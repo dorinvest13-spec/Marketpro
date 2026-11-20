@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Кадр не найден — AI Marketing Studio</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Unbounded:wght@500;700;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%237c5cff'/%3E%3Ctext x='16' y='22' font-size='15' font-weight='900' font-family='sans-serif' fill='%23fff' text-anchor='middle'%3EAI%3C/text%3E%3C/svg%3E">
+<style>
+:root{
+  --ink:#06070d;--surface:#0d1020;--surface2:#141931;--overlay:#1c2246;--line:#252d52;
+  --violet:#7c5cff;--violet-deep:#4a2dd4;--cyan:#22d3ee;--magenta:#ff4d9d;--amber:#ffb020;
+  --acid:#8bff5a;--green:#3ddc84;--red:#ff5470;--sand:#ffd9a0;
+  --text:#eef1ff;--muted:#98a1c6;--dim:#6a7297;
+  --font:'Manrope',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+  --disp:'Unbounded',var(--font);--mono:'JetBrains Mono',ui-monospace,Consolas,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font);background:var(--ink);color:var(--text);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased;line-height:1.55}
+::selection{background:var(--violet);color:#fff}
+*{scrollbar-width:thin;scrollbar-color:var(--violet-deep) var(--surface)}
+::-webkit-scrollbar{width:11px;height:11px}
+::-webkit-scrollbar-track{background:var(--surface);border-left:1px solid var(--line)}
+::-webkit-scrollbar-thumb{background:linear-gradient(var(--violet-deep),var(--violet) 60%,var(--magenta));border-radius:9px;border:2px solid var(--surface)}
+::-webkit-scrollbar-thumb:hover{background:linear-gradient(var(--cyan),var(--violet))}
+:focus-visible{outline:2px solid var(--cyan);outline-offset:3px;border-radius:6px}
+a{color:inherit}
+.amb{position:fixed;inset:0;z-index:-2;background:
+  radial-gradient(56% 44% at 8% 6%,rgba(124,92,255,.26),transparent 62%),
+  radial-gradient(44% 38% at 94% 10%,rgba(34,211,238,.16),transparent 62%),
+  radial-gradient(50% 46% at 76% 94%,rgba(255,77,157,.14),transparent 62%),var(--ink)}
+.amb::before{content:"";position:absolute;inset:-25%;background:
+  radial-gradient(30% 26% at 30% 40%,rgba(124,92,255,.18),transparent 70%),
+  radial-gradient(26% 24% at 70% 62%,rgba(255,176,32,.10),transparent 72%);
+  animation:drift 24s ease-in-out infinite alternate;filter:blur(14px)}
+.amb::after{content:"";position:absolute;inset:0;opacity:.06;mix-blend-mode:overlay;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E")}
+.mesh{position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.4;
+  background-image:linear-gradient(rgba(124,92,255,.055) 1px,transparent 1px),linear-gradient(90deg,rgba(124,92,255,.055) 1px,transparent 1px);
+  background-size:64px 64px;mask-image:radial-gradient(76% 60% at 50% 24%,#000,transparent)}
+@keyframes drift{from{transform:translate3d(-3%,-2%,0) rotate(-2deg)}to{transform:translate3d(3%,3%,0) rotate(2deg)}}
+@keyframes rise{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+@keyframes pop{from{opacity:0;transform:translateY(8px) scale(.98)}to{opacity:1;transform:none}}
+@keyframes blink{0%,49%{opacity:1}50%,100%{opacity:.25}}
+.rise{animation:rise .6s cubic-bezier(.2,.7,.2,1) both}
+.wrap{max-width:1180px;margin:0 auto;padding:0 20px}
+.top{padding:18px 0;border-bottom:1px solid var(--line);backdrop-filter:blur(16px);background:rgba(6,7,13,.7);position:sticky;top:0;z-index:20}
+.top-in{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:11px;text-decoration:none;margin-right:auto}
+.mark{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;font:900 13px var(--disp);color:#fff;
+  background:conic-gradient(from 200deg,var(--violet),var(--magenta),var(--amber),var(--cyan),var(--violet));box-shadow:0 0 22px rgba(124,92,255,.55)}
+.brand b{font:700 15px var(--disp);background:linear-gradient(90deg,#fff,var(--sand) 45%,var(--cyan));-webkit-background-clip:text;background-clip:text;color:transparent}
+main{padding:44px 0 70px}
+.grid{display:grid;grid-template-columns:1.1fr .9fr;gap:36px;align-items:start}
+.badge{display:inline-flex;align-items:center;gap:9px;padding:6px 13px;border-radius:999px;border:1px solid rgba(255,84,112,.4);background:rgba(255,84,112,.1);font:700 11.5px var(--font);color:var(--red)}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--red);box-shadow:0 0 10px var(--red);animation:blink 1.4s infinite}
+h1{font:900 clamp(52px,12vw,120px)/.9 var(--disp);letter-spacing:-4px;margin:16px 0 6px;
+  background:linear-gradient(96deg,var(--violet),var(--magenta) 44%,var(--amber));-webkit-background-clip:text;background-clip:text;color:transparent}
+h2{font:800 clamp(18px,2.6vw,25px)/1.25 var(--disp);margin-bottom:12px}
+.lead{color:var(--muted);font-size:15px;max-width:52ch}
+.path{margin-top:16px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:11px 14px;font:12.5px var(--mono);color:var(--amber);word-break:break-all}
+.path span{color:var(--dim)}
+.hint{margin-top:12px;display:flex;gap:10px;align-items:flex-start;background:rgba(139,255,90,.08);border:1px solid rgba(139,255,90,.35);border-radius:12px;padding:12px 14px;font-size:13px;color:var(--acid)}
+.card{background:linear-gradient(180deg,var(--surface2),var(--surface));border:1px solid var(--line);border-radius:18px;padding:20px;box-shadow:0 20px 54px rgba(0,0,0,.4)}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.btn{border:0;cursor:pointer;font:700 13px var(--font);border-radius:12px;padding:11px 17px;display:inline-flex;align-items:center;gap:8px;justify-content:center;text-decoration:none;color:#fff;transition:transform .15s,box-shadow .22s,border-color .2s}
+.btn:active{transform:scale(.97)}
+.btn-p{background:linear-gradient(100deg,var(--violet-deep),var(--violet) 52%,var(--magenta));box-shadow:0 10px 30px rgba(124,92,255,.42)}
+.btn-p:hover{box-shadow:0 14px 40px rgba(124,92,255,.62)}
+.btn-c{background:linear-gradient(100deg,#0b6f86,var(--cyan));color:#03222b}
+.btn-a{background:linear-gradient(100deg,#a35a06,var(--amber));color:#2a1500}
+.btn-g{background:var(--overlay);border:1px solid var(--line);color:var(--text)}
+.btn-g:hover{border-color:var(--cyan)}
+.btn-s{padding:8px 12px;font-size:12px;border-radius:10px}
+.input{width:100%;background:var(--ink);border:1px solid var(--line);color:var(--text);border-radius:12px;padding:12px 14px;font:500 14px var(--font);outline:none;transition:border .2s,box-shadow .2s}
+.input:focus{border-color:var(--violet);box-shadow:0 0 0 3px rgba(124,92,255,.22)}
+label.lbl{display:block;font-size:11px;color:var(--muted);margin-bottom:6px;font-weight:700}
+.dests{display:flex;flex-direction:column;gap:8px;margin-top:12px;max-height:340px;overflow-y:auto;padding-right:5px}
+.dest{display:flex;align-items:center;gap:12px;text-decoration:none;background:var(--ink);border:1px solid var(--line);border-radius:12px;padding:12px 14px;transition:border-color .2s,transform .2s,background .2s}
+.dest:hover{border-color:var(--violet);transform:translateX(5px);background:rgba(124,92,255,.06)}
+.dest .ic{width:34px;height:34px;flex:none;border-radius:10px;display:grid;place-items:center;font-size:16px;background:var(--overlay);border:1px solid var(--line)}
+.dest b{font:700 13.5px var(--font);display:block}
+.dest small{color:var(--dim);font-size:11.5px}
+.dest .go{margin-left:auto;color:var(--cyan);font-size:16px}
+.count{font:700 11px var(--font);color:var(--dim);margin-top:10px}
+.stage{display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:start}
+.reel{width:210px;aspect-ratio:9/16;border-radius:20px;border:2px solid var(--line);overflow:hidden;background:#05060c;position:relative;flex:none;box-shadow:0 26px 60px rgba(0,0,0,.6),0 0 34px rgba(255,77,157,.14)}
+.reel canvas{width:100%;height:100%;display:block}
+.reel .tag{position:absolute;top:8px;left:8px;font:800 9px var(--font);letter-spacing:.12em;padding:4px 8px;border-radius:7px;background:rgba(6,7,13,.75);border:1px solid var(--line);color:var(--red)}
+.deck{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:9px}
+.ctrl{background:var(--ink);border:1px solid var(--line);border-radius:12px;padding:10px 12px}
+.ctrl .val{float:right;font:800 11px var(--font);color:var(--cyan)}
+input[type=color]{width:100%;height:36px;background:var(--ink);border:1px solid var(--line);border-radius:11px;padding:4px;cursor:pointer}
+input[type=range]{width:100%;appearance:none;height:6px;border-radius:99px;background:linear-gradient(90deg,var(--violet-deep),var(--cyan));outline:none;cursor:pointer}
+input[type=range]::-webkit-slider-thumb{appearance:none;width:17px;height:17px;border-radius:50%;background:#fff;border:3px solid var(--violet);box-shadow:0 0 10px rgba(124,92,255,.75);cursor:pointer}
+input[type=range]::-moz-range-thumb{width:14px;height:14px;border-radius:50%;background:#fff;border:3px solid var(--violet);cursor:pointer}
+.switch{position:relative;width:44px;height:24px;border-radius:999px;background:var(--overlay);border:1px solid var(--line);cursor:pointer;transition:background .2s;flex:none;padding:0}
+.switch::after{content:"";position:absolute;top:2px;left:2px;width:18px;height:18px;border-radius:50%;background:var(--cyan);transition:transform .25s cubic-bezier(.2,.7,.2,1),background .2s}
+.switch[aria-checked="true"]{background:var(--violet-deep)}
+.switch[aria-checked="true"]::after{transform:translateX(20px);background:#fff}
+.note{font-size:11.5px;color:var(--dim);line-height:1.6}
+.kicker{font:800 10px var(--font);letter-spacing:.2em;text-transform:uppercase;color:var(--magenta)}
+.toasts{position:fixed;right:16px;bottom:16px;z-index:60;display:flex;flex-direction:column;gap:9px;width:min(330px,calc(100vw - 32px))}
+.toast{display:flex;gap:10px;align-items:flex-start;padding:12px 14px;border-radius:13px;border:1px solid rgba(34,211,238,.5);background:var(--surface2);box-shadow:0 16px 44px rgba(0,0,0,.55);font-size:13px;animation:pop .3s both}
+.toast button{margin-left:auto;border:0;background:none;color:var(--dim);cursor:pointer;font-size:14px}
+footer{border-top:1px solid var(--line);padding:26px 0;background:rgba(6,7,13,.6)}
+@media (max-width:960px){.grid{grid-template-columns:1fr}.stage{grid-template-columns:1fr;justify-items:center}.deck{width:100%}}
+@media (max-width:720px){.wrap{padding:0 14px}.brand b{display:none}.reel{width:min(210px,66vw)}.card{padding:16px}main{padding:30px 0 50px}}
+@media (prefers-reduced-motion:reduce){.amb::before,.dot,.rise{animation:none!important}*{transition-duration:.01ms!important}}
+</style>
+</head>
+<body>
+<div class="amb"></div><div class="mesh"></div>
+
+<div class="top"><div class="wrap top-in">
+  <a class="brand" id="brandLink" href="./"><span class="mark">AI</span><b>Marketing&nbsp;Studio</b></a>
+  <button class="btn btn-g btn-s" id="backBtn">← Назад</button>
+  <a class="btn btn-p btn-s" id="studioLink" href="app/">🚀 В студию</a>
+</div></div>
+
+<main class="wrap">
+  <div class="grid">
+    <div class="rise">
+      <span class="badge"><span class="dot"></span>Сигнал потерян</span>
+      <h1>404</h1>
+      <h2>Такого кадра в монтаже нет</h2>
+      <p class="lead">Адрес не найден: страница переехала, в ссылке опечатка или раздел ещё не опубликован. Ниже — все рабочие направления сайта, поиск по ним живой.</p>
+      <div class="path"><span>запрошено:</span> <b id="reqPath">—</b></div>
+      <div class="hint hidden" id="suggest">
+        <span>💡</span><span id="suggestText"></span>
+      </div>
+
+      <div class="card" style="margin-top:18px">
+        <label class="lbl" for="q">Куда хотели попасть?</label>
+        <input class="input" id="q" placeholder="студия, демо, api, запуск, видео…" autocomplete="off">
+        <div class="dests" id="dests"></div>
+        <p class="count" id="destCount"></p>
+      </div>
+
+      <div class="row" style="margin-top:16px">
+        <a class="btn btn-p" id="homeLink" href="./">🏠 На главную</a>
+        <button class="btn btn-g" id="copyHome">📋 Ссылка на главную</button>
+      </div>
+    </div>
+
+    <div class="card rise" style="animation-delay:.1s">
+      <div class="row" style="justify-content:space-between;margin-bottom:12px">
+        <div><span class="kicker">Тестовый сигнал</span><h2 style="font-size:16px;margin:6px 0 0">Кадр без источника</h2></div>
+        <span class="badge" id="sigState">NO SIGNAL</span>
+      </div>
+      <div class="stage">
+        <div class="reel">
+          <canvas id="cv" width="540" height="960" aria-label="Тестовый кадр с помехами"></canvas>
+          <span class="tag">9:16 · ERR</span>
+        </div>
+        <div style="width:100%">
+          <div class="deck">
+            <div class="ctrl"><label class="lbl" for="cGlitch">Глитч <span class="val" id="vGlitch">0.55</span></label><input type="range" id="cGlitch" min="0" max="1" step="0.05" value="0.55"></div>
+            <div class="ctrl"><label class="lbl" for="cNoise">Шум <span class="val" id="vNoise">0.18</span></label><input type="range" id="cNoise" min="0" max="0.5" step="0.02" value="0.18"></div>
+            <div class="ctrl"><label class="lbl" for="cSpeed">Скорость <span class="val" id="vSpeed">1.0×</span></label><input type="range" id="cSpeed" min="0.2" max="2.6" step="0.1" value="1"></div>
+            <div class="ctrl"><label class="lbl" for="cBars">Полосы <span class="val" id="vBars">0.70</span></label><input type="range" id="cBars" min="0" max="1" step="0.05" value="0.7"></div>
+            <div class="ctrl"><label class="lbl" for="cGrade">Грейд</label><input type="color" id="cGrade" value="#ff4d9d"></div>
+            <div class="ctrl"><label class="lbl">Скан-линии</label><div class="row" style="gap:8px"><button class="switch" id="cScan" role="switch" aria-checked="true" aria-label="Скан-линии"></button><span class="note">CRT</span></div></div>
+            <div class="ctrl"><label class="lbl">Стоп-кадр</label><div class="row" style="gap:8px"><button class="switch" id="cFreeze" role="switch" aria-checked="false" aria-label="Стоп-кадр"></button><span class="note">пауза</span></div></div>
+            <div class="ctrl"><label class="lbl">Safe-zone</label><div class="row" style="gap:8px"><button class="switch" id="cSafe" role="switch" aria-checked="false" aria-label="Направляющие"></button><span class="note">сетка</span></div></div>
+          </div>
+          <div class="row" style="margin-top:11px">
+            <button class="btn btn-g btn-s" id="cRandom">🎲 Сбой</button>
+            <button class="btn btn-g btn-s" id="cReset">↺ Сброс</button>
+            <button class="btn btn-a btn-s" id="cPng">⬇ Кадр</button>
+          </div>
+          <p class="note" style="margin-top:10px">Кадр рисуется локально и реагирует на параметры сразу. Ничего не отправляется на сервер.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer><div class="wrap row" style="justify-content:space-between">
+  <span class="note">AI Marketing Studio · MIT · страница ошибки не индексируется</span>
+  <a class="btn btn-g btn-s" id="footHome" href="./">На главную</a>
+</div></footer>
+
+<div class="toasts" id="toasts" role="status" aria-live="polite"></div>
+
+<script>
+"use strict";
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;");
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const RM=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+const RESERVED=new Set(["","app","docs","doc","demo","api","ship","pipeline","platforms","arch","trust","index.html","404.html","assets","static"]);
+function siteBase(){
+  const seg=(location.pathname.split("/").filter(Boolean)[0]||"").toLowerCase();
+  return RESERVED.has(seg)?"/":"/"+seg+"/";
+}
+const BASE=siteBase();
+function url(p){return BASE+p}
+
+function toast(msg){
+  const t=document.createElement("div");t.className="toast";
+  t.innerHTML=`<span>ℹ️</span><span>${esc(msg)}</span><button aria-label="Закрыть">✕</button>`;
+  t.querySelector("button").onclick=()=>t.remove();
+  $("toasts").appendChild(t);setTimeout(()=>t.remove(),4000);
+}
+async function copy(text){
+  try{if(navigator.clipboard&&window.isSecureContext){await navigator.clipboard.writeText(text);toast("Ссылка скопирована");return}}catch{}
+  try{
+    const ta=document.createElement("textarea");ta.value=text;ta.setAttribute("readonly","");
+    ta.style.cssText="position:fixed;top:-2000px;opacity:0";document.body.appendChild(ta);
+    ta.select();const ok=document.execCommand("copy");ta.remove();
+    toast(ok?"Ссылка скопирована":"Скопируйте вручную: "+text);
+  }catch{toast("Копирование недоступно")}
+}
+
+const DESTS=[
+  {ic:"🏠",n:"Главная витрина",d:"обзор проекта и живое превью",p:"",k:"home главная витрина лендинг overview"},
+  {ic:"🚀",n:"Студия",d:"парсер, карточки, тексты, ролик",p:"app/",k:"studio студия приложение app генератор"},
+  {ic:"⚙️",n:"Конвейер",d:"три шага от ссылки до публикации",p:"#pipeline",k:"pipeline конвейер шаги парсинг"},
+  {ic:"⚡",n:"Живое демо",d:"генерация контент-пака в браузере",p:"#demo",k:"demo демо генерация карточки тексты"},
+  {ic:"📱",n:"Площадки",d:"Telegram, Дзен, ВК, ОК, сайт",p:"#platforms",k:"platforms площадки telegram дзен вк одноклассники сайт"},
+  {ic:"🧩",n:"Архитектура",d:"схема модулей и потоков данных",p:"#arch",k:"arch архитектура схема backend fastapi"},
+  {ic:"🔌",n:"API",d:"справочник эндпоинтов с поиском",p:"#api",k:"api эндпоинты rest справочник"},
+  {ic:"📦",n:"Запуск",d:"Docker, локально, VPS, GitHub",p:"#ship",k:"ship запуск docker vps установка deploy"},
+  {ic:"🛡",n:"Защита",d:"SSRF, биллинг, лимиты, честность",p:"#trust",k:"trust защита безопасность ssrf биллинг"}
+];
+function lev(a,b){
+  a=a.toLowerCase();b=b.toLowerCase();
+  const m=a.length,n=b.length;
+  if(!m)return n;if(!n)return m;
+  let prev=Array.from({length:n+1},(_,i)=>i),cur=new Array(n+1);
+  for(let i=1;i<=m;i++){
+    cur[0]=i;
+    for(let j=1;j<=n;j++){
+      cur[j]=Math.min(prev[j]+1,cur[j-1]+1,prev[j-1]+(a[i-1]===b[j-1]?0:1));
+    }
+    [prev,cur]=[cur,prev];
+  }
+  return prev[n];
+}
+function paintDests(){
+  const q=($("q").value||"").trim().toLowerCase();
+  const list=DESTS.filter(d=>!q||(d.n+" "+d.d+" "+d.k+" "+d.p).toLowerCase().includes(q));
+  $("dests").innerHTML=list.length?list.map(d=>`<a class="dest" href="${esc(url(d.p))}">
+    <span class="ic">${d.ic}</span><span><b>${esc(d.n)}</b><small>${esc(d.d)}</small></span><span class="go">→</span></a>`).join("")
+    :`<p class="note" style="padding:18px;text-align:center">Ничего не нашлось. Откройте главную — там есть всё.</p>`;
+  $("destCount").textContent=`Показано ${list.length} из ${DESTS.length} разделов`;
+}
+$("q").addEventListener("input",paintDests);
+
+const reqRaw=location.pathname+location.search;
+$("reqPath").textContent=reqRaw;
+(function suggest(){
+  const tail=(location.pathname.split("/").filter(Boolean).pop()||"").replace(/\.html?$/i,"");
+  if(!tail)return;
+  let best=null,bestScore=Infinity;
+  DESTS.forEach(d=>{
+    const cand=(d.p.replace(/^#/,"")||"home");
+    const s=Math.min(lev(tail,cand),lev(tail,d.n.split(" ")[0]));
+    if(s<bestScore){bestScore=s;best=d}
+  });
+  if(best&&bestScore<=Math.max(2,Math.floor(tail.length/2))){
+    $("suggest").classList.remove("hidden");
+    $("suggestText").innerHTML=`Возможно, вы искали <a href="${esc(url(best.p))}" style="color:var(--cyan);font-weight:700">${esc(best.n)}</a> — открыть?`;
+  }
+})();
+
+["brandLink","homeLink","footHome"].forEach(id=>$(id).setAttribute("href",url("")));
+$("studioLink").setAttribute("href",url("app/"));
+$("backBtn").onclick=()=>{if(history.length>1)history.back();else location.href=url("")};
+$("copyHome").onclick=()=>copy(location.origin+url(""));
+paintDests();
+
+/* ---------- тестовый кадр ---------- */
+function hex2hsl(h){
+  const m=/^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(h)||[,"ff","4d","9d"];
+  const r=parseInt(m[1],16)/255,g=parseInt(m[2],16)/255,b=parseInt(m[3],16)/255;
+  const mx=Math.max(r,g,b),mn=Math.min(r,g,b);let hh=0,s=0;const l=(mx+mn)/2;
+  if(mx!==mn){const d=mx-mn;s=l>.5?d/(2-mx-mn):d/(mx+mn);hh=mx===r?((g-b)/d+(g<b?6:0)):mx===g?((b-r)/d+2):((r-g)/d+4);hh/=6}
+  return[hh*360,s*100,l*100];
+}
+const hsl=(h,s,l,a=1)=>`hsla(${((h%360)+360)%360},${clamp(s,0,100)}%,${clamp(l,0,100)}%,${a})`;
+const cfg={glitch:.55,noise:.18,speed:1,bars:.7,grade:"#ff4d9d",scan:true,freeze:false,safe:false};
+const cv=$("cv"),cx=cv.getContext("2d");
+let raf=null,t0=performance.now(),lastFrame=0;
+function fit(){
+  const dpr=Math.min(window.devicePixelRatio||1,2);
+  const w=Math.round(540*dpr),h=Math.round(960*dpr);
+  if(cv.width!==w){cv.width=w;cv.height=h}
+  cx.setTransform(dpr,0,0,dpr,0,0);
+}
+function draw(now){
+  const W=540,H=960;
+  const[gh,gs,gl]=hex2hsl(cfg.grade);
+  const A=[gh,Math.max(60,gs),clamp(gl,42,64)],B=[gh+150,Math.max(60,gs),clamp(gl+6,42,66)];
+  const t=(now-t0)/1000*cfg.speed;
+  fit();
+  const bg=cx.createLinearGradient(0,0,W,H);
+  bg.addColorStop(0,hsl(A[0],52,8));bg.addColorStop(1,hsl(B[0],52,11));
+  cx.fillStyle=bg;cx.fillRect(0,0,W,H);
+
+  if(cfg.bars>0){
+    const cols=[A[0],A[0]+40,B[0],B[0]+40,A[0]+150,B[0]+150,A[0]+280];
+    const bw=W/cols.length;
+    cx.save();cx.globalAlpha=cfg.bars*.55;
+    cols.forEach((h,i)=>{
+      const jitter=(Math.sin(t*2+i)*.5+.5)*cfg.glitch*22;
+      cx.fillStyle=hsl(h,68,52);
+      cx.fillRect(i*bw+jitter,150,bw+2,430);
+    });
+    cx.restore();
+    cx.save();cx.globalAlpha=cfg.bars*.35;
+    cols.forEach((h,i)=>{
+      cx.fillStyle=hsl(h,40,26);
+      cx.fillRect(i*bw,580,bw+2,70);
+    });
+    cx.restore();
+  }
+
+  const slices=Math.round(cfg.glitch*16);
+  for(let i=0;i<slices;i++){
+    const y=Math.random()*H,h=4+Math.random()*30;
+    const dx=(Math.random()-.5)*90*cfg.glitch;
+    try{
+      const img=cx.getImageData(0,Math.max(0,Math.round(y*(cv.height/H))),cv.width,Math.max(1,Math.round(h*(cv.height/H))));
+      cx.putImageData(img,Math.round(dx*(cv.width/W)),Math.max(0,Math.round(y*(cv.height/H))));
+    }catch{}
+    cx.fillStyle=hsl(Math.random()>.5?A[0]:B[0],85,60,.16*cfg.glitch);
+    cx.fillRect(dx,y,W,h);
+  }
+
+  cx.save();
+  cx.textAlign="center";
+  const blink=(Math.floor(t*2)%2)===0;
+  cx.fillStyle=blink?"#fff":hsl(A[0],80,70,.55);
+  cx.font="900 46px Unbounded,Manrope,sans-serif";
+  const shift=(Math.random()-.5)*10*cfg.glitch;
+  cx.fillText("NO SIGNAL",270+shift,690);
+  cx.fillStyle=hsl(B[0],80,66,.9);
+  cx.font="600 17px 'JetBrains Mono',monospace";
+  const tc=`00:${String(Math.floor(t)%60).padStart(2,"0")}:${String(Math.floor(t*30)%30).padStart(2,"0")}`;
+  cx.fillText("ERR 404 · "+tc,270,724);
+  cx.fillStyle="rgba(255,255,255,.5)";
+  cx.font="600 13px Manrope,sans-serif";
+  cx.fillText("источник не найден · проверьте адрес",270,752);
+  cx.restore();
+
+  cx.save();
+  cx.strokeStyle=hsl(A[0],80,62,.85);cx.lineWidth=3;
+  cx.strokeRect(28,28,W-56,H-56);
+  cx.restore();
+
+  if(cfg.scan){
+    cx.save();cx.globalAlpha=.16;cx.fillStyle="#000";
+    for(let y=0;y<H;y+=4)cx.fillRect(0,y,W,2);
+    cx.restore();
+    const sweep=(t*160)%H;
+    cx.save();cx.globalAlpha=.1;cx.fillStyle="#fff";cx.fillRect(0,sweep,W,26);cx.restore();
+  }
+  if(cfg.noise>0){
+    cx.save();cx.globalAlpha=cfg.noise;
+    for(let i=0;i<260;i++){cx.fillStyle=Math.random()>.5?"#fff":"#000";cx.fillRect(Math.random()*W,Math.random()*H,1.6,1.6)}
+    cx.restore();
+  }
+  if(cfg.safe){
+    cx.save();cx.strokeStyle="rgba(139,255,90,.55)";cx.lineWidth=1;cx.setLineDash([6,6]);
+    cx.strokeRect(44,120,W-88,H-250);
+    cx.beginPath();cx.moveTo(W/2,0);cx.lineTo(W/2,H);cx.moveTo(0,H/2);cx.lineTo(W,H/2);cx.stroke();
+    cx.setLineDash([]);cx.fillStyle="rgba(139,255,90,.9)";cx.font="600 11px Manrope,sans-serif";cx.textAlign="left";
+    cx.fillText("safe-zone",50,136);cx.restore();
+  }
+  lastFrame=now;
+}
+function loop(now){draw(now);raf=requestAnimationFrame(loop)}
+function start(){if(raf!==null||cfg.freeze||document.hidden||RM)return;t0=performance.now()-(lastFrame?lastFrame-t0:0);raf=requestAnimationFrame(loop)}
+function stop(){if(raf!==null){cancelAnimationFrame(raf);raf=null}}
+function still(){if(raf===null)draw(lastFrame||performance.now())}
+document.addEventListener("visibilitychange",()=>{document.hidden?stop():start()});
+window.addEventListener("resize",()=>{fit();still()});
+window.addEventListener("beforeunload",stop);
+
+function sync(){
+  $("cGlitch").value=cfg.glitch;$("cNoise").value=cfg.noise;$("cSpeed").value=cfg.speed;
+  $("cBars").value=cfg.bars;$("cGrade").value=cfg.grade;
+  $("vGlitch").textContent=cfg.glitch.toFixed(2);$("vNoise").textContent=cfg.noise.toFixed(2);
+  $("vSpeed").textContent=cfg.speed.toFixed(1)+"×";$("vBars").textContent=cfg.bars.toFixed(2);
+  $("cScan").setAttribute("aria-checked",String(cfg.scan));
+  $("cFreeze").setAttribute("aria-checked",String(cfg.freeze));
+  $("cSafe").setAttribute("aria-checked",String(cfg.safe));
+  $("sigState").textContent=cfg.freeze?"FREEZE":"NO SIGNAL";
+  still();
+}
+$("cGlitch").oninput=e=>{cfg.glitch=+e.target.value;$("vGlitch").textContent=cfg.glitch.toFixed(2);still()};
+$("cNoise").oninput=e=>{cfg.noise=+e.target.value;$("vNoise").textContent=cfg.noise.toFixed(2);still()};
+$("cSpeed").oninput=e=>{cfg.speed=+e.target.value;$("vSpeed").textContent=cfg.speed.toFixed(1)+"×";still()};
+$("cBars").oninput=e=>{cfg.bars=+e.target.value;$("vBars").textContent=cfg.bars.toFixed(2);still()};
+$("cGrade").oninput=e=>{cfg.grade=e.target.value;still()};
+function sw(el,key,after){el.onclick=()=>{cfg[key]=!cfg[key];el.setAttribute("aria-checked",String(cfg[key]));after&&after();still()}}
+sw($("cScan"),"scan");
+sw($("cSafe"),"safe");
+sw($("cFreeze"),"freeze",()=>{cfg.freeze?stop():start();$("sigState").textContent=cfg.freeze?"FREEZE":"NO SIGNAL"});
+$("cReset").onclick=()=>{Object.assign(cfg,{glitch:.55,noise:.18,speed:1,bars:.7,grade:"#ff4d9d",scan:true,freeze:false,safe:false});sync();start();toast("Параметры кадра сброшены")};
+$("cRandom").onclick=()=>{
+  const pal=["#ff4d9d","#7c5cff","#22d3ee","#ffb020","#8bff5a","#ff5470"];
+  cfg.grade=pal[Math.floor(Math.random()*pal.length)];
+  cfg.glitch=+(Math.random()).toFixed(2);
+  cfg.noise=+(Math.random()*.42).toFixed(2);
+  cfg.speed=+(0.3+Math.random()*2.1).toFixed(1);
+  cfg.bars=+(Math.random()).toFixed(2);
+  sync();toast("Случайный сбой применён");
+};
+$("cPng").onclick=()=>{
+  still();
+  cv.toBlob(b=>{
+    if(!b)return toast("Не удалось сохранить кадр");
+    const u=URL.createObjectURL(b),a=document.createElement("a");
+    a.href=u;a.download="no-signal-404.png";document.body.appendChild(a);a.click();a.remove();
+    setTimeout(()=>URL.revokeObjectURL(u),4000);toast("Кадр сохранён");
+  },"image/png");
+};
+sync();draw(performance.now());start();
+</script>
+</body>
+                                </html>
