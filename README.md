@@ -1,89 +1,55 @@
 # AI Marketing Studio
 
-Ссылка на товар → 3 переупакованные карточки + 5 продающих текстов (Telegram, Дзен, ВК, Одноклассники, сайт) → топ-10 поисковых запросов → вертикальный рекламный ролик 9:16.
+![License](https://img.shields.io/badge/license-MIT-7c5cff?style=flat-square)
+![Frontend](https://img.shields.io/badge/frontend-live-3ddc84?style=flat-square)
+![Backend](https://img.shields.io/badge/backend-в_процессе-ffb020?style=flat-square)
+![No build](https://img.shields.io/badge/build-не_требуется-22d3ee?style=flat-square)
 
-**Стек:** FastAPI · SQLite (WAL) · JWT · Qwen/GPT/Claude/Groq/DeepSeek/OpenRouter · Wan (DashScope) · ffmpeg · vanilla-JS SPA · nginx · Docker.
+Ссылка на товар → **3 переупакованные карточки**, **5 продающих текстов** (Telegram, Дзен, ВКонтакте, Одноклассники, сайт), **топ-10 поисковых запросов** и **вертикальный рекламный ролик 9:16**.
 
-> Новичку: начните с **[docs/START.md](docs/START.md)** — пошагово от пустого компьютера до рабочего сайта.
-> Оператору: **[docs/SETUP.md](docs/SETUP.md)** и **[docs/RUNBOOK.md](docs/RUNBOOK.md)**.
+## Открыть сейчас
 
-## Быстрый старт (DEMO, без ключей)
+| Что | Адрес |
+|---|---|
+| Витрина проекта | https://dorinvest13-spec.github.io/Marketpro/ |
+| Студия | https://dorinvest13-spec.github.io/Marketpro/app/ |
+| История сборок | [Actions](https://github.com/dorinvest13-spec/Marketpro/actions) |
 
-```bash
-cp .env.example .env
-make up                 # docker compose up -d --build
-```
-Открыть http://localhost · Swagger http://localhost/docs
+Работает прямо в браузере, без установки и без API-ключей. Данные демонстрационные и генерируются локально — ничего не отправляется на сервер.
 
-Без Docker:
-```bash
-make install && make run    # http://localhost:8000
-```
+## Что уже работает
 
-## Переход в LIVE
+**Студия** (`index.html`) — три вкладки:
 
-```bash
-cp configure.env.example configure.env   # впишите MODE=live и LLM_API_KEY
-make configure-probe                     # проверка ключа реальным запросом
-make configure                           # запись .env (600) + первый аккаунт
-make doctor-live                         # диагностика всех подсистем
-make verify                              # 38 автотестов
-make up
-```
-Интерактивная альтернатива: `python setup.py`.
+- **Парсер + карточки и посты.** Товар, галерея с перетаскиванием и удалением фото, таблица характеристик, JSON-превью. Генерация контент-пака: три угла подачи (рациональный, эмоциональный, сравнение с конкурентами) и пять текстов с живыми счётчиками объёма. Экспорт карточек в PNG, текстов в TXT, отчёта в PDF.
+- **Топ-10 запросов.** Таблица с частотностью, конкуренцией и интентом, облако ключей, три AI-рекомендации, экспорт в CSV, перенос ключей в генератор.
+- **Рекламный ролик.** Раскадровка по сценам, master-prompt, SEO-метаданные, чек-лист продакшена и живое превью 1080×1920.
 
-## Прод на своём сервере
+**Дизайн-панель карточек** — восемь параметров, применяются мгновенно: акцентный цвет, тип фона, плотность, размер цены, скругление, число буллетов, бейдж скидки, подпись бренда. Кнопки «Сброс», «Случайно», «Все PNG».
 
-```bash
-sudo bash deploy/vps-bootstrap.sh ваш-домен.ru /opt/ai-marketing-studio
-```
-Ставит Docker, nginx, Let's Encrypt, firewall и ночные бэкапы. Прод-стек слушает `127.0.0.1:8080` за внешним nginx.
+**Панель ролика** — двенадцать параметров: площадка, хронометраж, число сцен, стиль, настроение, цветокоррекция, динамика камеры, свечение, зерно плёнки, текст CTA, субтитры, закадровый голос. Кадр перерисовывается на каждое движение ползунка.
 
-## GitHub Pages
+**Витрина** (`docs/index.html`) — живой кадр с той же панелью управления, рабочий генератор контент-пака, схема архитектуры, справочник API с поиском и фильтром, четыре сценария запуска.
 
-Workflow `.github/workflows/pages.yml` публикует витрину (`docs/index.html`) и студию в DEMO (`/app/`) на `https://<user>.github.io/<repo>/`. Включается: Settings → Pages → Source: **GitHub Actions**.
+**Страница 404** (`docs/404.html`) — тестовый сигнал с глитчем, восемь параметров помех, живой поиск по разделам и подсказка ближайшего адреса по опечатке.
 
-## Управление
+## Запустить локально
+
+Фронтенд не требует сборки и зависимостей:
 
 ```bash
-python admin.py create boss@shop.ru --balance 1000000
-python admin.py topup  boss@shop.ru 500000
-python admin.py stats  --email boss@shop.ru
-python admin.py list
-make backup
+git clone https://github.com/dorinvest13-spec/Marketpro.git
+cd Marketpro
 ```
 
-## API (основное)
+Откройте `index.html` двойным кликом — студия работает в DEMO-режиме. Витрина лежит в `docs/index.html`.
 
-| Метод | Путь | Назначение |
-|---|---|---|
-| GET | `/api/health` | режим, провайдер, ffmpeg |
-| POST | `/api/parse` | парсинг товара (SSRF-защищённый) |
-| POST | `/api/generate` | 3 карточки + 5 текстов + image-промпты |
-| POST | `/api/keywords` | топ-10 запросов + insights |
-| POST | `/api/video` | раскадровка + master-prompt + SEO |
-| POST | `/api/video/render` | задачи Wan по сценам |
-| GET | `/api/video/status/{id}` | статус и ссылка на клип |
-| POST | `/api/video/assemble` | ffmpeg → MP4, иначе ZIP |
-| POST | `/api/auth/register` · `/login` | JWT |
-| GET | `/api/me` | баланс и расход токенов |
-| GET/POST/DELETE | `/api/history[/{id}]` | серверная история |
+Через локальный сервер:
 
-## Безопасность и честность
+```bash
+python -m http.server 8000
+# студия:  http://localhost:8000/index.html
+# витрина: http://localhost:8000/docs/index.html
+```
 
-* SSRF-фильтр (приватные диапазоны, редиректы, лимит 3 МБ), rate-limit по `X-Real-IP`, отдельный лимит на `/api/auth/*`.
-* PBKDF2-SHA256 600 000 итераций; JWT HS256; CORS whitelist.
-* Атомарное списание токенов (`UPDATE … WHERE balance >= n`), резерв под полный ответ модели.
-* Ответ LLM валидируется Pydantic-схемой с повторной попыткой.
-* Частотность запросов помечена как оценка LLM (`_estimated`), пока не подключён Wordstat.
-* Подробности: [SECURITY.md](SECURITY.md).
-
-## Ограничения (осознанные)
-
-* Wildberries/Ozon отдают данные через JS — для них включите `PARSER_ENGINE=playwright` (`make optional`).
-* SQLite single-writer и rate-limit в памяти процесса: при росте переходите на Postgres + Redis.
-* DNS-rebinding закрывается сетевой egress-политикой, а не кодом.
-
-## Лицензия
-
-MIT
+## Состав репозитория
