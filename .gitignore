@@ -1,0 +1,55 @@
+# ── секреты: никогда не коммитить ──
+.env
+.env.*
+!.env.example
+!.env.production.example
+configure.env
+*.pem
+*.key
+secrets/
+
+# ── данные и бэкапы ──
+data/
+backups/
+*.db
+*.db-wal
+*.db-shm
+*.sqlite
+*.sqlite3
+
+# ── Python ──
+venv/
+.venv/
+env/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# ── сборка сайта ──
+_site/
+node_modules/
+dist/
+build/
+
+# ── Playwright ──
+.playwright/
+test-results/
+playwright-report/
+
+# ── ОС и редакторы ──
+.DS_Store
+Thumbs.db
+desktop.ini
+.idea/
+.vscode/
+*.swp
+*~
+
+# ── логи ──
+*.log
+logs/
