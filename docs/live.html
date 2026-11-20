@@ -1,0 +1,1232 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Прямая генерация — AI Marketing Studio</title>
+<meta name="description" content="Реальная генерация контент-пака из браузера: свой ключ, свой провайдер, без сервера.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Unbounded:wght@500;700;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%2322d3ee'/%3E%3Ctext x='16' y='22' font-size='14' font-weight='900' font-family='sans-serif' fill='%2304222b' text-anchor='middle'%3EAI%3C/text%3E%3C/svg%3E">
+<style>
+:root{
+  --ink:#04070c;--surface:#0a1018;--surface2:#101a26;--overlay:#17263a;--scrim:rgba(3,6,10,.86);--line:#1e3348;
+  --cyan:#22d3ee;--cyan-deep:#0b7f96;--violet:#7c5cff;--magenta:#ff4d9d;--amber:#ffb020;
+  --acid:#8bff5a;--green:#3ddc84;--red:#ff5470;--blue:#4d7cff;--sand:#ffd9a0;
+  --text:#e8f4f8;--muted:#8fa8b8;--dim:#5d7688;
+  --font:'Manrope',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+  --disp:'Unbounded',var(--font);--mono:'JetBrains Mono',ui-monospace,Consolas,monospace;
+  --nav:62px;--pad:14px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--font);background:var(--ink);color:var(--text);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased;line-height:1.5}
+::selection{background:var(--cyan);color:#04222b}
+*{scrollbar-width:thin;scrollbar-color:var(--cyan-deep) var(--surface)}
+::-webkit-scrollbar{width:11px;height:11px}
+::-webkit-scrollbar-track{background:var(--surface);border-left:1px solid var(--line)}
+::-webkit-scrollbar-thumb{background:linear-gradient(var(--cyan-deep),var(--cyan) 55%,var(--acid));border-radius:9px;border:2px solid var(--surface)}
+::-webkit-scrollbar-thumb:hover{background:linear-gradient(var(--acid),var(--cyan))}
+::-webkit-scrollbar-corner{background:var(--surface)}
+:focus-visible{outline:2px solid var(--acid);outline-offset:3px;border-radius:6px}
+a{color:inherit}
+.hidden{display:none!important}
+.amb{position:fixed;inset:0;z-index:-3;background:
+  radial-gradient(58% 46% at 6% 2%,rgba(34,211,238,.22),transparent 62%),
+  radial-gradient(46% 40% at 96% 6%,rgba(124,92,255,.18),transparent 62%),
+  radial-gradient(52% 48% at 80% 98%,rgba(139,255,90,.10),transparent 62%),
+  radial-gradient(40% 34% at 18% 78%,rgba(255,77,157,.09),transparent 64%),var(--ink)}
+.amb::before{content:"";position:absolute;inset:-25%;background:
+  radial-gradient(30% 26% at 32% 36%,rgba(34,211,238,.16),transparent 70%),
+  radial-gradient(26% 24% at 68% 64%,rgba(124,92,255,.14),transparent 70%);
+  animation:drift 26s ease-in-out infinite alternate;filter:blur(15px)}
+.amb::after{content:"";position:absolute;inset:0;opacity:.06;mix-blend-mode:overlay;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E")}
+.mesh{position:fixed;inset:0;z-index:-2;pointer-events:none;opacity:.34;
+  background-image:linear-gradient(rgba(34,211,238,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(34,211,238,.06) 1px,transparent 1px);
+  background-size:58px 58px;mask-image:radial-gradient(80% 62% at 50% 20%,#000,transparent)}
+@keyframes drift{from{transform:translate3d(-3%,-2%,0) rotate(-2deg)}to{transform:translate3d(3%,3%,0) rotate(2deg)}}
+@keyframes rise{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+@keyframes pop{from{opacity:0;transform:translateY(8px) scale(.98)}to{opacity:1;transform:none}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes pulse{0%,100%{opacity:.35}50%{opacity:1}}
+@keyframes shimmer{from{background-position:200% 0}to{background-position:-200% 0}}
+@keyframes slide{from{opacity:0;transform:translateX(24px)}to{opacity:1;transform:none}}
+@keyframes ticker{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.rise{animation:rise .55s cubic-bezier(.2,.7,.2,1) both}
+.wrap{max-width:1340px;margin:0 auto;padding:0 18px}
+.nav{position:fixed;top:0;left:0;right:0;height:var(--nav);z-index:50;backdrop-filter:blur(20px);background:rgba(4,7,12,.88);border-bottom:1px solid var(--line)}
+.nav-in{max-width:1340px;margin:0 auto;height:100%;padding:0 18px;display:flex;align-items:center;gap:9px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;flex:none}
+.mark{width:36px;height:36px;border-radius:11px;display:grid;place-items:center;font:900 12px var(--disp);color:#04222b;
+  background:conic-gradient(from 200deg,var(--cyan),var(--acid),var(--violet),var(--magenta),var(--cyan));box-shadow:0 0 20px rgba(34,211,238,.5)}
+.brand b{font:700 14px var(--disp);background:linear-gradient(90deg,#fff,var(--cyan) 50%,var(--acid));-webkit-background-clip:text;background-clip:text;color:transparent;white-space:nowrap}
+.nav-right{display:flex;gap:7px;align-items:center;margin-left:auto}
+.conn{display:inline-flex;align-items:center;gap:7px;font:700 10.5px var(--font);padding:5px 10px;border-radius:999px;border:1px solid var(--line);background:var(--overlay);color:var(--muted)}
+.conn i{width:8px;height:8px;border-radius:50%;background:var(--dim);display:block}
+.conn.idle i{background:var(--dim)}
+.conn.ready i{background:var(--green);box-shadow:0 0 9px var(--green)}
+.conn.busy i{background:var(--amber);box-shadow:0 0 9px var(--amber);animation:pulse 1s infinite}
+.conn.err i{background:var(--red);box-shadow:0 0 9px var(--red)}
+main{padding:calc(var(--nav) + 24px) 0 90px}
+.card{background:linear-gradient(180deg,var(--surface2),var(--surface));border:1px solid var(--line);border-radius:18px;padding:var(--pad);box-shadow:0 20px 54px rgba(0,0,0,.45)}
+.card.hot{border-color:rgba(34,211,238,.42);box-shadow:0 20px 54px rgba(11,127,150,.2)}
+.kicker{font:800 10px var(--font);letter-spacing:.2em;text-transform:uppercase;color:var(--cyan)}
+.kicker.v{color:var(--violet)}.kicker.m{color:var(--magenta)}.kicker.a{color:var(--amber)}.kicker.acid{color:var(--acid)}
+h1{font:900 clamp(24px,4vw,38px)/1.06 var(--disp);letter-spacing:-1px;margin:9px 0 11px}
+h1 em{font-style:normal;background:linear-gradient(96deg,var(--cyan),var(--acid));-webkit-background-clip:text;background-clip:text;color:transparent}
+h2{font:800 16px var(--font);margin-bottom:11px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+h3{font:800 13.5px var(--font);margin-bottom:8px}
+.lead{color:var(--muted);font-size:14.5px;max-width:60ch}
+.note{font-size:11.5px;color:var(--dim);line-height:1.6}
+.warnbox{display:flex;gap:10px;align-items:flex-start;background:rgba(255,176,32,.08);border:1px solid rgba(255,176,32,.38);border-radius:12px;padding:11px 13px;font-size:12px;color:var(--sand)}
+.errbox{display:flex;gap:10px;align-items:flex-start;background:rgba(255,84,112,.08);border:1px solid rgba(255,84,112,.42);border-radius:12px;padding:11px 13px;font-size:12.5px;color:#ffc4ce}
+.okbox{display:flex;gap:10px;align-items:flex-start;background:rgba(61,220,132,.08);border:1px solid rgba(61,220,132,.4);border-radius:12px;padding:11px 13px;font-size:12.5px;color:#bff5d8}
+.row{display:flex;gap:9px;flex-wrap:wrap;align-items:center}
+.grid2{display:grid;grid-template-columns:1.02fr .98fr;gap:18px;align-items:start}
+.btn{border:0;cursor:pointer;font:700 12.5px var(--font);border-radius:11px;padding:10px 15px;display:inline-flex;align-items:center;gap:7px;justify-content:center;text-decoration:none;color:#04222b;transition:transform .15s,box-shadow .22s,border-color .2s,opacity .2s}
+.btn:active:not([disabled]){transform:scale(.97)}
+.btn-p{background:linear-gradient(100deg,var(--cyan-deep),var(--cyan) 52%,var(--acid));box-shadow:0 9px 26px rgba(34,211,238,.35)}
+.btn-p:hover:not([disabled]){box-shadow:0 13px 38px rgba(34,211,238,.55)}
+.btn-v{background:linear-gradient(100deg,#4a2dd4,var(--violet) 60%,var(--magenta));color:#fff}
+.btn-a{background:linear-gradient(100deg,#a35a06,var(--amber));color:#2a1500}
+.btn-r{background:linear-gradient(100deg,#a81f36,var(--red));color:#fff}
+.btn-g{background:var(--overlay);border:1px solid var(--line);color:var(--text)}
+.btn-g:hover:not([disabled]){border-color:var(--cyan)}
+.btn-s{padding:7px 11px;font-size:11.5px;border-radius:9px}
+.btn[disabled]{opacity:.42;cursor:not-allowed;box-shadow:none}
+.chip{display:inline-flex;align-items:center;gap:6px;font:700 10.5px var(--font);padding:4px 10px;border-radius:999px;border:1px solid var(--line);background:var(--overlay);color:var(--muted);white-space:nowrap}
+.chip.g{color:var(--green);border-color:rgba(61,220,132,.42);background:rgba(61,220,132,.1)}
+.chip.a{color:var(--amber);border-color:rgba(255,176,32,.42);background:rgba(255,176,32,.1)}
+.chip.r{color:var(--red);border-color:rgba(255,84,112,.42);background:rgba(255,84,112,.1)}
+.chip.c{color:var(--cyan);border-color:rgba(34,211,238,.42);background:rgba(34,211,238,.1)}
+.chip.v{color:var(--violet);border-color:rgba(124,92,255,.45);background:rgba(124,92,255,.12)}
+.chip.m{color:var(--magenta);border-color:rgba(255,77,157,.42);background:rgba(255,77,157,.1)}
+.chip.acid{color:var(--acid);border-color:rgba(139,255,90,.4);background:rgba(139,255,90,.09)}
+label.lbl{display:block;font-size:10.5px;color:var(--muted);margin-bottom:6px;font-weight:700}
+.input,.select,textarea{width:100%;background:var(--ink);border:1px solid var(--line);color:var(--text);border-radius:11px;padding:10px 12px;font:500 13px var(--font);outline:none;transition:border .2s,box-shadow .2s}
+.input:focus,.select:focus,textarea:focus{border-color:var(--cyan);box-shadow:0 0 0 3px rgba(34,211,238,.2)}
+textarea{resize:vertical;line-height:1.55;font-size:12.5px}
+.select{appearance:none;cursor:pointer;padding-right:30px;background-image:linear-gradient(45deg,transparent 50%,var(--cyan) 50%),linear-gradient(135deg,var(--cyan) 50%,transparent 50%);background-position:calc(100% - 16px) 50%,calc(100% - 11px) 50%;background-size:5px 5px;background-repeat:no-repeat}
+input[type=range]{width:100%;appearance:none;height:6px;border-radius:99px;background:linear-gradient(90deg,var(--cyan-deep),var(--acid));outline:none;cursor:pointer}
+input[type=range]::-webkit-slider-thumb{appearance:none;width:16px;height:16px;border-radius:50%;background:#fff;border:3px solid var(--cyan);box-shadow:0 0 9px rgba(34,211,238,.7);cursor:pointer}
+input[type=range]::-moz-range-thumb{width:13px;height:13px;border-radius:50%;background:#fff;border:3px solid var(--cyan);cursor:pointer}
+.switch{position:relative;width:42px;height:23px;border-radius:999px;background:var(--overlay);border:1px solid var(--line);cursor:pointer;transition:background .2s;flex:none;padding:0}
+.switch::after{content:"";position:absolute;top:2px;left:2px;width:17px;height:17px;border-radius:50%;background:var(--cyan);transition:transform .25s cubic-bezier(.2,.7,.2,1),background .2s}
+.switch[aria-checked="true"]{background:var(--cyan-deep)}
+.switch[aria-checked="true"]::after{transform:translateX(19px);background:#fff}
+.stepper{display:flex;align-items:center;gap:6px;background:var(--ink);border:1px solid var(--line);border-radius:11px;padding:4px}
+.stepper button{width:26px;height:26px;border-radius:8px;border:0;background:var(--overlay);color:var(--text);font-size:14px;cursor:pointer;line-height:1}
+.stepper button:hover:not([disabled]){background:var(--cyan-deep)}
+.stepper b{flex:1;text-align:center;font:800 13px var(--font)}
+.stepper button[disabled]{opacity:.4;cursor:not-allowed}
+.deck{display:grid;grid-template-columns:repeat(auto-fit,minmax(154px,1fr));gap:10px}
+.ctrl{background:var(--ink);border:1px solid var(--line);border-radius:12px;padding:10px 12px}
+.ctrl .val{float:right;font:800 10.5px var(--font);color:var(--acid)}
+.scope-wrap{position:relative;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:#03060a}
+.scope-wrap canvas{width:100%;height:180px;display:block}
+.scope-tag{position:absolute;top:8px;left:9px;font:800 9px var(--font);letter-spacing:.14em;padding:4px 8px;border-radius:7px;background:rgba(4,7,12,.75);border:1px solid var(--line);color:var(--cyan)}
+.metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(96px,1fr));gap:9px;margin-top:11px}
+.metric{background:var(--ink);border:1px solid var(--line);border-radius:12px;padding:10px}
+.metric b{display:block;font:900 18px var(--disp);line-height:1.15;color:var(--cyan)}
+.metric span{font-size:9px;color:var(--dim);text-transform:uppercase;letter-spacing:.11em}
+.metric.m2 b{color:var(--acid)}.metric.m3 b{color:var(--amber)}.metric.m4 b{color:var(--magenta)}
+.plats{display:flex;gap:6px;flex-wrap:wrap}
+.pchip{border:1px solid var(--line);background:var(--overlay);color:var(--muted);font:700 11px var(--font);padding:6px 12px;border-radius:999px;cursor:pointer;transition:.2s}
+.pchip.on{color:#04222b;border-color:var(--cyan);background:linear-gradient(100deg,var(--cyan),var(--acid))}
+.stream{background:#03060a;border:1px solid var(--line);border-radius:12px;padding:12px;font:11.5px/1.65 var(--mono);color:var(--acid);max-height:230px;overflow:auto;white-space:pre-wrap;word-break:break-word}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(238px,1fr));gap:13px}
+.pcard{border:1px solid var(--line);border-radius:15px;overflow:hidden;background:
+  radial-gradient(60% 40% at 86% 6%,rgba(34,211,238,.24),transparent 60%),
+  radial-gradient(56% 40% at 10% 92%,rgba(139,255,90,.16),transparent 60%),#08111a;transition:transform .2s,border-color .2s}
+.pcard:hover{transform:translateY(-4px);border-color:var(--cyan)}
+.pcard .b{padding:14px;display:flex;flex-direction:column;gap:9px}
+.pcard h4{font:800 13.5px var(--font);line-height:1.35}
+.pcard .price{font:900 20px var(--disp);color:var(--amber)}
+.pcard p{font-size:11.5px;color:var(--muted);line-height:1.55}
+.pcard ul{list-style:none;display:flex;flex-direction:column;gap:6px;font-size:11.5px;color:var(--muted)}
+.pcard li{display:flex;gap:7px}
+.pcard li::before{content:"✔";color:var(--acid);flex:none}
+.acc{border:1px solid var(--line);border-radius:13px;overflow:hidden;background:var(--surface)}
+.acc+.acc{margin-top:10px}
+.acc-h{width:100%;border:0;background:none;color:var(--text);display:flex;align-items:center;gap:11px;padding:12px 14px;cursor:pointer;text-align:left;font:600 13.5px var(--font)}
+.acc-h:hover{background:rgba(34,211,238,.06)}
+.acc-h .meta{font-size:10.5px;color:var(--dim);font-weight:500}
+.acc-h .cnt{margin-left:auto}
+.acc-h .arr{color:var(--dim);transition:transform .25s}
+.acc.open .arr{transform:rotate(180deg)}
+.acc-b{padding:0 14px 14px;border-top:1px solid var(--line)}
+.acc-b textarea{margin-top:11px;min-height:180px}
+.skel{border-radius:12px;background:linear-gradient(90deg,var(--surface2) 25%,var(--overlay) 50%,var(--surface2) 75%);background-size:200% 100%;animation:shimmer 1.4s infinite}
+.spin{width:16px;height:16px;border:2px solid var(--cyan);border-top-color:transparent;border-radius:50%;animation:spin .8s linear infinite;flex:none}
+.bulk{display:flex;gap:9px;align-items:center;flex-wrap:wrap;background:var(--ink);border:1px solid var(--line);border-radius:12px;padding:9px 12px;margin-bottom:10px}
+.hist{display:flex;flex-direction:column;gap:8px;max-height:430px;overflow-y:auto;padding-right:6px}
+.hrow{display:flex;align-items:center;gap:10px;background:var(--ink);border:1px solid var(--line);border-radius:12px;padding:10px 12px;transition:border-color .2s,transform .15s}
+.hrow:hover{border-color:var(--cyan)}
+.hrow.sel{border-color:var(--acid);background:rgba(139,255,90,.06)}
+.hrow.drag{opacity:.35}
+.hrow input{accent-color:var(--acid);width:15px;height:15px;flex:none}
+.hrow .grip{cursor:grab;color:var(--dim);font-size:14px;flex:none;user-select:none}
+.hrow .t{flex:1;min-width:0}
+.hrow .t b{font:700 12.5px var(--font);display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.filters{display:flex;gap:6px;flex-wrap:wrap}
+.fchip{border:1px solid var(--line);background:var(--overlay);color:var(--muted);font:700 11px var(--font);padding:6px 12px;border-radius:999px;cursor:pointer}
+.fchip.on{color:#04222b;border-color:var(--cyan);background:linear-gradient(100deg,var(--cyan),var(--acid))}
+.views{display:flex;flex-direction:column;gap:7px;margin-top:10px}
+.view{display:flex;align-items:center;gap:9px;background:var(--ink);border:1px solid var(--line);border-radius:11px;padding:9px 12px}
+.view b{font:700 12px var(--font);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(460px,100%);z-index:70;background:var(--surface);border-left:1px solid var(--cyan);box-shadow:-24px 0 70px rgba(0,0,0,.65);padding:19px;overflow-y:auto;animation:slide .28s cubic-bezier(.2,.7,.2,1) both}
+.drawer .code{background:#03060a;border:1px solid var(--line);border-radius:11px;padding:12px;font:11px/1.65 var(--mono);color:var(--acid);overflow-x:auto;white-space:pre-wrap;word-break:break-word;margin-top:10px;max-height:320px;overflow-y:auto}
+.scrim{position:fixed;inset:0;z-index:65;background:var(--scrim);backdrop-filter:blur(4px);animation:pop .2s both}
+.toasts{position:fixed;left:16px;bottom:16px;z-index:90;display:flex;flex-direction:column;gap:9px;width:min(360px,calc(100vw - 32px))}
+.toast{display:flex;gap:10px;align-items:flex-start;padding:12px 14px;border-radius:13px;border:1px solid var(--line);background:var(--surface2);box-shadow:0 16px 44px rgba(0,0,0,.55);font-size:12.5px;animation:pop .3s both}
+.toast.ok{border-color:rgba(61,220,132,.5)}.toast.err{border-color:rgba(255,84,112,.5)}.toast.info{border-color:rgba(34,211,238,.5)}
+.toast .x{margin-left:auto;border:0;background:none;color:var(--dim);cursor:pointer;font-size:14px}
+.toast .undo{border:0;background:none;color:var(--acid);font:700 11.5px var(--font);cursor:pointer;text-decoration:underline}
+.band{margin-top:18px}
+.ticker{overflow:hidden;border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:rgba(10,16,24,.6);padding:7px 0;margin-top:16px}
+.ticker-in{display:flex;gap:26px;width:max-content;animation:ticker 34s linear infinite;font:700 10.5px var(--font);letter-spacing:.14em;text-transform:uppercase;color:var(--dim)}
+.ticker-in span{white-space:nowrap}
+.ticker-in b{color:var(--cyan)}
+footer{border-top:1px solid var(--line);padding:26px 0;margin-top:22px;background:rgba(4,7,12,.6)}
+@media (max-width:900px){.grid2{grid-template-columns:1fr}}
+@media (max-width:720px){
+  :root{--nav:56px}
+  .wrap{padding:0 12px}.nav-in{padding:0 12px;gap:6px}.brand b{display:none}
+  .card{padding:13px}.hide-sm{display:none}.drawer{width:100%}
+  .scope-wrap canvas{height:150px}
+}
+@media (prefers-reduced-motion:reduce){.amb::before,.rise,.ticker-in,.conn.busy i{animation:none!important}*{transition-duration:.01ms!important}}
+</style>
+</head>
+<body>
+<div class="amb"></div><div class="mesh"></div>
+
+<nav class="nav"><div class="nav-in">
+  <a class="brand" href="./"><span class="mark">AI</span><b>Прямая&nbsp;генерация</b></a>
+  <span class="conn idle" id="conn"><i></i><span id="connText">нет ключа</span></span>
+  <div class="nav-right">
+    <button class="btn btn-g btn-s" id="muteBtn" aria-pressed="false" title="Звук событий">🔔<span class="hide-sm"> Звук</span></button>
+    <a class="btn btn-g btn-s" href="app/"><span class="hide-sm">Студия</span>🛒</a>
+    <a class="btn btn-g btn-s" href="./"><span class="hide-sm">Витрина</span>🏠</a>
+  </div>
+</div></nav>
+
+<main class="wrap">
+  <div class="grid2">
+    <div class="card hot rise">
+      <span class="kicker acid">Шаг 1 · подключение</span>
+      <h1>Реальный AI <em>прямо из браузера</em></h1>
+      <p class="lead">Свой ключ, свой провайдер, никакого сервера и никакого компьютера. Запрос уходит напрямую с этого устройства к выбранному API — страница только рисует результат.</p>
+
+      <div class="warnbox" style="margin-top:14px">
+        <span>🔐</span>
+        <span>Ключ виден этой странице и уходит только на выбранный хост. По умолчанию он <b>не сохраняется</b> и живёт до перезагрузки. На чужом устройстве не включайте «Запомнить». Для боевого продукта ключ держат на сервере — здесь режим личного инструмента.</span>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px">
+        <div><label class="lbl" for="provider">Провайдер</label><select class="select" id="provider"></select></div>
+        <div><label class="lbl" for="model">Модель</label><input class="input" id="model" spellcheck="false" placeholder="ID модели"></div>
+      </div>
+      <div class="row" style="margin-top:8px" id="modelPicks"></div>
+
+      <div style="margin-top:11px">
+        <label class="lbl" for="apiKey">API-ключ <span id="keyHost" style="color:var(--cyan)"></span></label>
+        <div class="row" style="gap:7px;flex-wrap:nowrap">
+          <input class="input" id="apiKey" type="password" autocomplete="off" spellcheck="false" placeholder="вставьте ключ">
+          <button class="btn btn-g btn-s" id="eyeBtn" title="Показать/скрыть" style="flex:none">👁</button>
+        </div>
+      </div>
+
+      <div id="customBaseWrap" class="hidden" style="margin-top:11px">
+        <label class="lbl" for="customBase">Base URL (OpenAI-совместимый)</label>
+        <input class="input" id="customBase" spellcheck="false" placeholder="https://api.example.com/v1">
+      </div>
+
+      <div class="row" style="margin-top:12px;justify-content:space-between">
+        <span class="row" style="gap:8px">
+          <button class="switch" id="swRemember" role="switch" aria-checked="false" aria-label="Запомнить ключ на этом устройстве"></button>
+          <span class="note">Запомнить на этом устройстве</span>
+        </span>
+        <span class="row">
+          <button class="btn btn-g btn-s" id="forgetBtn">Забыть ключ</button>
+          <button class="btn btn-v btn-s" id="testBtn">Проверить ключ</button>
+        </span>
+      </div>
+      <p class="note" id="providerNote" style="margin-top:10px"></p>
+      <div id="testResult" style="margin-top:10px"></div>
+    </div>
+
+    <div class="card rise" style="animation-delay:.07s">
+      <div class="row" style="justify-content:space-between;margin-bottom:10px">
+        <div><span class="kicker">Живой сигнал</span><h2 style="margin:6px 0 0">Поток ответа</h2></div>
+        <span class="chip c" id="phaseChip">ожидание</span>
+      </div>
+      <div class="scope-wrap">
+        <canvas id="scope" width="900" height="360" aria-label="Осциллограф потока токенов"></canvas>
+        <span class="scope-tag" id="scopeTag">IDLE</span>
+      </div>
+      <div class="metrics">
+        <div class="metric"><b id="mTok">0</b><span>токенов</span></div>
+        <div class="metric m2"><b id="mTps">0</b><span>ток/сек</span></div>
+        <div class="metric m3"><b id="mMs">0</b><span>мс</span></div>
+        <div class="metric m4"><b id="mChars">0</b><span>символов</span></div>
+      </div>
+      <div class="deck" style="margin-top:11px">
+        <div class="ctrl"><label class="lbl" for="scGain">Амплитуда <span class="val" id="scGainVal">1.0×</span></label><input type="range" id="scGain" min="0.3" max="3" step="0.1" value="1"></div>
+        <div class="ctrl"><label class="lbl" for="scGlow">Свечение <span class="val" id="scGlowVal">1.0×</span></label><input type="range" id="scGlow" min="0" max="2.5" step="0.1" value="1"></div>
+        <div class="ctrl"><label class="lbl" for="scTrail">Шлейф <span class="val" id="scTrailVal">0.82</span></label><input type="range" id="scTrail" min="0.4" max="0.96" step="0.02" value="0.82"></div>
+        <div class="ctrl"><label class="lbl">Сетка</label><div class="row" style="gap:8px"><button class="switch" id="swGrid" role="switch" aria-checked="true" aria-label="Сетка осциллографа"></button><span class="note">направляющие</span></div></div>
+      </div>
+      <div id="streamBox" class="stream hidden" style="margin-top:11px"></div>
+    </div>
+  </div>
+
+  <div class="ticker"><div class="ticker-in" id="ticker"></div></div>
+
+  <div class="card band rise" style="animation-delay:.12s">
+    <div class="row" style="justify-content:space-between;margin-bottom:5px">
+      <h2 style="margin:0">🎛 Параметры генерации — применяются сразу</h2>
+      <span class="row">
+        <button class="btn btn-g btn-s" id="resetParams">↺ Сброс</button>
+        <button class="btn btn-g btn-s" id="randomParams">🎲 Случайно</button>
+      </span>
+    </div>
+    <div class="deck">
+      <div class="ctrl"><label class="lbl" for="temp">Температура <span class="val" id="tempVal">0.70</span></label><input type="range" id="temp" min="0" max="1.5" step="0.05" value="0.7"></div>
+      <div class="ctrl"><label class="lbl" for="topp">Top-p <span class="val" id="toppVal">0.95</span></label><input type="range" id="topp" min="0.1" max="1" step="0.05" value="0.95"></div>
+      <div class="ctrl"><label class="lbl" for="maxTok">Лимит токенов <span class="val" id="maxTokVal">4096</span></label><input type="range" id="maxTok" min="512" max="16000" step="256" value="4096"></div>
+      <div class="ctrl"><label class="lbl">Карточек</label><div class="stepper"><button id="cardsMinus" aria-label="Меньше карточек">−</button><b id="cardsVal">3</b><button id="cardsPlus" aria-label="Больше карточек">+</button></div></div>
+      <div class="ctrl"><label class="lbl" for="tone">Тон бренда</label><select class="select" id="tone"><option>уверенный эксперт</option><option>дружелюбный сосед</option><option>дерзкий challenger</option><option>премиум-сдержанный</option><option>тёплый семейный</option></select></div>
+      <div class="ctrl"><label class="lbl" for="angle">Угол подачи</label><select class="select" id="angle"><option>рациональный / эмоции / сравнение</option><option>боль → решение → выгода</option><option>сценарии использования</option><option>против дорогого аналога</option><option>подарок и забота</option></select></div>
+      <div class="ctrl"><label class="lbl" for="lang">Язык</label><select class="select" id="lang"><option>русский</option><option>English</option><option>қазақша</option><option>українська</option></select></div>
+      <div class="ctrl"><label class="lbl" for="audience">Аудитория</label><input class="input" id="audience" value="25–45, город, покупает онлайн" style="padding:8px 10px;font-size:12px"></div>
+      <div class="ctrl"><label class="lbl">Потоковый вывод</label><div class="row" style="gap:8px"><button class="switch" id="swStream" role="switch" aria-checked="true" aria-label="Потоковый вывод"></button><span class="note">видно по мере</span></div></div>
+      <div class="ctrl"><label class="lbl">Строгий JSON</label><div class="row" style="gap:8px"><button class="switch" id="swJson" role="switch" aria-checked="true" aria-label="Требовать JSON от модели"></button><span class="note">response_format</span></div></div>
+      <div class="ctrl"><label class="lbl">Автолимит</label><div class="row" style="gap:8px"><button class="switch" id="swAuto" role="switch" aria-checked="true" aria-label="Автоматически поднимать лимит токенов"></button><span class="note">под объём</span></div></div>
+      <div class="ctrl"><label class="lbl">Повтор при сбое</label><div class="row" style="gap:8px"><button class="switch" id="swRetry" role="switch" aria-checked="true" aria-label="Один повтор при невалидном JSON"></button><span class="note">1 попытка</span></div></div>
+    </div>
+    <div style="margin-top:12px">
+      <label class="lbl">Площадки в контент-паке</label>
+      <div class="plats" id="platPicks"></div>
+    </div>
+    <div id="budgetHint" class="note" style="margin-top:10px"></div>
+  </div>
+
+  <div class="card band rise" style="animation-delay:.18s">
+    <span class="kicker v">Шаг 2 · товар</span>
+    <h2 style="margin-top:6px">Что продаём</h2>
+    <div style="display:grid;grid-template-columns:2fr 1fr 1fr;gap:10px" class="pgrid">
+      <div><label class="lbl" for="pTitle">Название товара</label><input class="input" id="pTitle" value="Беспроводные наушники SoundMax Pro"></div>
+      <div><label class="lbl" for="pPrice">Цена</label><input class="input" id="pPrice" value="4 990 ₽"></div>
+      <div><label class="lbl" for="pDisc">Скидка</label><input class="input" id="pDisc" value="30%"></div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px" class="pgrid2">
+      <div><label class="lbl" for="pOld">Старая цена</label><input class="input" id="pOld" value="7 130 ₽"></div>
+      <div><label class="lbl" for="pUrl">Ссылка на товар (для текстов)</label><input class="input" id="pUrl" value="https://example.shop/soundmax" spellcheck="false"></div>
+    </div>
+    <div style="margin-top:10px"><label class="lbl" for="pFeat">Характеристики и выгоды — по одной в строке</label>
+      <textarea id="pFeat" rows="4">Гибридное активное шумоподавление до 45 дБ
+Кодек LDAC, Hi-Res Audio, драйверы 40 мм
+До 40 часов работы, 10 минут зарядки = 5 часов
+Bluetooth 5.4 Multipoint — телефон и ноутбук сразу
+Амбушюры Memory Foam, вес 245 г
+В коробке жёсткий кейс и кабель AUX</textarea></div>
+    <div style="margin-top:10px"><label class="lbl" for="pAvoid">Чего не обещать</label><input class="input" id="pAvoid" value="не называть конкурентов, не обещать медицинский эффект, без слова «лучший»"></div>
+    <div class="row" style="margin-top:14px">
+      <button class="btn btn-p grow" id="genBtn">⚡ Сгенерировать контент-пак</button>
+      <button class="btn btn-r hidden" id="stopBtn">■ Стоп</button>
+      <button class="btn btn-g" id="demoBtn">Показать пример</button>
+    </div>
+    <div id="genError" style="margin-top:11px"></div>
+  </div>
+
+  <div id="outSection" class="hidden">
+    <div class="card band">
+      <div class="row" style="justify-content:space-between">
+        <div><span class="kicker acid">Шаг 3 · результат</span><h2 style="margin:6px 0 0" id="outTitle">Контент-пак</h2></div>
+        <span class="row">
+          <span class="chip c" id="outMeta">—</span>
+          <button class="btn btn-g btn-s" id="copyAll">📋 Всё</button>
+          <button class="btn btn-g btn-s" id="dlJson">⬇ JSON</button>
+          <button class="btn btn-a btn-s" id="dlMd">⬇ Markdown</button>
+        </span>
+      </div>
+      <div id="outWarn" style="margin-top:11px"></div>
+      <h3 style="margin-top:15px">Карточки товара</h3>
+      <div class="cards" id="outCards"></div>
+      <h3 style="margin-top:18px">Тексты по площадкам</h3>
+      <div id="outPlats"></div>
+    </div>
+  </div>
+
+  <div class="card band rise" style="animation-delay:.24s">
+    <div class="row" style="justify-content:space-between;margin-bottom:6px">
+      <h2 style="margin:0">🕒 История генераций <span class="chip c" id="histCount">0</span></h2>
+      <span class="row">
+        <button class="btn btn-g btn-s" id="saveView">＋ Сохранить вид</button>
+        <button class="btn btn-g btn-s" id="exportHist">⬇ Экспорт</button>
+      </span>
+    </div>
+    <div class="row" style="margin-bottom:10px">
+      <input class="input" id="hq" placeholder="Поиск по товару или модели…" style="flex:1;min-width:180px">
+      <select class="select" id="hsort" style="max-width:190px"><option value="new">Сначала новые</option><option value="old">Сначала старые</option><option value="manual">Ручной порядок</option><option value="tok">По токенам</option><option value="az">По названию</option></select>
+    </div>
+    <div class="filters" id="hfilters" style="margin-bottom:10px"></div>
+    <div class="bulk">
+      <label class="row" style="gap:7px;font-size:12px;cursor:pointer"><input type="checkbox" id="hselAll" style="accent-color:var(--acid);width:15px;height:15px">Выбрать все</label>
+      <span class="chip acid" id="hselN">0 выбрано</span>
+      <span class="row" style="margin-left:auto">
+        <button class="btn btn-g btn-s" id="hcopySel" disabled>📋 Пути</button>
+        <button class="btn btn-r btn-s" id="hdelSel" disabled>🗑 Удалить</button>
+      </span>
+    </div>
+    <div class="hist" id="hist"></div>
+    <div class="views" id="views"></div>
+    <p class="note" style="margin-top:10px">История хранится только в этом браузере. Ключи в неё не попадают. Перетаскивайте строки за ⠿ при сортировке «Ручной порядок».</p>
+  </div>
+</main>
+
+<footer><div class="wrap row" style="justify-content:space-between">
+  <span class="note">AI Marketing Studio · прямая генерация · ключ не покидает устройство, кроме запроса к выбранному API</span>
+  <span class="row"><a class="btn btn-g btn-s" href="app/">Студия</a><a class="btn btn-g btn-s" href="status.html">Состояние проекта</a></span>
+</div></footer>
+
+<div id="drawerHost"></div>
+<div class="toasts" id="toasts" role="status" aria-live="polite"></div>
+
+<script>
+"use strict";
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;");
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const store={get(k){try{return localStorage.getItem(k)}catch{return null}},set(k,v){try{localStorage.setItem(k,v);return true}catch{return false}},del(k){try{localStorage.removeItem(k)}catch{}}};
+const RM=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+/* ---------- sound ---------- */
+let ac=null,muted=store.get("lv_mute")==="1";
+function paintMute(){
+  $("muteBtn").innerHTML=(muted?"🔇":"🔔")+'<span class="hide-sm"> '+(muted?"Тихо":"Звук")+"</span>";
+  $("muteBtn").setAttribute("aria-pressed",String(muted));
+}
+function beep(kind){
+  if(muted)return;
+  try{
+    if(!ac)ac=new (window.AudioContext||window.webkitAudioContext)();
+    if(ac.state==="suspended")ac.resume();
+    const t=ac.currentTime,o=ac.createOscillator(),g=ac.createGain();
+    const map={ok:[660,0.16,"sine"],err:[180,0.26,"sawtooth"],tick:[880,0.05,"triangle"],start:[440,0.09,"sine"]};
+    const[f,d,w]=map[kind]||map.tick;
+    o.type=w;o.frequency.setValueAtTime(f,t);
+    if(kind==="ok")o.frequency.exponentialRampToValueAtTime(f*1.5,t+d);
+    if(kind==="err")o.frequency.exponentialRampToValueAtTime(f*0.6,t+d);
+    g.gain.setValueAtTime(0.0001,t);
+    g.gain.exponentialRampToValueAtTime(kind==="tick"?0.03:0.09,t+0.012);
+    g.gain.exponentialRampToValueAtTime(0.0001,t+d);
+    o.connect(g);g.connect(ac.destination);o.start(t);o.stop(t+d+0.02);
+  }catch{}
+}
+$("muteBtn").onclick=()=>{muted=!muted;store.set("lv_mute",muted?"1":"0");paintMute();if(!muted)beep("tick")};
+document.addEventListener("pointerdown",()=>{if(ac&&ac.state==="suspended")ac.resume()},{once:true});
+paintMute();
+
+/* ---------- providers ---------- */
+const PROVIDERS={
+  openrouter:{n:"OpenRouter",base:"https://openrouter.ai/api/v1",style:"openai",key:"sk-or-…",
+    models:["openai/gpt-4o-mini","anthropic/claude-3.5-sonnet","google/gemini-flash-1.5","meta-llama/llama-3.3-70b-instruct","qwen/qwen-2.5-72b-instruct"],
+    note:"Работает из браузера, один ключ открывает десятки моделей. Ключ: openrouter.ai → Keys."},
+  groq:{n:"Groq",base:"https://api.groq.com/openai/v1",style:"openai",key:"gsk_…",
+    models:["llama-3.3-70b-versatile","llama-3.1-8b-instant","gemma2-9b-it"],
+    note:"Очень быстрый, есть бесплатный лимит. Ключ: console.groq.com → API Keys."},
+  anthropic:{n:"Anthropic",base:"https://api.anthropic.com/v1",style:"anthropic",key:"sk-ant-…",
+    models:["claude-sonnet-4-5","claude-3-5-haiku-latest"],
+    note:"Прямой доступ из браузера включается специальным заголовком — страница добавляет его сама. Ключ: console.anthropic.com."},
+  openai:{n:"OpenAI",base:"https://api.openai.com/v1",style:"openai",key:"sk-…",
+    models:["gpt-4o-mini","gpt-4o"],
+    note:"Может отклонять запросы из браузера политикой CORS. Если так — возьмите OpenRouter с моделью openai/gpt-4o-mini."},
+  together:{n:"Together · Qwen",base:"https://api.together.xyz/v1",style:"openai",key:"…",
+    models:["Qwen/Qwen2.5-72B-Instruct-Turbo","meta-llama/Llama-3.3-70B-Instruct-Turbo"],
+    note:"Ключ: api.together.xyz → Settings → API Keys. Точный ID модели берите из каталога."},
+  deepseek:{n:"DeepSeek",base:"https://api.deepseek.com",style:"openai",key:"sk-…",
+    models:["deepseek-chat"],note:"Ключ: platform.deepseek.com → API keys."},
+  custom:{n:"Свой endpoint",base:"",style:"openai",key:"",models:[],
+    note:"Любой OpenAI-совместимый адрес: укажите Base URL до /chat/completions и ID модели."}
+};
+const PLATS={
+  telegram:{n:"Telegram",ic:"📱",rec:[150,1024],hard:4096,tok:400,note:"1024 — подпись к медиа, 4096 — текстовый пост"},
+  vk:{n:"ВКонтакте",ic:"📘",rec:[500,2000],hard:null,tok:600,note:"рекомендуемый объём поста"},
+  ok:{n:"Одноклассники",ic:"🟦",rec:[800,3000],hard:null,tok:800,note:"тёплый тон, аудитория 35+"},
+  dzen:{n:"Дзен",ic:"📰",rec:[3000,7000],hard:null,tok:2400,note:"лонгрид под дочитываемость"},
+  site:{n:"Сайт",ic:"🌐",rec:[400,10000],hard:null,tok:900,note:"HTML-структура + SEO meta"}
+};
+const TONES={"уверенный эксперт":"факты, цифры, спокойная уверенность","дружелюбный сосед":"простые слова, лёгкая улыбка, без пафоса","дерзкий challenger":"смело, против переплаты, короткие рубленые фразы","премиум-сдержанный":"сдержанно, дорого, минимум эмодзи","тёплый семейный":"забота, дом, близкие, надёжность"};
+
+const state={
+  provider:store.get("lv_provider")||"openrouter",
+  model:store.get("lv_model")||PROVIDERS.openrouter.models[0],
+  customBase:store.get("lv_base")||"",
+  key:store.get("lv_key")||"",
+  remember:store.get("lv_remember")==="1",
+  temp:0.7,topp:0.95,maxTok:4096,cards:3,
+  tone:"уверенный эксперт",angle:"рациональный / эмоции / сравнение",lang:"русский",
+  audience:"25–45, город, покупает онлайн",
+  stream:true,json:true,auto:true,retry:true,
+  plats:new Set(["telegram","vk","ok","dzen","site"]),
+  scope:{gain:1,glow:1,trail:.82,grid:true},
+  phase:"idle",tokens:0,tps:0,ms:0,chars:0,
+  result:null,resultMeta:null,raw:"",
+  hist:[],order:[],hq:"",hsort:"new",hfilter:"all",hsel:new Set(),views:[],
+  busy:false,ctl:null
+};
+try{const h=JSON.parse(store.get("lv_hist")||"[]");if(Array.isArray(h))state.hist=h}catch{}
+try{const o=JSON.parse(store.get("lv_order")||"[]");if(Array.isArray(o))state.order=o}catch{}
+try{const v=JSON.parse(store.get("lv_views")||"[]");if(Array.isArray(v))state.views=v}catch{}
+
+function toast(msg,type="ok",undo){
+  const t=document.createElement("div");t.className="toast "+type;
+  t.innerHTML=`<span>${type==="ok"?"✅":type==="err"?"⛔":"ℹ️"}</span><span>${esc(msg)}</span>`+(undo?`<button class="undo">Отменить</button>`:"")+`<button class="x" aria-label="Закрыть">✕</button>`;
+  t.querySelector(".x").onclick=()=>t.remove();
+  if(undo)t.querySelector(".undo").onclick=()=>{try{undo()}finally{t.remove()}};
+  $("toasts").appendChild(t);setTimeout(()=>t.remove(),undo?9000:4500);
+}
+async function copy(text){
+  const s=String(text??"");if(!s)return toast("Нечего копировать","info");
+  try{if(navigator.clipboard&&window.isSecureContext){await navigator.clipboard.writeText(s);toast("Скопировано");beep("tick");return}}catch{}
+  try{
+    const ta=document.createElement("textarea");ta.value=s;ta.setAttribute("readonly","");
+    ta.style.cssText="position:fixed;top:-2000px;opacity:0";document.body.appendChild(ta);
+    ta.select();ta.setSelectionRange(0,s.length);
+    const ok=document.execCommand("copy");ta.remove();
+    toast(ok?"Скопировано":"Скопируйте вручную",ok?"ok":"info");
+  }catch{toast("Копирование недоступно","err")}
+}
+function download(blob,name){
+  const u=URL.createObjectURL(blob),a=document.createElement("a");
+  a.href=u;a.download=name;document.body.appendChild(a);a.click();a.remove();
+  setTimeout(()=>URL.revokeObjectURL(u),4000);
+}
+function hostOf(u){try{return new URL(u).host}catch{return"—"}}
+function base(){return state.provider==="custom"?state.customBase.replace(/\/+$/,""):PROVIDERS[state.provider].base}
+function style(){return PROVIDERS[state.provider].style}
+
+/* ---------- scope ---------- */
+const cv=$("scope"),cx=cv.getContext("2d");
+let raf=null,pulses=[],lastT=performance.now(),tpsWin=[];
+function fitScope(){
+  const dpr=Math.min(window.devicePixelRatio||1,2);
+  const w=cv.clientWidth||900,h=cv.clientHeight||180;
+  const W=Math.round(w*dpr),H=Math.round(h*dpr);
+  if(cv.width!==W||cv.height!==H){cv.width=W;cv.height=H}
+  cx.setTransform(dpr,0,0,dpr,0,0);
+  return{w,h};
+}
+function pushPulse(n){pulses.push({t:performance.now(),a:clamp(n/14,.15,1.6)});if(pulses.length>240)pulses.shift()}
+function drawScope(now){
+  const{w,h}=fitScope();
+  const s=state.scope;
+  cx.fillStyle=`rgba(3,6,10,${clamp(1-s.trail,.04,.6)})`;cx.fillRect(0,0,w,h);
+  if(s.grid){
+    cx.save();cx.strokeStyle="rgba(34,211,238,.09)";cx.lineWidth=1;
+    for(let x=0;x<w;x+=Math.max(28,w/16)){cx.beginPath();cx.moveTo(x,0);cx.lineTo(x,h);cx.stroke()}
+    for(let y=0;y<h;y+=Math.max(22,h/6)){cx.beginPath();cx.moveTo(0,y);cx.lineTo(w,y);cx.stroke()}
+    cx.restore();
+  }
+  const mid=h/2,phase=state.phase;
+  const col=phase==="error"?[255,84,112]:phase==="stream"?[139,255,90]:phase==="wait"?[255,176,32]:[34,211,238];
+  const speed=phase==="stream"?1.9:phase==="wait"?1.2:.5;
+  const t=(now/1000)*speed;
+  cx.save();
+  cx.lineWidth=2.2;cx.strokeStyle=`rgba(${col[0]},${col[1]},${col[2]},.95)`;
+  cx.shadowBlur=16*s.glow;cx.shadowColor=`rgba(${col[0]},${col[1]},${col[2]},.85)`;
+  cx.beginPath();
+  for(let x=0;x<=w;x+=2){
+    const u=x/w;
+    let y=Math.sin(u*11+t*2.1)*7+Math.sin(u*27-t*3.3)*3.4;
+    if(phase==="stream")y+=Math.sin(u*54+t*7)*4.2;
+    if(phase==="error")y+=(Math.random()-.5)*13;
+    for(const p of pulses){
+      const age=(now-p.t)/900;if(age<0||age>1)continue;
+      const center=1-age,d=Math.abs(u-center);
+      if(d<.09)y+=Math.sin((1-d/.09)*Math.PI)*p.a*46*(1-age);
+    }
+    y*=s.gain;
+    const yy=mid+clamp(y,-mid+5,mid-5);
+    x===0?cx.moveTo(x,yy):cx.lineTo(x,yy);
+  }
+  cx.stroke();cx.restore();
+  cx.save();cx.globalAlpha=.5;cx.fillStyle=`rgba(${col[0]},${col[1]},${col[2]},.14)`;
+  cx.fillRect(0,mid-1,w,2);cx.restore();
+  pulses=pulses.filter(p=>(now-p.t)<950);
+  raf=requestAnimationFrame(drawScope);
+}
+function startScope(){if(raf===null&&!document.hidden)raf=requestAnimationFrame(drawScope)}
+function stopScope(){if(raf!==null){cancelAnimationFrame(raf);raf=null}}
+document.addEventListener("visibilitychange",()=>{document.hidden?stopScope():startScope()});
+window.addEventListener("resize",()=>fitScope());
+window.addEventListener("beforeunload",()=>{stopScope();if(state.ctl)state.ctl.abort()});
+startScope();
+
+/* ---------- ui sync ---------- */
+function setPhase(p,label){
+  state.phase=p;
+  const map={idle:["idle","нет ключа"],ready:["ready","готов"],wait:["busy","запрос"],stream:["busy","поток"],done:["ready","готово"],error:["err","ошибка"]};
+  const[cls,txt]=map[p]||map.idle;
+  $("conn").className="conn "+(state.key?cls:"idle");
+  $("connText").textContent=state.key?(label||txt):"нет ключа";
+  $("phaseChip").textContent=label||txt;
+  $("scopeTag").textContent=(p==="stream"?"STREAM":p==="wait"?"WAIT":p==="error"?"ERROR":p==="done"?"DONE":"IDLE");
+}
+function paintMetrics(){
+  $("mTok").textContent=state.tokens;
+  $("mTps").textContent=state.tps.toFixed(0);
+  $("mMs").textContent=state.ms;
+  $("mChars").textContent=state.chars;
+}
+function estimateTokens(){
+  let n=520+state.cards*230;
+  state.plats.forEach(k=>n+=PLATS[k].tok);
+  return Math.ceil(n/256)*256;
+}
+function paintBudget(){
+  const need=estimateTokens();
+  const el=$("budgetHint");
+  if(state.auto&&state.maxTok<need){state.maxTok=clamp(need,512,16000);$("maxTok").value=state.maxTok;$("maxTokVal").textContent=state.maxTok}
+  const short=state.maxTok<need;
+  el.innerHTML=`Оценка объёма: <b style="color:var(--cyan)">${need}</b> токенов при ${state.cards} карточках и ${state.plats.size} площадках. Лимит: <b style="color:${short?"var(--red)":"var(--acid)"}">${state.maxTok}</b>. ${short?"Лимит меньше оценки — JSON может обрезаться. Поднимите лимит или отключите Дзен.":"Запаса хватает."} Стоимость смотрите в биллинге провайдера.`;
+}
+function paintProviders(){
+  $("provider").innerHTML=Object.entries(PROVIDERS).map(([k,v])=>`<option value="${k}"${k===state.provider?" selected":""}>${esc(v.n)}</option>`).join("");
+  $("model").value=state.model;
+  $("customBase").value=state.customBase;
+  $("customBaseWrap").classList.toggle("hidden",state.provider!=="custom");
+  $("providerNote").textContent=PROVIDERS[state.provider].note;
+  $("keyHost").textContent=base()?("→ "+hostOf(base())):"";
+  $("apiKey").placeholder=PROVIDERS[state.provider].key||"вставьте ключ";
+  const ms=PROVIDERS[state.provider].models;
+  $("modelPicks").innerHTML=ms.map(m=>`<button class="pchip${m===state.model?" on":""}" data-m="${esc(m)}">${esc(m.split("/").pop())}</button>`).join("");
+  $("modelPicks").querySelectorAll("[data-m]").forEach(b=>b.onclick=()=>{state.model=b.dataset.m;store.set("lv_model",state.model);paintProviders()});
+}
+function paintPlats(){
+  $("platPicks").innerHTML=Object.entries(PLATS).map(([k,v])=>`<button class="pchip${state.plats.has(k)?" on":""}" data-p="${k}">${v.ic} ${esc(v.n)}</button>`).join("");
+  $("platPicks").querySelectorAll("[data-p]").forEach(b=>b.onclick=()=>{
+    const k=b.dataset.p;
+    state.plats.has(k)?state.plats.delete(k):state.plats.add(k);
+    if(!state.plats.size){state.plats.add(k);toast("Нужна хотя бы одна площадка","info")}
+    paintPlats();paintBudget();
+  });
+}
+function syncControls(){
+  $("temp").value=state.temp;$("tempVal").textContent=state.temp.toFixed(2);
+  $("topp").value=state.topp;$("toppVal").textContent=state.topp.toFixed(2);
+  $("maxTok").value=state.maxTok;$("maxTokVal").textContent=state.maxTok;
+  $("cardsVal").textContent=state.cards;
+  $("cardsMinus").disabled=state.cards<=1;$("cardsPlus").disabled=state.cards>=5;
+  $("tone").value=state.tone;$("angle").value=state.angle;$("lang").value=state.lang;$("audience").value=state.audience;
+  $("swStream").setAttribute("aria-checked",String(state.stream));
+  $("swJson").setAttribute("aria-checked",String(state.json));
+  $("swAuto").setAttribute("aria-checked",String(state.auto));
+  $("swRetry").setAttribute("aria-checked",String(state.retry));
+  $("swRemember").setAttribute("aria-checked",String(state.remember));
+  $("scGain").value=state.scope.gain;$("scGainVal").textContent=state.scope.gain.toFixed(1)+"×";
+  $("scGlow").value=state.scope.glow;$("scGlowVal").textContent=state.scope.glow.toFixed(1)+"×";
+  $("scTrail").value=state.scope.trail;$("scTrailVal").textContent=state.scope.trail.toFixed(2);
+  $("swGrid").setAttribute("aria-checked",String(state.scope.grid));
+  paintBudget();
+}
+$("provider").onchange=e=>{
+  state.provider=e.target.value;store.set("lv_provider",state.provider);
+  const ms=PROVIDERS[state.provider].models;
+  state.model=ms[0]||"";store.set("lv_model",state.model);
+  paintProviders();setPhase(state.key?"ready":"idle");
+};
+$("model").oninput=e=>{state.model=e.target.value.trim();store.set("lv_model",state.model);paintProviders()};
+$("customBase").oninput=e=>{state.customBase=e.target.value.trim();store.set("lv_base",state.customBase);$("keyHost").textContent=state.customBase?("→ "+hostOf(state.customBase)):""};
+$("apiKey").oninput=e=>{
+  state.key=e.target.value.trim();
+  if(state.remember)store.set("lv_key",state.key);
+  setPhase(state.key?"ready":"idle");
+};
+$("eyeBtn").onclick=()=>{const i=$("apiKey");i.type=i.type==="password"?"text":"password";$("eyeBtn").textContent=i.type==="password"?"👁":"🙈"};
+function sw(el,key,after){el.onclick=()=>{state[key]=!state[key];el.setAttribute("aria-checked",String(state[key]));after&&after()}}
+sw($("swStream"),"stream");sw($("swJson"),"json");sw($("swRetry"),"retry");
+sw($("swAuto"),"auto",paintBudget);
+sw($("swRemember"),"remember",()=>{
+  store.set("lv_remember",state.remember?"1":"0");
+  if(state.remember){store.set("lv_key",state.key);toast("Ключ сохранён в этом браузере","info")}
+  else{store.del("lv_key");toast("Ключ больше не сохраняется","info")}
+});
+$("forgetBtn").onclick=()=>{state.key="";$("apiKey").value="";store.del("lv_key");setPhase("idle");toast("Ключ удалён с устройства")};
+$("temp").oninput=e=>{state.temp=+e.target.value;$("tempVal").textContent=state.temp.toFixed(2)};
+$("topp").oninput=e=>{state.topp=+e.target.value;$("toppVal").textContent=state.topp.toFixed(2)};
+$("maxTok").oninput=e=>{state.maxTok=+e.target.value;$("maxTokVal").textContent=state.maxTok;paintBudget()};
+$("cardsMinus").onclick=()=>{state.cards=clamp(state.cards-1,1,5);syncControls()};
+$("cardsPlus").onclick=()=>{state.cards=clamp(state.cards+1,1,5);syncControls()};
+$("tone").onchange=e=>{state.tone=e.target.value};
+$("angle").onchange=e=>{state.angle=e.target.value};
+$("lang").onchange=e=>{state.lang=e.target.value};
+$("audience").oninput=e=>{state.audience=e.target.value};
+$("scGain").oninput=e=>{state.scope.gain=+e.target.value;$("scGainVal").textContent=state.scope.gain.toFixed(1)+"×"};
+$("scGlow").oninput=e=>{state.scope.glow=+e.target.value;$("scGlowVal").textContent=state.scope.glow.toFixed(1)+"×"};
+$("scTrail").oninput=e=>{state.scope.trail=+e.target.value;$("scTrailVal").textContent=state.scope.trail.toFixed(2)};
+sw($("swGrid"),"grid");
+$("swGrid").onclick=()=>{state.scope.grid=!state.scope.grid;$("swGrid").setAttribute("aria-checked",String(state.scope.grid))};
+$("resetParams").onclick=()=>{
+  Object.assign(state,{temp:.7,topp:.95,maxTok:4096,cards:3,tone:"уверенный эксперт",angle:"рациональный / эмоции / сравнение",lang:"русский",stream:true,json:true,auto:true,retry:true});
+  state.plats=new Set(Object.keys(PLATS));
+  state.scope={gain:1,glow:1,trail:.82,grid:true};
+  paintPlats();syncControls();toast("Параметры сброшены");
+};
+$("randomParams").onclick=()=>{
+  const tones=Object.keys(TONES),angles=[...$("angle").options].map(o=>o.value);
+  state.temp=+(0.3+Math.random()*0.9).toFixed(2);
+  state.topp=+(0.7+Math.random()*0.3).toFixed(2);
+  state.cards=1+Math.floor(Math.random()*5);
+  state.tone=tones[Math.floor(Math.random()*tones.length)];
+  state.angle=angles[Math.floor(Math.random()*angles.length)];
+  state.scope.gain=+(0.6+Math.random()*2).toFixed(1);
+  state.scope.glow=+(Math.random()*2.4).toFixed(1);
+  paintPlats();syncControls();toast("Случайные параметры применены");
+};
+
+/* ---------- prompt ---------- */
+function product(){
+  return{
+    title:$("pTitle").value.trim()||"Товар",
+    price:$("pPrice").value.trim(),old:$("pOld").value.trim(),disc:$("pDisc").value.trim(),
+    url:$("pUrl").value.trim(),
+    feats:$("pFeat").value.split("\n").map(s=>s.trim()).filter(Boolean),
+    avoid:$("pAvoid").value.trim()
+  };
+}
+function buildPrompt(extra){
+  const p=product();
+  const platSpec=[...state.plats].map(k=>{
+    const m=PLATS[k];
+    return `- "${k}": объём ${m.rec[0]}–${m.rec[1]} символов. ${m.note}.`;
+  }).join("\n");
+  const sys=`Ты — маркетолог товарного бизнеса. Отвечай ТОЛЬКО валидным JSON-объектом без markdown и пояснений.
+Схема:
+{"cards":[{"angle":"...","title":"...","badge":"...","description":"...","bullets":["...","...","..."]}],"texts":{${[...state.plats].map(k=>`"${k}":"..."`).join(",")}}}
+Карточек ровно ${state.cards}. Углы подачи: ${state.angle}.
+Тон: ${state.tone} — ${TONES[state.tone]||""}.
+Язык всех текстов: ${state.lang}. Аудитория: ${state.audience}.
+Требования к площадкам:
+${platSpec}
+Для "site" верни HTML-фрагмент строкой: h1, h2, ul, blockquote-отзыв, FAQ, кнопка CTA; в начале добавь строки "SEO Title: ..." и "Meta Description: ...".
+Telegram: короткие абзацы, эмодзи уместно, хештеги, одна ссылка.
+Дзен: заголовок-интрига, подзаголовки ##, честные минусы, финальный призыв подписаться.
+ВК: разговорно, вопрос или опрос в конце.
+ОК: тепло, по-домашнему, без сленга, польза и надёжность.
+Используй только характеристики из списка. Не выдумывай свойства. ${p.avoid?("Избегай: "+p.avoid+"."):""}
+Ссылку ${p.url||"https://example.shop/product"} вставляй там, где нужен переход.`;
+  const usr=`ТОВАР: ${p.title}
+ЦЕНА: ${p.price}${p.old?` (была ${p.old})`:""}${p.disc?`, скидка ${p.disc}`:""}
+ССЫЛКА: ${p.url||"—"}
+ХАРАКТЕРИСТИКИ:
+${p.feats.map(f=>"• "+f).join("\n")||"• не указаны"}
+${extra||""}
+Верни только JSON по схеме.`;
+  return{sys,usr};
+}
+
+/* ---------- transport ---------- */
+function headers(){
+  const h={"Content-Type":"application/json"};
+  if(style()==="anthropic"){
+    h["x-api-key"]=state.key;
+    h["anthropic-version"]="2023-06-01";
+    h["anthropic-dangerous-direct-browser-access"]="true";
+  }else{
+    h.Authorization="Bearer "+state.key;
+    if(state.provider==="openrouter"){h["HTTP-Referer"]=location.origin;h["X-Title"]="AI Marketing Studio"}
+  }
+  return h;
+}
+function body(sys,usr,stream,maxTok){
+  if(style()==="anthropic"){
+    const b={model:state.model,max_tokens:maxTok,temperature:clamp(state.temp,0,1),top_p:state.topp,system:sys,
+      messages:[{role:"user",content:usr}]};
+    if(stream)b.stream=true;
+    return b;
+  }
+  const b={model:state.model,messages:[{role:"system",content:sys},{role:"user",content:usr}],
+    temperature:state.temp,top_p:state.topp,max_tokens:maxTok};
+  if(stream){b.stream=true;b.stream_options={include_usage:true}}
+  if(state.json)b.response_format={type:"json_object"};
+  return b;
+}
+function endpoint(){
+  const b=base();
+  if(!b)throw new Error("Укажите Base URL для своего endpoint.");
+  return style()==="anthropic"?b+"/messages":b+"/chat/completions";
+}
+function friendlyError(e,respText){
+  const m=String(e&&e.message||e);
+  if(/Failed to fetch|NetworkError|TypeError/i.test(m))
+    return `Браузер не смог достучаться до ${hostOf(base())}. Частая причина — провайдер запрещает запросы со страниц (CORS). Попробуйте OpenRouter: он рассчитан на прямые запросы из браузера. Проверьте также интернет и Base URL.`;
+  if(/abort/i.test(m))return "Запрос остановлен.";
+  return m+(respText?(" · "+respText.slice(0,300)):"");
+}
+async function callModel(sys,usr,{stream,maxTok,onDelta}){
+  const url=endpoint();
+  const ctl=new AbortController();state.ctl=ctl;
+  let resp;
+  try{
+    resp=await fetch(url,{method:"POST",headers:headers(),body:JSON.stringify(body(sys,usr,stream,maxTok)),signal:ctl.signal});
+  }catch(e){throw new Error(friendlyError(e))}
+  if(!resp.ok){
+    let txt="";try{txt=await resp.text()}catch{}
+    if(resp.status===401||resp.status===403)throw new Error("Ключ отклонён (HTTP "+resp.status+"). Проверьте ключ и что у провайдера есть баланс. "+txt.slice(0,200));
+    if(resp.status===429)throw new Error("Лимит запросов исчерпан (429). Подождите или пополните баланс. "+txt.slice(0,200));
+    if(resp.status===404)throw new Error("Модель или адрес не найдены (404). Проверьте ID модели: "+state.model+". "+txt.slice(0,200));
+    if(resp.status===400&&/response_format|json_object/i.test(txt)&&state.json){
+      state.json=false;$("swJson").setAttribute("aria-checked","false");
+      toast("Модель не поддерживает строгий JSON — режим выключен, повторяю","info");
+      return callModel(sys,usr,{stream,maxTok,onDelta});
+    }
+    throw new Error("HTTP "+resp.status+" · "+txt.slice(0,320));
+  }
+  if(!stream){
+    const j=await resp.json();
+    const text=style()==="anthropic"?(j.content?.[0]?.text||""):(j.choices?.[0]?.message?.content||"");
+    const u=j.usage||{};
+    const tok=style()==="anthropic"?((u.input_tokens||0)+(u.output_tokens||0)):(u.total_tokens||Math.round(text.length/4));
+    return{text,tok,finish:style()==="anthropic"?j.stop_reason:j.choices?.[0]?.finish_reason};
+  }
+  if(!resp.body)throw new Error("Браузер не отдал поток ответа. Отключите «Потоковый вывод».");
+  const reader=resp.body.getReader(),dec=new TextDecoder();
+  let buf="",text="",tok=0,finish=null;
+  while(true){
+    const{done,value}=await reader.read();
+    if(done)break;
+    buf+=dec.decode(value,{stream:true});
+    const lines=buf.split("\n");buf=lines.pop()||"";
+    for(const raw of lines){
+      const line=raw.trim();
+      if(!line||line.startsWith(":"))continue;
+      if(!line.startsWith("data:"))continue;
+      const payload=line.slice(5).trim();
+      if(payload==="[DONE]")continue;
+      let j;try{j=JSON.parse(payload)}catch{continue}
+      let piece="";
+      if(style()==="anthropic"){
+        if(j.type==="content_block_delta"&&j.delta?.text)piece=j.delta.text;
+        if(j.type==="message_start"&&j.message?.usage)tok+=j.message.usage.input_tokens||0;
+        if(j.type==="message_delta"){if(j.usage)tok+=j.usage.output_tokens||0;if(j.delta?.stop_reason)finish=j.delta.stop_reason}
+      }else{
+        const ch=j.choices?.[0];
+        if(ch?.delta?.content)piece=ch.delta.content;
+        if(ch?.finish_reason)finish=ch.finish_reason;
+        if(j.usage?.total_tokens)tok=j.usage.total_tokens;
+      }
+      if(piece){text+=piece;onDelta&&onDelta(piece,text)}
+    }
+  }
+  if(!tok)tok=Math.round(text.length/4);
+  return{text,tok,finish};
+}
+function parseJson(text){
+  let t=String(text||"").trim().replace(/^```(?:json)?\s*/i,"").replace(/\s*```$/,"").trim();
+  try{return JSON.parse(t)}catch{}
+  const a=t.indexOf("{"),b=t.lastIndexOf("}");
+  if(a>=0&&b>a){try{return JSON.parse(t.slice(a,b+1))}catch{}}
+  throw new Error("Модель вернула не JSON. Попробуйте включить «Строгий JSON», снизить температуру или сменить модель.");
+}
+function normalize(obj){
+  const cards=Array.isArray(obj.cards)?obj.cards:[];
+  const texts=obj.texts&&typeof obj.texts==="object"?obj.texts:{};
+  const out={cards:[],texts:{}};
+  cards.slice(0,state.cards).forEach((c,i)=>{
+    out.cards.push({
+      angle:String(c.angle||"Вариант "+(i+1)),
+      title:String(c.title||product().title),
+      badge:String(c.badge||""),
+      description:String(c.description||""),
+      bullets:(Array.isArray(c.bullets)?c.bullets:typeof c.bullets==="string"?[c.bullets]:[]).map(String).slice(0,5)
+    });
+  });
+  [...state.plats].forEach(k=>{
+    let v=texts[k];
+    if(v&&typeof v==="object")v=Object.values(v).filter(x=>typeof x==="string").join("\n\n");
+    out.texts[k]=String(v??"");
+  });
+  return out;
+}
+
+/* ---------- render result ---------- */
+function cntClass(len,m){return m.hard&&len>m.hard?"r":(len<m.rec[0]||len>m.rec[1]?"a":"g")}
+function cntLabel(len,m){return m.hard?`${len} / ${m.hard}`:`${len} · рек. ${m.rec[0]}–${m.rec[1]}`}
+function renderResult(res,meta,warn){
+  state.result=res;state.resultMeta=meta;
+  $("outSection").classList.remove("hidden");
+  $("outTitle").textContent=product().title;
+  $("outMeta").textContent=`${meta.provider} · ${meta.model} · ${meta.tokens} ток · ${meta.ms} мс`;
+  $("outWarn").innerHTML=warn?`<div class="warnbox"><span>⚠️</span><span>${esc(warn)}</span></div>`
+    :`<div class="okbox"><span>✅</span><span>Ответ прошёл разбор: ${res.cards.length} карточек и ${Object.keys(res.texts).length} текстов. Правьте текст прямо в полях — счётчики обновляются.</span></div>`;
+  $("outCards").innerHTML=res.cards.length?res.cards.map((c,i)=>`<div class="pcard"><div class="b">
+    <div class="row" style="justify-content:space-between"><span class="chip c">${esc(c.angle)}</span>${c.badge?`<span class="chip a">${esc(c.badge)}</span>`:""}</div>
+    <h4>${esc(c.title)}</h4><div class="price">${esc(product().price)}</div>
+    <p>${esc(c.description)}</p>
+    <ul>${c.bullets.map(b=>`<li>${esc(b)}</li>`).join("")}</ul>
+    <button class="btn btn-g btn-s" data-card="${i}">📋 Карточка</button></div></div>`).join("")
+    :`<p class="note">Модель не вернула карточки. Проверьте промпт или смените модель.</p>`;
+  $("outCards").querySelectorAll("[data-card]").forEach(b=>b.onclick=()=>{
+    const c=res.cards[+b.dataset.card];
+    copy(`${c.angle}\n${c.title}\n${product().price}${c.badge?" · "+c.badge:""}\n\n${c.description}\n\n${c.bullets.map(x=>"• "+x).join("\n")}`);
+  });
+  $("outPlats").innerHTML=Object.keys(res.texts).map((k,i)=>{
+    const m=PLATS[k],len=res.texts[k].length;
+    return `<div class="acc${i===0?" open":""}" data-k="${k}">
+      <button class="acc-h" aria-expanded="${i===0}"><span style="font-size:17px">${m.ic}</span>
+        <span><b>${esc(m.n)}</b><br><span class="meta">${esc(m.note)}</span></span>
+        <span class="cnt chip ${cntClass(len,m)}" data-cnt="${k}">${cntLabel(len,m)}</span><span class="arr">▼</span></button>
+      <div class="acc-b${i===0?"":" hidden"}">
+        <textarea data-txt="${k}" rows="9">${esc(res.texts[k])}</textarea>
+        <div class="row" style="justify-content:flex-end;margin-top:9px">
+          <button class="btn btn-g btn-s" data-copy="${k}">📋 Копировать</button>
+          <button class="btn btn-g btn-s" data-dl="${k}">💾 .txt</button></div></div></div>`;
+  }).join("");
+  $("outPlats").querySelectorAll(".acc-h").forEach(h=>h.onclick=()=>{
+    const a=h.parentElement,open=a.classList.toggle("open");
+    h.nextElementSibling.classList.toggle("hidden",!open);h.setAttribute("aria-expanded",String(open));
+  });
+  $("outPlats").querySelectorAll("[data-txt]").forEach(t=>t.oninput=()=>{
+    const k=t.dataset.txt;state.result.texts[k]=t.value;
+    const c=$("outPlats").querySelector(`[data-cnt="${k}"]`);
+    c.textContent=cntLabel(t.value.length,PLATS[k]);c.className="cnt chip "+cntClass(t.value.length,PLATS[k]);
+    persistResult();
+  });
+  $("outPlats").querySelectorAll("[data-copy]").forEach(b=>b.onclick=()=>copy(state.result.texts[b.dataset.copy]));
+  $("outPlats").querySelectorAll("[data-dl]").forEach(b=>b.onclick=()=>{
+    const k=b.dataset.dl;download(new Blob([state.result.texts[k]],{type:"text/plain;charset=utf-8"}),k+".txt");toast("Файл сохранён");
+  });
+}
+function persistResult(){
+  if(!state.resultMeta)return;
+  const h=state.hist.find(x=>x.id===state.resultMeta.id);
+  if(h){h.result=state.result;saveHist()}
+}
+function allText(){
+  if(!state.result)return"";
+  const p=product(),L=[`# ${p.title}`,`Цена: ${p.price}${p.old?" (была "+p.old+")":""}${p.disc?", скидка "+p.disc:""}`,""];
+  state.result.cards.forEach((c,i)=>{L.push(`## Карточка ${i+1} — ${c.angle}`,c.title,c.badge||"",c.description,...c.bullets.map(b=>"• "+b),"")});
+  Object.entries(state.result.texts).forEach(([k,v])=>{L.push(`## ${PLATS[k].n}`,v,"")});
+  return L.filter(x=>x!==undefined).join("\n");
+}
+$("copyAll").onclick=()=>copy(allText());
+$("dlJson").onclick=()=>{
+  if(!state.result)return;
+  download(new Blob([JSON.stringify({product:product(),params:{provider:state.provider,model:state.model,temp:state.temp,topp:state.topp,maxTok:state.maxTok,tone:state.tone,angle:state.angle,lang:state.lang},meta:state.resultMeta,result:state.result},null,2)],{type:"application/json"}),"content-pack.json");
+  toast("JSON сохранён");
+};
+$("dlMd").onclick=()=>{if(!state.result)return;download(new Blob([allText()],{type:"text/markdown;charset=utf-8"}),"content-pack.md");toast("Markdown сохранён")};
+
+/* ---------- history ---------- */
+function saveHist(){
+  const slim=state.hist.slice(0,40).map(h=>({...h}));
+  if(!store.set("lv_hist",JSON.stringify(slim)))store.set("lv_hist",JSON.stringify(slim.slice(0,12)));
+  paintHist();
+}
+function seedHist(){
+  if(state.hist.length)return;
+  const p={title:"Беспроводные наушники SoundMax Pro",price:"4 990 ₽"};
+  const mk=(id,title,model,ago,tok,cards,texts)=>({
+    id,ts:Date.now()-ago,title,provider:"openrouter",model,tokens:tok,ms:2600+ago%1700,seeded:true,
+    product:{...p,title},result:{cards:cards,texts}
+  });
+  state.hist=[
+    mk("seed-1","SoundMax Pro · запуск скидки","openai/gpt-4o-mini",36e5,3180,
+      [{angle:"Рациональный выбор",title:"SoundMax Pro — 40 часов работы и тишина в дороге",badge:"Выгода 30%",description:"Инструмент для офиса и перелётов: заряжаете раз в неделю, подключаете к ноутбуку и телефону сразу.",bullets:["До 40 ч автономности","Bluetooth 5.4 Multipoint","Амбушюры Memory Foam"]},
+       {angle:"Эмоции",title:"SoundMax Pro — город остаётся снаружи",badge:"Хит сезона",description:"Одно касание — и гул метро исчезает, остаётся только ваша музыка.",bullets:["ANC до 45 дБ","LDAC и Hi-Res Audio","Матовый корпус"]}],
+      {telegram:"🎧 Метро гудит, а музыка тонет?\n\nSoundMax Pro выключают внешний мир одним касанием: ANC до 45 дБ.\n\n🔥 Внутри:\n• LDAC и Hi-Res\n• До 40 часов без розетки\n• Multipoint: ноутбук + телефон\n\n💥 Сейчас 4 990 ₽ вместо 7 130 ₽.\n\n👉 https://example.shop/soundmax\n\n#наушники #гаджеты #скидки",
+       vk:"Судите сами: SoundMax Pro.\n\nШумодав до 45 дБ и кодек LDAC — то, что чувствуется в первый же день.\n\n✅ До 40 часов работы\n✅ Телефон и ноутбук одновременно\n✅ 4 990 ₽ вместо 7 130 ₽\n\nЧто важнее при выборе? Пишите в комментариях.\n\n#обзор #гаджеты"})
+    ,
+    mk("seed-2","AeroBuds Lite · тест подачи","meta-llama/llama-3.3-70b-instruct",92e5,2410,
+      [{angle:"Практичный",title:"AeroBuds Lite — 4 грамма, которые не чувствуешь",badge:"Новинка",description:"Для дороги и зала: сидят плотно, дождь не страшен, кейс заряжает трижды.",bullets:["4 г каждый вкладыш","IPX5","28 часов с кейсом"]}],
+      {telegram:"🪶 4 грамма в ухе — и ты их не чувствуешь.\n\nAeroBuds Lite: IPX5, 28 часов с кейсом, посадка на весь день.\n\n💥 2 490 ₽ по акции.\n\n👉 https://example.shop/aerobuds\n\n#наушники #новинка",
+       ok:"Друзья, делимся находкой — AeroBuds Lite.\n\nЛёгкие, не давят, дождь им не помеха. Заряжать каждый день не нужно: кейс держит запас на неделю поездок.\n\nСейчас 2 490 ₽. В комплекте футляр — можно взять в подарок.\n\nПодробности: https://example.shop/aerobuds"})
+  ];
+  state.order=state.hist.map(h=>h.id);
+  saveHist();
+}
+function histView(){
+  let l=state.hist.slice();
+  if(state.hfilter!=="all")l=l.filter(h=>h.provider===state.hfilter);
+  const q=state.hq.trim().toLowerCase();
+  if(q)l=l.filter(h=>(h.title+" "+h.model+" "+(h.product?.title||"")).toLowerCase().includes(q));
+  const cmp={new:(a,b)=>b.ts-a.ts,old:(a,b)=>a.ts-b.ts,tok:(a,b)=>(b.tokens||0)-(a.tokens||0),
+    az:(a,b)=>String(a.title).localeCompare(String(b.title),"ru"),
+    manual:(a,b)=>{const ia=state.order.indexOf(a.id),ib=state.order.indexOf(b.id);return (ia<0?1e9:ia)-(ib<0?1e9:ib)}}[state.hsort];
+  return l.sort(cmp);
+}
+function paintHistFilters(){
+  const provs=[...new Set(state.hist.map(h=>h.provider))];
+  $("hfilters").innerHTML=[`<button class="fchip${state.hfilter==="all"?" on":""}" data-f="all">Все</button>`]
+    .concat(provs.map(p=>`<button class="fchip${state.hfilter===p?" on":""}" data-f="${esc(p)}">${esc(PROVIDERS[p]?.n||p)}</button>`)).join("");
+  $("hfilters").querySelectorAll("[data-f]").forEach(b=>b.onclick=()=>{state.hfilter=b.dataset.f;paintHistFilters();paintHist()});
+}
+function paintHist(){
+  const l=histView();
+  $("histCount").textContent=state.hist.length;
+  $("hist").innerHTML=l.length?l.map(h=>`<div class="hrow${state.hsel.has(h.id)?" sel":""}" data-id="${esc(h.id)}" draggable="${state.hsort==="manual"}">
+    <span class="grip" aria-hidden="true">⠿</span>
+    <input type="checkbox" data-sel="${esc(h.id)}" ${state.hsel.has(h.id)?"checked":""} aria-label="Выбрать запись">
+    <span class="t"><b>${esc(h.title)}</b><span class="note">${esc(PROVIDERS[h.provider]?.n||h.provider)} · ${esc(h.model)} · ${new Date(h.ts).toLocaleString("ru-RU")}${h.seeded?" · пример":""}</span></span>
+    <span class="chip c">${h.tokens||0} ток</span>
+    <button class="btn btn-g btn-s" data-open="${esc(h.id)}">Открыть</button>
+    <button class="btn btn-g btn-s" data-reuse="${esc(h.id)}">↻ Параметры</button>
+    <button class="btn btn-g btn-s" style="color:var(--red)" data-del="${esc(h.id)}" aria-label="Удалить">✕</button></div>`).join("")
+    :`<p class="note" style="padding:20px;text-align:center">Ничего не найдено. Измените фильтр или сгенерируйте контент-пак.</p>`;
+  $("hist").querySelectorAll("[data-sel]").forEach(c=>c.onchange=e=>{
+    e.stopPropagation();c.checked?state.hsel.add(c.dataset.sel):state.hsel.delete(c.dataset.sel);
+    c.closest(".hrow").classList.toggle("sel",c.checked);paintBulk();
+  });
+  $("hist").querySelectorAll("[data-open]").forEach(b=>b.onclick=()=>openDrawer(b.dataset.open));
+  $("hist").querySelectorAll("[data-reuse]").forEach(b=>b.onclick=()=>{
+    const h=state.hist.find(x=>x.id===b.dataset.reuse);if(!h||!h.params)return toast("У записи нет сохранённых параметров","info");
+    Object.assign(state,h.params);
+    state.plats=new Set(h.params.plats||Object.keys(PLATS));
+    if(h.product){$("pTitle").value=h.product.title||"";$("pPrice").value=h.product.price||"";$("pOld").value=h.product.old||"";$("pDisc").value=h.product.disc||"";$("pUrl").value=h.product.url||"";$("pFeat").value=(h.product.feats||[]).join("\n");$("pAvoid").value=h.product.avoid||""}
+    paintProviders();paintPlats();syncControls();toast("Параметры восстановлены");
+    window.scrollTo({top:0,behavior:"smooth"});
+  });
+  $("hist").querySelectorAll("[data-del]").forEach(b=>b.onclick=()=>delHist(b.dataset.del));
+  if(state.hsort==="manual"){
+    let dragId=null;
+    $("hist").querySelectorAll(".hrow").forEach(r=>{
+      r.ondragstart=()=>{dragId=r.dataset.id;r.classList.add("drag")};
+      r.ondragend=()=>{dragId=null;r.classList.remove("drag")};
+      r.ondragover=e=>e.preventDefault();
+      r.ondrop=e=>{
+        e.preventDefault();const to=r.dataset.id;if(!dragId||dragId===to)return;
+        const order=histView().map(h=>h.id);
+        const from=order.indexOf(dragId),ti=order.indexOf(to);
+        order.splice(ti,0,order.splice(from,1)[0]);
+        state.order=order.concat(state.hist.map(h=>h.id).filter(id=>!order.includes(id)));
+        store.set("lv_order",JSON.stringify(state.order));paintHist();toast("Порядок обновлён");
+      };
+    });
+  }
+  paintBulk();paintHistFilters();
+}
+function paintBulk(){
+  const n=state.hsel.size;$("hselN").textContent=n+" выбрано";
+  $("hcopySel").disabled=!n;$("hdelSel").disabled=!n;
+  const v=histView();$("hselAll").checked=v.length>0&&v.every(h=>state.hsel.has(h.id));
+}
+function delHist(id){
+  const i=state.hist.findIndex(h=>h.id===id);if(i<0)return;
+  const[rm]=state.hist.splice(i,1);state.hsel.delete(id);saveHist();
+  toast("Запись удалена","info",()=>{state.hist.splice(i,0,rm);saveHist()});
+}
+$("hq").oninput=e=>{state.hq=e.target.value;paintHist()};
+$("hsort").onchange=e=>{state.hsort=e.target.value;paintHist()};
+$("hselAll").onchange=()=>{
+  const v=histView();
+  $("hselAll").checked?v.forEach(h=>state.hsel.add(h.id)):v.forEach(h=>state.hsel.delete(h.id));
+  paintHist();
+};
+$("hcopySel").onclick=()=>copy(state.hist.filter(h=>state.hsel.has(h.id)).map(h=>`${h.title} · ${h.model} · ${h.tokens} ток`).join("\n"));
+$("hdelSel").onclick=()=>{
+  const ids=new Set(state.hsel);if(!ids.size)return;
+  const backup=state.hist.slice();
+  state.hist=state.hist.filter(h=>!ids.has(h.id));state.hsel.clear();saveHist();
+  toast(`Удалено записей: ${ids.size}`,"info",()=>{state.hist=backup;saveHist()});
+};
+$("exportHist").onclick=()=>{
+  download(new Blob([JSON.stringify(state.hist,null,2)],{type:"application/json"}),"generation-history.json");
+  toast("История сохранена");
+};
+$("saveView").onclick=()=>{
+  const v={id:"v"+Date.now(),name:`${state.hfilter==="all"?"все":state.hfilter}${state.hq?` · «${state.hq}»`:""} · ${state.hsort}`,
+    filter:state.hfilter,q:state.hq,sort:state.hsort};
+  state.views.unshift(v);state.views=state.views.slice(0,8);
+  store.set("lv_views",JSON.stringify(state.views));paintViews();
+  toast("Вид сохранён","ok",()=>{state.views=state.views.filter(x=>x.id!==v.id);store.set("lv_views",JSON.stringify(state.views));paintViews()});
+};
+function paintViews(){
+  $("views").innerHTML=state.views.length?state.views.map(v=>`<div class="view"><span class="chip v">вид</span><b>${esc(v.name)}</b>
+    <button class="btn btn-g btn-s" data-apply="${esc(v.id)}">Применить</button>
+    <button class="btn btn-g btn-s" style="color:var(--red)" data-vdel="${esc(v.id)}" aria-label="Удалить вид">✕</button></div>`).join(""):"";
+  $("views").querySelectorAll("[data-apply]").forEach(b=>b.onclick=()=>{
+    const v=state.views.find(x=>x.id===b.dataset.apply);if(!v)return;
+    state.hfilter=v.filter;state.hq=v.q;state.hsort=v.sort;
+    $("hq").value=v.q;$("hsort").value=v.sort;paintHist();toast("Вид применён");
+  });
+  $("views").querySelectorAll("[data-vdel]").forEach(b=>b.onclick=()=>{
+    const i=state.views.findIndex(x=>x.id===b.dataset.vdel);if(i<0)return;
+    const[rm]=state.views.splice(i,1);store.set("lv_views",JSON.stringify(state.views));paintViews();
+    toast("Вид удалён","info",()=>{state.views.splice(i,0,rm);store.set("lv_views",JSON.stringify(state.views));paintViews()});
+  });
+}
+let drawerId=null;
+function openDrawer(id){
+  const h=state.hist.find(x=>x.id===id);if(!h)return;
+  drawerId=id;
+  $("drawerHost").innerHTML=`<div class="scrim" id="scrim"></div><aside class="drawer" role="dialog" aria-modal="true" aria-label="Детали генерации">
+    <div class="row" style="justify-content:space-between;margin-bottom:12px"><span class="kicker acid">Генерация</span>
+      <button class="btn btn-g btn-s" id="dClose">✕ Закрыть</button></div>
+    <h2 style="font:800 15px var(--font);word-break:break-word">${esc(h.title)}</h2>
+    <div class="row" style="margin:10px 0">
+      <span class="chip c">${esc(PROVIDERS[h.provider]?.n||h.provider)}</span>
+      <span class="chip v">${esc(h.model)}</span>
+      <span class="chip acid">${h.tokens||0} ток</span>
+      <span class="chip">${h.ms||0} мс</span>
+      ${h.seeded?'<span class="chip a">пример</span>':""}
+    </div>
+    <p class="note">${new Date(h.ts).toLocaleString("ru-RU")}</p>
+    <div class="row" style="margin-top:12px">
+      <button class="btn btn-p btn-s" id="dLoad">Показать в результате</button>
+      <button class="btn btn-g btn-s" id="dCopy">📋 JSON</button>
+      <button class="btn btn-g btn-s" id="dDl">⬇ Файл</button>
+    </div>
+    <h3 style="margin-top:16px">Карточки</h3>
+    ${(h.result?.cards||[]).map(c=>`<div class="pcard" style="margin-bottom:9px"><div class="b"><span class="chip c">${esc(c.angle)}</span><h4>${esc(c.title)}</h4><p>${esc(c.description)}</p></div></div>`).join("")||'<p class="note">Нет карточек</p>'}
+    <h3 style="margin-top:14px">Параметры</h3>
+    <div class="code">${esc(JSON.stringify(h.params||{},null,2))}</div>
+    <h3 style="margin-top:14px">Тексты</h3>
+    <div class="code">${esc(JSON.stringify(h.result?.texts||{},null,2).slice(0,3000))}</div>
+  </aside>`;
+  $("scrim").onclick=closeDrawer;$("dClose").onclick=closeDrawer;
+  $("dCopy").onclick=()=>copy(JSON.stringify(h,null,2));
+  $("dDl").onclick=()=>download(new Blob([JSON.stringify(h,null,2)],{type:"application/json"}),(h.id||"generation")+".json");
+  $("dLoad").onclick=()=>{
+    if(h.product){$("pTitle").value=h.product.title||"";$("pPrice").value=h.product.price||"";$("pOld").value=h.product.old||"";$("pDisc").value=h.product.disc||"";$("pUrl").value=h.product.url||"";$("pFeat").value=(h.product.feats||[]).join("\n");$("pAvoid").value=h.product.avoid||""}
+    state.plats=new Set(Object.keys(h.result?.texts||{}).length?Object.keys(h.result.texts):Object.keys(PLATS));
+    paintPlats();syncControls();
+    renderResult(h.result,{id:h.id,provider:PROVIDERS[h.provider]?.n||h.provider,model:h.model,tokens:h.tokens||0,ms:h.ms||0},h.seeded?"Это seeded-пример из поставки страницы, не ответ модели.":null);
+    closeDrawer();$("outSection").scrollIntoView({behavior:"smooth",block:"start"});
+  };
+  $("dClose").focus();
+}
+function closeDrawer(){$("drawerHost").innerHTML="";drawerId=null}
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&drawerId)closeDrawer()});
+
+/* ---------- generate ---------- */
+function lock(on){
+  state.busy=on;
+  $("genBtn").disabled=on;
+  $("testBtn").disabled=on;
+  $("demoBtn").disabled=on;
+  $("stopBtn").classList.toggle("hidden",!on);
+  $("genBtn").innerHTML=on?'<span class="spin"></span> Генерирую…':"⚡ Сгенерировать контент-пак";
+}
+function resetRun(){
+  state.tokens=0;state.tps=0;state.ms=0;state.chars=0;state.raw="";
+  tpsWin=[];pulses=[];paintMetrics();
+  $("streamBox").classList.add("hidden");$("streamBox").textContent="";
+  $("genError").innerHTML="";
+}
+function showErr(msg){
+  $("genError").innerHTML=`<div class="errbox"><span>⛔</span><span>${esc(msg)}</span></div>`;
+  setPhase("error","ошибка");beep("err");
+}
+async function runGenerate(){
+  if(state.busy)return;
+  if(!state.key)return showErr("Вставьте API-ключ. Без него запрос не уйдёт."),setPhase("idle");
+  if(!state.model)return showErr("Укажите ID модели.");
+  if(!state.plats.size)return showErr("Выберите хотя бы одну площадку.");
+  lock(true);resetRun();setPhase("wait","запрос");beep("start");
+  const t0=performance.now();
+  const useStream=state.stream;
+  if(useStream){$("streamBox").classList.remove("hidden")}
+  const onDelta=(piece,full)=>{
+    if(state.phase!=="stream")setPhase("stream","поток");
+    state.chars=full.length;state.raw=full;
+    const now=performance.now();
+    tpsWin.push({t:now,n:Math.max(1,Math.round(piece.length/4))});
+    tpsWin=tpsWin.filter(x=>now-x.t<1000);
+    state.tps=tpsWin.reduce((a,b)=>a+b.n,0);
+    state.tokens=Math.max(state.tokens,Math.round(full.length/4));
+    state.ms=Math.round(now-t0);
+    pushPulse(piece.length/4);
+    paintMetrics();
+    const box=$("streamBox");box.textContent=full.slice(-4000);box.scrollTop=box.scrollHeight;
+  };
+  const {sys,usr}=buildPrompt();
+  let attempt=0,out=null,warn=null;
+  try{
+    while(true){
+      attempt++;
+      const extra=attempt>1?"\nПредыдущий ответ не разобрался как JSON. Верни строго валидный JSON по схеме, без текста вокруг.":"";
+      const p=attempt>1?buildPrompt(extra):{sys,usr};
+      const r=await callModel(p.sys,p.usr,{stream:useStream,maxTok:state.maxTok,onDelta});
+      state.ms=Math.round(performance.now()-t0);
+      state.tokens=r.tok||state.tokens;
+      state.chars=r.text.length;paintMetrics();
+      if(r.finish&&/length|max_tokens/i.test(String(r.finish)))
+        warn="Ответ упёрся в лимит токенов и мог обрезаться. Поднимите «Лимит токенов» или отключите Дзен.";
+      try{out=normalize(parseJson(r.text));break}
+      catch(e){
+        if(state.retry&&attempt<2){toast("JSON не разобрался — повторяю с уточнением","info");continue}
+        throw e;
+      }
+    }
+    const missing=[...state.plats].filter(k=>!out.texts[k]||out.texts[k].length<40);
+    if(missing.length)warn=(warn?warn+" ":"")+"Пустые или слишком короткие тексты: "+missing.map(k=>PLATS[k].n).join(", ")+". Проверьте лимит токенов и модель.";
+    if(out.cards.length<state.cards)warn=(warn?warn+" ":"")+`Карточек пришло ${out.cards.length} из ${state.cards}.`;
+    const meta={id:"g"+Date.now(),provider:PROVIDERS[state.provider].n,model:state.model,tokens:state.tokens,ms:state.ms};
+    renderResult(out,meta,warn);
+    state.hist.unshift({id:meta.id,ts:Date.now(),title:product().title+" · "+state.tone,
+      provider:state.provider,model:state.model,tokens:state.tokens,ms:state.ms,
+      product:product(),params:{provider:state.provider,model:state.model,temp:state.temp,topp:state.topp,maxTok:state.maxTok,
+        cards:state.cards,tone:state.tone,angle:state.angle,lang:state.lang,audience:state.audience,plats:[...state.plats]},
+      result:out});
+    state.order=[meta.id,...state.order];store.set("lv_order",JSON.stringify(state.order));
+    saveHist();
+    setPhase("done","готово");beep("ok");
+    toast(`Готово: ${out.cards.length} карточек, ${Object.keys(out.texts).length} текстов · ${state.tokens} токенов`);
+    $("outSection").scrollIntoView({behavior:"smooth",block:"start"});
+  }catch(e){
+    showErr(friendlyError(e));
+  }finally{
+    lock(false);state.ctl=null;
+  }
+}
+$("genBtn").onclick=runGenerate;
+$("stopBtn").onclick=()=>{if(state.ctl){state.ctl.abort();toast("Останавливаю запрос","info")}};
+$("testBtn").onclick=async()=>{
+  if(state.busy)return;
+  if(!state.key)return showErr("Вставьте ключ для проверки."),setPhase("idle");
+  if(!state.model)return showErr("Укажите ID модели.");
+  $("genError").innerHTML="";$("testResult").innerHTML="";
+  lock(true);setPhase("wait","проверка");
+  const t0=performance.now();
+  try{
+    const r=await callModel("Отвечай одним словом.","ping",{stream:false,maxTok:16});
+    const ms=Math.round(performance.now()-t0);
+    $("testResult").innerHTML=`<div class="okbox"><span>✅</span><span><b>${esc(PROVIDERS[state.provider].n)}</b> отвечает · модель <b>${esc(state.model)}</b> · ${ms} мс. Можно генерировать.</span></div>`;
+    setPhase("ready","готов");beep("ok");toast("Ключ работает");
+  }catch(e){
+    $("testResult").innerHTML=`<div class="errbox"><span>⛔</span><span>${esc(friendlyError(e))}</span></div>`;
+    setPhase("error","ошибка");beep("err");
+  }finally{lock(false);state.ctl=null}
+};
+$("demoBtn").onclick=()=>{
+  const seed=state.hist.find(h=>h.seeded);
+  if(!seed)return toast("Примеры не найдены","info");
+  state.plats=new Set(Object.keys(seed.result.texts));paintPlats();syncControls();
+  renderResult(seed.result,{id:seed.id,provider:"пример",model:seed.model,tokens:seed.tokens,ms:seed.ms},
+    "Это встроенный пример, а не ответ модели. Подключите ключ и нажмите «Сгенерировать», чтобы получить свой контент-пак.");
+  $("outSection").scrollIntoView({behavior:"smooth",block:"start"});
+  toast("Показан пример результат","info");
+};
+
+/* ---------- ticker ---------- */
+$("ticker").innerHTML=(()=>{
+  const items=["Прямой запрос к API","Ключ остаётся на устройстве","Поток токенов в реальном времени",
+    "5 площадок · 3 угла подачи","История только в этом браузере","Экспорт JSON · Markdown · TXT",
+    "OpenRouter · Groq · Anthropic · Together","Без сервера и без сборки"];
+  const one=items.map(t=>`<span>◆ <b>${esc(t)}</b></span>`).join("");
+  return one+one;
+})();
+
+/* ---------- init ---------- */
+paintProviders();paintPlats();syncControls();paintMetrics();
+$("apiKey").value=state.key;
+seedHist();paintHist();paintViews();
+setPhase(state.key?"ready":"idle");
+if(!state.key)setTimeout(()=>toast("Вставьте ключ провайдера — и генерация пойдёт напрямую с этого устройства. Без ключа можно посмотреть пример.","info"),600);
+</script>
+</body>
+                                             </html>
