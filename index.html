@@ -1,0 +1,1012 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Marketing Studio — AI-конвейер товарного контента</title>
+<meta name="description" content="Ссылка на товар → 3 карточки, 5 продающих текстов, топ-10 запросов и вертикальный ролик 9:16. FastAPI · Qwen · Wan · Docker. Открытый исходный код.">
+<meta property="og:title" content="AI Marketing Studio">
+<meta property="og:description" content="AI-конвейер товарного контента: парсинг → карточки → 5 площадок → ролик 9:16">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Unbounded:wght@500;700;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%237c5cff'/%3E%3Ctext x='16' y='22' font-size='15' font-weight='900' font-family='sans-serif' fill='%23fff' text-anchor='middle'%3EAI%3C/text%3E%3C/svg%3E">
+<style>
+:root{
+  --ink:#06070d; --surface:#0d1020; --surface2:#141931; --overlay:#1c2246; --scrim:rgba(4,5,12,.86); --line:#252d52;
+  --violet:#7c5cff; --violet-deep:#4a2dd4; --cyan:#22d3ee; --magenta:#ff4d9d; --amber:#ffb020;
+  --acid:#8bff5a; --green:#3ddc84; --red:#ff5470; --blue:#4d7cff; --sand:#ffd9a0;
+  --text:#eef1ff; --muted:#98a1c6; --dim:#6a7297;
+  --font:'Manrope',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+  --disp:'Unbounded',var(--font); --mono:'JetBrains Mono',ui-monospace,Consolas,monospace;
+  --nav:70px; --hue:0deg;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--font);background:var(--ink);color:var(--text);overflow-x:hidden;-webkit-font-smoothing:antialiased;line-height:1.55}
+::selection{background:var(--violet);color:#fff}
+*{scrollbar-width:thin;scrollbar-color:var(--violet-deep) var(--surface)}
+::-webkit-scrollbar{width:11px;height:11px}
+::-webkit-scrollbar-track{background:var(--surface);border-left:1px solid var(--line)}
+::-webkit-scrollbar-thumb{background:linear-gradient(var(--violet-deep),var(--violet) 60%,var(--magenta));border-radius:9px;border:2px solid var(--surface)}
+::-webkit-scrollbar-thumb:hover{background:linear-gradient(var(--cyan),var(--violet))}
+::-webkit-scrollbar-corner{background:var(--surface)}
+:focus-visible{outline:2px solid var(--cyan);outline-offset:3px;border-radius:6px}
+img,canvas,svg{max-width:100%}
+a{color:inherit}
+.amb{position:fixed;inset:0;z-index:-3;background:
+  radial-gradient(58% 46% at 10% 4%,rgba(124,92,255,.24),transparent 62%),
+  radial-gradient(46% 40% at 92% 8%,rgba(34,211,238,.16),transparent 62%),
+  radial-gradient(52% 48% at 74% 96%,rgba(255,77,157,.13),transparent 62%),
+  radial-gradient(40% 34% at 24% 74%,rgba(139,255,90,.07),transparent 64%),var(--ink);
+  filter:hue-rotate(var(--hue));transition:filter .8s ease}
+.amb::before{content:"";position:absolute;inset:-25%;background:
+  radial-gradient(32% 28% at 28% 38%,rgba(124,92,255,.18),transparent 70%),
+  radial-gradient(28% 26% at 72% 62%,rgba(34,211,238,.14),transparent 70%),
+  radial-gradient(24% 22% at 50% 88%,rgba(255,176,32,.10),transparent 72%);
+  animation:drift 30s ease-in-out infinite alternate;filter:blur(14px)}
+.amb::after{content:"";position:absolute;inset:0;opacity:.055;mix-blend-mode:overlay;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E")}
+.mesh{position:fixed;inset:0;z-index:-2;pointer-events:none;opacity:.4;
+  background-image:linear-gradient(rgba(124,92,255,.055) 1px,transparent 1px),linear-gradient(90deg,rgba(124,92,255,.055) 1px,transparent 1px);
+  background-size:64px 64px;mask-image:radial-gradient(78% 62% at 50% 26%,#000,transparent)}
+.orb{position:fixed;border-radius:50%;filter:blur(70px);z-index:-2;pointer-events:none;opacity:.5;will-change:transform}
+.orb.a{width:340px;height:340px;left:-90px;top:14%;background:radial-gradient(circle,rgba(124,92,255,.55),transparent 70%)}
+.orb.b{width:280px;height:280px;right:-70px;top:46%;background:radial-gradient(circle,rgba(34,211,238,.42),transparent 70%)}
+.orb.c{width:240px;height:240px;left:38%;bottom:-80px;background:radial-gradient(circle,rgba(255,77,157,.36),transparent 70%)}
+@keyframes drift{from{transform:translate3d(-3%,-2%,0) rotate(-2deg)}to{transform:translate3d(3%,3%,0) rotate(2deg)}}
+@keyframes rise{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:none}}
+@keyframes pop{from{opacity:0;transform:translateY(9px) scale(.98)}to{opacity:1;transform:none}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes dash{to{stroke-dashoffset:-260}}
+@keyframes pulse{0%,100%{opacity:.35}50%{opacity:1}}
+@keyframes shimmer{from{background-position:200% 0}to{background-position:-200% 0}}
+.nav{position:fixed;top:0;left:0;right:0;height:var(--nav);z-index:60;backdrop-filter:blur(20px);background:rgba(6,7,13,.82);border-bottom:1px solid var(--line)}
+.nav-in{max-width:1300px;margin:0 auto;height:100%;padding:0 20px;display:flex;align-items:center;gap:14px}
+.brand{display:flex;align-items:center;gap:11px;text-decoration:none;flex:none}
+.mark{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;font:900 13px var(--disp);color:#fff;
+  background:conic-gradient(from 200deg,var(--violet),var(--magenta),var(--amber),var(--cyan),var(--violet));box-shadow:0 0 22px rgba(124,92,255,.55)}
+.brand b{font:700 15px var(--disp);background:linear-gradient(90deg,#fff,var(--sand) 45%,var(--cyan));-webkit-background-clip:text;background-clip:text;color:transparent;white-space:nowrap}
+.nav-links{display:flex;gap:2px;margin-left:auto;overflow-x:auto;scrollbar-width:none}
+.nav-links::-webkit-scrollbar{display:none}
+.nav-links a{position:relative;text-decoration:none;color:var(--muted);font:600 13px var(--font);padding:9px 12px;border-radius:9px;white-space:nowrap;transition:color .2s,background .2s}
+.nav-links a:hover{color:var(--text);background:rgba(124,92,255,.1)}
+.nav-links a.on{color:#fff}
+.nav-links a.on::after{content:"";position:absolute;left:12px;right:12px;bottom:2px;height:2px;border-radius:2px;background:linear-gradient(90deg,var(--violet),var(--cyan))}
+.nav-cta{display:flex;gap:8px;flex:none}
+.progress{position:absolute;left:0;bottom:-1px;height:2px;width:0;background:linear-gradient(90deg,var(--violet),var(--cyan),var(--magenta));box-shadow:0 0 12px var(--violet)}
+.btn{border:0;cursor:pointer;font:700 13px var(--font);border-radius:12px;padding:11px 17px;display:inline-flex;align-items:center;gap:8px;justify-content:center;text-decoration:none;color:#fff;transition:transform .15s,box-shadow .22s,opacity .2s,border-color .2s}
+.btn:active:not([disabled]){transform:scale(.97)}
+.btn-p{background:linear-gradient(100deg,var(--violet-deep),var(--violet) 52%,var(--magenta));box-shadow:0 10px 30px rgba(124,92,255,.42)}
+.btn-p:hover{box-shadow:0 14px 40px rgba(124,92,255,.62)}
+.btn-c{background:linear-gradient(100deg,#0b6f86,var(--cyan));color:#03222b;box-shadow:0 10px 28px rgba(34,211,238,.3)}
+.btn-a{background:linear-gradient(100deg,#a35a06,var(--amber));color:#2a1500}
+.btn-g{background:var(--overlay);border:1px solid var(--line);color:var(--text)}
+.btn-g:hover{border-color:var(--cyan)}
+.btn-s{padding:8px 12px;font-size:12px;border-radius:10px}
+.btn[disabled]{opacity:.45;cursor:not-allowed;box-shadow:none}
+.chip{display:inline-flex;align-items:center;gap:6px;font:700 11px var(--font);padding:5px 11px;border-radius:999px;border:1px solid var(--line);background:var(--overlay);color:var(--muted)}
+.chip.v{color:var(--violet);border-color:rgba(124,92,255,.45);background:rgba(124,92,255,.12)}
+.chip.c{color:var(--cyan);border-color:rgba(34,211,238,.42);background:rgba(34,211,238,.1)}
+.chip.m{color:var(--magenta);border-color:rgba(255,77,157,.42);background:rgba(255,77,157,.1)}
+.chip.a{color:var(--amber);border-color:rgba(255,176,32,.42);background:rgba(255,176,32,.1)}
+.chip.g{color:var(--green);border-color:rgba(61,220,132,.42);background:rgba(61,220,132,.1)}
+.chip.acid{color:var(--acid);border-color:rgba(139,255,90,.4);background:rgba(139,255,90,.09)}
+.chip.r{color:var(--red);border-color:rgba(255,84,112,.42);background:rgba(255,84,112,.1)}
+.card{background:linear-gradient(180deg,var(--surface2),var(--surface));border:1px solid var(--line);border-radius:18px;padding:22px;box-shadow:0 20px 54px rgba(0,0,0,.4)}
+.kicker{font:800 10px var(--font);letter-spacing:.2em;text-transform:uppercase;color:var(--cyan)}
+.kicker.v{color:var(--violet)}.kicker.m{color:var(--magenta)}.kicker.a{color:var(--amber)}.kicker.acid{color:var(--acid)}
+h2.sec{font:900 clamp(24px,3.4vw,38px)/1.12 var(--disp);margin:10px 0 12px;letter-spacing:-.5px}
+h3{font:800 16px var(--font);margin-bottom:10px}
+.lead{color:var(--muted);font-size:15px;max-width:64ch}
+.note{font-size:11.5px;color:var(--dim);line-height:1.6}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.grid{display:grid;gap:16px}
+.input,.select,textarea{width:100%;background:var(--ink);border:1px solid var(--line);color:var(--text);border-radius:12px;padding:11px 13px;font:500 14px var(--font);outline:none;transition:border .2s,box-shadow .2s}
+.input:focus,.select:focus,textarea:focus{border-color:var(--violet);box-shadow:0 0 0 3px rgba(124,92,255,.22)}
+.select{appearance:none;cursor:pointer;padding-right:32px;background-image:linear-gradient(45deg,transparent 50%,var(--cyan) 50%),linear-gradient(135deg,var(--cyan) 50%,transparent 50%);background-position:calc(100% - 17px) 50%,calc(100% - 12px) 50%;background-size:5px 5px;background-repeat:no-repeat}
+input[type=color]{width:100%;height:38px;background:var(--ink);border:1px solid var(--line);border-radius:11px;padding:4px;cursor:pointer}
+input[type=range]{width:100%;appearance:none;height:6px;border-radius:99px;background:linear-gradient(90deg,var(--violet-deep),var(--cyan));outline:none;cursor:pointer}
+input[type=range]::-webkit-slider-thumb{appearance:none;width:17px;height:17px;border-radius:50%;background:#fff;border:3px solid var(--violet);box-shadow:0 0 10px rgba(124,92,255,.75);cursor:pointer}
+input[type=range]::-moz-range-thumb{width:14px;height:14px;border-radius:50%;background:#fff;border:3px solid var(--violet);cursor:pointer}
+label.lbl{display:block;font-size:11px;color:var(--muted);margin-bottom:6px;font-weight:700}
+.switch{position:relative;width:44px;height:24px;border-radius:999px;background:var(--overlay);border:1px solid var(--line);cursor:pointer;transition:background .2s;flex:none;padding:0}
+.switch::after{content:"";position:absolute;top:2px;left:2px;width:18px;height:18px;border-radius:50%;background:var(--cyan);transition:transform .25s cubic-bezier(.2,.7,.2,1),background .2s}
+.switch[aria-checked="true"]{background:var(--violet-deep)}
+.switch[aria-checked="true"]::after{transform:translateX(20px);background:#fff}
+.stepper{display:flex;align-items:center;gap:6px;background:var(--ink);border:1px solid var(--line);border-radius:11px;padding:4px}
+.stepper button{width:27px;height:27px;border-radius:8px;border:0;background:var(--overlay);color:var(--text);font-size:15px;cursor:pointer;line-height:1}
+.stepper button:hover:not([disabled]){background:var(--violet-deep)}
+.stepper b{flex:1;text-align:center;font:800 14px var(--font)}
+.stepper button[disabled]{opacity:.4;cursor:not-allowed}
+.ctrl{background:var(--ink);border:1px solid var(--line);border-radius:12px;padding:10px 12px}
+.ctrl .val{float:right;font:800 11px var(--font);color:var(--cyan)}
+.code{position:relative;background:var(--ink);border:1px solid var(--line);border-radius:13px;padding:15px 46px 15px 16px;font:13px/1.75 var(--mono);color:var(--acid);overflow-x:auto;white-space:pre}
+.code .cp{position:absolute;top:9px;right:9px}
+.spin{width:17px;height:17px;border:2px solid var(--cyan);border-top-color:transparent;border-radius:50%;animation:spin .8s linear infinite;flex:none}
+.skel{border-radius:12px;background:linear-gradient(90deg,var(--surface2) 25%,var(--overlay) 50%,var(--surface2) 75%);background-size:200% 100%;animation:shimmer 1.4s infinite}
+.reveal{opacity:0;transform:translateY(26px)}
+.reveal.in{animation:rise .7s cubic-bezier(.2,.7,.2,1) forwards}
+section{scroll-margin-top:calc(var(--nav) + 18px)}
+.wrap{max-width:1300px;margin:0 auto;padding:0 20px}
+.band{padding:76px 0;position:relative}
+.band+.band{border-top:1px solid rgba(37,45,82,.6)}
+.hero{padding:calc(var(--nav) + 46px) 0 60px}
+.hero-grid{display:grid;grid-template-columns:1.08fr .92fr;gap:38px;align-items:start}
+.hbadge{display:inline-flex;align-items:center;gap:9px;padding:6px 13px;border-radius:999px;border:1px solid rgba(139,255,90,.35);background:rgba(139,255,90,.08);font:700 11.5px var(--font);color:var(--acid)}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--acid);box-shadow:0 0 10px var(--acid);animation:pulse 2s infinite}
+h1{font:900 clamp(32px,5.4vw,60px)/1.04 var(--disp);letter-spacing:-1.6px;margin:16px 0 16px}
+h1 .g1{background:linear-gradient(96deg,var(--violet),var(--magenta) 46%,var(--amber));-webkit-background-clip:text;background-clip:text;color:transparent}
+h1 .g2{background:linear-gradient(96deg,var(--cyan),var(--acid));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p.lead{font-size:16.5px;max-width:56ch}
+.metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:24px 0}
+.metric{background:var(--ink);border:1px solid var(--line);border-radius:13px;padding:13px 12px}
+.metric b{display:block;font:900 24px var(--disp);line-height:1.1}
+.metric span{font-size:10px;color:var(--dim);text-transform:uppercase;letter-spacing:.1em}
+.m1 b{color:var(--violet)}.m2 b{color:var(--cyan)}.m3 b{color:var(--amber)}.m4 b{color:var(--acid)}
+.stack{display:flex;flex-wrap:wrap;gap:7px;margin-top:18px}
+.studio{position:sticky;top:calc(var(--nav) + 18px)}
+.stage{display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:start}
+.reel{width:236px;aspect-ratio:9/16;border-radius:22px;border:2px solid var(--line);overflow:hidden;background:#05060c;box-shadow:0 30px 70px rgba(0,0,0,.6),0 0 40px rgba(124,92,255,.18);position:relative;flex:none}
+.reel canvas{width:100%;height:100%;display:block}
+.reel .tag{position:absolute;top:9px;left:9px;font:800 9px var(--font);letter-spacing:.12em;padding:4px 8px;border-radius:7px;background:rgba(6,7,13,.72);border:1px solid var(--line);color:var(--cyan)}
+.deck{display:grid;grid-template-columns:repeat(auto-fit,minmax(128px,1fr));gap:9px}
+.deck-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:11px;flex-wrap:wrap}
+.pipe{display:grid;grid-template-columns:.85fr 1.15fr;gap:34px;align-items:start}
+.pipe-sticky{position:sticky;top:calc(var(--nav) + 30px)}
+.stage-card{display:grid;grid-template-columns:52px 1fr;gap:16px;padding:20px;border-radius:16px;border:1px solid var(--line);background:linear-gradient(180deg,var(--surface2),var(--surface));transition:border-color .3s,transform .3s,box-shadow .3s}
+.stage-card:hover{transform:translateX(6px)}
+.stage-card.s1:hover{border-color:var(--violet);box-shadow:0 16px 40px rgba(124,92,255,.2)}
+.stage-card.s2:hover{border-color:var(--cyan);box-shadow:0 16px 40px rgba(34,211,238,.18)}
+.stage-card.s3:hover{border-color:var(--magenta);box-shadow:0 16px 40px rgba(255,77,157,.18)}
+.snum{width:52px;height:52px;border-radius:15px;display:grid;place-items:center;font:900 19px var(--disp);color:#fff}
+.s1 .snum{background:linear-gradient(140deg,var(--violet-deep),var(--violet))}
+.s2 .snum{background:linear-gradient(140deg,#0b6f86,var(--cyan));color:#04222b}
+.s3 .snum{background:linear-gradient(140deg,#a8195f,var(--magenta))}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.demo-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:20px;align-items:start}
+.pcards{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:13px}
+.pcard{border:1px solid var(--line);border-radius:16px;overflow:hidden;background:radial-gradient(60% 40% at 84% 8%,rgba(124,92,255,.26),transparent 60%),radial-gradient(55% 40% at 12% 90%,rgba(34,211,238,.2),transparent 60%),#0b0e1a;transition:transform .2s,border-color .2s}
+.pcard:hover{transform:translateY(-4px);border-color:var(--amber)}
+.pcard .b{padding:15px;display:flex;flex-direction:column;gap:9px}
+.pcard .thumb{height:104px;border-radius:11px;border:1px solid var(--line);display:grid;place-items:center;font:900 13px var(--disp);color:#fff;text-align:center;padding:8px;background:linear-gradient(135deg,rgba(124,92,255,.5),rgba(34,211,238,.35))}
+.pcard h4{font:800 13.5px var(--font);line-height:1.35}
+.pcard .price{font:900 20px var(--disp);color:var(--amber)}
+.pcard ul{list-style:none;display:flex;flex-direction:column;gap:6px;font-size:11.5px;color:var(--muted)}
+.pcard li{display:flex;gap:7px}
+.pcard li::before{content:"✔";color:var(--acid);flex:none}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.tab-btn{border:1px solid var(--line);background:var(--overlay);color:var(--muted);font:700 12px var(--font);padding:7px 13px;border-radius:999px;cursor:pointer;transition:.2s}
+.tab-btn.on{color:#fff;border-color:var(--violet);background:var(--violet-deep)}
+.txtbox{width:100%;min-height:210px;background:var(--ink);border:1px solid var(--line);border-radius:13px;padding:14px;color:var(--text);font:13px/1.65 var(--font);resize:vertical;outline:none}
+.txtbox:focus{border-color:var(--violet);box-shadow:0 0 0 3px rgba(124,92,255,.2)}
+.plats{display:grid;grid-template-columns:repeat(auto-fit,minmax(216px,1fr));gap:14px}
+.plat{border:1px solid var(--line);border-radius:16px;padding:18px;background:linear-gradient(180deg,var(--surface2),var(--surface));position:relative;overflow:hidden;transition:transform .25s,border-color .25s}
+.plat::before{content:"";position:absolute;inset:0 auto 0 0;width:3px;background:var(--pc)}
+.plat:hover{transform:translateY(-5px);border-color:var(--pc)}
+.plat .ic{font-size:23px}
+.bar{height:6px;border-radius:99px;background:var(--overlay);overflow:hidden;margin-top:11px}
+.bar i{display:block;height:100%;background:var(--pc);width:0;transition:width 1.1s cubic-bezier(.2,.7,.2,1)}
+.arch{display:grid;grid-template-columns:1.25fr .75fr;gap:24px;align-items:center}
+.diagram{background:var(--ink);border:1px solid var(--line);border-radius:18px;padding:14px;overflow-x:auto}
+.flow{stroke-dasharray:7 9;animation:dash 9s linear infinite}
+.legend{display:flex;flex-direction:column;gap:11px}
+.leg{display:grid;grid-template-columns:12px 1fr;gap:11px;align-items:start;font-size:12.5px;color:var(--muted)}
+.leg i{width:12px;height:12px;border-radius:4px;margin-top:4px}
+.api-tools{display:grid;grid-template-columns:1fr auto auto;gap:11px;margin-bottom:14px}
+.api-list{display:flex;flex-direction:column;gap:9px;max-height:440px;overflow-y:auto;padding-right:6px}
+.ep{border:1px solid var(--line);border-radius:13px;background:var(--ink);overflow:hidden}
+.ep-h{width:100%;border:0;background:none;color:var(--text);display:flex;align-items:center;gap:11px;padding:12px 14px;cursor:pointer;text-align:left;font:600 13px var(--font)}
+.ep-h:hover{background:rgba(124,92,255,.07)}
+.meth{font:800 10px var(--mono);padding:4px 8px;border-radius:6px;flex:none;min-width:56px;text-align:center}
+.m-get{background:rgba(61,220,132,.16);color:var(--green);border:1px solid rgba(61,220,132,.4)}
+.m-post{background:rgba(124,92,255,.16);color:var(--violet);border:1px solid rgba(124,92,255,.45)}
+.m-del{background:rgba(255,84,112,.14);color:var(--red);border:1px solid rgba(255,84,112,.4)}
+.ep-b{padding:0 14px 14px;border-top:1px solid var(--line)}
+.ep-b .code{margin-top:12px;font-size:12px}
+.ship{display:grid;grid-template-columns:.8fr 1.2fr;gap:24px;align-items:start}
+.steps{display:flex;flex-direction:column;gap:12px}
+.step{display:grid;grid-template-columns:28px 1fr;gap:12px;align-items:start;font-size:13.5px;color:var(--muted)}
+.step b{width:28px;height:28px;border-radius:9px;display:grid;place-items:center;background:var(--overlay);border:1px solid var(--line);color:var(--cyan);font:800 12px var(--font)}
+.trust{display:grid;grid-template-columns:repeat(auto-fit,minmax(238px,1fr));gap:14px}
+.tr{border:1px solid var(--line);border-radius:16px;padding:19px;background:linear-gradient(180deg,var(--surface2),var(--surface))}
+.tr .ic{width:38px;height:38px;border-radius:11px;display:grid;place-items:center;font-size:17px;margin-bottom:11px}
+footer{border-top:1px solid var(--line);padding:34px 0 46px;background:rgba(6,7,13,.6)}
+.foot{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;align-items:center}
+.toasts{position:fixed;right:16px;bottom:16px;z-index:90;display:flex;flex-direction:column;gap:9px;width:min(340px,calc(100vw - 32px))}
+.toast{display:flex;gap:10px;align-items:flex-start;padding:12px 14px;border-radius:13px;border:1px solid var(--line);background:var(--surface2);box-shadow:0 16px 44px rgba(0,0,0,.55);font-size:13px;animation:pop .3s both}
+.toast.ok{border-color:rgba(61,220,132,.5)}.toast.err{border-color:rgba(255,84,112,.5)}.toast.info{border-color:rgba(34,211,238,.5)}
+.toast button{margin-left:auto;border:0;background:none;color:var(--dim);cursor:pointer;font-size:14px}
+@media (max-width:1080px){
+  .hero-grid,.pipe,.demo-grid,.arch,.ship{grid-template-columns:1fr}
+  .studio,.pipe-sticky{position:static}
+  .stage{grid-template-columns:1fr;justify-items:center}
+  .deck{width:100%}
+}
+@media (max-width:720px){
+  :root{--nav:62px}
+  .wrap{padding:0 14px}
+  .nav-in{padding:0 14px;gap:9px}
+  .brand b{display:none}
+  .nav-links a{padding:8px 9px;font-size:12px}
+  .band{padding:52px 0}
+  .metrics{grid-template-columns:repeat(2,1fr)}
+  .api-tools{grid-template-columns:1fr}
+  .reel{width:min(236px,72vw)}
+  .card{padding:16px}
+  .nav-cta .hide-sm{display:none}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .amb::before,.flow,.dot,.reveal.in{animation:none!important}
+  .reveal{opacity:1;transform:none}
+  *{transition-duration:.01ms!important}
+}
+</style>
+</head>
+<body>
+<div class="amb"></div><div class="mesh"></div>
+<div class="orb a" data-par="0.16"></div><div class="orb b" data-par="-0.12"></div><div class="orb c" data-par="0.09"></div>
+
+<nav class="nav">
+  <div class="nav-in">
+    <a class="brand" href="#top"><span class="mark">AI</span><b>Marketing&nbsp;Studio</b></a>
+    <div class="nav-links" id="navLinks">
+      <a href="#pipeline">Конвейер</a>
+      <a href="#demo">Демо</a>
+      <a href="#platforms">Площадки</a>
+      <a href="#arch">Архитектура</a>
+      <a href="#api">API</a>
+      <a href="#ship">Запуск</a>
+      <a href="#trust">Защита</a>
+    </div>
+    <div class="nav-cta">
+      <a class="btn btn-g btn-s" id="ghLink" href="https://github.com/" target="_blank" rel="noopener">★<span class="hide-sm"> GitHub</span></a>
+      <a class="btn btn-p btn-s" id="openStudio" href="app/">Открыть<span class="hide-sm"> студию</span></a>
+    </div>
+    <div class="progress" id="prog"></div>
+  </div>
+</nav>
+
+<main id="top">
+<section class="hero wrap">
+  <div class="hero-grid">
+    <div>
+      <span class="hbadge"><span class="dot"></span>Open source · MIT · FastAPI + Qwen + Wan</span>
+      <h1>Ссылка на товар → <span class="g1">контент-пак</span> и <span class="g2">ролик 9:16</span></h1>
+      <p class="lead">Один URL превращается в три переупакованные карточки, пять текстов под Telegram, Дзен, ВК, Одноклассники и сайт, топ-10 поисковых запросов и вертикальный рекламный ролик. С биллингом по токенам, серверной историей и защитой от SSRF.</p>
+      <div class="metrics">
+        <div class="metric m1"><b data-count="3">0</b><span>карточки</span></div>
+        <div class="metric m2"><b data-count="5">0</b><span>площадки</span></div>
+        <div class="metric m3"><b data-count="10">0</b><span>запросов</span></div>
+        <div class="metric m4"><b data-count="38">0</b><span>автотестов</span></div>
+      </div>
+      <div class="row">
+        <a class="btn btn-p" id="openStudio2" href="app/">🚀 Открыть студию</a>
+        <a class="btn btn-g" href="#ship">⚡ Запуск в одну команду</a>
+        <button class="btn btn-g" id="copyClone">📋 git clone</button>
+      </div>
+      <div class="stack">
+        <span class="chip v">FastAPI</span><span class="chip c">SQLite · WAL</span><span class="chip m">JWT · PBKDF2 600k</span>
+        <span class="chip a">Wan · DashScope</span><span class="chip acid">ffmpeg</span><span class="chip">Docker · nginx</span>
+        <span class="chip g">Pydantic-валидация</span><span class="chip r">SSRF-фильтр</span>
+      </div>
+      <div class="card" style="margin-top:22px">
+        <span class="kicker acid">Что видно сразу</span>
+        <p class="note" style="margin-top:9px;font-size:12.5px;color:var(--muted)">
+          Студия открывается уже наполненной: товар распарсен, контент-пак сгенерирован, превью ролика живое.
+          Все параметры справа меняют кадр в реальном времени — без кнопки «применить».
+          Демо работает офлайн, без единого API-ключа.
+        </p>
+      </div>
+    </div>
+
+    <div class="studio">
+      <div class="card">
+        <div class="deck-head">
+          <div><span class="kicker m">Живой кадр</span><h3 style="margin:5px 0 0">Превью ролика · 1080×1920</h3></div>
+          <span class="chip c" id="reelState">рендер идёт</span>
+        </div>
+        <div class="stage">
+          <div class="reel">
+            <canvas id="reel" width="540" height="960" aria-label="Живое превью рекламного ролика"></canvas>
+            <span class="tag">9:16 · LIVE</span>
+          </div>
+          <div style="width:100%">
+            <div class="deck">
+              <div class="ctrl"><label class="lbl" for="cGrade">Грейдинг</label><input type="color" id="cGrade" value="#7c5cff"></div>
+              <div class="ctrl"><label class="lbl" for="cMotion">Динамика <span class="val" id="vMotion">1.0×</span></label><input type="range" id="cMotion" min="0.2" max="2.4" step="0.1" value="1"></div>
+              <div class="ctrl"><label class="lbl" for="cGlow">Свечение <span class="val" id="vGlow">1.0×</span></label><input type="range" id="cGlow" min="0" max="2.5" step="0.1" value="1"></div>
+              <div class="ctrl"><label class="lbl" for="cGrain">Зерно <span class="val" id="vGrain">0.10</span></label><input type="range" id="cGrain" min="0" max="0.4" step="0.02" value="0.1"></div>
+              <div class="ctrl"><label class="lbl" for="cZoom">Наезд камеры <span class="val" id="vZoom">1.00×</span></label><input type="range" id="cZoom" min="0.85" max="1.35" step="0.01" value="1"></div>
+              <div class="ctrl"><label class="lbl">Сцен</label><div class="stepper"><button id="scMinus" aria-label="Меньше сцен">−</button><b id="vScenes">4</b><button id="scPlus" aria-label="Больше сцен">+</button></div></div>
+              <div class="ctrl"><label class="lbl" for="cDur">Хронометраж</label><select class="select" id="cDur"><option value="15">15 сек</option><option value="30">30 сек</option></select></div>
+              <div class="ctrl"><label class="lbl" for="cQuality">Качество</label><select class="select" id="cQuality"><option value="1">1× быстрее</option><option value="2" selected>2× чётче</option></select></div>
+              <div class="ctrl"><label class="lbl" for="cCta">Текст CTA</label><input class="input" id="cCta" value="КУПИТЬ" maxlength="16" style="padding:8px 10px;font-size:12px"></div>
+              <div class="ctrl"><label class="lbl">Субтитры</label><div class="row" style="gap:8px"><button class="switch" id="cSubs" role="switch" aria-checked="true" aria-label="Субтитры"></button><span class="note">в safe-zone</span></div></div>
+              <div class="ctrl"><label class="lbl">Направляющие</label><div class="row" style="gap:8px"><button class="switch" id="cGuides" role="switch" aria-checked="false" aria-label="Направляющие safe-zone"></button><span class="note">сетка кадра</span></div></div>
+              <div class="ctrl"><label class="lbl">Продукт</label><select class="select" id="cProduct"><option value="0">SoundMax Pro ANC</option><option value="1">AeroBuds Lite</option><option value="2">StudioMax Over-Ear</option></select></div>
+            </div>
+            <div class="row" style="margin-top:11px">
+              <button class="btn btn-g btn-s" id="cReset">↺ Сброс</button>
+              <button class="btn btn-g btn-s" id="cRandom">🎲 Случайно</button>
+              <button class="btn btn-a btn-s" id="cPng">⬇ Кадр PNG</button>
+              <button class="btn btn-c btn-s" id="cRec">● Записать клип</button>
+            </div>
+            <p class="note" id="reelHint" style="margin-top:10px"></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="pipeline" class="band">
+  <div class="wrap pipe">
+    <div class="pipe-sticky reveal">
+      <span class="kicker v">Конвейер</span>
+      <h2 class="sec">Три шага<br>от ссылки до публикации</h2>
+      <p class="lead">Каждый шаг — отдельный модуль backend со своей валидацией, историей и учётом токенов. Ни один невалидный ответ модели не доходит до интерфейса.</p>
+      <div class="row" style="margin-top:18px">
+        <span class="chip g">Pydantic-схема</span><span class="chip c">retry ×2</span><span class="chip a">атомарный биллинг</span>
+      </div>
+      <div class="card" style="margin-top:18px">
+        <span class="kicker acid">Резерв токенов</span>
+        <p class="note" style="margin-top:8px;color:var(--muted);font-size:12.5px">
+          Резерв = <code style="font-family:var(--mono);color:var(--cyan)">max_tokens + input_estimate</code>. Провайдер не вызывается,
+          если баланса не хватит на полный ответ — отказ после оплаченной генерации исключён.
+        </p>
+      </div>
+    </div>
+    <div class="grid" style="gap:14px">
+      <div class="stage-card s1 reveal"><div class="snum">1</div><div>
+        <h3>Парсинг товара</h3>
+        <p class="note" style="font-size:13px;color:var(--muted)">JSON-LD Product, OpenGraph, meta-теги, таблицы характеристик и эвристика цены. SSRF-фильтр отсекает приватные диапазоны, редиректы проверяются на каждом шаге, ответ ограничен 3 МБ. Если сайт закрыт анти-ботом — открывается форма ручного ввода с drag&nbsp;&amp;&nbsp;drop фото.</p>
+        <div class="tags"><span class="chip v">JSON-LD</span><span class="chip v">OpenGraph</span><span class="chip r">SSRF-guard</span><span class="chip">3 МБ лимит</span></div>
+      </div></div>
+      <div class="stage-card s2 reveal"><div class="snum">2</div><div>
+        <h3>Генерация контент-пака</h3>
+        <p class="note" style="font-size:13px;color:var(--muted)">Три угла подачи — рациональный, эмоциональный, сравнение с конкурентами. Пять текстов с валидацией объёма: Telegram, Дзен-лонгрид, ВК, Одноклассники и лендинг с SEO-meta. Ответ модели проверяется схемой; при провале — повтор с указанием ошибки.</p>
+        <div class="tags"><span class="chip c">3 карточки</span><span class="chip c">5 площадок</span><span class="chip c">3 image-промпта</span><span class="chip g">схема + retry</span></div>
+      </div></div>
+      <div class="stage-card s3 reveal"><div class="snum">3</div><div>
+        <h3>Ролик по сценам</h3>
+        <p class="note" style="font-size:13px;color:var(--muted)">T2V-модели отдают короткие клипы, поэтому ролик собирается из сцен: задача на каждую сцену → опрос статусов → скачивание → склейка ffmpeg в единый MP4. Без ffmpeg отдаётся ZIP с клипами, <code style="font-family:var(--mono);color:var(--cyan)">list.txt</code> и готовой командой. Без WAN-ключа — canvas-превью в браузере.</p>
+        <div class="tags"><span class="chip m">задача на сцену</span><span class="chip m">опрос статуса</span><span class="chip a">ffmpeg concat</span><span class="chip">ZIP-fallback</span></div>
+      </div></div>
+    </div>
+  </div>
+</section>
+
+<section id="demo" class="band">
+  <div class="wrap">
+    <div class="reveal" style="margin-bottom:22px">
+      <span class="kicker c">Рабочее демо</span>
+      <h2 class="sec">Сгенерируйте контент-пак прямо здесь</h2>
+      <p class="lead">Тот же движок шаблонов, что и в студии. Работает офлайн, без сервера и ключей — введите товар и получите карточки и тексты с живыми счётчиками объёма.</p>
+    </div>
+    <div class="demo-grid">
+      <div class="card reveal">
+        <span class="kicker v">Вход</span>
+        <div style="margin-top:12px"><label class="lbl" for="dTitle">Название товара</label><input class="input" id="dTitle" value="Беспроводные наушники SoundMax Pro"></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:11px">
+          <div><label class="lbl" for="dPrice">Цена</label><input class="input" id="dPrice" value="4 990 ₽"></div>
+          <div><label class="lbl" for="dDisc">Скидка</label><input class="input" id="dDisc" value="30%"></div>
+        </div>
+        <div style="margin-top:11px"><label class="lbl" for="dFeat">Ключевая выгода</label><input class="input" id="dFeat" value="ANC до 45 дБ и 40 часов работы"></div>
+        <div style="margin-top:11px"><label class="lbl" for="dTone">Тон бренда</label><select class="select" id="dTone"><option>уверенный эксперт</option><option>дружелюбный сосед</option><option>дерзкий challenger</option><option>премиум-сдержанный</option></select></div>
+        <div class="row" style="margin-top:15px">
+          <button class="btn btn-p grow" id="dGen">⚡ Сгенерировать</button>
+          <button class="btn btn-g" id="dReset">↺</button>
+        </div>
+        <p class="note" style="margin-top:11px">Демо использует детерминированные шаблоны с вариативностью. В LIVE-режиме студии те же промпты уходят в Qwen / GPT / Claude — провайдер меняется одной строкой в <code style="font-family:var(--mono);color:var(--cyan)">.env</code>.</p>
+      </div>
+      <div class="reveal">
+        <div id="dSkel" class="card hidden"><div class="row" style="margin-bottom:14px"><div class="spin"></div><b style="font-size:13px;color:var(--cyan)">Собираем карточки и тексты…</b></div><div class="pcards"><div class="skel" style="height:230px"></div><div class="skel" style="height:230px"></div></div><div class="skel" style="height:150px;margin-top:14px"></div></div>
+        <div id="dOut">
+          <div class="pcards" id="dCards"></div>
+          <div class="card" style="margin-top:14px">
+            <div class="tabs" id="dTabs"></div>
+            <textarea class="txtbox" id="dText" spellcheck="false"></textarea>
+            <div class="row" style="justify-content:space-between;margin-top:11px">
+              <span class="chip" id="dCount">0</span>
+              <span class="row"><button class="btn btn-g btn-s" id="dCopy">📋 Копировать</button><button class="btn btn-g btn-s" id="dDl">💾 .txt</button></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="platforms" class="band">
+  <div class="wrap">
+    <div class="reveal" style="margin-bottom:22px">
+      <span class="kicker a">Площадки</span>
+      <h2 class="sec">Пять текстов — пять разных голосов</h2>
+      <p class="lead">Счётчики показывают рекомендуемый объём редакции и, где он документирован, жёсткий лимит площадки. Красный загорается только при реальном превышении — не по выдуманным правилам.</p>
+    </div>
+    <div class="plats" id="plats"></div>
+  </div>
+</section>
+
+<section id="arch" class="band">
+  <div class="wrap">
+    <div class="reveal" style="margin-bottom:22px">
+      <span class="kicker v">Архитектура</span>
+      <h2 class="sec">Модули без циклических зависимостей</h2>
+    </div>
+    <div class="arch">
+      <div class="diagram reveal">
+        <svg viewBox="0 0 760 400" role="img" aria-label="Схема архитектуры: браузер, nginx, FastAPI, SQLite и внешние провайдеры" style="min-width:620px;display:block">
+          <defs>
+            <linearGradient id="gv" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#4a2dd4"/><stop offset="1" stop-color="#7c5cff"/></linearGradient>
+            <linearGradient id="gc" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0b6f86"/><stop offset="1" stop-color="#22d3ee"/></linearGradient>
+            <linearGradient id="gm" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#a8195f"/><stop offset="1" stop-color="#ff4d9d"/></linearGradient>
+            <linearGradient id="ga" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#a35a06"/><stop offset="1" stop-color="#ffb020"/></linearGradient>
+            <linearGradient id="gg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1f8a52"/><stop offset="1" stop-color="#3ddc84"/></linearGradient>
+          </defs>
+          <g font-family="Manrope,sans-serif" font-size="12" fill="#eef1ff">
+            <rect x="18" y="150" width="128" height="86" rx="14" fill="#141931" stroke="#252d52"/>
+            <text x="82" y="182" text-anchor="middle" font-weight="800">Браузер</text>
+            <text x="82" y="202" text-anchor="middle" font-size="10.5" fill="#98a1c6">SPA · vanilla JS</text>
+            <text x="82" y="219" text-anchor="middle" font-size="10.5" fill="#6a7297">canvas · export</text>
+            <rect x="188" y="150" width="120" height="86" rx="14" fill="url(#gc)" opacity=".92"/>
+            <text x="248" y="182" text-anchor="middle" font-weight="800" fill="#04222b">nginx</text>
+            <text x="248" y="202" text-anchor="middle" font-size="10.5" fill="#04222b">статика + /api</text>
+            <text x="248" y="219" text-anchor="middle" font-size="10.5" fill="#04222b">X-Real-IP</text>
+            <rect x="352" y="96" width="176" height="194" rx="16" fill="url(#gv)" opacity=".95"/>
+            <text x="440" y="126" text-anchor="middle" font-weight="800" font-size="13">FastAPI</text>
+            <text x="440" y="150" text-anchor="middle" font-size="10.5">security · SSRF</text>
+            <text x="440" y="169" text-anchor="middle" font-size="10.5">auth · JWT</text>
+            <text x="440" y="188" text-anchor="middle" font-size="10.5">schemas · Pydantic</text>
+            <text x="440" y="207" text-anchor="middle" font-size="10.5">llm_provider</text>
+            <text x="440" y="226" text-anchor="middle" font-size="10.5">rate limit</text>
+            <text x="440" y="252" text-anchor="middle" font-size="10.5" fill="#ffd9a0">mocks · demo fallback</text>
+            <text x="440" y="271" text-anchor="middle" font-size="10.5" fill="#ffd9a0">db · атомарный биллинг</text>
+            <rect x="580" y="30" width="156" height="72" rx="13" fill="url(#gm)"/>
+            <text x="658" y="60" text-anchor="middle" font-weight="800">LLM</text>
+            <text x="658" y="80" text-anchor="middle" font-size="10.5">Qwen · GPT · Claude</text>
+            <rect x="580" y="122" width="156" height="72" rx="13" fill="url(#ga)"/>
+            <text x="658" y="152" text-anchor="middle" font-weight="800" fill="#2a1500">Wan · DashScope</text>
+            <text x="658" y="172" text-anchor="middle" font-size="10.5" fill="#2a1500">задача → статус → клип</text>
+            <rect x="580" y="214" width="156" height="72" rx="13" fill="url(#gg)"/>
+            <text x="658" y="244" text-anchor="middle" font-weight="800" fill="#04240f">ffmpeg</text>
+            <text x="658" y="264" text-anchor="middle" font-size="10.5" fill="#04240f">concat → MP4 / ZIP</text>
+            <rect x="352" y="318" width="176" height="64" rx="13" fill="#141931" stroke="#3ddc84"/>
+            <text x="440" y="345" text-anchor="middle" font-weight="800" fill="#3ddc84">SQLite · WAL</text>
+            <text x="440" y="364" text-anchor="middle" font-size="10.5" fill="#98a1c6">users · history · token_log</text>
+            <g stroke-width="2" fill="none">
+              <path class="flow" d="M146 193 H188" stroke="#22d3ee"/>
+              <path class="flow" d="M308 193 H352" stroke="#7c5cff"/>
+              <path class="flow" d="M528 150 C556 150 556 66 580 66" stroke="#ff4d9d"/>
+              <path class="flow" d="M528 190 C556 190 556 158 580 158" stroke="#ffb020"/>
+              <path class="flow" d="M528 232 C556 232 556 250 580 250" stroke="#3ddc84"/>
+              <path class="flow" d="M440 290 V318" stroke="#3ddc84"/>
+            </g>
+          </g>
+        </svg>
+      </div>
+      <div class="legend reveal">
+        <div class="leg"><i style="background:var(--cyan)"></i><div><b style="color:var(--text)">nginx</b> отдаёт статику и перезаписывает <code style="font-family:var(--mono)">X-Real-IP</code> — на нём держится rate-limit, подмена XFF не проходит.</div></div>
+        <div class="leg"><i style="background:var(--violet)"></i><div><b style="color:var(--text)">FastAPI</b> собран из независимых модулей: <code style="font-family:var(--mono)">security</code>, <code style="font-family:var(--mono)">auth</code>, <code style="font-family:var(--mono)">schemas</code>, <code style="font-family:var(--mono)">llm_provider</code>, <code style="font-family:var(--mono)">db</code>, <code style="font-family:var(--mono)">mocks</code>.</div></div>
+        <div class="leg"><i style="background:var(--magenta)"></i><div><b style="color:var(--text)">LLM-провайдер</b> меняется одной переменной. Anthropic идёт отдельной веткой: system отдельным полем, свой заголовок и суммирование usage.</div></div>
+        <div class="leg"><i style="background:var(--amber)"></i><div><b style="color:var(--text)">Wan</b> вызывается по сцене, статус опрашивается, клипы скачиваются с ограничением 60 МБ каждый.</div></div>
+        <div class="leg"><i style="background:var(--green)"></i><div><b style="color:var(--text)">SQLite в WAL</b> и списание одним <code style="font-family:var(--mono)">UPDATE … WHERE balance &gt;= n</code>: гонки и овердрафт исключены.</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="api" class="band">
+  <div class="wrap">
+    <div class="reveal" style="margin-bottom:20px">
+      <span class="kicker c">API</span>
+      <h2 class="sec">Четырнадцать эндпоинтов</h2>
+      <p class="lead">Живой справочник: ищите, фильтруйте по методу и сортируйте. Клик по строке раскрывает пример запроса.</p>
+    </div>
+    <div class="card reveal">
+      <div class="api-tools">
+        <input class="input" id="apiQ" placeholder="Поиск по пути или описанию…" aria-label="Поиск эндпоинта">
+        <select class="select" id="apiSort" style="min-width:170px" aria-label="Сортировка"><option value="group">По разделу</option><option value="path">По пути А→Я</option><option value="method">По методу</option></select>
+        <div class="row" id="apiFilters" style="gap:6px">
+          <button class="tab-btn on" data-m="all">Все</button><button class="tab-btn" data-m="GET">GET</button><button class="tab-btn" data-m="POST">POST</button><button class="tab-btn" data-m="DELETE">DELETE</button>
+        </div>
+      </div>
+      <div class="api-list" id="apiList"></div>
+      <p class="note" style="margin-top:12px" id="apiCount"></p>
+    </div>
+  </div>
+</section>
+
+<section id="ship" class="band">
+  <div class="wrap">
+    <div class="reveal" style="margin-bottom:22px">
+      <span class="kicker acid">Запуск</span>
+      <h2 class="sec">Одна команда до работающей студии</h2>
+    </div>
+    <div class="ship">
+      <div class="steps reveal">
+        <div class="step"><b>1</b><div>Скопируйте <code style="font-family:var(--mono);color:var(--cyan)">.env.example</code> в <code style="font-family:var(--mono);color:var(--cyan)">.env</code>. Ключи можно оставить пустыми — студия откроется в DEMO.</div></div>
+        <div class="step"><b>2</b><div>Поднимите стек. Именованный volume для <code style="font-family:var(--mono);color:var(--cyan)">/data</code> снимает проблему прав на SQLite.</div></div>
+        <div class="step"><b>3</b><div>Прогоните <code style="font-family:var(--mono);color:var(--cyan)">make verify</code> — 38 проверок покрывают SSRF, биллинг, схему LLM, историю и rate-limit.</div></div>
+        <div class="step"><b>4</b><div>Для прода задайте <code style="font-family:var(--mono);color:var(--cyan)">JWT_SECRET</code>, свой домен в <code style="font-family:var(--mono);color:var(--cyan)">CORS_ORIGINS</code> и включите HTTPS.</div></div>
+        <div class="card" style="margin-top:6px">
+          <span class="kicker m">Смена модели</span>
+          <div class="code" style="margin-top:9px">LLM_PROVIDER=anthropic
+ANTHROPIC_API_KEY=sk-ant-…<button class="btn btn-g btn-s cp" data-copy="LLM_PROVIDER=anthropic
+ANTHROPIC_API_KEY=sk-ant-…">📋</button></div>
+          <p class="note" style="margin-top:9px">Доступно: qwen · openai · anthropic · groq · deepseek · openrouter.</p>
+        </div>
+      </div>
+      <div class="card reveal">
+        <div class="tabs" id="shipTabs">
+          <button class="tab-btn on" data-s="docker">🐳 Docker</button>
+          <button class="tab-btn" data-s="local">💻 Локально</button>
+          <button class="tab-btn" data-s="vps">☁️ VPS + HTTPS</button>
+          <button class="tab-btn" data-s="gh">📦 GitHub</button>
+        </div>
+        <div class="code" id="shipCode"></div>
+        <div class="row" style="margin-top:12px;justify-content:space-between">
+          <span class="note" id="shipNote"></span>
+          <button class="btn btn-c btn-s" id="shipCopy">📋 Копировать</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="trust" class="band">
+  <div class="wrap">
+    <div class="reveal" style="margin-bottom:22px">
+      <span class="kicker m">Защита и честность</span>
+      <h2 class="sec">Что закрыто и что честно признано</h2>
+    </div>
+    <div class="trust">
+      <div class="tr reveal"><div class="ic" style="background:rgba(255,84,112,.14);border:1px solid rgba(255,84,112,.4)">🛡</div><h3>SSRF-фильтр</h3><p class="note" style="color:var(--muted);font-size:12.5px">Приватные, loopback, link-local и reserved адреса отклоняются. Редиректы проверяются на каждом шаге, лимит 3 перехода и 3 МБ ответа.</p></div>
+      <div class="tr reveal"><div class="ic" style="background:rgba(124,92,255,.14);border:1px solid rgba(124,92,255,.45)">⚖️</div><h3>Атомарный биллинг</h3><p class="note" style="color:var(--muted);font-size:12.5px">Списание одним UPDATE с условием. Параллельные запросы не могут увести баланс в минус. Резерв покрывает полный ответ модели.</p></div>
+      <div class="tr reveal"><div class="ic" style="background:rgba(61,220,132,.14);border:1px solid rgba(61,220,132,.4)">✅</div><h3>Схема ответа</h3><p class="note" style="color:var(--muted);font-size:12.5px">Pydantic проверяет каждый ответ LLM. При провале — повтор с текстом ошибки. Кривой JSON не ломает интерфейс.</p></div>
+      <div class="tr reveal"><div class="ic" style="background:rgba(34,211,238,.14);border:1px solid rgba(34,211,238,.42)">🚦</div><h3>Rate limit</h3><p class="note" style="color:var(--muted);font-size:12.5px">Доверие только <code style="font-family:var(--mono)">X-Real-IP</code> от nginx. Отдельный жёсткий лимит на <code style="font-family:var(--mono)">/api/auth/*</code> против брутфорса.</p></div>
+      <div class="tr reveal"><div class="ic" style="background:rgba(255,176,32,.14);border:1px solid rgba(255,176,32,.42)">📊</div><h3>Частотность — оценка</h3><p class="note" style="color:var(--muted);font-size:12.5px">Цифры спроса даёт модель, а не Wordstat. Это помечено в UI и в ответе API. Для закупок подключайте реальный источник.</p></div>
+      <div class="tr reveal"><div class="ic" style="background:rgba(139,255,90,.12);border:1px solid rgba(139,255,90,.4)">🧩</div><h3>Graceful degradation</h3><p class="note" style="color:var(--muted);font-size:12.5px">Нет ключей — демо. Нет ffmpeg — ZIP с командой. Нет clipboard API — fallback. Нет html2pdf — печать. Ядро не ломается.</p></div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <div class="row"><span class="mark">AI</span><div><b style="font:700 14px var(--disp)">AI Marketing Studio</b><p class="note">MIT · FastAPI · Qwen · Wan · ffmpeg · Docker</p></div></div>
+    <div class="row">
+      <a class="btn btn-g btn-s" href="#top">↑ Наверх</a>
+      <a class="btn btn-g btn-s" id="ghLink2" href="https://github.com/" target="_blank" rel="noopener">★ Репозиторий</a>
+      <a class="btn btn-p btn-s" id="openStudio3" href="app/">Открыть студию</a>
+    </div>
+  </div>
+</footer>
+
+<div class="toasts" id="toasts" role="status" aria-live="polite"></div>
+
+<script>
+"use strict";
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;");
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+const RM=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const urls=new Set();
+function mkURL(b){const u=URL.createObjectURL(b);urls.add(u);return u}
+window.addEventListener("beforeunload",()=>{urls.forEach(u=>URL.revokeObjectURL(u));stopReel()});
+function toast(msg,type="ok"){
+  const t=document.createElement("div");t.className="toast "+type;
+  t.innerHTML=`<span>${type==="ok"?"✅":type==="err"?"⛔":"ℹ️"}</span><span>${esc(msg)}</span><button aria-label="Закрыть">✕</button>`;
+  t.querySelector("button").onclick=()=>t.remove();
+  $("toasts").appendChild(t);setTimeout(()=>t.remove(),4200);
+}
+async function copy(text){
+  const s=String(text??"");if(!s)return toast("Нечего копировать","info");
+  try{if(navigator.clipboard&&window.isSecureContext){await navigator.clipboard.writeText(s);toast("Скопировано");return}}catch{}
+  try{
+    const ta=document.createElement("textarea");ta.value=s;ta.setAttribute("readonly","");
+    ta.style.cssText="position:fixed;top:-2000px;opacity:0";document.body.appendChild(ta);
+    ta.select();ta.setSelectionRange(0,s.length);
+    const ok=document.execCommand("copy");ta.remove();
+    toast(ok?"Скопировано":"Скопируйте вручную",ok?"ok":"info");
+  }catch{toast("Копирование недоступно","err")}
+}
+function download(blob,name){const u=mkURL(blob);const a=document.createElement("a");a.href=u;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>{URL.revokeObjectURL(u);urls.delete(u)},5000)}
+function hex2hsl(h){
+  const m=/^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(h)||[,"7c","5c","ff"];
+  const r=parseInt(m[1],16)/255,g=parseInt(m[2],16)/255,b=parseInt(m[3],16)/255;
+  const mx=Math.max(r,g,b),mn=Math.min(r,g,b);let hh=0,s=0;const l=(mx+mn)/2;
+  if(mx!==mn){const d=mx-mn;s=l>.5?d/(2-mx-mn):d/(mx+mn);hh=mx===r?((g-b)/d+(g<b?6:0)):mx===g?((b-r)/d+2):((r-g)/d+4);hh/=6}
+  return[hh*360,s*100,l*100];
+}
+const hsl=(h,s,l,a=1)=>`hsla(${((h%360)+360)%360},${clamp(s,0,100)}%,${clamp(l,0,100)}%,${a})`;
+
+const PRODUCTS=[
+  {title:"SoundMax Pro ANC",price:"4 990 ₽",caps:["🔊 Выключи шум города в 1 клик","🎧 ANC -45 дБ + Hi-Res LDAC","⚡ 40 часов без розетки"]},
+  {title:"AeroBuds Lite",price:"2 490 ₽",caps:["🪶 4 грамма в каждом ухе","💧 IPX5 — дождь не помеха","⚡ 28 часов с кейсом"]},
+  {title:"StudioMax Over-Ear",price:"9 900 ₽",caps:["🎚 Мониторная ровная АЧХ","🎧 Graphene 50 мм","🔌 Съёмный кабель 3.5 мм"]}
+];
+const cfg={grade:"#7c5cff",motion:1,glow:1,grain:.1,zoom:1,scenes:4,dur:15,quality:2,cta:"КУПИТЬ",subs:true,guides:false,product:0};
+const reel=$("reel"),rc=reel.getContext("2d");
+let raf=null,t0=performance.now(),visible=true;
+function fitReel(){
+  const dpr=Math.min(window.devicePixelRatio||1,cfg.quality);
+  const w=Math.round(540*dpr),h=Math.round(960*dpr);
+  if(reel.width!==w){reel.width=w;reel.height=h}
+  rc.setTransform(dpr,0,0,dpr,0,0);
+}
+function drawReel(now){
+  const W=540,H=960,p=PRODUCTS[cfg.product];
+  const[gh,gs,gl]=hex2hsl(cfg.grade);
+  const A=[gh,Math.max(62,gs),clamp(gl,45,66)],B=[gh+148,Math.max(62,gs),clamp(gl+6,45,68)];
+  const t=((now-t0)/1000*cfg.motion)%12/12;
+  fitReel();
+  rc.save();
+  rc.translate(W/2,H/2);rc.scale(cfg.zoom,cfg.zoom);rc.translate(-W/2,-H/2);
+  const g=rc.createLinearGradient(0,0,W,H);
+  g.addColorStop(0,hsl(A[0],58,9));g.addColorStop(.5,hsl(A[0],62,17));g.addColorStop(1,hsl(B[0],58,12));
+  rc.fillStyle=g;rc.fillRect(-60,-60,W+120,H+120);
+  rc.save();rc.globalCompositeOperation="lighter";
+  for(let r=0;r<5;r++){
+    const rad=70+((t*300+r*58)%300),al=Math.max(0,1-rad/380)*.85;
+    rc.strokeStyle=r%2?hsl(B[0],B[1],B[2],al):hsl(A[0],A[1],A[2],al);
+    rc.lineWidth=3+cfg.glow;rc.shadowBlur=18*cfg.glow;rc.shadowColor=rc.strokeStyle;
+    rc.beginPath();rc.arc(270,408,rad,0,Math.PI*2);rc.stroke();
+  }
+  rc.restore();
+  const bob=Math.sin(t*Math.PI*2)*7*cfg.motion;
+  rc.save();rc.shadowBlur=26*cfg.glow;rc.shadowColor=hsl(B[0],B[1],B[2],.9);
+  rc.strokeStyle="#fff";rc.lineWidth=14;rc.lineCap="round";
+  if(cfg.product===1){
+    rc.fillStyle=hsl(B[0],B[1],B[2]);
+    rc.beginPath();rc.ellipse(232,410+bob,26,34,-.25,0,7);rc.fill();
+    rc.beginPath();rc.ellipse(308,410+bob,26,34,.25,0,7);rc.fill();
+    rc.strokeStyle="#fff";rc.lineWidth=8;
+    rc.beginPath();rc.moveTo(226,438+bob);rc.lineTo(220,478+bob);rc.stroke();
+    rc.beginPath();rc.moveTo(314,438+bob);rc.lineTo(320,478+bob);rc.stroke();
+  }else{
+    rc.beginPath();rc.arc(270,412+bob,95,Math.PI,0);rc.stroke();
+    rc.fillStyle=hsl(B[0],B[1],B[2]);
+    const w=cfg.product===2?42:34,hh=cfg.product===2?100:86;
+    rc.fillRect(158-(cfg.product===2?8:0),402+bob,w,hh);rc.fillRect(348,402+bob,w,hh);
+  }
+  rc.restore();
+  rc.textAlign="center";
+  rc.fillStyle=hsl(A[0],A[1],A[2],.92);rc.fillRect(112,86,316,42);
+  rc.fillStyle="#fff";rc.font="bold 18px Manrope,sans-serif";rc.fillText("WAN AI PROMO · 9:16",270,113);
+  rc.fillStyle="#fff";rc.font="bold 26px Manrope,sans-serif";
+  rc.fillText(p.title.length>26?p.title.slice(0,25)+"…":p.title,270,636);
+  if(cfg.subs){
+    rc.fillStyle=hsl(B[0],B[1],B[2]+8);rc.font="bold 20px Manrope,sans-serif";
+    rc.fillText(p.caps[Math.min(p.caps.length-1,Math.floor(t*p.caps.length))],270,700);
+  }
+  rc.save();rc.shadowBlur=20*cfg.glow;rc.shadowColor=hsl(A[0],A[1],A[2],.8);
+  rc.fillStyle=hsl(A[0],Math.max(70,A[1]),clamp(A[2]+8,45,62));rc.fillRect(78,786,384,62);rc.restore();
+  rc.fillStyle="#06070d";rc.font="bold 22px Manrope,sans-serif";
+  rc.fillText((cfg.cta+" • "+p.price).slice(0,30),270,825);
+  const scIdx=Math.min(cfg.scenes-1,Math.floor(t*cfg.scenes));
+  for(let i=0;i<cfg.scenes;i++){
+    const bw=(360/cfg.scenes)-8,x=90+i*(360/cfg.scenes);
+    rc.fillStyle=i===scIdx?hsl(B[0],B[1],B[2],.95):"rgba(255,255,255,.22)";
+    rc.fillRect(x,880,bw,5);
+  }
+  rc.fillStyle="rgba(255,255,255,.55)";rc.font="600 12px Manrope,sans-serif";
+  rc.fillText(`сцена ${scIdx+1}/${cfg.scenes} · ${cfg.dur}с · 1080×1920`,270,912);
+  rc.restore();
+  if(cfg.guides){
+    rc.save();rc.strokeStyle="rgba(139,255,90,.5)";rc.lineWidth=1;rc.setLineDash([6,6]);
+    rc.strokeRect(38,120,W-76,H-260);
+    rc.beginPath();rc.moveTo(W/2,0);rc.lineTo(W/2,H);rc.moveTo(0,H/2);rc.lineTo(W,H/2);rc.stroke();
+    rc.setLineDash([]);rc.fillStyle="rgba(139,255,90,.85)";rc.font="600 11px Manrope,sans-serif";rc.textAlign="left";
+    rc.fillText("safe-zone",44,136);rc.restore();
+  }
+  if(cfg.grain>0){
+    rc.save();rc.globalAlpha=cfg.grain;
+    for(let i=0;i<200;i++){rc.fillStyle=Math.random()>.5?"#fff":"#000";rc.fillRect(Math.random()*W,Math.random()*H,1.4,1.4)}
+    rc.restore();
+  }
+}
+function reelLoop(now){drawReel(now);raf=requestAnimationFrame(reelLoop)}
+function startReel(){if(raf!==null||!visible||document.hidden)return;t0=performance.now();raf=requestAnimationFrame(reelLoop)}
+function stopReel(){if(raf!==null){cancelAnimationFrame(raf);raf=null}}
+new IntersectionObserver(es=>{visible=es[0].isIntersecting;visible?startReel():stopReel()},{threshold:.05}).observe(reel);
+document.addEventListener("visibilitychange",()=>{document.hidden?stopReel():startReel()});
+window.addEventListener("resize",()=>{if(raf!==null)fitReel()});
+function reelHint(){$("reelHint").textContent=`${cfg.scenes} сцен · ${cfg.dur}с · качество ${cfg.quality}× · грейд ${cfg.grade} · всё применяется мгновенно`}
+function syncReel(){
+  $("cGrade").value=cfg.grade;$("cMotion").value=cfg.motion;$("cGlow").value=cfg.glow;$("cGrain").value=cfg.grain;
+  $("cZoom").value=cfg.zoom;$("cDur").value=String(cfg.dur);$("cQuality").value=String(cfg.quality);
+  $("cCta").value=cfg.cta;$("cProduct").value=String(cfg.product);
+  $("vMotion").textContent=cfg.motion.toFixed(1)+"×";$("vGlow").textContent=cfg.glow.toFixed(1)+"×";
+  $("vGrain").textContent=cfg.grain.toFixed(2);$("vZoom").textContent=cfg.zoom.toFixed(2)+"×";
+  $("vScenes").textContent=cfg.scenes;
+  $("cSubs").setAttribute("aria-checked",String(cfg.subs));$("cGuides").setAttribute("aria-checked",String(cfg.guides));
+  $("scMinus").disabled=cfg.scenes<=3;$("scPlus").disabled=cfg.scenes>=6;
+  reelHint();if(raf===null)drawReel(performance.now());
+}
+$("cGrade").oninput=e=>{cfg.grade=e.target.value;reelHint()};
+$("cMotion").oninput=e=>{cfg.motion=+e.target.value;$("vMotion").textContent=cfg.motion.toFixed(1)+"×";reelHint()};
+$("cGlow").oninput=e=>{cfg.glow=+e.target.value;$("vGlow").textContent=cfg.glow.toFixed(1)+"×";reelHint()};
+$("cGrain").oninput=e=>{cfg.grain=+e.target.value;$("vGrain").textContent=cfg.grain.toFixed(2);reelHint()};
+$("cZoom").oninput=e=>{cfg.zoom=+e.target.value;$("vZoom").textContent=cfg.zoom.toFixed(2)+"×";reelHint()};
+$("cDur").onchange=e=>{cfg.dur=+e.target.value;reelHint()};
+$("cQuality").onchange=e=>{cfg.quality=+e.target.value;fitReel();reelHint();toast("Качество превью: "+cfg.quality+"×")};
+$("cCta").oninput=e=>{cfg.cta=e.target.value||"КУПИТЬ";reelHint()};
+$("cProduct").onchange=e=>{cfg.product=+e.target.value;reelHint()};
+$("scMinus").onclick=()=>{cfg.scenes=clamp(cfg.scenes-1,3,6);syncReel()};
+$("scPlus").onclick=()=>{cfg.scenes=clamp(cfg.scenes+1,3,6);syncReel()};
+function bindSw(el,key){el.onclick=()=>{cfg[key]=!cfg[key];el.setAttribute("aria-checked",String(cfg[key]));reelHint();if(raf===null)drawReel(performance.now())}}
+bindSw($("cSubs"),"subs");bindSw($("cGuides"),"guides");
+$("cReset").onclick=()=>{Object.assign(cfg,{grade:"#7c5cff",motion:1,glow:1,grain:.1,zoom:1,scenes:4,dur:15,quality:2,cta:"КУПИТЬ",subs:true,guides:false,product:0});syncReel();toast("Параметры сброшены")};
+$("cRandom").onclick=()=>{
+  const pal=["#7c5cff","#22d3ee","#ff4d9d","#8bff5a","#ffb020","#4d7cff","#ff5470"];
+  cfg.grade=pal[Math.floor(Math.random()*pal.length)];
+  cfg.motion=+(0.4+Math.random()*1.9).toFixed(1);
+  cfg.glow=+(Math.random()*2.4).toFixed(1);
+  cfg.grain=+(Math.random()*.32).toFixed(2);
+  cfg.zoom=+(0.9+Math.random()*.4).toFixed(2);
+  cfg.scenes=3+Math.floor(Math.random()*4);
+  cfg.product=Math.floor(Math.random()*PRODUCTS.length);
+  syncReel();toast("Случайный образ применён");
+};
+$("cPng").onclick=()=>{
+  drawReel(performance.now());
+  reel.toBlob(b=>{if(!b)return toast("Не удалось создать PNG","err");download(b,"promo-frame-9x16.png");toast("Кадр PNG сохранён")},"image/png");
+};
+$("cRec").onclick=async()=>{
+  const btn=$("cRec");
+  if(btn.disabled)return;
+  if(!window.MediaRecorder||!reel.captureStream){toast("Браузер не поддерживает запись — используйте PNG","info");return}
+  btn.disabled=true;const old=btn.textContent;btn.textContent="● Запись…";$("reelState").textContent="запись клипа";
+  startReel();
+  let stream,rec,timer;
+  try{
+    stream=reel.captureStream(30);
+    const mime=["video/mp4;codecs=avc1.42E01E","video/mp4","video/webm;codecs=vp9","video/webm"].find(m=>{try{return MediaRecorder.isTypeSupported(m)}catch{return false}})||"video/webm";
+    const ext=mime.includes("mp4")?"mp4":"webm";
+    rec=new MediaRecorder(stream,{mimeType:mime});
+    const chunks=[];
+    rec.ondataavailable=e=>{if(e.data&&e.data.size)chunks.push(e.data)};
+    const done=new Promise((res,rej)=>{rec.onstop=()=>res();rec.onerror=()=>rej(new Error("сбой записи"))});
+    rec.start();
+    await sleep(4200);
+    rec.stop();await done;
+    download(new Blob(chunks,{type:mime}),"promo-9x16."+ext);
+    toast("Клип сохранён (."+ext+")");
+  }catch(e){toast("Запись: "+e.message,"err")}
+  finally{
+    if(timer)clearTimeout(timer);
+    try{stream&&stream.getTracks().forEach(t=>t.stop())}catch{}
+    btn.disabled=false;btn.textContent=old;$("reelState").textContent="рендер идёт";
+  }
+};
+
+const TONES={
+  "уверенный эксперт":{hook:"Разбираем по фактам:",cta:"Подробные характеристики и заказ",vk:"Судите сами:"},
+  "дружелюбный сосед":{hook:"Смотрите, что нашлось 🙂",cta:"Загляните, пока скидка держится",vk:"Делимся находкой:"},
+  "дерзкий challenger":{hook:"Хватит переплачивать за логотип.",cta:"Забирайте, пока партия не кончилась",vk:"Бросаем вызов ценникам:"},
+  "премиум-сдержанный":{hook:"Сдержанно о главном.",cta:"Оформить заказ",vk:"Коротко о сути:"}
+};
+let demoVar=0,demoData=null,demoTab="telegram";
+function buildDemo(){
+  const title=$("dTitle").value.trim()||"Беспроводные наушники SoundMax Pro";
+  const price=$("dPrice").value.trim()||"4 990 ₽";
+  const disc=$("dDisc").value.trim()||"30%";
+  const feat=$("dFeat").value.trim()||"ANC до 45 дБ и 40 часов работы";
+  const tone=TONES[$("dTone").value]||TONES["уверенный эксперт"];
+  const angles=[["Рациональный","Эмоциональный","Сравнение"],["Практичный","Атмосферный","Выгодный"],["Для работы","Для дороги","Против флагманов"]][demoVar%3];
+  const cards=[
+    {a:angles[0],t:`${title} — ${feat}`,b:`Выгода ${disc}`,d:"Инструмент, который окупается в первый месяц: меньше проводов, меньше розеток, меньше компромиссов.",ul:[feat,"Гарантия 1 год и возврат 14 дней","Комплект без доплат"]},
+    {a:angles[1],t:`${title} — тишина, которую слышно`,b:"Хит сезона",d:"Одно касание — и город остаётся снаружи. Остаётся только то, что вы включили сами.",ul:[feat,"Мягкая посадка на весь день","Матовый корпус без отпечатков"]},
+    {a:angles[2],t:`${title} — флагманские функции без наценки`,b:`Скидка ${disc}`,d:"Те же технологии, что у моделей вдвое дороже, но по честной цене и с полным комплектом.",ul:[feat,"Кейс и кабель уже в коробке","Прямая поставка без наценки"]}
+  ];
+  const telegram=`${tone.hook}\n\n${title} — ${feat}.\n\n🔥 Коротко:\n• ${feat}\n• Комплект без доплат\n• Гарантия и возврат\n\n💥 Сейчас ${price} со скидкой ${disc}.\n\n👉 ${tone.cta}: https://example.shop/product\n\n#новинка #гаджеты #скидки`;
+  const vk=`${tone.vk} ${title}.\n\n${feat} — и это не строчка из рекламы, а то, что чувствуется в первый же день.\n\n✅ ${feat}\n✅ Полный комплект в коробке\n✅ ${price} вместо полной цены (-${disc})\n\nЧто для вас важнее при выборе? Пишите в комментариях:\n1 — автономность\n2 — шумоподавление\n3 — цена\n\n#обзор #гаджеты #выгоднаяпокупка`;
+  const ok=`Друзья, делимся удачной находкой — ${title}.\n\nКак часто хочется спокойно послушать музыку или поговорить с близкими, чтобы ничего не мешало? Здесь это решается одним касанием: ${feat}.\n\nПочему берут:\n• Работает долго, заряжать каждый день не нужно.\n• Мягко сидит, не давит даже к вечеру.\n• Голос слышно чисто, без «под водой».\n• Включается одной кнопкой — разберётся каждый.\n\nСейчас действует скидка ${disc}: цена ${price}. В комплекте футляр — можно смело брать в подарок.\n\nПодробности и заказ: https://example.shop/product`;
+  const dzen=`# ${title}: месяц использования и честный вывод\n\n${tone.hook} ещё недавно казалось, что за ${feat} нужно отдавать вдвое больше. Этот месяц показал обратное, и дальше — по пунктам, без рекламных формулировок.\n\n## Первое впечатление\nКомплектация оказалась полнее ожиданий: футляр, кабель, инструкция на русском. Корпус матовый, отпечатки не собирает, шарниры без люфта. Вес распределён равномерно, так что через час не вспоминаешь, что что-то надето.\n\n## Что даёт ${feat} на практике\nВ транспорте гул уходит первым — остаётся музыка на комфортной громкости. В офисе исчезает шум кондиционера и клавиатур. Дома слышно только то, что вы включили. Разница заметна уже в первый день, и к ней быстро привыкаешь.\n\n## Автономность и зарядка\nЗаявленные цифры подтверждаются в спокойном режиме. При активном использовании расход выше, но розетку искать всё равно приходится редко. Быстрая зарядка выручает утром: несколько минут у кабеля — и хватает на дорогу.\n\n## Кому подойдёт, а кому нет\nПодойдёт тем, кто много ездит, работает в шумном помещении или просто хочет тишины вечером. Не подойдёт тем, кому нужен эталонный мониторинг или специфический кодек — здесь честный бытовой баланс, а не студийный инструмент.\n\n## Итог\nЗа ${price} со скидкой ${disc} набор возможностей выглядит избыточным в хорошем смысле. Если задачи совпали — переплата за логотип не выглядит обоснованной.\n\nПодпишитесь, чтобы не пропустить следующий разбор.`;
+  const website=`SEO Title: ${title} — купить со скидкой ${disc}\nMeta Description: ${title}: ${feat}. Цена ${price}, гарантия 1 год, быстрая доставка.\n\n<h1>${title}</h1>\n<p>${feat}. Сегодня <strong>${price}</strong> со скидкой ${disc}.</p>\n<h2>Преимущества</h2>\n<ul><li>${feat}</li><li>Полный комплект</li><li>Гарантия 1 год</li></ul>\n<h2>Отзыв</h2>\n<blockquote>Пользуюсь месяц — к покупке вопросов нет.</blockquote>\n<h2>FAQ</h2>\n<p><strong>Подойдёт для телефона?</strong> Да, совместимо с iOS и Android.</p>\n<button>${tone.cta}</button>`;
+  return{cards,texts:{telegram,vk,ok,dzen,website},title};
+}
+const PLAT_META={
+  telegram:{n:"Telegram",rec:[150,1024],hard:4096,note:"1024 — подпись к медиа, 4096 — пост"},
+  dzen:{n:"Дзен",rec:[3000,7000],hard:null,note:"рекомендация дочитываемости"},
+  vk:{n:"ВКонтакте",rec:[500,2000],hard:null,note:"рекомендуемый объём"},
+  ok:{n:"Одноклассники",rec:[800,3000],hard:null,note:"рекомендуемый объём"},
+  website:{n:"Сайт",rec:[400,10000],hard:null,note:"структура + SEO"}
+};
+function paintDemo(){
+  if(!demoData)return;
+  $("dCards").innerHTML=demoData.cards.map((c,i)=>`<div class="pcard"><div class="b">
+    <div class="row" style="justify-content:space-between"><span class="chip v">${esc(c.a)}</span><span class="chip a">${esc(c.b)}</span></div>
+    <div class="thumb">${esc(demoData.title.slice(0,30))}</div>
+    <h4>${esc(c.t)}</h4><div class="price">${esc($("dPrice").value||"4 990 ₽")}</div>
+    <ul>${c.ul.map(u=>`<li>${esc(u)}</li>`).join("")}</ul></div></div>`).join("");
+  $("dTabs").innerHTML=Object.keys(PLAT_META).map(k=>`<button class="tab-btn ${k===demoTab?"on":""}" data-t="${k}">${PLAT_META[k].n}</button>`).join("");
+  $("dTabs").querySelectorAll("[data-t]").forEach(b=>b.onclick=()=>{demoTab=b.dataset.t;paintDemo()});
+  $("dText").value=demoData.texts[demoTab]||"";
+  updCount();
+}
+function updCount(){
+  const m=PLAT_META[demoTab],len=$("dText").value.length;
+  const cls=m.hard&&len>m.hard?"r":(len<m.rec[0]||len>m.rec[1]?"a":"g");
+  const el=$("dCount");el.className="chip "+cls;
+  el.textContent=m.hard?`${len} / ${m.hard} · ${m.note}`:`${len} · рек. ${m.rec[0]}–${m.rec[1]}`;
+}
+$("dText").addEventListener("input",updCount);
+$("dGen").onclick=async()=>{
+  const b=$("dGen");if(b.disabled)return;b.disabled=true;
+  $("dOut").classList.add("hidden");$("dSkel").classList.remove("hidden");
+  await sleep(700);
+  demoVar++;demoData=buildDemo();paintDemo();
+  $("dSkel").classList.add("hidden");$("dOut").classList.remove("hidden");
+  b.disabled=false;toast("Контент-пак собран: 3 карточки и 5 текстов");
+};
+$("dReset").onclick=()=>{
+  $("dTitle").value="Беспроводные наушники SoundMax Pro";$("dPrice").value="4 990 ₽";
+  $("dDisc").value="30%";$("dFeat").value="ANC до 45 дБ и 40 часов работы";$("dTone").selectedIndex=0;
+  demoVar=0;demoData=buildDemo();demoTab="telegram";paintDemo();toast("Демо сброшено");
+};
+$("dCopy").onclick=()=>copy($("dText").value);
+$("dDl").onclick=()=>{download(new Blob([$("dText").value],{type:"text/plain;charset=utf-8"}),demoTab+".txt");toast("Файл сохранён")};
+
+const PLATS=[
+  {ic:"📱",n:"Telegram",c:"var(--cyan)",d:"Короткие абзацы, эмодзи, хештеги и одна ссылка-действие. Безопасный объём — до 1024 знаков, чтобы текст влез и в подпись к медиа.",rec:"150–1024",fill:72},
+  {ic:"📰",n:"Дзен",c:"var(--amber)",d:"Лонгрид с интригующим заголовком, подзаголовками и честными минусами товара. Объём под дочитываемость, а не под жёсткий лимит.",rec:"3000–7000",fill:96},
+  {ic:"📘",n:"ВКонтакте",c:"var(--blue)",d:"Разговорный тон, умеренные эмодзи и вопрос для комментариев — вовлечение важнее перечисления характеристик.",rec:"500–2000",fill:58},
+  {ic:"🟦",n:"Одноклассники",c:"var(--green)",d:"Тёплый домашний голос для аудитории 35+: польза, надёжность, подарок близким. Без сленга и англицизмов.",rec:"800–3000",fill:78},
+  {ic:"🌐",n:"Сайт",c:"var(--magenta)",d:"H1 и H2, буллеты преимуществ, шаблон отзыва, FAQ, CTA-кнопка и SEO title до 60 знаков с meta до 160.",rec:"400–10000",fill:88}
+];
+$("plats").innerHTML=PLATS.map(p=>`<div class="plat reveal" style="--pc:${p.c}">
+  <div class="ic">${p.ic}</div><h3 style="margin:8px 0 6px">${p.n}</h3>
+  <p class="note" style="color:var(--muted);font-size:12.5px">${p.d}</p>
+  <div class="row" style="justify-content:space-between;margin-top:12px"><span class="chip">${p.rec}</span><span class="note">рекомендация</span></div>
+  <div class="bar"><i data-fill="${p.fill}"></i></div></div>`).join("");
+
+const EPS=[
+  {m:"GET",p:"/api/health",g:"Служебное",d:"Режим, провайдер, наличие ключей, ffmpeg",ex:'{"status":"ok","mode":"demo","llm_provider":"qwen","ffmpeg":true}'},
+  {m:"POST",p:"/api/parse",g:"Контент",d:"Парсинг URL с SSRF-фильтром и выбором полей",ex:'{"url":"https://shop.example/p/1","fields":{"price":true,"photos":true}}'},
+  {m:"POST",p:"/api/generate",g:"Контент",d:"3 карточки + 5 текстов + image-промпты",ex:'{"product":{"title":"SoundMax Pro","price":"4 990 ₽"},"seo_keywords":["наушники anc"]}'},
+  {m:"POST",p:"/api/keywords",g:"Контент",d:"Топ-10 запросов и insights (оценка LLM)",ex:'{"product_name":"наушники","geo":"Россия"}'},
+  {m:"POST",p:"/api/video",g:"Видео",d:"Раскадровка, master-prompt и SEO",ex:'{"idea":"шум метро → тишина","duration":15,"platform":"TikTok"}'},
+  {m:"POST",p:"/api/video/render",g:"Видео",d:"Задача Wan на каждую сцену",ex:'{"scenes":[{"prompt":"subway hook","duration":5}],"platform":"TikTok"}'},
+  {m:"GET",p:"/api/video/status/{id}",g:"Видео",d:"Статус задачи и ссылка на клип",ex:'{"status":"SUCCEEDED","video_url":"https://…/clip.mp4"}'},
+  {m:"POST",p:"/api/video/assemble",g:"Видео",d:"ffmpeg → MP4, без ffmpeg → ZIP с инструкцией",ex:'{"urls":["https://…/s1.mp4","https://…/s2.mp4"]}'},
+  {m:"POST",p:"/api/auth/register",g:"Аккаунт",d:"Регистрация, стартовый баланс токенов",ex:'{"email":"you@studio.ru","password":"min8chars"}'},
+  {m:"POST",p:"/api/auth/login",g:"Аккаунт",d:"Вход, JWT на 30 дней",ex:'{"email":"you@studio.ru","password":"min8chars"}'},
+  {m:"GET",p:"/api/me",g:"Аккаунт",d:"Баланс, расход и разбивка по эндпоинтам",ex:'{"tokens_balance":8766,"tokens_used":1234,"usage":[]}'},
+  {m:"GET",p:"/api/history",g:"История",d:"Серверная история генераций",ex:'[{"id":1,"type":"Генерация","title":"SoundMax Pro","payload":{}}]'},
+  {m:"POST",p:"/api/history",g:"История",d:"Запись своей генерации в историю",ex:'{"type":"Заметка","title":"Кампания","payload":{"note":"…"}}'},
+  {m:"DELETE",p:"/api/history/{id}",g:"История",d:"Удаление записи (и очистка всей истории)",ex:'{"deleted":12}'}
+];
+let apiM="all";
+function paintApi(){
+  const q=($("apiQ").value||"").toLowerCase(),sort=$("apiSort").value;
+  let list=EPS.filter(e=>(apiM==="all"||e.m===apiM)&&(!q||(e.p+" "+e.d+" "+e.g).toLowerCase().includes(q)));
+  if(sort==="path")list=[...list].sort((a,b)=>a.p.localeCompare(b.p));
+  if(sort==="method")list=[...list].sort((a,b)=>a.m.localeCompare(b.m)||a.p.localeCompare(b.p));
+  $("apiList").innerHTML=list.length?list.map((e,i)=>`<div class="ep">
+    <button class="ep-h" aria-expanded="false"><span class="meth m-${e.m.toLowerCase()}">${e.m}</span>
+      <span style="flex:1;min-width:0"><b style="font-family:var(--mono);font-size:12.5px">${esc(e.p)}</b><br><span class="note">${esc(e.d)}</span></span>
+      <span class="chip">${esc(e.g)}</span></button>
+    <div class="ep-b hidden"><div class="code">${esc(e.ex)}<button class="btn btn-g btn-s cp" data-ex="${i}">📋</button></div></div></div>`).join("")
+    :`<p class="note" style="text-align:center;padding:24px">Ничего не найдено — измените запрос или фильтр.</p>`;
+  $("apiCount").textContent=`Показано ${list.length} из ${EPS.length} эндпоинтов`;
+  $("apiList").querySelectorAll(".ep-h").forEach(h=>h.onclick=()=>{
+    const b=h.nextElementSibling,open=b.classList.toggle("hidden");
+    h.setAttribute("aria-expanded",String(!open));
+  });
+  $("apiList").querySelectorAll("[data-ex]").forEach(b=>b.onclick=ev=>{ev.stopPropagation();copy(list[+b.dataset.ex].ex)});
+}
+$("apiQ").addEventListener("input",paintApi);
+$("apiSort").addEventListener("change",paintApi);
+$("apiFilters").querySelectorAll("[data-m]").forEach(b=>b.onclick=()=>{
+  $("apiFilters").querySelectorAll("[data-m]").forEach(x=>x.classList.remove("on"));
+  b.classList.add("on");apiM=b.dataset.m;paintApi();
+});
+
+const SHIP={
+  docker:{code:`cp .env.example .env      # ключи можно оставить пустыми → DEMO
+docker compose up -d --build
+
+# студия:  http://localhost
+# swagger: http://localhost/docs
+make verify               # 38 автотестов`,note:"Именованный volume для /data — права на SQLite не ломают запуск."},
+  local:{code:`python -m venv venv
+source venv/bin/activate        # Windows: venv\\Scripts\\activate
+pip install -r requirements.txt
+cp .env.example .env
+uvicorn app:app --reload --port 8000
+
+# студия: http://localhost:8000`,note:"FastAPI сам отдаёт index.html — nginx не обязателен."},
+  vps:{code:`sudo apt update && sudo apt install -y docker.io docker-compose-v2 nginx certbot python3-certbot-nginx
+git clone https://github.com/<you>/ai-marketing-studio.git
+cd ai-marketing-studio && cp .env.example .env && nano .env
+docker compose up -d --build
+sudo certbot --nginx -d your.domain
+
+# во внешнем nginx обязательно:
+# proxy_set_header X-Real-IP $remote_addr;`,note:"JWT_SECRET, CORS_ORIGINS со своим доменом и X-Real-IP — обязательны для прода."},
+  gh:{code:`git init && git add . && git commit -m "feat: AI Marketing Studio v2"
+git branch -M main
+gh repo create ai-marketing-studio --public --source=. --remote=origin --push
+
+# или без gh CLI:
+git remote add origin https://github.com/<you>/ai-marketing-studio.git
+git push -u origin main`,note:"CI прогонит pytest и соберёт образы. Pages опубликует эту витрину и студию."}
+};
+let shipTab="docker";
+function paintShip(){
+  const s=SHIP[shipTab];
+  $("shipCode").innerHTML=esc(s.code)+`<button class="btn btn-g btn-s cp" id="shipCp">📋</button>`;
+  $("shipNote").textContent=s.note;
+  $("shipCp").onclick=()=>copy(s.code);
+}
+$("shipTabs").querySelectorAll("[data-s]").forEach(b=>b.onclick=()=>{
+  $("shipTabs").querySelectorAll("[data-s]").forEach(x=>x.classList.remove("on"));
+  b.classList.add("on");shipTab=b.dataset.s;paintShip();
+});
+$("shipCopy").onclick=()=>copy(SHIP[shipTab].code);
+$("copyClone").onclick=()=>copy("git clone https://github.com/<you>/ai-marketing-studio.git && cd ai-marketing-studio && cp .env.example .env && docker compose up -d --build");
+document.querySelectorAll("[data-copy]").forEach(b=>b.onclick=()=>copy(b.dataset.copy));
+
+const secs=[...document.querySelectorAll("section[id]")];
+const links=[...document.querySelectorAll("#navLinks a")];
+let ticking=false;
+function onScroll(){
+  if(ticking)return;ticking=true;
+  requestAnimationFrame(()=>{
+    const y=window.scrollY,h=document.documentElement.scrollHeight-innerHeight;
+    $("prog").style.width=(h>0?clamp(y/h,0,1)*100:0)+"%";
+    let cur=null;
+    secs.forEach(s=>{if(s.getBoundingClientRect().top<=140)cur=s.id});
+    links.forEach(a=>a.classList.toggle("on",a.getAttribute("href")==="#"+cur));
+    const hue=clamp(y/Math.max(1,h),0,1)*26;
+    document.documentElement.style.setProperty("--hue",hue.toFixed(1)+"deg");
+    if(!RM)document.querySelectorAll("[data-par]").forEach(o=>{
+      o.style.transform=`translate3d(0,${(y*parseFloat(o.dataset.par)).toFixed(1)}px,0)`;
+    });
+    ticking=false;
+  });
+}
+window.addEventListener("scroll",onScroll,{passive:true});
+const io=new IntersectionObserver(es=>{
+  es.forEach(e=>{
+    if(!e.isIntersecting)return;
+    e.target.classList.add("in");
+    e.target.querySelectorAll?.("[data-fill]").forEach(b=>{b.style.width=b.dataset.fill+"%"});
+    e.target.querySelectorAll?.("[data-count]").forEach(n=>{
+      if(n.dataset.done)return;n.dataset.done="1";
+      const to=+n.dataset.count;let v=0;
+      const step=()=>{v+=Math.max(1,Math.ceil(to/22));n.textContent=Math.min(v,to);if(v<to)requestAnimationFrame(step)};
+      RM?n.textContent=to:step();
+    });
+    io.unobserve(e.target);
+  });
+},{threshold:.16,rootMargin:"0px 0px -8% 0px"});
+document.querySelectorAll(".reveal").forEach(el=>io.observe(el));
+document.querySelectorAll(".metric b[data-count]").forEach(el=>io.observe(el.closest(".metric")));
+
+async function resolveStudio(ev){
+  ev.preventDefault();
+  try{
+    const r=await fetch("app/",{method:"HEAD"});
+    if(r.ok){location.href="app/";return}
+  }catch{}
+  try{
+    const r2=await fetch("../index.html",{method:"HEAD"});
+    if(r2.ok){location.href="../index.html";return}
+  }catch{}
+  toast("Студия публикуется через GitHub Pages или запускается локально: make up","info");
+}
+["openStudio","openStudio2","openStudio3"].forEach(id=>$(id).addEventListener("click",resolveStudio));
+
+syncReel();drawReel(performance.now());startReel();
+demoData=buildDemo();paintDemo();
+paintApi();paintShip();onScroll();
+setTimeout(()=>toast("Витрина готова: крутите параметры кадра справа и соберите контент-пак в разделе «Демо»","info"),700);
+</script>
+</body>
+  </html>
