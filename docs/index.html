@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI Marketing Studio — AI-конвейер товарного контента</title>
-<meta name="description" content="Ссылка на товар → 3 карточки, 5 продающих текстов, топ-10 запросов и вертикальный ролик 9:16. FastAPI · Qwen · Wan · Docker. Открытый исходный код.">
+<title>AI Marketing Studio — конвейер товарного контента</title>
+<meta name="description" content="Ссылка на товар → карточки, тексты для 5 площадок, топ-10 запросов и вертикальный ролик 9:16. Генерация и рендер прямо в браузере.">
 <meta property="og:title" content="AI Marketing Studio">
-<meta property="og:description" content="AI-конвейер товарного контента: парсинг → карточки → 5 площадок → ролик 9:16">
+<meta property="og:description" content="Конвейер товарного контента: генерация, карточки в PNG, вертикальный ролик">
 <meta property="og:type" content="website">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -14,13 +14,13 @@
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%237c5cff'/%3E%3Ctext x='16' y='22' font-size='15' font-weight='900' font-family='sans-serif' fill='%23fff' text-anchor='middle'%3EAI%3C/text%3E%3C/svg%3E">
 <style>
 :root{
-  --ink:#06070d; --surface:#0d1020; --surface2:#141931; --overlay:#1c2246; --scrim:rgba(4,5,12,.86); --line:#252d52;
-  --violet:#7c5cff; --violet-deep:#4a2dd4; --cyan:#22d3ee; --magenta:#ff4d9d; --amber:#ffb020;
-  --acid:#8bff5a; --green:#3ddc84; --red:#ff5470; --blue:#4d7cff; --sand:#ffd9a0;
-  --text:#eef1ff; --muted:#98a1c6; --dim:#6a7297;
+  --ink:#06070d;--surface:#0d1020;--surface2:#141931;--overlay:#1c2246;--scrim:rgba(4,5,12,.86);--line:#252d52;
+  --violet:#7c5cff;--violet-deep:#4a2dd4;--cyan:#22d3ee;--magenta:#ff4d9d;--amber:#ffb020;
+  --acid:#8bff5a;--green:#3ddc84;--red:#ff5470;--blue:#4d7cff;--sand:#ffd9a0;
+  --text:#eef1ff;--muted:#98a1c6;--dim:#6a7297;
   --font:'Manrope',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
-  --disp:'Unbounded',var(--font); --mono:'JetBrains Mono',ui-monospace,Consolas,monospace;
-  --nav:70px; --hue:0deg;
+  --disp:'Unbounded',var(--font);--mono:'JetBrains Mono',ui-monospace,Consolas,monospace;
+  --nav:70px;--hue:0deg;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
@@ -59,22 +59,27 @@ a{color:inherit}
 @keyframes rise{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:none}}
 @keyframes pop{from{opacity:0;transform:translateY(9px) scale(.98)}to{opacity:1;transform:none}}
 @keyframes spin{to{transform:rotate(360deg)}}
-@keyframes dash{to{stroke-dashoffset:-260}}
+@keyframes dash{to{stroke-dashoffset:-300}}
 @keyframes pulse{0%,100%{opacity:.35}50%{opacity:1}}
 @keyframes shimmer{from{background-position:200% 0}to{background-position:-200% 0}}
-.nav{position:fixed;top:0;left:0;right:0;height:var(--nav);z-index:60;backdrop-filter:blur(20px);background:rgba(6,7,13,.82);border-bottom:1px solid var(--line)}
-.nav-in{max-width:1300px;margin:0 auto;height:100%;padding:0 20px;display:flex;align-items:center;gap:14px}
+@keyframes glow{0%,100%{filter:drop-shadow(0 0 4px currentColor)}50%{filter:drop-shadow(0 0 14px currentColor)}}
+.nav{position:fixed;top:0;left:0;right:0;height:var(--nav);z-index:60;backdrop-filter:blur(20px);background:rgba(6,7,13,.86);border-bottom:1px solid var(--line)}
+.nav-in{max-width:1320px;margin:0 auto;height:100%;padding:0 18px;display:flex;align-items:center;gap:12px}
 .brand{display:flex;align-items:center;gap:11px;text-decoration:none;flex:none}
 .mark{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;font:900 13px var(--disp);color:#fff;
   background:conic-gradient(from 200deg,var(--violet),var(--magenta),var(--amber),var(--cyan),var(--violet));box-shadow:0 0 22px rgba(124,92,255,.55)}
 .brand b{font:700 15px var(--disp);background:linear-gradient(90deg,#fff,var(--sand) 45%,var(--cyan));-webkit-background-clip:text;background-clip:text;color:transparent;white-space:nowrap}
-.nav-links{display:flex;gap:2px;margin-left:auto;overflow-x:auto;scrollbar-width:none}
-.nav-links::-webkit-scrollbar{display:none}
-.nav-links a{position:relative;text-decoration:none;color:var(--muted);font:600 13px var(--font);padding:9px 12px;border-radius:9px;white-space:nowrap;transition:color .2s,background .2s}
-.nav-links a:hover{color:var(--text);background:rgba(124,92,255,.1)}
-.nav-links a.on{color:#fff}
-.nav-links a.on::after{content:"";position:absolute;left:12px;right:12px;bottom:2px;height:2px;border-radius:2px;background:linear-gradient(90deg,var(--violet),var(--cyan))}
-.nav-cta{display:flex;gap:8px;flex:none}
+.nav-scroll{display:flex;gap:3px;align-items:center;margin-left:auto;overflow-x:auto;scrollbar-width:none;padding:4px 0}
+.nav-scroll::-webkit-scrollbar{display:none}
+.nav-scroll a{position:relative;text-decoration:none;color:var(--muted);font:600 12.5px var(--font);padding:8px 11px;border-radius:9px;white-space:nowrap;transition:color .2s,background .2s}
+.nav-scroll a:hover{color:var(--text);background:rgba(124,92,255,.1)}
+.nav-scroll a.on{color:#fff}
+.nav-scroll a.on::after{content:"";position:absolute;left:11px;right:11px;bottom:1px;height:2px;border-radius:2px;background:linear-gradient(90deg,var(--violet),var(--cyan))}
+.nav-scroll a.ext{border:1px solid var(--line);background:var(--overlay);color:var(--text);font-weight:700}
+.nav-scroll a.ext:hover{border-color:var(--cyan)}
+.nav-scroll a.ext.hot{border-color:rgba(139,255,90,.45);background:rgba(139,255,90,.1);color:var(--acid)}
+.nav-div{width:1px;height:22px;background:var(--line);flex:none;margin:0 5px}
+.nav-mute{flex:none}
 .progress{position:absolute;left:0;bottom:-1px;height:2px;width:0;background:linear-gradient(90deg,var(--violet),var(--cyan),var(--magenta));box-shadow:0 0 12px var(--violet)}
 .btn{border:0;cursor:pointer;font:700 13px var(--font);border-radius:12px;padding:11px 17px;display:inline-flex;align-items:center;gap:8px;justify-content:center;text-decoration:none;color:#fff;transition:transform .15s,box-shadow .22s,opacity .2s,border-color .2s}
 .btn:active:not([disabled]){transform:scale(.97)}
@@ -82,6 +87,7 @@ a{color:inherit}
 .btn-p:hover{box-shadow:0 14px 40px rgba(124,92,255,.62)}
 .btn-c{background:linear-gradient(100deg,#0b6f86,var(--cyan));color:#03222b;box-shadow:0 10px 28px rgba(34,211,238,.3)}
 .btn-a{background:linear-gradient(100deg,#a35a06,var(--amber));color:#2a1500}
+.btn-acid{background:linear-gradient(100deg,#3f7a1e,var(--acid));color:#0d2103}
 .btn-g{background:var(--overlay);border:1px solid var(--line);color:var(--text)}
 .btn-g:hover{border-color:var(--cyan)}
 .btn-s{padding:8px 12px;font-size:12px;border-radius:10px}
@@ -129,23 +135,25 @@ label.lbl{display:block;font-size:11px;color:var(--muted);margin-bottom:6px;font
 .reveal{opacity:0;transform:translateY(26px)}
 .reveal.in{animation:rise .7s cubic-bezier(.2,.7,.2,1) forwards}
 section{scroll-margin-top:calc(var(--nav) + 18px)}
-.wrap{max-width:1300px;margin:0 auto;padding:0 20px}
-.band{padding:76px 0;position:relative}
+.wrap{max-width:1320px;margin:0 auto;padding:0 20px}
+.band{padding:74px 0;position:relative}
 .band+.band{border-top:1px solid rgba(37,45,82,.6)}
-.hero{padding:calc(var(--nav) + 46px) 0 60px}
-.hero-grid{display:grid;grid-template-columns:1.08fr .92fr;gap:38px;align-items:start}
+.hero{padding:calc(var(--nav) + 44px) 0 56px}
+.hero-grid{display:grid;grid-template-columns:1.06fr .94fr;gap:36px;align-items:start}
 .hbadge{display:inline-flex;align-items:center;gap:9px;padding:6px 13px;border-radius:999px;border:1px solid rgba(139,255,90,.35);background:rgba(139,255,90,.08);font:700 11.5px var(--font);color:var(--acid)}
 .dot{width:7px;height:7px;border-radius:50%;background:var(--acid);box-shadow:0 0 10px var(--acid);animation:pulse 2s infinite}
-h1{font:900 clamp(32px,5.4vw,60px)/1.04 var(--disp);letter-spacing:-1.6px;margin:16px 0 16px}
+h1{font:900 clamp(31px,5.2vw,58px)/1.04 var(--disp);letter-spacing:-1.6px;margin:16px 0 16px}
 h1 .g1{background:linear-gradient(96deg,var(--violet),var(--magenta) 46%,var(--amber));-webkit-background-clip:text;background-clip:text;color:transparent}
 h1 .g2{background:linear-gradient(96deg,var(--cyan),var(--acid));-webkit-background-clip:text;background-clip:text;color:transparent}
 .hero p.lead{font-size:16.5px;max-width:56ch}
-.metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:24px 0}
+.metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:22px 0}
 .metric{background:var(--ink);border:1px solid var(--line);border-radius:13px;padding:13px 12px}
 .metric b{display:block;font:900 24px var(--disp);line-height:1.1}
 .metric span{font-size:10px;color:var(--dim);text-transform:uppercase;letter-spacing:.1em}
 .m1 b{color:var(--violet)}.m2 b{color:var(--cyan)}.m3 b{color:var(--amber)}.m4 b{color:var(--acid)}
 .stack{display:flex;flex-wrap:wrap;gap:7px;margin-top:18px}
+.next{margin-top:20px;border:1px solid rgba(139,255,90,.35);background:linear-gradient(120deg,rgba(139,255,90,.09),rgba(34,211,238,.06));border-radius:16px;padding:16px}
+.next b{font:800 14px var(--font);display:block;margin-bottom:6px}
 .studio{position:sticky;top:calc(var(--nav) + 18px)}
 .stage{display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:start}
 .reel{width:236px;aspect-ratio:9/16;border-radius:22px;border:2px solid var(--line);overflow:hidden;background:#05060c;box-shadow:0 30px 70px rgba(0,0,0,.6),0 0 40px rgba(124,92,255,.18);position:relative;flex:none}
@@ -153,17 +161,28 @@ h1 .g2{background:linear-gradient(96deg,var(--cyan),var(--acid));-webkit-backgro
 .reel .tag{position:absolute;top:9px;left:9px;font:800 9px var(--font);letter-spacing:.12em;padding:4px 8px;border-radius:7px;background:rgba(6,7,13,.72);border:1px solid var(--line);color:var(--cyan)}
 .deck{display:grid;grid-template-columns:repeat(auto-fit,minmax(128px,1fr));gap:9px}
 .deck-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:11px;flex-wrap:wrap}
+.flowmap{background:var(--ink);border:1px solid var(--line);border-radius:18px;padding:16px;overflow-x:auto}
+.flow{stroke-dasharray:8 10;animation:dash 10s linear infinite}
+.node-lit{animation:glow 2.6s ease-in-out infinite}
+.surfaces{display:grid;grid-template-columns:repeat(auto-fit,minmax(252px,1fr));gap:14px;margin-top:18px}
+.surface{border:1px solid var(--line);border-radius:16px;padding:18px;background:linear-gradient(180deg,var(--surface2),var(--surface));position:relative;overflow:hidden;transition:transform .25s,border-color .25s,box-shadow .25s;display:flex;flex-direction:column;gap:10px}
+.surface::before{content:"";position:absolute;inset:0 auto 0 0;width:3px;background:var(--sc)}
+.surface:hover{transform:translateY(-5px);border-color:var(--sc);box-shadow:0 18px 44px rgba(0,0,0,.4)}
+.surface .ic{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;font-size:19px;background:var(--overlay);border:1px solid var(--line)}
+.surface h3{margin:0}
+.surface .path{font:11px var(--mono);color:var(--sc);word-break:break-all}
+.surface .acts{margin-top:auto;display:flex;gap:7px;flex-wrap:wrap}
 .pipe{display:grid;grid-template-columns:.85fr 1.15fr;gap:34px;align-items:start}
 .pipe-sticky{position:sticky;top:calc(var(--nav) + 30px)}
 .stage-card{display:grid;grid-template-columns:52px 1fr;gap:16px;padding:20px;border-radius:16px;border:1px solid var(--line);background:linear-gradient(180deg,var(--surface2),var(--surface));transition:border-color .3s,transform .3s,box-shadow .3s}
 .stage-card:hover{transform:translateX(6px)}
 .stage-card.s1:hover{border-color:var(--violet);box-shadow:0 16px 40px rgba(124,92,255,.2)}
 .stage-card.s2:hover{border-color:var(--cyan);box-shadow:0 16px 40px rgba(34,211,238,.18)}
-.stage-card.s3:hover{border-color:var(--magenta);box-shadow:0 16px 40px rgba(255,77,157,.18)}
+.stage-card.s3:hover{border-color:var(--amber);box-shadow:0 16px 40px rgba(255,176,32,.18)}
 .snum{width:52px;height:52px;border-radius:15px;display:grid;place-items:center;font:900 19px var(--disp);color:#fff}
 .s1 .snum{background:linear-gradient(140deg,var(--violet-deep),var(--violet))}
 .s2 .snum{background:linear-gradient(140deg,#0b6f86,var(--cyan));color:#04222b}
-.s3 .snum{background:linear-gradient(140deg,#a8195f,var(--magenta))}
+.s3 .snum{background:linear-gradient(140deg,#a35a06,var(--amber));color:#2a1500}
 .tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
 .demo-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:20px;align-items:start}
 .pcards{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:13px}
@@ -189,14 +208,8 @@ h1 .g2{background:linear-gradient(96deg,var(--cyan),var(--acid));-webkit-backgro
 .plat .ic{font-size:23px}
 .bar{height:6px;border-radius:99px;background:var(--overlay);overflow:hidden;margin-top:11px}
 .bar i{display:block;height:100%;background:var(--pc);width:0;transition:width 1.1s cubic-bezier(.2,.7,.2,1)}
-.arch{display:grid;grid-template-columns:1.25fr .75fr;gap:24px;align-items:center}
-.diagram{background:var(--ink);border:1px solid var(--line);border-radius:18px;padding:14px;overflow-x:auto}
-.flow{stroke-dasharray:7 9;animation:dash 9s linear infinite}
-.legend{display:flex;flex-direction:column;gap:11px}
-.leg{display:grid;grid-template-columns:12px 1fr;gap:11px;align-items:start;font-size:12.5px;color:var(--muted)}
-.leg i{width:12px;height:12px;border-radius:4px;margin-top:4px}
 .api-tools{display:grid;grid-template-columns:1fr auto auto;gap:11px;margin-bottom:14px}
-.api-list{display:flex;flex-direction:column;gap:9px;max-height:440px;overflow-y:auto;padding-right:6px}
+.api-list{display:flex;flex-direction:column;gap:9px;max-height:420px;overflow-y:auto;padding-right:6px}
 .ep{border:1px solid var(--line);border-radius:13px;background:var(--ink);overflow:hidden}
 .ep-h{width:100%;border:0;background:none;color:var(--text);display:flex;align-items:center;gap:11px;padding:12px 14px;cursor:pointer;text-align:left;font:600 13px var(--font)}
 .ep-h:hover{background:rgba(124,92,255,.07)}
@@ -215,32 +228,32 @@ h1 .g2{background:linear-gradient(96deg,var(--cyan),var(--acid));-webkit-backgro
 .tr .ic{width:38px;height:38px;border-radius:11px;display:grid;place-items:center;font-size:17px;margin-bottom:11px}
 footer{border-top:1px solid var(--line);padding:34px 0 46px;background:rgba(6,7,13,.6)}
 .foot{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;align-items:center}
-.toasts{position:fixed;right:16px;bottom:16px;z-index:90;display:flex;flex-direction:column;gap:9px;width:min(340px,calc(100vw - 32px))}
+.toasts{position:fixed;left:16px;bottom:16px;z-index:90;display:flex;flex-direction:column;gap:9px;width:min(350px,calc(100vw - 32px))}
 .toast{display:flex;gap:10px;align-items:flex-start;padding:12px 14px;border-radius:13px;border:1px solid var(--line);background:var(--surface2);box-shadow:0 16px 44px rgba(0,0,0,.55);font-size:13px;animation:pop .3s both}
 .toast.ok{border-color:rgba(61,220,132,.5)}.toast.err{border-color:rgba(255,84,112,.5)}.toast.info{border-color:rgba(34,211,238,.5)}
-.toast button{margin-left:auto;border:0;background:none;color:var(--dim);cursor:pointer;font-size:14px}
+.toast button.x{margin-left:auto;border:0;background:none;color:var(--dim);cursor:pointer;font-size:14px}
 @media (max-width:1080px){
-  .hero-grid,.pipe,.demo-grid,.arch,.ship{grid-template-columns:1fr}
+  .hero-grid,.pipe,.demo-grid,.ship{grid-template-columns:1fr}
   .studio,.pipe-sticky{position:static}
   .stage{grid-template-columns:1fr;justify-items:center}
   .deck{width:100%}
 }
 @media (max-width:720px){
-  :root{--nav:62px}
+  :root{--nav:60px}
   .wrap{padding:0 14px}
-  .nav-in{padding:0 14px;gap:9px}
+  .nav-in{padding:0 12px;gap:8px}
   .brand b{display:none}
-  .nav-links a{padding:8px 9px;font-size:12px}
-  .band{padding:52px 0}
+  .nav-scroll a{padding:7px 9px;font-size:11.5px}
+  .band{padding:50px 0}
   .metrics{grid-template-columns:repeat(2,1fr)}
   .api-tools{grid-template-columns:1fr}
   .reel{width:min(236px,72vw)}
   .card{padding:16px}
-  .nav-cta .hide-sm{display:none}
+  .hide-sm{display:none}
 }
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
-  .amb::before,.flow,.dot,.reveal.in{animation:none!important}
+  .amb::before,.flow,.dot,.reveal.in,.node-lit{animation:none!important}
   .reveal{opacity:1;transform:none}
   *{transition-duration:.01ms!important}
 }
@@ -253,19 +266,20 @@ footer{border-top:1px solid var(--line);padding:34px 0 46px;background:rgba(6,7,
 <nav class="nav">
   <div class="nav-in">
     <a class="brand" href="#top"><span class="mark">AI</span><b>Marketing&nbsp;Studio</b></a>
-    <div class="nav-links" id="navLinks">
+    <div class="nav-scroll" id="navScroll">
+      <a href="#product">Продукт</a>
       <a href="#pipeline">Конвейер</a>
       <a href="#demo">Демо</a>
       <a href="#platforms">Площадки</a>
-      <a href="#arch">Архитектура</a>
       <a href="#api">API</a>
       <a href="#ship">Запуск</a>
-      <a href="#trust">Защита</a>
+      <span class="nav-div"></span>
+      <a class="ext" href="app/" data-surface="app">🛒 Студия</a>
+      <a class="ext hot" href="live.html" data-surface="live">⚡ Генерация</a>
+      <a class="ext" href="assets.html" data-surface="assets">🎨 Ассеты</a>
+      <a class="ext" href="status.html" data-surface="status">📊 Состояние</a>
     </div>
-    <div class="nav-cta">
-      <a class="btn btn-g btn-s" id="ghLink" href="https://github.com/" target="_blank" rel="noopener">★<span class="hide-sm"> GitHub</span></a>
-      <a class="btn btn-p btn-s" id="openStudio" href="app/">Открыть<span class="hide-sm"> студию</span></a>
-    </div>
+    <button class="btn btn-g btn-s nav-mute" id="muteBtn" aria-pressed="false">🔔</button>
     <div class="progress" id="prog"></div>
   </div>
 </nav>
@@ -274,32 +288,29 @@ footer{border-top:1px solid var(--line);padding:34px 0 46px;background:rgba(6,7,
 <section class="hero wrap">
   <div class="hero-grid">
     <div>
-      <span class="hbadge"><span class="dot"></span>Open source · MIT · FastAPI + Qwen + Wan</span>
+      <span class="hbadge"><span class="dot"></span>Работает в браузере · без сервера · MIT</span>
       <h1>Ссылка на товар → <span class="g1">контент-пак</span> и <span class="g2">ролик 9:16</span></h1>
-      <p class="lead">Один URL превращается в три переупакованные карточки, пять текстов под Telegram, Дзен, ВК, Одноклассники и сайт, топ-10 поисковых запросов и вертикальный рекламный ролик. С биллингом по токенам, серверной историей и защитой от SSRF.</p>
+      <p class="lead">Три переупакованные карточки, пять текстов под Telegram, Дзен, ВКонтакте, Одноклассники и сайт, топ-10 запросов и вертикальный ролик. Генерация идёт напрямую к вашему провайдеру, карточки и видео рендерятся на устройстве.</p>
+
       <div class="metrics">
         <div class="metric m1"><b data-count="3">0</b><span>карточки</span></div>
         <div class="metric m2"><b data-count="5">0</b><span>площадки</span></div>
         <div class="metric m3"><b data-count="10">0</b><span>запросов</span></div>
-        <div class="metric m4"><b data-count="38">0</b><span>автотестов</span></div>
+        <div class="metric m4"><b data-count="4">0</b><span>формата PNG</span></div>
       </div>
-      <div class="row">
-        <a class="btn btn-p" id="openStudio2" href="app/">🚀 Открыть студию</a>
-        <a class="btn btn-g" href="#ship">⚡ Запуск в одну команду</a>
-        <button class="btn btn-g" id="copyClone">📋 git clone</button>
+
+      <div class="next" id="nextBox">
+        <span class="kicker acid">Ваш прогресс</span>
+        <b id="nextTitle">Читаю состояние…</b>
+        <p class="note" id="nextNote" style="color:var(--muted);font-size:12.5px"></p>
+        <div class="row" style="margin-top:11px" id="nextActs"></div>
+        <div class="row" style="margin-top:11px" id="stateChips"></div>
       </div>
+
       <div class="stack">
-        <span class="chip v">FastAPI</span><span class="chip c">SQLite · WAL</span><span class="chip m">JWT · PBKDF2 600k</span>
-        <span class="chip a">Wan · DashScope</span><span class="chip acid">ffmpeg</span><span class="chip">Docker · nginx</span>
-        <span class="chip g">Pydantic-валидация</span><span class="chip r">SSRF-фильтр</span>
-      </div>
-      <div class="card" style="margin-top:22px">
-        <span class="kicker acid">Что видно сразу</span>
-        <p class="note" style="margin-top:9px;font-size:12.5px;color:var(--muted)">
-          Студия открывается уже наполненной: товар распарсен, контент-пак сгенерирован, превью ролика живое.
-          Все параметры справа меняют кадр в реальном времени — без кнопки «применить».
-          Демо работает офлайн, без единого API-ключа.
-        </p>
+        <span class="chip v">OpenRouter</span><span class="chip c">Groq</span><span class="chip m">Anthropic</span>
+        <span class="chip a">Together · Qwen</span><span class="chip acid">Canvas-рендер</span><span class="chip">MediaRecorder</span>
+        <span class="chip g">Без сборки</span><span class="chip r">Ключ на устройстве</span>
       </div>
     </div>
 
@@ -327,7 +338,7 @@ footer{border-top:1px solid var(--line);padding:34px 0 46px;background:rgba(6,7,
               <div class="ctrl"><label class="lbl" for="cCta">Текст CTA</label><input class="input" id="cCta" value="КУПИТЬ" maxlength="16" style="padding:8px 10px;font-size:12px"></div>
               <div class="ctrl"><label class="lbl">Субтитры</label><div class="row" style="gap:8px"><button class="switch" id="cSubs" role="switch" aria-checked="true" aria-label="Субтитры"></button><span class="note">в safe-zone</span></div></div>
               <div class="ctrl"><label class="lbl">Направляющие</label><div class="row" style="gap:8px"><button class="switch" id="cGuides" role="switch" aria-checked="false" aria-label="Направляющие safe-zone"></button><span class="note">сетка кадра</span></div></div>
-              <div class="ctrl"><label class="lbl">Продукт</label><select class="select" id="cProduct"><option value="0">SoundMax Pro ANC</option><option value="1">AeroBuds Lite</option><option value="2">StudioMax Over-Ear</option></select></div>
+              <div class="ctrl"><label class="lbl" for="cProduct">Продукт</label><select class="select" id="cProduct"><option value="0">SoundMax Pro ANC</option><option value="1">AeroBuds Lite</option><option value="2">StudioMax Over-Ear</option></select></div>
             </div>
             <div class="row" style="margin-top:11px">
               <button class="btn btn-g btn-s" id="cReset">↺ Сброс</button>
@@ -343,38 +354,100 @@ footer{border-top:1px solid var(--line);padding:34px 0 46px;background:rgba(6,7,
   </div>
 </section>
 
+<section id="product" class="band">
+  <div class="wrap">
+    <div class="reveal" style="margin-bottom:20px">
+      <span class="kicker acid">Продукт целиком</span>
+      <h2 class="sec">Пять поверхностей, один конвейер</h2>
+      <p class="lead">Каждая страница закрывает свой этап и передаёт результат дальше через память браузера. Открывайте в любом порядке — состояние подхватится автоматически.</p>
+    </div>
+
+    <div class="flowmap reveal">
+      <svg viewBox="0 0 900 250" role="img" aria-label="Схема конвейера: товар, генерация, ассеты, публикация" style="min-width:720px;display:block">
+        <defs>
+          <linearGradient id="fv" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#4a2dd4"/><stop offset="1" stop-color="#7c5cff"/></linearGradient>
+          <linearGradient id="fc" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0b6f86"/><stop offset="1" stop-color="#22d3ee"/></linearGradient>
+          <linearGradient id="fa" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#a35a06"/><stop offset="1" stop-color="#ffb020"/></linearGradient>
+          <linearGradient id="fg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3f7a1e"/><stop offset="1" stop-color="#8bff5a"/></linearGradient>
+        </defs>
+        <g font-family="Manrope,sans-serif" font-size="12" fill="#eef1ff">
+          <rect x="16" y="86" width="164" height="80" rx="15" fill="#141931" stroke="#252d52"/>
+          <text x="98" y="116" text-anchor="middle" font-weight="800">1 · Товар</text>
+          <text x="98" y="136" text-anchor="middle" font-size="10.5" fill="#98a1c6">студия · парсер</text>
+          <text x="98" y="153" text-anchor="middle" font-size="10.5" fill="#6a7297">app/</text>
+
+          <rect x="238" y="86" width="164" height="80" rx="15" fill="url(#fc)" opacity=".93"/>
+          <text x="320" y="116" text-anchor="middle" font-weight="800" fill="#04222b">2 · Генерация</text>
+          <text x="320" y="136" text-anchor="middle" font-size="10.5" fill="#04222b">свой ключ · поток</text>
+          <text x="320" y="153" text-anchor="middle" font-size="10.5" fill="#04222b">live.html</text>
+
+          <rect x="460" y="86" width="164" height="80" rx="15" fill="url(#fa)" opacity=".93"/>
+          <text x="542" y="116" text-anchor="middle" font-weight="800" fill="#2a1500">3 · Ассеты</text>
+          <text x="542" y="136" text-anchor="middle" font-size="10.5" fill="#2a1500">PNG · ролик</text>
+          <text x="542" y="153" text-anchor="middle" font-size="10.5" fill="#2a1500">assets.html</text>
+
+          <rect x="682" y="86" width="200" height="80" rx="15" fill="url(#fg)" opacity=".93"/>
+          <text x="782" y="116" text-anchor="middle" font-weight="800" fill="#0d2103">4 · Публикация</text>
+          <text x="782" y="136" text-anchor="middle" font-size="10.5" fill="#0d2103">GitHub Pages · соцсети</text>
+          <text x="782" y="153" text-anchor="middle" font-size="10.5" fill="#0d2103">готовые файлы</text>
+
+          <g stroke-width="2.4" fill="none">
+            <path class="flow" d="M180 126 H238" stroke="#22d3ee"/>
+            <path class="flow" d="M402 126 H460" stroke="#ffb020"/>
+            <path class="flow" d="M624 126 H682" stroke="#8bff5a"/>
+          </g>
+          <circle id="lit1" cx="98" cy="76" r="5" fill="#7c5cff" class="node-lit" style="color:#7c5cff"/>
+          <circle id="lit2" cx="320" cy="76" r="5" fill="#252d52"/>
+          <circle id="lit3" cx="542" cy="76" r="5" fill="#252d52"/>
+          <circle id="lit4" cx="782" cy="76" r="5" fill="#252d52"/>
+          <text x="98" y="200" text-anchor="middle" font-size="10.5" fill="#6a7297" id="cap1">товар загружен</text>
+          <text x="320" y="200" text-anchor="middle" font-size="10.5" fill="#6a7297" id="cap2">ожидает ключ</text>
+          <text x="542" y="200" text-anchor="middle" font-size="10.5" fill="#6a7297" id="cap3">ожидает карточки</text>
+          <text x="782" y="200" text-anchor="middle" font-size="10.5" fill="#6a7297" id="cap4">сайт опубликован</text>
+          <text x="450" y="34" text-anchor="middle" font-size="11" fill="#98a1c6" font-weight="700">Состояние читается из памяти этого браузера</text>
+        </g>
+      </svg>
+    </div>
+
+    <div class="surfaces" id="surfaces"></div>
+  </div>
+</section>
+
 <section id="pipeline" class="band">
   <div class="wrap pipe">
     <div class="pipe-sticky reveal">
       <span class="kicker v">Конвейер</span>
-      <h2 class="sec">Три шага<br>от ссылки до публикации</h2>
-      <p class="lead">Каждый шаг — отдельный модуль backend со своей валидацией, историей и учётом токенов. Ни один невалидный ответ модели не доходит до интерфейса.</p>
+      <h2 class="sec">Три шага<br>от ссылки до файлов</h2>
+      <p class="lead">Каждый шаг работает автономно и передаёт результат дальше. Ни один этап не требует сервера: ключ живёт на устройстве, рендер идёт в canvas.</p>
       <div class="row" style="margin-top:18px">
-        <span class="chip g">Pydantic-схема</span><span class="chip c">retry ×2</span><span class="chip a">атомарный биллинг</span>
+        <span class="chip g">Прямой запрос к API</span><span class="chip c">Поток токенов</span><span class="chip a">Экспорт PNG и видео</span>
       </div>
       <div class="card" style="margin-top:18px">
-        <span class="kicker acid">Резерв токенов</span>
+        <span class="kicker acid">Что передаётся между шагами</span>
         <p class="note" style="margin-top:8px;color:var(--muted);font-size:12.5px">
-          Резерв = <code style="font-family:var(--mono);color:var(--cyan)">max_tokens + input_estimate</code>. Провайдер не вызывается,
-          если баланса не хватит на полный ответ — отказ после оплаченной генерации исключён.
+          Генерация складывает контент-пак в память браузера. Мастерская ассетов читает его сама —
+          карточки, цены и выгоды подставляются в макет без ручного копирования. Ключи в эту память не попадают.
         </p>
       </div>
     </div>
     <div class="grid" style="gap:14px">
       <div class="stage-card s1 reveal"><div class="snum">1</div><div>
-        <h3>Парсинг товара</h3>
-        <p class="note" style="font-size:13px;color:var(--muted)">JSON-LD Product, OpenGraph, meta-теги, таблицы характеристик и эвристика цены. SSRF-фильтр отсекает приватные диапазоны, редиректы проверяются на каждом шаге, ответ ограничен 3 МБ. Если сайт закрыт анти-ботом — открывается форма ручного ввода с drag&nbsp;&amp;&nbsp;drop фото.</p>
-        <div class="tags"><span class="chip v">JSON-LD</span><span class="chip v">OpenGraph</span><span class="chip r">SSRF-guard</span><span class="chip">3 МБ лимит</span></div>
+        <h3>Товар и исходные данные</h3>
+        <p class="note" style="font-size:13px;color:var(--muted)">Студия показывает работу с товаром: галерея с перетаскиванием, характеристики, JSON-превью, три угла подачи и пять текстов с счётчиками объёма. Работает без ключа на эталонных данных — можно оценить интерфейс до подключения провайдера.</p>
+        <div class="tags"><span class="chip v">3 карточки</span><span class="chip v">5 площадок</span><span class="chip v">Дизайн-панель</span><span class="chip">Экспорт PNG</span></div>
+        <div class="row" style="margin-top:12px"><a class="btn btn-g btn-s" href="app/">Открыть студию</a></div>
       </div></div>
       <div class="stage-card s2 reveal"><div class="snum">2</div><div>
-        <h3>Генерация контент-пака</h3>
-        <p class="note" style="font-size:13px;color:var(--muted)">Три угла подачи — рациональный, эмоциональный, сравнение с конкурентами. Пять текстов с валидацией объёма: Telegram, Дзен-лонгрид, ВК, Одноклассники и лендинг с SEO-meta. Ответ модели проверяется схемой; при провале — повтор с указанием ошибки.</p>
-        <div class="tags"><span class="chip c">3 карточки</span><span class="chip c">5 площадок</span><span class="chip c">3 image-промпта</span><span class="chip g">схема + retry</span></div>
+        <h3>Реальная генерация</h3>
+        <p class="note" style="font-size:13px;color:var(--muted)">Свой ключ OpenRouter, Groq, Anthropic, Together или DeepSeek. Запрос уходит прямо с устройства, ответ приходит потоком — видно каждый токен на осциллографе. Температура, top-p, лимит, тон, угол подачи и язык меняют результат, автолимит поднимает потолок под объём выбранных площадок.</p>
+        <div class="tags"><span class="chip c">6 провайдеров</span><span class="chip c">Потоковый вывод</span><span class="chip c">Проверка ключа</span><span class="chip">История и виды</span></div>
+        <div class="row" style="margin-top:12px"><a class="btn btn-c btn-s" href="live.html">Начать генерацию</a></div>
       </div></div>
       <div class="stage-card s3 reveal"><div class="snum">3</div><div>
-        <h3>Ролик по сценам</h3>
-        <p class="note" style="font-size:13px;color:var(--muted)">T2V-модели отдают короткие клипы, поэтому ролик собирается из сцен: задача на каждую сцену → опрос статусов → скачивание → склейка ffmpeg в единый MP4. Без ffmpeg отдаётся ZIP с клипами, <code style="font-family:var(--mono);color:var(--cyan)">list.txt</code> и готовой командой. Без WAN-ключа — canvas-превью в браузере.</p>
-        <div class="tags"><span class="chip m">задача на сцену</span><span class="chip m">опрос статуса</span><span class="chip a">ffmpeg concat</span><span class="chip">ZIP-fallback</span></div>
+        <h3>Ассеты и публикация</h3>
+        <p class="note" style="font-size:13px;color:var(--muted)">Мастерская забирает карточки из генерации и рендерит их в PNG четырёх форматов до 3× разрешения. Раскладка измеряет текст и ужимает его до отрисовки, поэтому заголовки не обрезаются. Ролик собирается из сцен с переходами и записывается в MP4 или WebM.</p>
+        <div class="tags"><span class="chip a">4:5 · 1:1 · 9:16 · 16:9</span><span class="chip a">До 3× качества</span><span class="chip a">Запись ролика</span><span class="chip">Пресеты</span></div>
+        <div class="row" style="margin-top:12px"><a class="btn btn-a btn-s" href="assets.html">Собрать ассеты</a></div>
       </div></div>
     </div>
   </div>
@@ -383,9 +456,9 @@ footer{border-top:1px solid var(--line);padding:34px 0 46px;background:rgba(6,7,
 <section id="demo" class="band">
   <div class="wrap">
     <div class="reveal" style="margin-bottom:22px">
-      <span class="kicker c">Рабочее демо</span>
-      <h2 class="sec">Сгенерируйте контент-пак прямо здесь</h2>
-      <p class="lead">Тот же движок шаблонов, что и в студии. Работает офлайн, без сервера и ключей — введите товар и получите карточки и тексты с живыми счётчиками объёма.</p>
+      <span class="kicker c">Демо без ключа</span>
+      <h2 class="sec">Соберите контент-пак прямо здесь</h2>
+      <p class="lead">Тот же движок шаблонов, что и в студии. Работает офлайн — введите товар и получите карточки и тексты с живыми счётчиками объёма. За реальным ответом модели идите в раздел «Генерация».</p>
     </div>
     <div class="demo-grid">
       <div class="card reveal">
@@ -401,7 +474,7 @@ footer{border-top:1px solid var(--line);padding:34px 0 46px;background:rgba(6,7,
           <button class="btn btn-p grow" id="dGen">⚡ Сгенерировать</button>
           <button class="btn btn-g" id="dReset">↺</button>
         </div>
-        <p class="note" style="margin-top:11px">Демо использует детерминированные шаблоны с вариативностью. В LIVE-режиме студии те же промпты уходят в Qwen / GPT / Claude — провайдер меняется одной строкой в <code style="font-family:var(--mono);color:var(--cyan)">.env</code>.</p>
+        <p class="note" style="margin-top:11px">Шаблоны детерминированы с вариативностью. В разделе «Генерация» те же поля уходят в модель, а провайдер меняется одним выбором.</p>
       </div>
       <div class="reveal">
         <div id="dSkel" class="card hidden"><div class="row" style="margin-bottom:14px"><div class="spin"></div><b style="font-size:13px;color:var(--cyan)">Собираем карточки и тексты…</b></div><div class="pcards"><div class="skel" style="height:230px"></div><div class="skel" style="height:230px"></div></div><div class="skel" style="height:150px;margin-top:14px"></div></div>
@@ -412,7 +485,7 @@ footer{border-top:1px solid var(--line);padding:34px 0 46px;background:rgba(6,7,
             <textarea class="txtbox" id="dText" spellcheck="false"></textarea>
             <div class="row" style="justify-content:space-between;margin-top:11px">
               <span class="chip" id="dCount">0</span>
-              <span class="row"><button class="btn btn-g btn-s" id="dCopy">📋 Копировать</button><button class="btn btn-g btn-s" id="dDl">💾 .txt</button></span>
+              <span class="row"><button class="btn btn-g btn-s" id="dCopy">📋 Копировать</button><button class="btn btn-g btn-s" id="dDl">💾 .txt</button><a class="btn btn-acid btn-s" href="assets.html">🎨 В ассеты</a></span>
             </div>
           </div>
         </div>
@@ -426,86 +499,18 @@ footer{border-top:1px solid var(--line);padding:34px 0 46px;background:rgba(6,7,
     <div class="reveal" style="margin-bottom:22px">
       <span class="kicker a">Площадки</span>
       <h2 class="sec">Пять текстов — пять разных голосов</h2>
-      <p class="lead">Счётчики показывают рекомендуемый объём редакции и, где он документирован, жёсткий лимит площадки. Красный загорается только при реальном превышении — не по выдуманным правилам.</p>
+      <p class="lead">Счётчики показывают рекомендуемый объём редакции и, где он документирован, жёсткий лимит площадки. Красный загорается только при реальном превышении.</p>
     </div>
     <div class="plats" id="plats"></div>
-  </div>
-</section>
-
-<section id="arch" class="band">
-  <div class="wrap">
-    <div class="reveal" style="margin-bottom:22px">
-      <span class="kicker v">Архитектура</span>
-      <h2 class="sec">Модули без циклических зависимостей</h2>
-    </div>
-    <div class="arch">
-      <div class="diagram reveal">
-        <svg viewBox="0 0 760 400" role="img" aria-label="Схема архитектуры: браузер, nginx, FastAPI, SQLite и внешние провайдеры" style="min-width:620px;display:block">
-          <defs>
-            <linearGradient id="gv" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#4a2dd4"/><stop offset="1" stop-color="#7c5cff"/></linearGradient>
-            <linearGradient id="gc" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0b6f86"/><stop offset="1" stop-color="#22d3ee"/></linearGradient>
-            <linearGradient id="gm" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#a8195f"/><stop offset="1" stop-color="#ff4d9d"/></linearGradient>
-            <linearGradient id="ga" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#a35a06"/><stop offset="1" stop-color="#ffb020"/></linearGradient>
-            <linearGradient id="gg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1f8a52"/><stop offset="1" stop-color="#3ddc84"/></linearGradient>
-          </defs>
-          <g font-family="Manrope,sans-serif" font-size="12" fill="#eef1ff">
-            <rect x="18" y="150" width="128" height="86" rx="14" fill="#141931" stroke="#252d52"/>
-            <text x="82" y="182" text-anchor="middle" font-weight="800">Браузер</text>
-            <text x="82" y="202" text-anchor="middle" font-size="10.5" fill="#98a1c6">SPA · vanilla JS</text>
-            <text x="82" y="219" text-anchor="middle" font-size="10.5" fill="#6a7297">canvas · export</text>
-            <rect x="188" y="150" width="120" height="86" rx="14" fill="url(#gc)" opacity=".92"/>
-            <text x="248" y="182" text-anchor="middle" font-weight="800" fill="#04222b">nginx</text>
-            <text x="248" y="202" text-anchor="middle" font-size="10.5" fill="#04222b">статика + /api</text>
-            <text x="248" y="219" text-anchor="middle" font-size="10.5" fill="#04222b">X-Real-IP</text>
-            <rect x="352" y="96" width="176" height="194" rx="16" fill="url(#gv)" opacity=".95"/>
-            <text x="440" y="126" text-anchor="middle" font-weight="800" font-size="13">FastAPI</text>
-            <text x="440" y="150" text-anchor="middle" font-size="10.5">security · SSRF</text>
-            <text x="440" y="169" text-anchor="middle" font-size="10.5">auth · JWT</text>
-            <text x="440" y="188" text-anchor="middle" font-size="10.5">schemas · Pydantic</text>
-            <text x="440" y="207" text-anchor="middle" font-size="10.5">llm_provider</text>
-            <text x="440" y="226" text-anchor="middle" font-size="10.5">rate limit</text>
-            <text x="440" y="252" text-anchor="middle" font-size="10.5" fill="#ffd9a0">mocks · demo fallback</text>
-            <text x="440" y="271" text-anchor="middle" font-size="10.5" fill="#ffd9a0">db · атомарный биллинг</text>
-            <rect x="580" y="30" width="156" height="72" rx="13" fill="url(#gm)"/>
-            <text x="658" y="60" text-anchor="middle" font-weight="800">LLM</text>
-            <text x="658" y="80" text-anchor="middle" font-size="10.5">Qwen · GPT · Claude</text>
-            <rect x="580" y="122" width="156" height="72" rx="13" fill="url(#ga)"/>
-            <text x="658" y="152" text-anchor="middle" font-weight="800" fill="#2a1500">Wan · DashScope</text>
-            <text x="658" y="172" text-anchor="middle" font-size="10.5" fill="#2a1500">задача → статус → клип</text>
-            <rect x="580" y="214" width="156" height="72" rx="13" fill="url(#gg)"/>
-            <text x="658" y="244" text-anchor="middle" font-weight="800" fill="#04240f">ffmpeg</text>
-            <text x="658" y="264" text-anchor="middle" font-size="10.5" fill="#04240f">concat → MP4 / ZIP</text>
-            <rect x="352" y="318" width="176" height="64" rx="13" fill="#141931" stroke="#3ddc84"/>
-            <text x="440" y="345" text-anchor="middle" font-weight="800" fill="#3ddc84">SQLite · WAL</text>
-            <text x="440" y="364" text-anchor="middle" font-size="10.5" fill="#98a1c6">users · history · token_log</text>
-            <g stroke-width="2" fill="none">
-              <path class="flow" d="M146 193 H188" stroke="#22d3ee"/>
-              <path class="flow" d="M308 193 H352" stroke="#7c5cff"/>
-              <path class="flow" d="M528 150 C556 150 556 66 580 66" stroke="#ff4d9d"/>
-              <path class="flow" d="M528 190 C556 190 556 158 580 158" stroke="#ffb020"/>
-              <path class="flow" d="M528 232 C556 232 556 250 580 250" stroke="#3ddc84"/>
-              <path class="flow" d="M440 290 V318" stroke="#3ddc84"/>
-            </g>
-          </g>
-        </svg>
-      </div>
-      <div class="legend reveal">
-        <div class="leg"><i style="background:var(--cyan)"></i><div><b style="color:var(--text)">nginx</b> отдаёт статику и перезаписывает <code style="font-family:var(--mono)">X-Real-IP</code> — на нём держится rate-limit, подмена XFF не проходит.</div></div>
-        <div class="leg"><i style="background:var(--violet)"></i><div><b style="color:var(--text)">FastAPI</b> собран из независимых модулей: <code style="font-family:var(--mono)">security</code>, <code style="font-family:var(--mono)">auth</code>, <code style="font-family:var(--mono)">schemas</code>, <code style="font-family:var(--mono)">llm_provider</code>, <code style="font-family:var(--mono)">db</code>, <code style="font-family:var(--mono)">mocks</code>.</div></div>
-        <div class="leg"><i style="background:var(--magenta)"></i><div><b style="color:var(--text)">LLM-провайдер</b> меняется одной переменной. Anthropic идёт отдельной веткой: system отдельным полем, свой заголовок и суммирование usage.</div></div>
-        <div class="leg"><i style="background:var(--amber)"></i><div><b style="color:var(--text)">Wan</b> вызывается по сцене, статус опрашивается, клипы скачиваются с ограничением 60 МБ каждый.</div></div>
-        <div class="leg"><i style="background:var(--green)"></i><div><b style="color:var(--text)">SQLite в WAL</b> и списание одним <code style="font-family:var(--mono)">UPDATE … WHERE balance &gt;= n</code>: гонки и овердрафт исключены.</div></div>
-      </div>
-    </div>
   </div>
 </section>
 
 <section id="api" class="band">
   <div class="wrap">
     <div class="reveal" style="margin-bottom:20px">
-      <span class="kicker c">API</span>
+      <span class="kicker c">API для серверного режима</span>
       <h2 class="sec">Четырнадцать эндпоинтов</h2>
-      <p class="lead">Живой справочник: ищите, фильтруйте по методу и сортируйте. Клик по строке раскрывает пример запроса.</p>
+      <p class="lead">Когда появится свой backend, студия переключится в LIVE и заговорит с ним. Справочник живой: ищите, фильтруйте по методу и сортируйте.</p>
     </div>
     <div class="card reveal">
       <div class="api-tools">
@@ -525,28 +530,31 @@ footer{border-top:1px solid var(--line);padding:34px 0 46px;background:rgba(6,7,
   <div class="wrap">
     <div class="reveal" style="margin-bottom:22px">
       <span class="kicker acid">Запуск</span>
-      <h2 class="sec">Одна команда до работающей студии</h2>
+      <h2 class="sec">Три способа работать</h2>
     </div>
     <div class="ship">
       <div class="steps reveal">
-        <div class="step"><b>1</b><div>Скопируйте <code style="font-family:var(--mono);color:var(--cyan)">.env.example</code> в <code style="font-family:var(--mono);color:var(--cyan)">.env</code>. Ключи можно оставить пустыми — студия откроется в DEMO.</div></div>
-        <div class="step"><b>2</b><div>Поднимите стек. Именованный volume для <code style="font-family:var(--mono);color:var(--cyan)">/data</code> снимает проблему прав на SQLite.</div></div>
-        <div class="step"><b>3</b><div>Прогоните <code style="font-family:var(--mono);color:var(--cyan)">make verify</code> — 38 проверок покрывают SSRF, биллинг, схему LLM, историю и rate-limit.</div></div>
-        <div class="step"><b>4</b><div>Для прода задайте <code style="font-family:var(--mono);color:var(--cyan)">JWT_SECRET</code>, свой домен в <code style="font-family:var(--mono);color:var(--cyan)">CORS_ORIGINS</code> и включите HTTPS.</div></div>
+        <div class="step"><b>1</b><div><b style="color:var(--text)">Прямо сейчас, без установки.</b> Откройте генерацию, вставьте ключ провайдера, нажмите «Проверить ключ» и соберите контент-пак. Ассеты рендерятся там же в браузере.</div></div>
+        <div class="step"><b>2</b><div><b style="color:var(--text)">Локальная копия.</b> Склонируйте репозиторий и откройте <code style="font-family:var(--mono);color:var(--cyan)">index.html</code> — сборка и зависимости не нужны.</div></div>
+        <div class="step"><b>3</b><div><b style="color:var(--text)">Свой сервер позже.</b> Backend добавит команду, общий доступ и биллинг. Студия переключится в LIVE тумблером, а поле «API base» укажет на ваш домен.</div></div>
         <div class="card" style="margin-top:6px">
-          <span class="kicker m">Смена модели</span>
-          <div class="code" style="margin-top:9px">LLM_PROVIDER=anthropic
-ANTHROPIC_API_KEY=sk-ant-…<button class="btn btn-g btn-s cp" data-copy="LLM_PROVIDER=anthropic
-ANTHROPIC_API_KEY=sk-ant-…">📋</button></div>
-          <p class="note" style="margin-top:9px">Доступно: qwen · openai · anthropic · groq · deepseek · openrouter.</p>
+          <span class="kicker m">Где взять ключ</span>
+          <div class="code" style="margin-top:9px">OpenRouter → openrouter.ai/keys
+Groq       → console.groq.com → API Keys
+Anthropic  → console.anthropic.com
+Together   → api.together.xyz → Settings<button class="btn btn-g btn-s cp" data-copy="OpenRouter → openrouter.ai/keys
+Groq       → console.groq.com → API Keys
+Anthropic  → console.anthropic.com
+Together   → api.together.xyz → Settings">📋</button></div>
+          <p class="note" style="margin-top:9px">OpenRouter рассчитан на запросы из браузера и открывает десятки моделей одним ключом — самый надёжный старт.</p>
         </div>
       </div>
       <div class="card reveal">
         <div class="tabs" id="shipTabs">
-          <button class="tab-btn on" data-s="docker">🐳 Docker</button>
+          <button class="tab-btn on" data-s="now">⚡ Сейчас</button>
           <button class="tab-btn" data-s="local">💻 Локально</button>
-          <button class="tab-btn" data-s="vps">☁️ VPS + HTTPS</button>
           <button class="tab-btn" data-s="gh">📦 GitHub</button>
+          <button class="tab-btn" data-s="server">☁️ Сервер</button>
         </div>
         <div class="code" id="shipCode"></div>
         <div class="row" style="margin-top:12px;justify-content:space-between">
@@ -562,15 +570,15 @@ ANTHROPIC_API_KEY=sk-ant-…">📋</button></div>
   <div class="wrap">
     <div class="reveal" style="margin-bottom:22px">
       <span class="kicker m">Защита и честность</span>
-      <h2 class="sec">Что закрыто и что честно признано</h2>
+      <h2 class="sec">Что закрыто и что признано открыто</h2>
     </div>
     <div class="trust">
-      <div class="tr reveal"><div class="ic" style="background:rgba(255,84,112,.14);border:1px solid rgba(255,84,112,.4)">🛡</div><h3>SSRF-фильтр</h3><p class="note" style="color:var(--muted);font-size:12.5px">Приватные, loopback, link-local и reserved адреса отклоняются. Редиректы проверяются на каждом шаге, лимит 3 перехода и 3 МБ ответа.</p></div>
-      <div class="tr reveal"><div class="ic" style="background:rgba(124,92,255,.14);border:1px solid rgba(124,92,255,.45)">⚖️</div><h3>Атомарный биллинг</h3><p class="note" style="color:var(--muted);font-size:12.5px">Списание одним UPDATE с условием. Параллельные запросы не могут увести баланс в минус. Резерв покрывает полный ответ модели.</p></div>
-      <div class="tr reveal"><div class="ic" style="background:rgba(61,220,132,.14);border:1px solid rgba(61,220,132,.4)">✅</div><h3>Схема ответа</h3><p class="note" style="color:var(--muted);font-size:12.5px">Pydantic проверяет каждый ответ LLM. При провале — повтор с текстом ошибки. Кривой JSON не ломает интерфейс.</p></div>
-      <div class="tr reveal"><div class="ic" style="background:rgba(34,211,238,.14);border:1px solid rgba(34,211,238,.42)">🚦</div><h3>Rate limit</h3><p class="note" style="color:var(--muted);font-size:12.5px">Доверие только <code style="font-family:var(--mono)">X-Real-IP</code> от nginx. Отдельный жёсткий лимит на <code style="font-family:var(--mono)">/api/auth/*</code> против брутфорса.</p></div>
-      <div class="tr reveal"><div class="ic" style="background:rgba(255,176,32,.14);border:1px solid rgba(255,176,32,.42)">📊</div><h3>Частотность — оценка</h3><p class="note" style="color:var(--muted);font-size:12.5px">Цифры спроса даёт модель, а не Wordstat. Это помечено в UI и в ответе API. Для закупок подключайте реальный источник.</p></div>
-      <div class="tr reveal"><div class="ic" style="background:rgba(139,255,90,.12);border:1px solid rgba(139,255,90,.4)">🧩</div><h3>Graceful degradation</h3><p class="note" style="color:var(--muted);font-size:12.5px">Нет ключей — демо. Нет ffmpeg — ZIP с командой. Нет clipboard API — fallback. Нет html2pdf — печать. Ядро не ломается.</p></div>
+      <div class="tr reveal"><div class="ic" style="background:rgba(255,84,112,.14);border:1px solid rgba(255,84,112,.4)">🔐</div><h3>Ключ на устройстве</h3><p class="note" style="color:var(--muted);font-size:12.5px">По умолчанию ключ живёт до перезагрузки и не сохраняется. Запоминание включается отдельным тумблером с предупреждением. В историю генераций ключ не попадает.</p></div>
+      <div class="tr reveal"><div class="ic" style="background:rgba(124,92,255,.14);border:1px solid rgba(124,92,255,.45)">📡</div><h3>Прямой запрос</h3><p class="note" style="color:var(--muted);font-size:12.5px">Запрос идёт с устройства к выбранному API, посредников нет. Если провайдер запрещает браузерные запросы, страница объясняет это и предлагает совместимый вариант.</p></div>
+      <div class="tr reveal"><div class="ic" style="background:rgba(61,220,132,.14);border:1px solid rgba(61,220,132,.4)">🧩</div><h3>Разбор ответа</h3><p class="note" style="color:var(--muted);font-size:12.5px">JSON чистится от обёрток, разбирается с поиском границ объекта, при провале — один повтор с уточнением. Обрезанный лимитом ответ помечается явно.</p></div>
+      <div class="tr reveal"><div class="ic" style="background:rgba(34,211,238,.14);border:1px solid rgba(34,211,238,.42)">📐</div><h3>Макет без обрезки</h3><p class="note" style="color:var(--muted);font-size:12.5px">Карточка измеряет текст до отрисовки и ужимает кегль под доступную высоту. Заголовки и буллеты не налезают на цену ни в одном из четырёх форматов.</p></div>
+      <div class="tr reveal"><div class="ic" style="background:rgba(255,176,32,.14);border:1px solid rgba(255,176,32,.42)">📊</div><h3>Частотность — оценка</h3><p class="note" style="color:var(--muted);font-size:12.5px">Цифры спроса в демо даёт шаблон, а не Wordstat. Это помечено в интерфейсе. Для решений о закупке подключайте реальный источник.</p></div>
+      <div class="tr reveal"><div class="ic" style="background:rgba(139,255,90,.12);border:1px solid rgba(139,255,90,.4)">🛟</div><h3>Отказ не ломает ядро</h3><p class="note" style="color:var(--muted);font-size:12.5px">Нет ключа — демо. Нет MediaRecorder — остаются PNG. Нет Clipboard API — резервное копирование. Нет сети — витрина и шаблоны работают.</p></div>
     </div>
   </div>
 </section>
@@ -578,11 +586,12 @@ ANTHROPIC_API_KEY=sk-ant-…">📋</button></div>
 
 <footer>
   <div class="wrap foot">
-    <div class="row"><span class="mark">AI</span><div><b style="font:700 14px var(--disp)">AI Marketing Studio</b><p class="note">MIT · FastAPI · Qwen · Wan · ffmpeg · Docker</p></div></div>
+    <div class="row"><span class="mark">AI</span><div><b style="font:700 14px var(--disp)">AI Marketing Studio</b><p class="note">MIT · генерация и рендер на устройстве</p></div></div>
     <div class="row">
       <a class="btn btn-g btn-s" href="#top">↑ Наверх</a>
-      <a class="btn btn-g btn-s" id="ghLink2" href="https://github.com/" target="_blank" rel="noopener">★ Репозиторий</a>
-      <a class="btn btn-p btn-s" id="openStudio3" href="app/">Открыть студию</a>
+      <a class="btn btn-g btn-s" href="status.html">📊 Состояние</a>
+      <a class="btn btn-c btn-s" href="live.html">⚡ Генерация</a>
+      <a class="btn btn-p btn-s" href="assets.html">🎨 Ассеты</a>
     </div>
   </div>
 </footer>
@@ -596,18 +605,45 @@ const esc=s=>String(s??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
 const RM=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const store={get(k){try{return localStorage.getItem(k)}catch{return null}},set(k,v){try{localStorage.setItem(k,v);return true}catch{return false}}};
+const parse=s=>{try{const v=JSON.parse(s);return Array.isArray(v)?v:[]}catch{return[]}};
 const urls=new Set();
 function mkURL(b){const u=URL.createObjectURL(b);urls.add(u);return u}
 window.addEventListener("beforeunload",()=>{urls.forEach(u=>URL.revokeObjectURL(u));stopReel()});
+
+/* ---------- sound ---------- */
+let ac=null,muted=store.get("hub_mute")==="1";
+function paintMute(){$("muteBtn").textContent=muted?"🔇":"🔔";$("muteBtn").setAttribute("aria-pressed",String(muted));$("muteBtn").title=muted?"Звук выключен":"Звук включён"}
+function beep(kind){
+  if(muted)return;
+  try{
+    if(!ac)ac=new (window.AudioContext||window.webkitAudioContext)();
+    if(ac.state==="suspended")ac.resume();
+    const t=ac.currentTime,o=ac.createOscillator(),g=ac.createGain();
+    const map={ok:[660,.15,"sine"],err:[180,.24,"sawtooth"],tick:[880,.04,"triangle"],shutter:[1200,.06,"square"],rec:[430,.11,"sine"]};
+    const[f,d,w]=map[kind]||map.tick;
+    o.type=w;o.frequency.setValueAtTime(f,t);
+    if(kind==="ok")o.frequency.exponentialRampToValueAtTime(f*1.5,t+d);
+    if(kind==="shutter")o.frequency.exponentialRampToValueAtTime(f*.4,t+d);
+    g.gain.setValueAtTime(.0001,t);
+    g.gain.exponentialRampToValueAtTime(kind==="tick"?.025:.075,t+.012);
+    g.gain.exponentialRampToValueAtTime(.0001,t+d);
+    o.connect(g);g.connect(ac.destination);o.start(t);o.stop(t+d+.02);
+  }catch{}
+}
+$("muteBtn").onclick=()=>{muted=!muted;store.set("hub_mute",muted?"1":"0");paintMute();if(!muted)beep("tick")};
+document.addEventListener("pointerdown",()=>{if(ac&&ac.state==="suspended")ac.resume()},{once:true});
+paintMute();
+
 function toast(msg,type="ok"){
   const t=document.createElement("div");t.className="toast "+type;
-  t.innerHTML=`<span>${type==="ok"?"✅":type==="err"?"⛔":"ℹ️"}</span><span>${esc(msg)}</span><button aria-label="Закрыть">✕</button>`;
-  t.querySelector("button").onclick=()=>t.remove();
-  $("toasts").appendChild(t);setTimeout(()=>t.remove(),4200);
+  t.innerHTML=`<span>${type==="ok"?"✅":type==="err"?"⛔":"ℹ️"}</span><span>${esc(msg)}</span><button class="x" aria-label="Закрыть">✕</button>`;
+  t.querySelector(".x").onclick=()=>t.remove();
+  $("toasts").appendChild(t);setTimeout(()=>t.remove(),4400);
 }
 async function copy(text){
   const s=String(text??"");if(!s)return toast("Нечего копировать","info");
-  try{if(navigator.clipboard&&window.isSecureContext){await navigator.clipboard.writeText(s);toast("Скопировано");return}}catch{}
+  try{if(navigator.clipboard&&window.isSecureContext){await navigator.clipboard.writeText(s);toast("Скопировано");beep("tick");return}}catch{}
   try{
     const ta=document.createElement("textarea");ta.value=s;ta.setAttribute("readonly","");
     ta.style.cssText="position:fixed;top:-2000px;opacity:0";document.body.appendChild(ta);
@@ -626,6 +662,105 @@ function hex2hsl(h){
 }
 const hsl=(h,s,l,a=1)=>`hsla(${((h%360)+360)%360},${clamp(s,0,100)}%,${clamp(l,0,100)}%,${a})`;
 
+/* ---------- real state ---------- */
+function readState(){
+  const gens=parse(store.get("lv_hist"));
+  const real=gens.filter(g=>!g.seeded);
+  const cards=real.reduce((n,g)=>n+((g.result&&Array.isArray(g.result.cards))?g.result.cards.length:0),0);
+  return{
+    gens:gens.length,real:real.length,cards,
+    presets:parse(store.get("as_presets")).length,
+    studio:parse(store.get("ams_hist")).length,
+    key:!!store.get("lv_key"),
+    provider:store.get("lv_provider")||"",
+    model:store.get("lv_model")||"",
+    last:real[0]||null
+  };
+}
+const SURFACES=[
+  {id:"app",ic:"🛒",n:"Студия",href:"app/",path:"app/",sc:"var(--violet)",
+   d:"Три вкладки: парсер товара, генератор контент-пака и видеостудия. Дизайн-панель карточек, экспорт PNG, PDF-отчёт, история с поиском иundo.",
+   tags:["Демо без ключа","3 вкладки","PDF-отчёт"]},
+  {id:"live",ic:"⚡",n:"Генерация",href:"live.html",path:"live.html",sc:"var(--cyan)",
+   d:"Реальный ответ модели по вашему ключу. Шесть провайдеров, потоковый вывод на осциллографе, проверка ключа, автолимит токенов, история и сохранённые виды.",
+   tags:["6 провайдеров","Поток токенов","Свой ключ"]},
+  {id:"assets",ic:"🎨",n:"Мастерская ассетов",href:"assets.html",path:"assets.html",sc:"var(--amber)",
+   d:"Забирает карточки из генерации и рендерит PNG в четырёх форматах до 3× качества. Собирает вертикальный ролик из сцен и записывает его в файл.",
+   tags:["4 формата","До 3× PNG","Запись ролика"]},
+  {id:"status",ic:"📊",n:"Состояние проекта",href:"status.html",path:"status.html",sc:"var(--acid)",
+   d:"Проверяет репозиторий через открытый API GitHub: обязательные файлы, целостность HTML, имя workflow, лишние папки, последнюю сборку и доступность адресов.",
+   tags:["Живая проверка","Отчёт и JSON","Поиск по файлам"]},
+  {id:"404",ic:"🛰",n:"Страница ошибки",href:"net-takogo",path:"404.html",sc:"var(--magenta)",
+   d:"Тестовый сигнал с глитчем вместо стандартной заглушки: восемь параметров помех, живой поиск по разделам и подсказка ближайшего адреса по опечатке.",
+   tags:["Свой 404","8 параметров","Подсказка адреса"]}
+];
+function paintSurfaces(st){
+  $("surfaces").innerHTML=SURFACES.map(s=>{
+    let badge="";
+    if(s.id==="live")badge=st.real?`<span class="chip g">${st.real} своих генераций</span>`:st.key?'<span class="chip a">ключ сохранён</span>':'<span class="chip">нужен ключ</span>';
+    if(s.id==="assets")badge=st.cards?`<span class="chip g">${st.cards} карточек готово</span>`:st.presets?`<span class="chip a">${st.presets} пресетов</span>`:'<span class="chip">ждёт карточки</span>';
+    if(s.id==="app")badge=st.studio?`<span class="chip c">${st.studio} записей истории</span>`:'<span class="chip c">готова к работе</span>';
+    if(s.id==="status")badge='<span class="chip acid">проверяет репозиторий</span>';
+    if(s.id==="404")badge='<span class="chip m">отдаётся на любой 404</span>';
+    return `<div class="surface reveal" style="--sc:${s.sc}">
+      <div class="row" style="justify-content:space-between"><span class="ic">${s.ic}</span>${badge}</div>
+      <h3>${esc(s.n)}</h3>
+      <div class="path">${esc(s.path)}</div>
+      <p class="note" style="color:var(--muted);font-size:12.5px">${esc(s.d)}</p>
+      <div class="row" style="gap:5px">${s.tags.map(t=>`<span class="chip">${esc(t)}</span>`).join("")}</div>
+      <div class="acts">
+        <a class="btn btn-p btn-s" href="${esc(s.href)}" data-open="${esc(s.id)}">Открыть</a>
+        <button class="btn btn-g btn-s" data-copy-link="${esc(s.href)}">📋 Ссылка</button>
+      </div></div>`;
+  }).join("");
+  $("surfaces").querySelectorAll("[data-copy-link]").forEach(b=>b.onclick=()=>copy(new URL(b.dataset.copyLink,location.href).href));
+  $("surfaces").querySelectorAll("[data-open]").forEach(a=>a.addEventListener("click",()=>beep("tick")));
+  document.querySelectorAll(".reveal:not(.in)").forEach(el=>io.observe(el));
+}
+function paintProgress(st){
+  const chips=[
+    `<span class="chip ${st.real?"g":""}">своих генераций: ${st.real}</span>`,
+    `<span class="chip ${st.cards?"g":""}">карточек: ${st.cards}</span>`,
+    `<span class="chip ${st.presets?"a":""}">пресетов: ${st.presets}</span>`,
+    `<span class="chip ${st.key?"a":"r"}">ключ: ${st.key?"сохранён":"не сохранён"}</span>`,
+    st.provider?`<span class="chip c">${esc(st.provider)}</span>`:""
+  ].filter(Boolean);
+  $("stateChips").innerHTML=chips.join("");
+  let title,note,acts;
+  if(!st.real){
+    title=st.key?"Ключ сохранён — можно генерировать":"Начните с генерации";
+    note=st.key
+      ?`Провайдер ${st.provider||"выбран"}, модель ${st.model||"указана"}. Откройте генерацию и соберите первый контент-пак — карточки сразу станут доступны мастерской.`
+      :"Вставьте ключ OpenRouter или Groq в разделе «Генерация». Проверка ключа занимает один запрос, дальше контент-пак собирается за один клик.";
+    acts=`<a class="btn btn-c" href="live.html">⚡ Открыть генерацию</a><a class="btn btn-g" href="app/">🛒 Посмотреть студию</a>`;
+  }else if(!st.cards){
+    title="Генерации есть, карточек нет";
+    note="Последняя генерация не вернула карточки. Откройте генерацию, поднимите лимит токенов и повторите — мастерская подхватит результат автоматически.";
+    acts=`<a class="btn btn-c" href="live.html">⚡ Повторить генерацию</a>`;
+  }else{
+    title=`Готово к упаковке: ${st.cards} карточек`;
+    note=`${st.last?`Последний набор: «${st.last.title}». `:""}Мастерская заберёт карточки сама — можно сразу экспортировать PNG и собрать вертикальный ролик.`;
+    acts=`<a class="btn btn-a" href="assets.html">🎨 Собрать ассеты</a><a class="btn btn-g" href="live.html">⚡ Ещё генерация</a>`;
+  }
+  $("nextTitle").textContent=title;
+  $("nextNote").textContent=note;
+  $("nextActs").innerHTML=acts;
+  const lit=(id,on,color,cap)=>{
+    const el=$(id);
+    el.setAttribute("fill",on?color:"#252d52");
+    el.classList.toggle("node-lit",on);
+    el.style.color=color;
+    if(cap)$(cap.id).textContent=cap.text;
+  };
+  lit("lit1",true,"#7c5cff",{id:"cap1",text:st.studio?`${st.studio} записей в студии`:"товар загружен"});
+  lit("lit2",st.real>0,"#22d3ee",{id:"cap2",text:st.real?`${st.real} генераций`:st.key?"ключ сохранён":"ожидает ключ"});
+  lit("lit3",st.cards>0,"#ffb020",{id:"cap3",text:st.cards?`${st.cards} карточек`:st.presets?`${st.presets} пресетов`:"ожидает карточки"});
+  lit("lit4",true,"#8bff5a",{id:"cap4",text:"сайт опубликован"});
+  document.querySelectorAll('[data-surface="live"]').forEach(a=>a.classList.toggle("hot",!st.real));
+  document.querySelectorAll('[data-surface="assets"]').forEach(a=>a.classList.toggle("hot",st.cards>0));
+}
+
+/* ---------- reel ---------- */
 const PRODUCTS=[
   {title:"SoundMax Pro ANC",price:"4 990 ₽",caps:["🔊 Выключи шум города в 1 клик","🎧 ANC -45 дБ + Hi-Res LDAC","⚡ 40 часов без розетки"]},
   {title:"AeroBuds Lite",price:"2 490 ₽",caps:["🪶 4 грамма в каждом ухе","💧 IPX5 — дождь не помеха","⚡ 28 часов с кейсом"]},
@@ -678,7 +813,7 @@ function drawReel(now){
   rc.restore();
   rc.textAlign="center";
   rc.fillStyle=hsl(A[0],A[1],A[2],.92);rc.fillRect(112,86,316,42);
-  rc.fillStyle="#fff";rc.font="bold 18px Manrope,sans-serif";rc.fillText("WAN AI PROMO · 9:16",270,113);
+  rc.fillStyle="#fff";rc.font="bold 18px Manrope,sans-serif";rc.fillText("AI PROMO · 9:16",270,113);
   rc.fillStyle="#fff";rc.font="bold 26px Manrope,sans-serif";
   rc.fillText(p.title.length>26?p.title.slice(0,25)+"…":p.title,270,636);
   if(cfg.subs){
@@ -712,12 +847,12 @@ function drawReel(now){
   }
 }
 function reelLoop(now){drawReel(now);raf=requestAnimationFrame(reelLoop)}
-function startReel(){if(raf!==null||!visible||document.hidden)return;t0=performance.now();raf=requestAnimationFrame(reelLoop)}
+function startReel(){if(raf!==null||!visible||document.hidden||RM)return;t0=performance.now();raf=requestAnimationFrame(reelLoop)}
 function stopReel(){if(raf!==null){cancelAnimationFrame(raf);raf=null}}
 new IntersectionObserver(es=>{visible=es[0].isIntersecting;visible?startReel():stopReel()},{threshold:.05}).observe(reel);
 document.addEventListener("visibilitychange",()=>{document.hidden?stopReel():startReel()});
-window.addEventListener("resize",()=>{if(raf!==null)fitReel()});
-function reelHint(){$("reelHint").textContent=`${cfg.scenes} сцен · ${cfg.dur}с · качество ${cfg.quality}× · грейд ${cfg.grade} · всё применяется мгновенно`}
+window.addEventListener("resize",()=>{if(raf!==null)fitReel();else drawReel(performance.now())});
+function reelHint(){$("reelHint").textContent=`${cfg.scenes} сцен · ${cfg.dur}с · качество ${cfg.quality}× · грейд ${cfg.grade} · параметры применяются мгновенно`}
 function syncReel(){
   $("cGrade").value=cfg.grade;$("cMotion").value=cfg.motion;$("cGlow").value=cfg.glow;$("cGrain").value=cfg.grain;
   $("cZoom").value=cfg.zoom;$("cDur").value=String(cfg.dur);$("cQuality").value=String(cfg.quality);
@@ -729,20 +864,20 @@ function syncReel(){
   $("scMinus").disabled=cfg.scenes<=3;$("scPlus").disabled=cfg.scenes>=6;
   reelHint();if(raf===null)drawReel(performance.now());
 }
-$("cGrade").oninput=e=>{cfg.grade=e.target.value;reelHint()};
+$("cGrade").oninput=e=>{cfg.grade=e.target.value;reelHint();if(raf===null)drawReel(performance.now())};
 $("cMotion").oninput=e=>{cfg.motion=+e.target.value;$("vMotion").textContent=cfg.motion.toFixed(1)+"×";reelHint()};
-$("cGlow").oninput=e=>{cfg.glow=+e.target.value;$("vGlow").textContent=cfg.glow.toFixed(1)+"×";reelHint()};
-$("cGrain").oninput=e=>{cfg.grain=+e.target.value;$("vGrain").textContent=cfg.grain.toFixed(2);reelHint()};
-$("cZoom").oninput=e=>{cfg.zoom=+e.target.value;$("vZoom").textContent=cfg.zoom.toFixed(2)+"×";reelHint()};
+$("cGlow").oninput=e=>{cfg.glow=+e.target.value;$("vGlow").textContent=cfg.glow.toFixed(1)+"×";reelHint();if(raf===null)drawReel(performance.now())};
+$("cGrain").oninput=e=>{cfg.grain=+e.target.value;$("vGrain").textContent=cfg.grain.toFixed(2);reelHint();if(raf===null)drawReel(performance.now())};
+$("cZoom").oninput=e=>{cfg.zoom=+e.target.value;$("vZoom").textContent=cfg.zoom.toFixed(2)+"×";reelHint();if(raf===null)drawReel(performance.now())};
 $("cDur").onchange=e=>{cfg.dur=+e.target.value;reelHint()};
-$("cQuality").onchange=e=>{cfg.quality=+e.target.value;fitReel();reelHint();toast("Качество превью: "+cfg.quality+"×")};
-$("cCta").oninput=e=>{cfg.cta=e.target.value||"КУПИТЬ";reelHint()};
-$("cProduct").onchange=e=>{cfg.product=+e.target.value;reelHint()};
+$("cQuality").onchange=e=>{cfg.quality=+e.target.value;fitReel();reelHint();toast("Качество превью: "+cfg.quality+"×","info")};
+$("cCta").oninput=e=>{cfg.cta=e.target.value||"КУПИТЬ";reelHint();if(raf===null)drawReel(performance.now())};
+$("cProduct").onchange=e=>{cfg.product=+e.target.value;reelHint();if(raf===null)drawReel(performance.now())};
 $("scMinus").onclick=()=>{cfg.scenes=clamp(cfg.scenes-1,3,6);syncReel()};
 $("scPlus").onclick=()=>{cfg.scenes=clamp(cfg.scenes+1,3,6);syncReel()};
 function bindSw(el,key){el.onclick=()=>{cfg[key]=!cfg[key];el.setAttribute("aria-checked",String(cfg[key]));reelHint();if(raf===null)drawReel(performance.now())}}
 bindSw($("cSubs"),"subs");bindSw($("cGuides"),"guides");
-$("cReset").onclick=()=>{Object.assign(cfg,{grade:"#7c5cff",motion:1,glow:1,grain:.1,zoom:1,scenes:4,dur:15,quality:2,cta:"КУПИТЬ",subs:true,guides:false,product:0});syncReel();toast("Параметры сброшены")};
+$("cReset").onclick=()=>{Object.assign(cfg,{grade:"#7c5cff",motion:1,glow:1,grain:.1,zoom:1,scenes:4,dur:15,quality:2,cta:"КУПИТЬ",subs:true,guides:false,product:0});syncReel();toast("Параметры кадра сброшены")};
 $("cRandom").onclick=()=>{
   const pal=["#7c5cff","#22d3ee","#ff4d9d","#8bff5a","#ffb020","#4d7cff","#ff5470"];
   cfg.grade=pal[Math.floor(Math.random()*pal.length)];
@@ -756,35 +891,34 @@ $("cRandom").onclick=()=>{
 };
 $("cPng").onclick=()=>{
   drawReel(performance.now());
-  reel.toBlob(b=>{if(!b)return toast("Не удалось создать PNG","err");download(b,"promo-frame-9x16.png");toast("Кадр PNG сохранён")},"image/png");
+  reel.toBlob(b=>{if(!b)return toast("Не удалось создать PNG","err");download(b,"promo-frame-9x16.png");beep("shutter");toast("Кадр PNG сохранён")},"image/png");
 };
 $("cRec").onclick=async()=>{
   const btn=$("cRec");
   if(btn.disabled)return;
-  if(!window.MediaRecorder||!reel.captureStream){toast("Браузер не поддерживает запись — используйте PNG","info");return}
+  if(!window.MediaRecorder||!reel.captureStream){toast("Браузер не поддерживает запись — сохраните кадр PNG","info");return}
   btn.disabled=true;const old=btn.textContent;btn.textContent="● Запись…";$("reelState").textContent="запись клипа";
-  startReel();
-  let stream,rec;
+  startReel();beep("rec");
+  let stream;
   try{
     stream=reel.captureStream(30);
     const mime=["video/mp4;codecs=avc1.42E01E","video/mp4","video/webm;codecs=vp9","video/webm"].find(m=>{try{return MediaRecorder.isTypeSupported(m)}catch{return false}})||"video/webm";
     const ext=mime.includes("mp4")?"mp4":"webm";
-    rec=new MediaRecorder(stream,{mimeType:mime});
+    const rec=new MediaRecorder(stream,{mimeType:mime});
     const chunks=[];
     rec.ondataavailable=e=>{if(e.data&&e.data.size)chunks.push(e.data)};
     const done=new Promise((res,rej)=>{rec.onstop=()=>res();rec.onerror=()=>rej(new Error("сбой записи"))});
-    rec.start();
-    await sleep(4200);
-    rec.stop();await done;
+    rec.start();await sleep(4200);rec.stop();await done;
     download(new Blob(chunks,{type:mime}),"promo-9x16."+ext);
-    toast("Клип сохранён (."+ext+")");
-  }catch(e){toast("Запись: "+e.message,"err")}
+    beep("ok");toast("Клип сохранён (."+ext+")");
+  }catch(e){toast("Запись: "+e.message,"err");beep("err")}
   finally{
     try{stream&&stream.getTracks().forEach(t=>t.stop())}catch{}
     btn.disabled=false;btn.textContent=old;$("reelState").textContent="рендер идёт";
   }
 };
 
+/* ---------- demo generator ---------- */
 const TONES={
   "уверенный эксперт":{hook:"Разбираем по фактам:",cta:"Подробные характеристики и заказ",vk:"Судите сами:"},
   "дружелюбный сосед":{hook:"Смотрите, что нашлось 🙂",cta:"Загляните, пока скидка держится",vk:"Делимся находкой:"},
@@ -909,7 +1043,7 @@ function paintDemo(){
     <p class="desc">${esc(c.d)}</p>
     <ul>${c.ul.map(u=>`<li>${esc(u)}</li>`).join("")}</ul></div></div>`).join("");
   $("dTabs").innerHTML=Object.keys(PLAT_META).map(k=>`<button class="tab-btn ${k===demoTab?"on":""}" data-t="${k}">${PLAT_META[k].n}</button>`).join("");
-  $("dTabs").querySelectorAll("[data-t]").forEach(b=>b.onclick=()=>{demoTab=b.dataset.t;paintDemo()});
+  $("dTabs").querySelectorAll("[data-t]").forEach(b=>b.onclick=()=>{demoTab=b.dataset.t;paintDemo();beep("tick")});
   $("dText").value=demoData.texts[demoTab]||"";
   updCount();
 }
@@ -926,7 +1060,7 @@ $("dGen").onclick=async()=>{
   await sleep(700);
   demoVar++;demoData=buildDemo();paintDemo();
   $("dSkel").classList.add("hidden");$("dOut").classList.remove("hidden");
-  b.disabled=false;toast("Контент-пак собран: 3 карточки и 5 текстов");
+  b.disabled=false;beep("ok");toast("Контент-пак собран: 3 карточки и 5 текстов");
 };
 $("dReset").onclick=()=>{
   $("dTitle").value="Беспроводные наушники SoundMax Pro";$("dPrice").value="4 990 ₽";
@@ -936,6 +1070,7 @@ $("dReset").onclick=()=>{
 $("dCopy").onclick=()=>copy($("dText").value);
 $("dDl").onclick=()=>{download(new Blob([$("dText").value],{type:"text/plain;charset=utf-8"}),demoTab+".txt");toast("Файл сохранён")};
 
+/* ---------- platforms ---------- */
 const PLATS=[
   {ic:"📱",n:"Telegram",c:"var(--cyan)",d:"Короткие абзацы, эмодзи, хештеги и одна ссылка-действие. Безопасный объём — до 1024 знаков, чтобы текст влез и в подпись к медиа.",rec:"150–1024",fill:72},
   {ic:"📰",n:"Дзен",c:"var(--amber)",d:"Лонгрид с интригующим заголовком, подзаголовками и честными минусами товара. Объём под дочитываемость, а не под жёсткий лимит.",rec:"3000–7000",fill:96},
@@ -949,21 +1084,22 @@ $("plats").innerHTML=PLATS.map(p=>`<div class="plat reveal" style="--pc:${p.c}">
   <div class="row" style="justify-content:space-between;margin-top:12px"><span class="chip">${p.rec}</span><span class="note">рекомендация</span></div>
   <div class="bar"><i data-fill="${p.fill}"></i></div></div>`).join("");
 
+/* ---------- api ---------- */
 const EPS=[
   {m:"GET",p:"/api/health",g:"Служебное",d:"Режим, провайдер, наличие ключей, ffmpeg",ex:'{"status":"ok","mode":"demo","llm_provider":"qwen","ffmpeg":true}'},
   {m:"POST",p:"/api/parse",g:"Контент",d:"Парсинг URL с SSRF-фильтром и выбором полей",ex:'{"url":"https://shop.example/p/1","fields":{"price":true,"photos":true}}'},
   {m:"POST",p:"/api/generate",g:"Контент",d:"3 карточки + 5 текстов + image-промпты",ex:'{"product":{"title":"SoundMax Pro","price":"4 990 ₽"},"seo_keywords":["наушники anc"]}'},
-  {m:"POST",p:"/api/keywords",g:"Контент",d:"Топ-10 запросов и insights (оценка LLM)",ex:'{"product_name":"наушники","geo":"Россия"}'},
+  {m:"POST",p:"/api/keywords",g:"Контент",d:"Топ-10 запросов и insights",ex:'{"product_name":"наушники","geo":"Россия"}'},
   {m:"POST",p:"/api/video",g:"Видео",d:"Раскадровка, master-prompt и SEO",ex:'{"idea":"шум метро → тишина","duration":15,"platform":"TikTok"}'},
-  {m:"POST",p:"/api/video/render",g:"Видео",d:"Задача Wan на каждую сцену",ex:'{"scenes":[{"prompt":"subway hook","duration":5}],"platform":"TikTok"}'},
+  {m:"POST",p:"/api/video/render",g:"Видео",d:"Задача на каждую сцену",ex:'{"scenes":[{"prompt":"subway hook","duration":5}],"platform":"TikTok"}'},
   {m:"GET",p:"/api/video/status/{id}",g:"Видео",d:"Статус задачи и ссылка на клип",ex:'{"status":"SUCCEEDED","video_url":"https://…/clip.mp4"}'},
-  {m:"POST",p:"/api/video/assemble",g:"Видео",d:"ffmpeg → MP4, без ffmpeg → ZIP с инструкцией",ex:'{"urls":["https://…/s1.mp4","https://…/s2.mp4"]}'},
+  {m:"POST",p:"/api/video/assemble",g:"Видео",d:"ffmpeg → MP4, без ffmpeg → ZIP",ex:'{"urls":["https://…/s1.mp4","https://…/s2.mp4"]}'},
   {m:"POST",p:"/api/auth/register",g:"Аккаунт",d:"Регистрация, стартовый баланс токенов",ex:'{"email":"you@studio.ru","password":"min8chars"}'},
   {m:"POST",p:"/api/auth/login",g:"Аккаунт",d:"Вход, JWT на 30 дней",ex:'{"email":"you@studio.ru","password":"min8chars"}'},
   {m:"GET",p:"/api/me",g:"Аккаунт",d:"Баланс, расход и разбивка по эндпоинтам",ex:'{"tokens_balance":8766,"tokens_used":1234,"usage":[]}'},
   {m:"GET",p:"/api/history",g:"История",d:"Серверная история генераций",ex:'[{"id":1,"type":"Генерация","title":"SoundMax Pro","payload":{}}]'},
   {m:"POST",p:"/api/history",g:"История",d:"Запись своей генерации в историю",ex:'{"type":"Заметка","title":"Кампания","payload":{"note":"…"}}'},
-  {m:"DELETE",p:"/api/history/{id}",g:"История",d:"Удаление записи (и очистка всей истории)",ex:'{"deleted":12}'}
+  {m:"DELETE",p:"/api/history/{id}",g:"История",d:"Удаление записи и очистка истории",ex:'{"deleted":12}'}
 ];
 let apiM="all";
 function paintApi(){
@@ -980,7 +1116,7 @@ function paintApi(){
   $("apiCount").textContent=`Показано ${list.length} из ${EPS.length} эндпоинтов`;
   $("apiList").querySelectorAll(".ep-h").forEach(h=>h.onclick=()=>{
     const b=h.nextElementSibling,closed=b.classList.toggle("hidden");
-    h.setAttribute("aria-expanded",String(!closed));
+    h.setAttribute("aria-expanded",String(!closed));beep("tick");
   });
   $("apiList").querySelectorAll("[data-ex]").forEach(b=>b.onclick=ev=>{ev.stopPropagation();copy(list[+b.dataset.ex].ex)});
 }
@@ -991,37 +1127,43 @@ $("apiFilters").querySelectorAll("[data-m]").forEach(b=>b.onclick=()=>{
   b.classList.add("on");apiM=b.dataset.m;paintApi();
 });
 
+/* ---------- ship ---------- */
 const SHIP={
-  docker:{code:`cp .env.example .env      # ключи можно оставить пустыми → DEMO
-docker compose up -d --build
+  now:{code:`1. Откройте раздел «Генерация»
+2. Выберите провайдера (OpenRouter — самый надёжный из браузера)
+3. Вставьте API-ключ → «Проверить ключ»
+4. Заполните товар → «Сгенерировать контент-пак»
+5. Откройте «Ассеты» → карточки подхватятся сами
+6. Экспортируйте PNG и запишите ролик`,note:"Ничего устанавливать не нужно. Ключ по умолчанию не сохраняется."},
+  local:{code:`git clone https://github.com/dorinvest13-spec/Marketpro.git
+cd Marketpro
 
-# студия:  http://localhost
-# swagger: http://localhost/docs
-make verify               # 38 автотестов`,note:"Именованный volume для /data — права на SQLite не ломают запуск."},
-  local:{code:`python -m venv venv
-source venv/bin/activate        # Windows: venv\\Scripts\\activate
-pip install -r requirements.txt
+# студия
+open index.html
+
+# витрина и остальные страницы
+open docs/index.html
+open docs/live.html
+open docs/assets.html
+
+# или локальный сервер
+python -m http.server 8000`,note:"Сборка и зависимости не требуются — чистый HTML и JS."},
+  gh:{code:`git add .
+git commit -m "feat: конвейер контента"
+git push
+
+# Settings → Pages → Source: GitHub Actions
+# вкладка Actions покажет сборку
+# сайт: https://<логин>.github.io/<репозиторий>/`,note:"Workflow собирает витрину в корень и студию в /app/."},
+  server:{code:`# позже: свой backend для команды и биллинга
 cp .env.example .env
-uvicorn app:app --reload --port 8000
-
-# студия: http://localhost:8000`,note:"FastAPI сам отдаёт index.html — nginx не обязателен."},
-  vps:{code:`sudo apt update && sudo apt install -y docker.io docker-compose-v2 nginx certbot python3-certbot-nginx
-git clone https://github.com/<you>/ai-marketing-studio.git
-cd ai-marketing-studio && cp .env.example .env && nano .env
 docker compose up -d --build
-sudo certbot --nginx -d your.domain
 
-# во внешнем nginx обязательно:
-# proxy_set_header X-Real-IP $remote_addr;`,note:"JWT_SECRET, CORS_ORIGINS со своим доменом и X-Real-IP — обязательны для прода."},
-  gh:{code:`git init && git add . && git commit -m "feat: AI Marketing Studio v2"
-git branch -M main
-gh repo create ai-marketing-studio --public --source=. --remote=origin --push
-
-# или без gh CLI:
-git remote add origin https://github.com/<you>/ai-marketing-studio.git
-git push -u origin main`,note:"CI прогонит pytest и соберёт образы. Pages опубликует эту витрину и студию."}
+# студия переключается в LIVE тумблером,
+# поле «API base» указывает на ваш домен
+# обязательно: JWT_SECRET, CORS_ORIGINS, HTTPS`,note:"Файлы backend добавляются отдельным шагом; до этого работает браузерный режим."}
 };
-let shipTab="docker";
+let shipTab="now";
 function paintShip(){
   const s=SHIP[shipTab];
   $("shipCode").innerHTML=esc(s.code)+`<button class="btn btn-g btn-s cp" id="shipCp">📋</button>`;
@@ -1030,14 +1172,14 @@ function paintShip(){
 }
 $("shipTabs").querySelectorAll("[data-s]").forEach(b=>b.onclick=()=>{
   $("shipTabs").querySelectorAll("[data-s]").forEach(x=>x.classList.remove("on"));
-  b.classList.add("on");shipTab=b.dataset.s;paintShip();
+  b.classList.add("on");shipTab=b.dataset.s;paintShip();beep("tick");
 });
 $("shipCopy").onclick=()=>copy(SHIP[shipTab].code);
-$("copyClone").onclick=()=>copy("git clone https://github.com/<you>/ai-marketing-studio.git && cd ai-marketing-studio && cp .env.example .env && docker compose up -d --build");
 document.querySelectorAll("[data-copy]").forEach(b=>b.onclick=()=>copy(b.dataset.copy));
 
+/* ---------- scroll ---------- */
 const secs=[...document.querySelectorAll("section[id]")];
-const links=[...document.querySelectorAll("#navLinks a")];
+const links=[...document.querySelectorAll('#navScroll a[href^="#"]')];
 let ticking=false;
 function onScroll(){
   if(ticking)return;ticking=true;
@@ -1045,10 +1187,9 @@ function onScroll(){
     const y=window.scrollY,h=document.documentElement.scrollHeight-innerHeight;
     $("prog").style.width=(h>0?clamp(y/h,0,1)*100:0)+"%";
     let cur=null;
-    secs.forEach(s=>{if(s.getBoundingClientRect().top<=140)cur=s.id});
+    secs.forEach(s=>{if(s.getBoundingClientRect().top<=150)cur=s.id});
     links.forEach(a=>a.classList.toggle("on",a.getAttribute("href")==="#"+cur));
-    const hue=clamp(y/Math.max(1,h),0,1)*26;
-    document.documentElement.style.setProperty("--hue",hue.toFixed(1)+"deg");
+    document.documentElement.style.setProperty("--hue",(clamp(y/Math.max(1,h),0,1)*26).toFixed(1)+"deg");
     if(!RM)document.querySelectorAll("[data-par]").forEach(o=>{
       o.style.transform=`translate3d(0,${(y*parseFloat(o.dataset.par)).toFixed(1)}px,0)`;
     });
@@ -1069,28 +1210,21 @@ const io=new IntersectionObserver(es=>{
     });
     io.unobserve(e.target);
   });
-},{threshold:.16,rootMargin:"0px 0px -8% 0px"});
+},{threshold:.14,rootMargin:"0px 0px -6% 0px"});
 document.querySelectorAll(".reveal").forEach(el=>io.observe(el));
 document.querySelectorAll(".metric b[data-count]").forEach(el=>io.observe(el.closest(".metric")));
 
-async function resolveStudio(ev){
-  ev.preventDefault();
-  try{
-    const r=await fetch("app/",{method:"HEAD"});
-    if(r.ok){location.href="app/";return}
-  }catch{}
-  try{
-    const r2=await fetch("../index.html",{method:"HEAD"});
-    if(r2.ok){location.href="../index.html";return}
-  }catch{}
-  toast("Студия публикуется через GitHub Pages или запускается локально: make up","info");
-}
-["openStudio","openStudio2","openStudio3"].forEach(id=>$(id).addEventListener("click",resolveStudio));
-
+/* ---------- init ---------- */
+const st=readState();
+paintSurfaces(st);paintProgress(st);
 syncReel();drawReel(performance.now());startReel();
 demoData=buildDemo();paintDemo();
 paintApi();paintShip();onScroll();
-setTimeout(()=>toast("Витрина готова: крутите параметры кадра справа и соберите контент-пак в разделе «Демо»","info"),700);
+window.addEventListener("focus",()=>{const s=readState();paintProgress(s);paintSurfaces(s)});
+setTimeout(()=>{
+  toast(st.real?`Найдено ${st.real} своих генераций — карточки готовы к упаковке в ассетах.`
+    :"Витрина работает офлайн. Начните с раздела «Генерация»: ключ, товар, контент-пак.","info");
+},700);
 </script>
 </body>
-  </html>
+</html>
