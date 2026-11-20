@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Состояние проекта — AI Marketing Studio</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Unbounded:wght@500;700;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%237c5cff'/%3E%3Ctext x='16' y='22' font-size='15' font-weight='900' font-family='sans-serif' fill='%23fff' text-anchor='middle'%3EAI%3C/text%3E%3C/svg%3E">
+<style>
+:root{
+  --ink:#06070d;--surface:#0d1020;--surface2:#141931;--overlay:#1c2246;--scrim:rgba(4,5,12,.84);--line:#252d52;
+  --violet:#7c5cff;--violet-deep:#4a2dd4;--cyan:#22d3ee;--magenta:#ff4d9d;--amber:#ffb020;
+  --acid:#8bff5a;--green:#3ddc84;--red:#ff5470;--blue:#4d7cff;--sand:#ffd9a0;
+  --text:#eef1ff;--muted:#98a1c6;--dim:#6a7297;
+  --font:'Manrope',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+  --disp:'Unbounded',var(--font);--mono:'JetBrains Mono',ui-monospace,Consolas,monospace;
+  --nav:64px;--accent:#7c5cff;--pad:13px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--font);background:var(--ink);color:var(--text);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased;line-height:1.5}
+::selection{background:var(--accent);color:#fff}
+*{scrollbar-width:thin;scrollbar-color:var(--violet-deep) var(--surface)}
+::-webkit-scrollbar{width:11px;height:11px}
+::-webkit-scrollbar-track{background:var(--surface);border-left:1px solid var(--line)}
+::-webkit-scrollbar-thumb{background:linear-gradient(var(--violet-deep),var(--accent) 60%,var(--magenta));border-radius:9px;border:2px solid var(--surface)}
+::-webkit-scrollbar-thumb:hover{background:linear-gradient(var(--cyan),var(--accent))}
+::-webkit-scrollbar-corner{background:var(--surface)}
+:focus-visible{outline:2px solid var(--cyan);outline-offset:3px;border-radius:6px}
+a{color:inherit}
+.hidden{display:none!important}
+.amb{position:fixed;inset:0;z-index:-3;background:
+  radial-gradient(56% 44% at 8% 4%,rgba(124,92,255,.24),transparent 62%),
+  radial-gradient(44% 38% at 94% 8%,rgba(34,211,238,.15),transparent 62%),
+  radial-gradient(50% 46% at 78% 96%,rgba(255,77,157,.12),transparent 62%),
+  radial-gradient(38% 32% at 22% 76%,rgba(139,255,90,.07),transparent 64%),var(--ink)}
+.amb::before{content:"";position:absolute;inset:-25%;background:
+  radial-gradient(30% 26% at 30% 38%,rgba(124,92,255,.18),transparent 70%),
+  radial-gradient(26% 24% at 70% 62%,rgba(34,211,238,.13),transparent 70%);
+  animation:drift 28s ease-in-out infinite alternate;filter:blur(14px)}
+.amb::after{content:"";position:absolute;inset:0;opacity:.055;mix-blend-mode:overlay;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E")}
+.mesh{position:fixed;inset:0;z-index:-2;pointer-events:none;opacity:.38;
+  background-image:linear-gradient(rgba(124,92,255,.055) 1px,transparent 1px),linear-gradient(90deg,rgba(124,92,255,.055) 1px,transparent 1px);
+  background-size:62px 62px;mask-image:radial-gradient(78% 60% at 50% 22%,#000,transparent)}
+@keyframes drift{from{transform:translate3d(-3%,-2%,0) rotate(-2deg)}to{transform:translate3d(3%,3%,0) rotate(2deg)}}
+@keyframes rise{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+@keyframes pop{from{opacity:0;transform:translateY(8px) scale(.98)}to{opacity:1;transform:none}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes pulse{0%,100%{opacity:.35}50%{opacity:1}}
+@keyframes shimmer{from{background-position:200% 0}to{background-position:-200% 0}}
+@keyframes slide{from{opacity:0;transform:translateX(24px)}to{opacity:1;transform:none}}
+.rise{animation:rise .55s cubic-bezier(.2,.7,.2,1) both}
+.wrap{max-width:1320px;margin:0 auto;padding:0 18px}
+.nav{position:fixed;top:0;left:0;right:0;height:var(--nav);z-index:50;backdrop-filter:blur(20px);background:rgba(6,7,13,.86);border-bottom:1px solid var(--line)}
+.nav-in{max-width:1320px;margin:0 auto;height:100%;padding:0 18px;display:flex;align-items:center;gap:10px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;flex:none}
+.mark{width:36px;height:36px;border-radius:11px;display:grid;place-items:center;font:900 12px var(--disp);color:#fff;
+  background:conic-gradient(from 200deg,var(--violet),var(--magenta),var(--amber),var(--cyan),var(--violet));box-shadow:0 0 20px rgba(124,92,255,.5)}
+.brand b{font:700 14px var(--disp);background:linear-gradient(90deg,#fff,var(--sand) 45%,var(--cyan));-webkit-background-clip:text;background-clip:text;color:transparent;white-space:nowrap}
+.repo-form{display:flex;gap:6px;align-items:center;margin-left:auto;min-width:0}
+.repo-form input{width:130px;background:var(--ink);border:1px solid var(--line);color:var(--text);border-radius:10px;padding:8px 10px;font:600 12px var(--mono);outline:none}
+.repo-form input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(124,92,255,.2)}
+.live-dot{width:8px;height:8px;border-radius:50%;background:var(--dim);flex:none}
+.live-dot.ok{background:var(--green);box-shadow:0 0 10px var(--green);animation:pulse 2.2s infinite}
+.live-dot.warn{background:var(--amber);box-shadow:0 0 10px var(--amber)}
+.live-dot.err{background:var(--red);box-shadow:0 0 10px var(--red)}
+main{padding:calc(var(--nav) + 26px) 0 90px}
+.card{background:linear-gradient(180deg,var(--surface2),var(--surface));border:1px solid var(--line);border-radius:18px;padding:var(--pad);box-shadow:0 20px 54px rgba(0,0,0,.4)}
+.card.accent{border-color:rgba(124,92,255,.4)}
+.kicker{font:800 10px var(--font);letter-spacing:.2em;text-transform:uppercase;color:var(--cyan)}
+.kicker.v{color:var(--violet)}.kicker.m{color:var(--magenta)}.kicker.a{color:var(--amber)}.kicker.acid{color:var(--acid)}
+h1{font:900 clamp(22px,3.4vw,32px)/1.1 var(--disp);letter-spacing:-.6px;margin:8px 0 10px}
+h2{font:800 16px var(--font);margin-bottom:11px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.lead{color:var(--muted);font-size:14px;max-width:60ch}
+.note{font-size:11.5px;color:var(--dim);line-height:1.6}
+.row{display:flex;gap:9px;flex-wrap:wrap;align-items:center}
+.btn{border:0;cursor:pointer;font:700 12.5px var(--font);border-radius:11px;padding:10px 15px;display:inline-flex;align-items:center;gap:7px;justify-content:center;text-decoration:none;color:#fff;transition:transform .15s,box-shadow .22s,border-color .2s,opacity .2s}
+.btn:active:not([disabled]){transform:scale(.97)}
+.btn-p{background:linear-gradient(100deg,var(--violet-deep),var(--accent) 55%,var(--magenta));box-shadow:0 9px 26px rgba(124,92,255,.4)}
+.btn-c{background:linear-gradient(100deg,#0b6f86,var(--cyan));color:#03222b}
+.btn-a{background:linear-gradient(100deg,#a35a06,var(--amber));color:#2a1500}
+.btn-g{background:var(--overlay);border:1px solid var(--line);color:var(--text)}
+.btn-g:hover:not([disabled]){border-color:var(--cyan)}
+.btn-s{padding:7px 11px;font-size:11.5px;border-radius:9px}
+.btn[disabled]{opacity:.45;cursor:not-allowed;box-shadow:none}
+.chip{display:inline-flex;align-items:center;gap:6px;font:700 10.5px var(--font);padding:4px 10px;border-radius:999px;border:1px solid var(--line);background:var(--overlay);color:var(--muted);white-space:nowrap}
+.chip.g{color:var(--green);border-color:rgba(61,220,132,.42);background:rgba(61,220,132,.1)}
+.chip.a{color:var(--amber);border-color:rgba(255,176,32,.42);background:rgba(255,176,32,.1)}
+.chip.r{color:var(--red);border-color:rgba(255,84,112,.42);background:rgba(255,84,112,.1)}
+.chip.c{color:var(--cyan);border-color:rgba(34,211,238,.42);background:rgba(34,211,238,.1)}
+.chip.v{color:var(--violet);border-color:rgba(124,92,255,.45);background:rgba(124,92,255,.12)}
+.chip.m{color:var(--magenta);border-color:rgba(255,77,157,.42);background:rgba(255,77,157,.1)}
+.chip.acid{color:var(--acid);border-color:rgba(139,255,90,.4);background:rgba(139,255,90,.09)}
+.hero{display:grid;grid-template-columns:auto 1fr;gap:22px;align-items:center}
+.gauge{position:relative;width:168px;height:168px;flex:none}
+.gauge svg{transform:rotate(-90deg);display:block}
+.gauge .val{position:absolute;inset:0;display:grid;place-items:center;text-align:center}
+.gauge .val b{font:900 38px var(--disp);line-height:1}
+.gauge .val span{font-size:10px;color:var(--dim);text-transform:uppercase;letter-spacing:.14em}
+.metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(126px,1fr));gap:10px;margin-top:14px}
+.metric{background:var(--ink);border:1px solid var(--line);border-radius:13px;padding:12px}
+.metric b{display:block;font:900 21px var(--disp);line-height:1.15}
+.metric span{font-size:9.5px;color:var(--dim);text-transform:uppercase;letter-spacing:.11em}
+.m1 b{color:var(--violet)}.m2 b{color:var(--cyan)}.m3 b{color:var(--amber)}.m4 b{color:var(--acid)}.m5 b{color:var(--magenta)}
+.deck{display:grid;grid-template-columns:repeat(auto-fit,minmax(152px,1fr));gap:10px;margin-top:12px}
+.ctrl{background:var(--ink);border:1px solid var(--line);border-radius:12px;padding:10px 12px}
+.ctrl .val{float:right;font:800 10.5px var(--font);color:var(--cyan)}
+label.lbl{display:block;font-size:10.5px;color:var(--muted);margin-bottom:6px;font-weight:700}
+.input,.select{width:100%;background:var(--ink);border:1px solid var(--line);color:var(--text);border-radius:11px;padding:10px 12px;font:500 13px var(--font);outline:none;transition:border .2s,box-shadow .2s}
+.input:focus,.select:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(124,92,255,.2)}
+.select{appearance:none;cursor:pointer;padding-right:30px;background-image:linear-gradient(45deg,transparent 50%,var(--cyan) 50%),linear-gradient(135deg,var(--cyan) 50%,transparent 50%);background-position:calc(100% - 16px) 50%,calc(100% - 11px) 50%;background-size:5px 5px;background-repeat:no-repeat}
+input[type=color]{width:100%;height:36px;background:var(--ink);border:1px solid var(--line);border-radius:11px;padding:4px;cursor:pointer}
+input[type=range]{width:100%;appearance:none;height:6px;border-radius:99px;background:linear-gradient(90deg,var(--violet-deep),var(--cyan));outline:none;cursor:pointer}
+input[type=range]::-webkit-slider-thumb{appearance:none;width:16px;height:16px;border-radius:50%;background:#fff;border:3px solid var(--accent);box-shadow:0 0 9px rgba(124,92,255,.7);cursor:pointer}
+input[type=range]::-moz-range-thumb{width:13px;height:13px;border-radius:50%;background:#fff;border:3px solid var(--accent);cursor:pointer}
+.switch{position:relative;width:42px;height:23px;border-radius:999px;background:var(--overlay);border:1px solid var(--line);cursor:pointer;transition:background .2s;flex:none;padding:0}
+.switch::after{content:"";position:absolute;top:2px;left:2px;width:17px;height:17px;border-radius:50%;background:var(--cyan);transition:transform .25s cubic-bezier(.2,.7,.2,1),background .2s}
+.switch[aria-checked="true"]{background:var(--violet-deep)}
+.switch[aria-checked="true"]::after{transform:translateX(19px);background:#fff}
+.stepper{display:flex;align-items:center;gap:6px;background:var(--ink);border:1px solid var(--line);border-radius:11px;padding:4px}
+.stepper button{width:26px;height:26px;border-radius:8px;border:0;background:var(--overlay);color:var(--text);font-size:14px;cursor:pointer;line-height:1}
+.stepper button:hover:not([disabled]){background:var(--violet-deep)}
+.stepper b{flex:1;text-align:center;font:800 13px var(--font)}
+.stepper button[disabled]{opacity:.4;cursor:not-allowed}
+.filters{display:flex;gap:6px;flex-wrap:wrap}
+.fchip{border:1px solid var(--line);background:var(--overlay);color:var(--muted);font:700 11px var(--font);padding:6px 12px;border-radius:999px;cursor:pointer;transition:.2s}
+.fchip.on{color:#fff;border-color:var(--accent);background:var(--violet-deep)}
+.spin{width:16px;height:16px;border:2px solid var(--cyan);border-top-color:transparent;border-radius:50%;animation:spin .8s linear infinite;flex:none}
+.skel{border-radius:11px;background:linear-gradient(90deg,var(--surface2) 25%,var(--overlay) 50%,var(--surface2) 75%);background-size:200% 100%;animation:shimmer 1.4s infinite}
+.checks{display:flex;flex-direction:column;gap:9px}
+.check-row{display:grid;grid-template-columns:26px 1fr;gap:11px;background:var(--ink);border:1px solid var(--line);border-radius:12px;padding:11px 13px}
+.check-row.ok{border-color:rgba(61,220,132,.35)}
+.check-row.warn{border-color:rgba(255,176,32,.4)}
+.check-row.err{border-color:rgba(255,84,112,.45);background:rgba(255,84,112,.05)}
+.check-row .ic{width:26px;height:26px;border-radius:8px;display:grid;place-items:center;font-size:13px}
+.check-row.ok .ic{background:rgba(61,220,132,.15);color:var(--green)}
+.check-row.warn .ic{background:rgba(255,176,32,.15);color:var(--amber)}
+.check-row.err .ic{background:rgba(255,84,112,.15);color:var(--red)}
+.check-row b{font:700 13px var(--font);display:block}
+.check-row .fix{margin-top:6px;font:11.5px/1.6 var(--mono);color:var(--sand);background:var(--surface);border:1px solid var(--line);border-radius:9px;padding:8px 10px;word-break:break-word}
+.bulk{display:flex;gap:9px;align-items:center;flex-wrap:wrap;background:var(--ink);border:1px solid var(--line);border-radius:12px;padding:9px 12px;margin-bottom:10px}
+.tree{display:flex;flex-direction:column;gap:6px;max-height:520px;overflow-y:auto;padding-right:6px}
+.node{display:flex;align-items:center;gap:10px;background:var(--ink);border:1px solid var(--line);border-radius:11px;padding:calc(var(--pad) * .62) 12px;cursor:pointer;transition:border-color .2s,transform .2s,background .2s}
+.node:hover{border-color:var(--accent);transform:translateX(4px)}
+.node.sel{border-color:var(--cyan);background:rgba(34,211,238,.06)}
+.node.dir{background:var(--surface);cursor:default}
+.node.dir:hover{transform:none;border-color:var(--line)}
+.node input{accent-color:var(--cyan);width:15px;height:15px;flex:none}
+.node .path{font:12px var(--mono);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.node .sz{font:10.5px var(--mono);color:var(--dim);flex:none}
+.runs{display:flex;flex-direction:column;gap:8px}
+.run{display:flex;align-items:center;gap:11px;background:var(--ink);border:1px solid var(--line);border-radius:11px;padding:10px 12px;text-decoration:none;transition:border-color .2s}
+.run:hover{border-color:var(--accent)}
+.run .st{width:9px;height:9px;border-radius:50%;flex:none}
+.run .st.success{background:var(--green);box-shadow:0 0 9px var(--green)}
+.run .st.failure{background:var(--red);box-shadow:0 0 9px var(--red)}
+.run .st.pending{background:var(--amber);box-shadow:0 0 9px var(--amber);animation:pulse 1.6s infinite}
+.run .st.other{background:var(--dim)}
+.links{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px}
+.link-card{background:var(--ink);border:1px solid var(--line);border-radius:13px;padding:13px}
+.link-card .u{font:11.5px var(--mono);color:var(--cyan);word-break:break-all;margin:7px 0 10px}
+.views{display:flex;flex-direction:column;gap:7px;margin-top:10px}
+.view{display:flex;align-items:center;gap:9px;background:var(--ink);border:1px solid var(--line);border-radius:11px;padding:9px 12px}
+.view b{font:700 12.5px var(--font);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(420px,100%);z-index:70;background:var(--surface);border-left:1px solid var(--accent);box-shadow:-24px 0 70px rgba(0,0,0,.6);padding:20px;overflow-y:auto;animation:slide .28s cubic-bezier(.2,.7,.2,1) both}
+.drawer .code{background:var(--ink);border:1px solid var(--line);border-radius:11px;padding:12px;font:11.5px/1.7 var(--mono);color:var(--acid);overflow-x:auto;white-space:pre-wrap;word-break:break-all;margin-top:10px}
+.scrim{position:fixed;inset:0;z-index:65;background:var(--scrim);backdrop-filter:blur(4px);animation:pop .2s both}
+.toasts{position:fixed;left:16px;bottom:16px;z-index:90;display:flex;flex-direction:column;gap:9px;width:min(350px,calc(100vw - 32px))}
+.toast{display:flex;gap:10px;align-items:flex-start;padding:12px 14px;border-radius:13px;border:1px solid var(--line);background:var(--surface2);box-shadow:0 16px 44px rgba(0,0,0,.55);font-size:12.5px;animation:pop .3s both}
+.toast.ok{border-color:rgba(61,220,132,.5)}.toast.err{border-color:rgba(255,84,112,.5)}.toast.info{border-color:rgba(34,211,238,.5)}
+.toast .x{margin-left:auto;border:0;background:none;color:var(--dim);cursor:pointer;font-size:14px}
+.toast .undo{border:0;background:none;color:var(--cyan);font:700 11.5px var(--font);cursor:pointer;text-decoration:underline}
+section{scroll-margin-top:calc(var(--nav) + 16px)}
+.band{margin-top:18px}
+@media (max-width:860px){.hero{grid-template-columns:1fr;justify-items:center;text-align:center}.hero .lead{margin:0 auto}.metrics{width:100%}}
+@media (max-width:720px){
+  :root{--nav:58px}
+  .wrap{padding:0 12px}.nav-in{padding:0 12px;gap:7px}.brand b{display:none}
+  .repo-form input{width:96px;font-size:11px}
+  .card{padding:14px}.gauge{width:142px;height:142px}
+  .drawer{width:100%}
+  .hide-sm{display:none}
+}
+@media (prefers-reduced-motion:reduce){.amb::before,.rise,.live-dot.ok,.run .st.pending{animation:none!important}*{transition-duration:.01ms!important}}
+</style>
+</head>
+<body>
+<div class="amb"></div><div class="mesh"></div>
+
+<nav class="nav"><div class="nav-in">
+  <a class="brand" id="homeLink" href="./"><span class="mark">AI</span><b>Состояние&nbsp;проекта</b></a>
+  <span class="live-dot" id="liveDot" title="статус соединения"></span>
+  <div class="repo-form">
+    <input id="inOwner" value="dorinvest13-spec" aria-label="Владелец репозитория" spellcheck="false">
+    <input id="inRepo" value="Marketpro" aria-label="Название репозитория" spellcheck="false">
+    <button class="btn btn-p btn-s" id="applyRepo">→</button>
+  </div>
+</div></nav>
+
+<main class="wrap">
+  <div class="card accent rise">
+    <div class="hero">
+      <div class="gauge">
+        <svg width="168" height="168" viewBox="0 0 168 168" aria-hidden="true">
+          <defs>
+            <linearGradient id="gg" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#4a2dd4"/><stop offset=".5" stop-color="#7c5cff"/><stop offset="1" stop-color="#22d3ee"/>
+            </linearGradient>
+          </defs>
+          <circle cx="84" cy="84" r="72" fill="none" stroke="#1c2246" stroke-width="13"/>
+          <circle id="ring" cx="84" cy="84" r="72" fill="none" stroke="url(#gg)" stroke-width="13" stroke-linecap="round"
+                  stroke-dasharray="452.4" stroke-dashoffset="452.4" style="transition:stroke-dashoffset .9s cubic-bezier(.2,.7,.2,1)"/>
+        </svg>
+        <div class="val"><div><b id="gaugeVal">—</b><span>готовность</span></div></div>
+      </div>
+      <div style="min-width:0">
+        <span class="kicker acid">Проверка публикации</span>
+        <h1 id="verdict">Читаю репозиторий…</h1>
+        <p class="lead" id="verdictNote">Данные берутся из открытого API GitHub прямо в браузере. Ключи не нужны, ничего не отправляется наружу.</p>
+        <div class="metrics">
+          <div class="metric m1"><b id="mFiles">—</b><span>файлов</span></div>
+          <div class="metric m2"><b id="mReq">—</b><span>обязательных</span></div>
+          <div class="metric m3"><b id="mProb">—</b><span>замечаний</span></div>
+          <div class="metric m4"><b id="mRun">—</b><span>сборка</span></div>
+          <div class="metric m5"><b id="mRate">—</b><span>лимит API</span></div>
+        </div>
+        <div class="row" style="margin-top:13px">
+          <button class="btn btn-p" id="refreshBtn">⟳ Обновить</button>
+          <button class="btn btn-g" id="copyReport">📋 Отчёт</button>
+          <button class="btn btn-g" id="exportJson">⬇ JSON</button>
+          <span class="chip" id="cacheChip">кэш: —</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card band rise" style="animation-delay:.06s">
+    <div class="row" style="justify-content:space-between;margin-bottom:4px">
+      <h2 style="margin:0">🎛 Панель просмотра</h2>
+      <span class="row">
+        <button class="btn btn-g btn-s" id="resetFilters">↺ Сброс</button>
+        <button class="btn btn-c btn-s" id="saveView">＋ Сохранить вид</button>
+      </span>
+    </div>
+    <div class="deck">
+      <div class="ctrl" style="grid-column:span 2"><label class="lbl" for="q">Поиск по пути</label><input class="input" id="q" placeholder="index, docs, workflows…" autocomplete="off"></div>
+      <div class="ctrl"><label class="lbl" for="sortSel">Сортировка</label><select class="select" id="sortSel"><option value="path">По пути А→Я</option><option value="size">По размеру</option><option value="kind">По типу</option><option value="depth">По вложенности</option></select></div>
+      <div class="ctrl"><label class="lbl">Глубина</label><div class="stepper"><button id="depthMinus" aria-label="Меньше глубина">−</button><b id="depthVal">4</b><button id="depthPlus" aria-label="Больше глубина">+</button></div></div>
+      <div class="ctrl"><label class="lbl" for="density">Плотность <span class="val" id="densityVal">1.00×</span></label><input type="range" id="density" min="0.7" max="1.6" step="0.05" value="1"></div>
+      <div class="ctrl"><label class="lbl" for="accent">Акцент</label><input type="color" id="accent" value="#7c5cff"></div>
+      <div class="ctrl"><label class="lbl" for="interval">Автообновление</label><select class="select" id="interval"><option value="0">выключено</option><option value="60">каждую минуту</option><option value="300">каждые 5 минут</option></select></div>
+      <div class="ctrl"><label class="lbl">Скрытые файлы</label><div class="row" style="gap:8px"><button class="switch" id="swHidden" role="switch" aria-checked="true" aria-label="Показывать скрытые файлы"></button><span class="note">.github, .env</span></div></div>
+      <div class="ctrl"><label class="lbl">Группировать</label><div class="row" style="gap:8px"><button class="switch" id="swGroup" role="switch" aria-checked="true" aria-label="Группировать по папкам"></button><span class="note">по папкам</span></div></div>
+      <div class="ctrl"><label class="lbl">Только проблемы</label><div class="row" style="gap:8px"><button class="switch" id="swProb" role="switch" aria-checked="false" aria-label="Только проблемные файлы"></button><span class="note">фильтр</span></div></div>
+      <div class="ctrl"><label class="lbl">Глубокая проверка</label><div class="row" style="gap:8px"><button class="switch" id="swDeep" role="switch" aria-checked="true" aria-label="Проверять содержимое файлов"></button><span class="note">читает файлы</span></div></div>
+    </div>
+    <div class="filters" style="margin-top:11px" id="kindFilters">
+      <button class="fchip on" data-k="all">Все</button>
+      <button class="fchip" data-k="req">Обязательные</button>
+      <button class="fchip" data-k="front">Фронтенд</button>
+      <button class="fchip" data-k="infra">Инфраструктура</button>
+      <button class="fchip" data-k="doc">Документы</button>
+      <button class="fchip" data-k="bad">Лишние / опасные</button>
+    </div>
+    <div class="views" id="views"></div>
+  </div>
+
+  <div class="card band rise" style="animation-delay:.12s">
+    <h2>🔍 Проверки <span class="chip" id="checkSummary">—</span></h2>
+    <div class="checks" id="checks"><div class="skel" style="height:58px"></div><div class="skel" style="height:58px"></div><div class="skel" style="height:58px"></div></div>
+  </div>
+
+  <div class="card band rise" style="animation-delay:.18s">
+    <h2>📁 Состав репозитория <span class="chip c" id="treeCount">—</span></h2>
+    <div class="bulk">
+      <label class="row" style="gap:7px;font-size:12px;cursor:pointer"><input type="checkbox" id="selAll" style="accent-color:var(--cyan);width:15px;height:15px">Выбрать всё</label>
+      <span class="chip v" id="selCount">0 выбрано</span>
+      <span class="row" style="margin-left:auto">
+        <button class="btn btn-g btn-s" id="copySel" disabled>📋 Пути</button>
+        <button class="btn btn-g btn-s" id="clearSel" disabled>✕ Снять</button>
+      </span>
+    </div>
+    <div class="tree" id="tree"><div class="skel" style="height:40px"></div><div class="skel" style="height:40px"></div><div class="skel" style="height:40px"></div><div class="skel" style="height:40px"></div></div>
+  </div>
+
+  <div class="card band rise" style="animation-delay:.24s">
+    <h2>⚙️ Последние сборки</h2>
+    <div class="runs" id="runs"><div class="skel" style="height:44px"></div><div class="skel" style="height:44px"></div></div>
+  </div>
+
+  <div class="card band rise" style="animation-delay:.3s">
+    <h2>🔗 Живые адреса</h2>
+    <div class="links" id="links"></div>
+    <p class="note" style="margin-top:11px">Проверка доступности выполняется запросом из браузера. Если GitHub Pages не отдаёт заголовок CORS, результат помечается как «непроверяемо» — это не ошибка сайта.</p>
+  </div>
+</main>
+
+<div id="drawerHost"></div>
+<div class="toasts" id="toasts" role="status" aria-live="polite"></div>
+
+<script>
+"use strict";
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;");
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+const RM=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const store={get(k){try{return localStorage.getItem(k)}catch{return null}},set(k,v){try{localStorage.setItem(k,v);return true}catch{return false}},del(k){try{localStorage.removeItem(k)}catch{}}};
+const fmtSize=n=>n==null?"—":n<1024?n+" Б":n<1048576?(n/1024).toFixed(1)+" КБ":(n/1048576).toFixed(2)+" МБ";
+const fmtTime=iso=>{if(!iso)return"—";const d=new Date(iso);return d.toLocaleString("ru-RU",{day:"2-digit",month:"2-digit",hour:"2-digit",minute:"2-digit"})};
+
+const REQUIRED=[
+  {p:"index.html",label:"Студия",kind:"front"},
+  {p:"docs/index.html",label:"Витрина",kind:"front"},
+  {p:"docs/404.html",label:"Страница 404",kind:"front"},
+  {p:".github/workflows/pages.yml",label:"Сборка Pages",kind:"infra"},
+  {p:"README.md",label:"Описание",kind:"doc"},
+  {p:"LICENSE",label:"Лицензия",kind:"doc"},
+  {p:".gitignore",label:"Защита секретов",kind:"infra"}
+];
+const KIND_LABEL={front:"фронтенд",infra:"инфраструктура",doc:"документ",req:"обязательный",bad:"внимание",other:"файл"};
+const KIND_CHIP={front:"c",infra:"v",doc:"acid",req:"g",bad:"r",other:""};
+
+const state={
+  owner:store.get("st_owner")||"dorinvest13-spec",
+  repo:store.get("st_repo")||"Marketpro",
+  branch:"main",meta:null,tree:[],runs:[],contents:{},readme:"",
+  truncated:false,rate:{remaining:null,limit:null,reset:null},
+  loading:false,error:null,fetchedAt:null,fromCache:false,
+  filter:"all",q:"",sort:"path",depth:4,hidden:true,group:true,onlyProb:false,deep:true,
+  density:1,interval:0,selected:new Set(),views:[],checks:[],linkProbe:{}
+};
+try{const v=JSON.parse(store.get("st_views")||"[]");if(Array.isArray(v))state.views=v}catch{}
+let timer=null,busy=false;
+
+function toast(msg,type="ok",undo){
+  const t=document.createElement("div");t.className="toast "+type;
+  t.innerHTML=`<span>${type==="ok"?"✅":type==="err"?"⛔":"ℹ️"}</span><span>${esc(msg)}</span>`+(undo?`<button class="undo">Отменить</button>`:"")+`<button class="x" aria-label="Закрыть">✕</button>`;
+  t.querySelector(".x").onclick=()=>t.remove();
+  if(undo)t.querySelector(".undo").onclick=()=>{try{undo()}finally{t.remove()}};
+  $("toasts").appendChild(t);setTimeout(()=>t.remove(),undo?9000:4200);
+}
+async function copy(text){
+  const s=String(text??"");if(!s)return toast("Нечего копировать","info");
+  try{if(navigator.clipboard&&window.isSecureContext){await navigator.clipboard.writeText(s);toast("Скопировано");return}}catch{}
+  try{
+    const ta=document.createElement("textarea");ta.value=s;ta.setAttribute("readonly","");
+    ta.style.cssText="position:fixed;top:-2000px;opacity:0";document.body.appendChild(ta);
+    ta.select();ta.setSelectionRange(0,s.length);
+    const ok=document.execCommand("copy");ta.remove();
+    toast(ok?"Скопировано":"Скопируйте вручную",ok?"ok":"info");
+  }catch{toast("Копирование недоступно","err")}
+}
+function download(blob,name){
+  const u=URL.createObjectURL(blob),a=document.createElement("a");
+  a.href=u;a.download=name;document.body.appendChild(a);a.click();a.remove();
+  setTimeout(()=>URL.revokeObjectURL(u),4000);
+}
+function cacheKey(){return `st_cache_${state.owner}/${state.repo}`}
+function saveCache(){
+  store.set(cacheKey(),JSON.stringify({
+    t:Date.now(),branch:state.branch,meta:state.meta,tree:state.tree,runs:state.runs,
+    contents:state.contents,readme:state.readme,truncated:state.truncated
+  }));
+}
+function loadCache(){
+  try{
+    const raw=store.get(cacheKey());if(!raw)return false;
+    const c=JSON.parse(raw);if(!c||!Array.isArray(c.tree))return false;
+    state.branch=c.branch||"main";state.meta=c.meta;state.tree=c.tree;state.runs=c.runs||[];
+    state.contents=c.contents||{};state.readme=c.readme||"";state.truncated=!!c.truncated;
+    state.fetchedAt=c.t;state.fromCache=true;return true;
+  }catch{return false}
+}
+async function gh(path){
+  const ctl=new AbortController();const to=setTimeout(()=>ctl.abort(),20000);
+  try{
+    const r=await fetch("https://api.github.com"+path,{signal:ctl.signal,headers:{Accept:"application/vnd.github+json"}});
+    const rem=r.headers.get("x-ratelimit-remaining"),lim=r.headers.get("x-ratelimit-limit"),res=r.headers.get("x-ratelimit-reset");
+    if(rem!==null)state.rate={remaining:+rem,limit:+lim,reset:+res};
+    if(r.status===403&&state.rate.remaining===0){
+      const when=state.rate.reset?new Date(state.rate.reset*1000).toLocaleTimeString("ru-RU"):"скоро";
+      throw new Error(`Лимит GitHub API исчерпан (60 запросов/час без входа). Обновится после ${when}.`);
+    }
+    if(r.status===404)throw new Error("Репозиторий или ветка не найдены. Проверьте владельца, название и что репозиторий публичный.");
+    if(!r.ok)throw new Error("GitHub API ответил "+r.status);
+    return r.json();
+  }finally{clearTimeout(to)}
+}
+async function raw(path){
+  const ctl=new AbortController();const to=setTimeout(()=>ctl.abort(),20000);
+  try{
+    const r=await fetch(`https://raw.githubusercontent.com/${state.owner}/${state.repo}/${state.branch}/${path}`,{signal:ctl.signal});
+    if(!r.ok)throw new Error("raw "+r.status);
+    return r.text();
+  }finally{clearTimeout(to)}
+}
+function kindOf(path){
+  if(/(^|\/)\.env($|\.)/.test(path)||/configure\.env$/.test(path)||/\.(db|sqlite3?|pem|key)$/.test(path)||/^backups\//.test(path))return"bad";
+  if(/^github\//.test(path))return"bad";
+  if(/^\.github\/workflows\/\./.test(path))return"bad";
+  if(REQUIRED.some(r=>r.p===path))return"req";
+  if(/\.html?$/.test(path))return"front";
+  if(/^\.github\//.test(path)||/\.(ya?ml|toml|conf|sh|ps1)$/.test(path)||/Dockerfile/.test(path)||/Makefile/.test(path)||path===".gitignore"||path===".dockerignore")return"infra";
+  if(/\.(md|txt)$/.test(path)||/^LICENSE/.test(path))return"doc";
+  if(/\.py$/.test(path))return"infra";
+  return"other";
+}
+function buildChecks(){
+  const paths=new Set(state.tree.filter(n=>n.type==="blob").map(n=>n.path));
+  const out=[];
+  REQUIRED.forEach(r=>{
+    if(paths.has(r.p))out.push({s:"ok",t:`${r.label} — на месте`,d:r.p});
+    else out.push({s:r.p==="docs/index.html"?"warn":"err",t:`${r.label} — файла нет`,d:r.p,
+      fix:`Создайте файл по пути ${r.p}${r.p==="docs/index.html"?" — иначе корень сайта отдаст студию вместо витрины":""}`});
+  });
+  const stray=state.tree.filter(n=>/^github\//.test(n.path));
+  if(stray.length)out.push({s:"err",t:"Папка github/ без точки впереди",d:stray.map(n=>n.path).join(", "),
+    fix:"GitHub Actions читает только .github/workflows. Удалите папку github/ целиком."});
+  const dotYml=state.tree.filter(n=>/^\.github\/workflows\/\.[^/]+\.ya?ml$/.test(n.path));
+  if(dotYml.length)out.push({s:"warn",t:"Workflow-файл с точкой в начале имени",d:dotYml.map(n=>n.path).join(", "),
+    fix:"Переименуйте в pages.yml без ведущей точки и удалите вариант с точкой."});
+  const wf=state.tree.filter(n=>/^\.github\/workflows\/[^/]+\.ya?ml$/.test(n.path)&&!/^\.github\/workflows\/\./.test(n.path));
+  if(wf.length>1)out.push({s:"warn",t:`Несколько workflow: ${wf.length}`,d:wf.map(n=>n.path).join(", "),
+    fix:"Если оба публикуют Pages, сборки будут перебивать друг друга. Оставьте один pages.yml."});
+  const secrets=state.tree.filter(n=>kindOf(n.path)==="bad"&&!/^github\//.test(n.path)&&!/^\.github\/workflows\/\./.test(n.path));
+  if(secrets.length)out.push({s:"err",t:"В репозитории есть секретные или служебные файлы",d:secrets.map(n=>n.path).join(", "),
+    fix:"Удалите их из истории и отзовите ключи. .gitignore предотвращает повторное попадание."});
+  if(paths.has("docs/404.html")&&!paths.has("docs/index.html"))
+    out.push({s:"warn",t:"В docs есть только 404.html",d:"docs/",fix:"Добавьте docs/index.html — витрину проекта."});
+  if(state.truncated)out.push({s:"warn",t:"Дерево файлов усечено GitHub",d:"recursive tree",fix:"Репозиторий очень большой; часть файлов не попала в проверку."});
+
+  if(state.deep&&state.contents["docs/index.html"]!=null){
+    const c=state.contents["docs/index.html"];
+    if(/\.hidden\s*\{\s*display\s*:\s*none/.test(c))out.push({s:"ok",t:"Витрина: правило .hidden присутствует",d:"docs/index.html"});
+    else out.push({s:"err",t:"Витрина: нет правила .hidden",d:"docs/index.html",
+      fix:"Добавьте в <style> строку .hidden{display:none!important} — иначе скелетоны видны постоянно."});
+    if(/<\/html>\s*$/.test(c))out.push({s:"ok",t:"Витрина скопирована целиком",d:"docs/index.html"});
+    else out.push({s:"err",t:"Витрина обрывается — файл скопирован не полностью",d:"docs/index.html",fix:"Вставьте содержимое заново от <!DOCTYPE html> до </html>."});
+  }
+  if(state.deep&&state.contents["index.html"]!=null){
+    const c=state.contents["index.html"];
+    if(/<\/html>\s*$/.test(c))out.push({s:"ok",t:"Студия скопирована целиком",d:"index.html"});
+    else out.push({s:"err",t:"Студия обрывается — файл скопирован не полностью",d:"index.html",fix:"Вставьте содержимое заново от <!DOCTYPE html> до </html>."});
+    if(/function\s+guard\s*\(/.test(c))out.push({s:"ok",t:"Студия: защита от двойных нажатий на месте",d:"index.html"});
+  }
+  if(state.deep&&state.contents[".github/workflows/pages.yml"]!=null){
+    const c=state.contents[".github/workflows/pages.yml"];
+    const need=["upload-pages-artifact","deploy-pages","actions/checkout"];
+    const miss=need.filter(n=>!c.includes(n));
+    if(!miss.length)out.push({s:"ok",t:"Workflow содержит все шаги публикации",d:".github/workflows/pages.yml"});
+    else out.push({s:"err",t:"В workflow не хватает шагов: "+miss.join(", "),d:".github/workflows/pages.yml",fix:"Замените файл полной версией pages.yml."});
+  }
+  if(state.readme){
+    const links=[...state.readme.matchAll(/\]\(([^)\s]+)\)/g)].map(m=>m[1])
+      .filter(u=>!/^https?:|^#|^mailto:/.test(u)).map(u=>u.replace(/^\.\//,"").split("#")[0]).filter(Boolean);
+    const broken=[...new Set(links)].filter(u=>!paths.has(u)&&!state.tree.some(n=>n.path.startsWith(u.replace(/\/$/,"")+"/")));
+    if(broken.length)out.push({s:"warn",t:"README ссылается на отсутствующие файлы",d:broken.join(", "),
+      fix:"Уберите ссылки или добавьте файлы. Сейчас они ведут в 404."});
+    else if(links.length)out.push({s:"ok",t:`README: все локальные ссылки целы (${links.length})`,d:"README.md"});
+  }
+  const last=state.runs[0];
+  if(last){
+    if(last.conclusion==="success")out.push({s:"ok",t:"Последняя сборка Pages успешна",d:last.name||"workflow"});
+    else if(last.status!=="completed")out.push({s:"warn",t:"Сборка ещё идёт",d:last.name||"workflow",fix:"Подождите 1–2 минуты и нажмите «Обновить»."});
+    else out.push({s:"err",t:"Последняя сборка завершилась ошибкой: "+(last.conclusion||"—"),d:last.html_url||"",
+      fix:"Откройте журнал сборки по ссылке в разделе «Последние сборки»."});
+  }else out.push({s:"warn",t:"Сборок пока не видно",d:"Actions",fix:"Убедитесь, что Settings → Pages → Source = GitHub Actions, и сделайте любой коммит."});
+  state.checks=out;
+}
+function score(){
+  const reqOk=REQUIRED.filter(r=>state.tree.some(n=>n.path===r.p)).length;
+  const errs=state.checks.filter(c=>c.s==="err").length;
+  const warns=state.checks.filter(c=>c.s==="warn").length;
+  let s=Math.round(reqOk/REQUIRED.length*100);
+  s-=errs*9+warns*3;
+  return clamp(s,0,100);
+}
+function paintHero(){
+  const s=state.tree.length?score():0;
+  const circ=2*Math.PI*72;
+  $("ring").setAttribute("stroke-dasharray",circ.toFixed(1));
+  $("ring").setAttribute("stroke-dashoffset",(circ*(1-s/100)).toFixed(1));
+  $("gaugeVal").textContent=state.tree.length?s+"%":"—";
+  const errs=state.checks.filter(c=>c.s==="err").length,warns=state.checks.filter(c=>c.s==="warn").length;
+  const reqOk=REQUIRED.filter(r=>state.tree.some(n=>n.path===r.p)).length;
+  $("mFiles").textContent=state.tree.filter(n=>n.type==="blob").length||"—";
+  $("mReq").textContent=state.tree.length?`${reqOk}/${REQUIRED.length}`:"—";
+  $("mProb").textContent=state.tree.length?(errs+warns):"—";
+  const last=state.runs[0];
+  $("mRun").textContent=last?(last.conclusion==="success"?"OK":last.status!=="completed"?"идёт":"сбой"):"—";
+  $("mRate").textContent=state.rate.remaining!=null?state.rate.remaining:"—";
+  if(state.error){
+    $("verdict").textContent="Нет свежих данных";
+    $("verdictNote").textContent=state.error+(state.fromCache?" Показан последний сохранённый снимок.":"");
+    $("liveDot").className="live-dot err";
+  }else if(!state.tree.length){
+    $("verdict").textContent="Читаю репозиторий…";$("liveDot").className="live-dot warn";
+  }else if(errs){
+    $("verdict").textContent=`Готово на ${s}% — есть ${errs} критичных`;
+    $("verdictNote").textContent="Красные строки в разделе «Проверки» блокируют публикацию или ломают страницу. Каждая содержит точное исправление.";
+    $("liveDot").className="live-dot err";
+  }else if(warns){
+    $("verdict").textContent=`Публикация работает · ${warns} замечаний`;
+    $("verdictNote").textContent="Сайт доступен, но жёлтые строки стоит закрыть: они влияют на первый взгляд посетителя.";
+    $("liveDot").className="live-dot warn";
+  }else{
+    $("verdict").textContent="Всё на месте и опубликовано";
+    $("verdictNote").textContent="Обязательные файлы найдены, содержимое целое, последняя сборка успешна. Можно переходить к backend.";
+    $("liveDot").className="live-dot ok";
+  }
+  $("cacheChip").textContent=state.fetchedAt?("снимок: "+fmtTime(new Date(state.fetchedAt).toISOString())+(state.fromCache?" · кэш":" · свежий")):"кэш: —";
+  $("checkSummary").textContent=state.checks.length?`${state.checks.filter(c=>c.s==="ok").length} ок · ${warns} warn · ${errs} err`:"—";
+}
+function paintChecks(){
+  if(!state.checks.length){$("checks").innerHTML=`<p class="note" style="padding:16px;text-align:center">Данные ещё не загружены.</p>`;return}
+  const order={err:0,warn:1,ok:2};
+  const list=[...state.checks].sort((a,b)=>order[a.s]-order[b.s]);
+  $("checks").innerHTML=list.map(c=>`<div class="check-row ${c.s}">
+    <span class="ic">${c.s==="ok"?"✓":c.s==="warn"?"!":"✕"}</span>
+    <div style="min-width:0"><b>${esc(c.t)}</b>
+      ${c.d?`<div class="note" style="word-break:break-all;margin-top:3px">${esc(c.d)}</div>`:""}
+      ${c.fix?`<div class="fix">${esc(c.fix)}</div>`:""}
+    </div></div>`).join("");
+}
+function visibleFiles(){
+  let list=state.tree.filter(n=>n.type==="blob");
+  if(!state.hidden)list=list.filter(n=>!n.path.split("/").some(s=>s.startsWith(".")));
+  const maxD=state.depth;
+  list=list.filter(n=>n.path.split("/").length<=maxD);
+  if(state.filter!=="all"){
+    list=list.filter(n=>{
+      const k=kindOf(n.path);
+      if(state.filter==="req")return REQUIRED.some(r=>r.p===n.path);
+      if(state.filter==="bad")return k==="bad";
+      return k===state.filter;
+    });
+  }
+  if(state.onlyProb){
+    const bad=new Set();
+    state.checks.filter(c=>c.s!=="ok").forEach(c=>String(c.d||"").split(", ").forEach(p=>bad.add(p)));
+    list=list.filter(n=>bad.has(n.path)||kindOf(n.path)==="bad");
+  }
+  const q=state.q.trim().toLowerCase();
+  if(q)list=list.filter(n=>n.path.toLowerCase().includes(q));
+  const cmp={
+    path:(a,b)=>a.path.localeCompare(b.path),
+    size:(a,b)=>(b.size||0)-(a.size||0)||a.path.localeCompare(b.path),
+    kind:(a,b)=>kindOf(a.path).localeCompare(kindOf(b.path))||a.path.localeCompare(b.path),
+    depth:(a,b)=>a.path.split("/").length-b.path.split("/").length||a.path.localeCompare(b.path)
+  }[state.sort];
+  return [...list].sort(cmp);
+}
+function paintTree(){
+  const list=visibleFiles();
+  $("treeCount").textContent=`${list.length} из ${state.tree.filter(n=>n.type==="blob").length}`;
+  if(!list.length){
+    $("tree").innerHTML=`<p class="note" style="padding:20px;text-align:center">${state.tree.length?"Ничего не найдено — измените фильтры или глубину.":"Данные ещё не загружены."}</p>`;
+    paintBulk();return;
+  }
+  const html=[];let lastDir=null;
+  list.forEach(n=>{
+    const parts=n.path.split("/"),dir=parts.length>1?parts.slice(0,-1).join("/"):"";
+    if(state.group&&dir!==lastDir){
+      html.push(`<div class="node dir"><span class="path" style="color:var(--muted)">📂 ${esc(dir||"корень")}/</span></div>`);
+      lastDir=dir;
+    }
+    const k=kindOf(n.path),req=REQUIRED.find(r=>r.p===n.path);
+    html.push(`<div class="node ${state.selected.has(n.path)?"sel":""}" data-path="${esc(n.path)}">
+      <input type="checkbox" data-sel="${esc(n.path)}" ${state.selected.has(n.path)?"checked":""} aria-label="Выбрать ${esc(n.path)}">
+      <span class="path">${esc(state.group?parts[parts.length-1]:n.path)}</span>
+      ${req?`<span class="chip g">обязательный</span>`:`<span class="chip ${KIND_CHIP[k]}">${KIND_LABEL[k]}</span>`}
+      <span class="sz">${fmtSize(n.size)}</span>
+    </div>`);
+  });
+  $("tree").innerHTML=html.join("");
+  $("tree").querySelectorAll("[data-sel]").forEach(c=>c.onchange=e=>{
+    e.stopPropagation();
+    c.checked?state.selected.add(c.dataset.sel):state.selected.delete(c.dataset.sel);
+    c.closest(".node").classList.toggle("sel",c.checked);paintBulk();
+  });
+  $("tree").querySelectorAll(".node[data-path]").forEach(el=>el.onclick=e=>{
+    if(e.target.tagName==="INPUT")return;
+    openDrawer(el.dataset.path);
+  });
+  paintBulk();
+}
+function paintBulk(){
+  const n=state.selected.size;
+  $("selCount").textContent=n+" выбрано";
+  $("copySel").disabled=!n;$("clearSel").disabled=!n;
+  const vis=visibleFiles();
+  $("selAll").checked=vis.length>0&&vis.every(f=>state.selected.has(f.path));
+}
+function paintRuns(){
+  if(!state.runs.length){$("runs").innerHTML=`<p class="note" style="padding:14px">Сборок не найдено. Включите Settings → Pages → Source: GitHub Actions.</p>`;return}
+  $("runs").innerHTML=state.runs.slice(0,6).map(r=>{
+    const cls=r.conclusion==="success"?"success":r.status!=="completed"?"pending":r.conclusion?"failure":"other";
+    const dur=r.run_started_at&&r.updated_at?Math.max(0,Math.round((new Date(r.updated_at)-new Date(r.run_started_at))/1000)):null;
+    return `<a class="run" href="${esc(r.html_url)}" target="_blank" rel="noopener">
+      <span class="st ${cls}"></span>
+      <span style="flex:1;min-width:0"><b style="font:700 12.5px var(--font)">${esc(r.name||"workflow")}</b>
+      <div class="note">${esc(r.head_commit?.message?.split("\n")[0]||r.display_title||"—")}</div></span>
+      <span class="chip ${cls==="success"?"g":cls==="pending"?"a":cls==="failure"?"r":""}">${esc(r.conclusion||r.status)}</span>
+      <span class="note hide-sm">${fmtTime(r.created_at)}${dur!=null?` · ${dur}с`:""}</span>
+    </a>`;
+  }).join("");
+}
+function siteUrls(){
+  const base=`https://${state.owner}.github.io/${state.repo}/`;
+  return [
+    {n:"Витрина",u:base,d:"корень сайта"},
+    {n:"Студия",u:base+"app/",d:"полное приложение"},
+    {n:"Страница 404",u:base+"net-takogo",d:"проверка своей 404"},
+    {n:"Репозиторий",u:`https://github.com/${state.owner}/${state.repo}`,d:"исходники"}
+  ];
+}
+function paintLinks(){
+  $("links").innerHTML=siteUrls().map((l,i)=>{
+    const p=state.linkProbe[l.u];
+    const chip=p==="ok"?'<span class="chip g">открывается</span>':p==="opaque"?'<span class="chip a">непроверяемо</span>':p==="fail"?'<span class="chip r">недоступно</span>':'<span class="chip">не проверено</span>';
+    return `<div class="link-card"><div class="row" style="justify-content:space-between"><b style="font:700 13px var(--font)">${esc(l.n)}</b>${chip}</div>
+      <div class="u">${esc(l.u)}</div>
+      <div class="row"><a class="btn btn-p btn-s" href="${esc(l.u)}" target="_blank" rel="noopener">Открыть</a>
+      <button class="btn btn-g btn-s" data-copy-url="${esc(l.u)}">📋</button>
+      <button class="btn btn-g btn-s" data-probe="${i}">Проверить</button></div>
+      <p class="note" style="margin-top:8px">${esc(l.d)}</p></div>`;
+  }).join("");
+  $("links").querySelectorAll("[data-copy-url]").forEach(b=>b.onclick=()=>copy(b.dataset.copyUrl));
+  $("links").querySelectorAll("[data-probe]").forEach(b=>b.onclick=()=>probe(siteUrls()[+b.dataset.probe].u));
+}
+async function probe(u){
+  state.linkProbe[u]="pending";paintLinks();
+  try{
+    const r=await fetch(u,{method:"GET",mode:"cors",cache:"no-store"});
+    state.linkProbe[u]=r.ok?"ok":"fail";
+  }catch{
+    try{await fetch(u,{method:"GET",mode:"no-cors",cache:"no-store"});state.linkProbe[u]="opaque"}
+    catch{state.linkProbe[u]="fail"}
+  }
+  paintLinks();
+}
+function paintViews(){
+  if(!state.views.length){$("views").innerHTML="";return}
+  $("views").innerHTML=state.views.map(v=>`<div class="view">
+    <span class="chip v">вид</span><b>${esc(v.name)}</b>
+    <span class="note hide-sm">${esc(v.filter)} · ${esc(v.sort)}${v.q?` · «${esc(v.q)}»`:""}</span>
+    <button class="btn btn-g btn-s" data-apply="${esc(v.id)}">Применить</button>
+    <button class="btn btn-g btn-s" style="color:var(--red)" data-del="${esc(v.id)}" aria-label="Удалить вид">✕</button></div>`).join("");
+  $("views").querySelectorAll("[data-apply]").forEach(b=>b.onclick=()=>{
+    const v=state.views.find(x=>x.id===b.dataset.apply);if(!v)return;
+    Object.assign(state,{filter:v.filter,sort:v.sort,q:v.q,depth:v.depth,hidden:v.hidden,group:v.group,onlyProb:v.onlyProb});
+    syncControls();paintTree();toast("Вид применён: "+v.name);
+  });
+  $("views").querySelectorAll("[data-del]").forEach(b=>b.onclick=()=>{
+    const i=state.views.findIndex(x=>x.id===b.dataset.del);if(i<0)return;
+    const[rm]=state.views.splice(i,1);store.set("st_views",JSON.stringify(state.views));paintViews();
+    toast("Вид удалён","info",()=>{state.views.splice(i,0,rm);store.set("st_views",JSON.stringify(state.views));paintViews()});
+  });
+}
+let drawerPath=null;
+function openDrawer(path){
+  const n=state.tree.find(x=>x.path===path);if(!n)return;
+  drawerPath=path;
+  const k=kindOf(path),req=REQUIRED.find(r=>r.p===path);
+  const ghUrl=`https://github.com/${state.owner}/${state.repo}/blob/${state.branch}/${path}`;
+  const rawUrl=`https://raw.githubusercontent.com/${state.owner}/${state.repo}/${state.branch}/${path}`;
+  const content=state.contents[path];
+  const host=$("drawerHost");
+  host.innerHTML=`<div class="scrim" id="scrim"></div><aside class="drawer" role="dialog" aria-modal="true" aria-label="Детали файла">
+    <div class="row" style="justify-content:space-between;margin-bottom:12px">
+      <span class="kicker m">Файл</span><button class="btn btn-g btn-s" id="drawerClose">✕ Закрыть</button></div>
+    <h2 style="font:800 15px var(--mono);word-break:break-all">${esc(path)}</h2>
+    <div class="row" style="margin:10px 0">
+      ${req?'<span class="chip g">обязательный</span>':`<span class="chip ${KIND_CHIP[k]}">${KIND_LABEL[k]}</span>`}
+      <span class="chip">${fmtSize(n.size)}</span>
+      <span class="chip c">${esc(path.split("/").length)} уровень</span>
+    </div>
+    <div class="row">
+      <a class="btn btn-p btn-s" href="${esc(ghUrl)}" target="_blank" rel="noopener">На GitHub</a>
+      <a class="btn btn-g btn-s" href="${esc(rawUrl)}" target="_blank" rel="noopener">Raw</a>
+      <button class="btn btn-g btn-s" id="dCopyPath">📋 Путь</button>
+      <button class="btn btn-c btn-s" id="dLoad">${content?"Обновить текст":"Загрузить текст"}</button>
+    </div>
+    <div class="note" style="margin-top:12px">sha: ${esc(String(n.sha||"—").slice(0,12))}</div>
+    ${content?`<div class="code" id="dCode">${esc(content.slice(0,4000))}${content.length>4000?"\n… обрезано для просмотра":""}</div>
+      <div class="row" style="margin-top:10px"><button class="btn btn-g btn-s" id="dCopyAll">📋 Весь текст</button>
+      <button class="btn btn-g btn-s" id="dDownload">⬇ Скачать</button></div>`:`<p class="note" style="margin-top:12px">Текст не загружен. Нажмите «Загрузить текст» — файл читается напрямую из репозитория.</p>`}
+  </aside>`;
+  $("scrim").onclick=closeDrawer;
+  $("drawerClose").onclick=closeDrawer;
+  $("dCopyPath").onclick=()=>copy(path);
+  $("dLoad").onclick=async()=>{
+    const b=$("dLoad");b.disabled=true;b.textContent="Читаю…";
+    try{state.contents[path]=await raw(path);saveCache();buildChecks();paintHero();paintChecks();openDrawer(path)}
+    catch(e){toast("Не удалось прочитать: "+e.message,"err");b.disabled=false;b.textContent="Загрузить текст"}
+  };
+  if(content){
+    $("dCopyAll").onclick=()=>copy(content);
+    $("dDownload").onclick=()=>download(new Blob([content],{type:"text/plain;charset=utf-8"}),path.split("/").pop());
+  }
+  $("drawerClose").focus();
+}
+function closeDrawer(){$("drawerHost").innerHTML="";drawerPath=null}
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&drawerPath)closeDrawer()});
+
+function report(){
+  const s=state.tree.length?score():0;
+  const lines=[
+    `AI Marketing Studio — состояние проекта`,
+    `Репозиторий: ${state.owner}/${state.repo} (${state.branch})`,
+    `Снимок: ${state.fetchedAt?new Date(state.fetchedAt).toLocaleString("ru-RU"):"—"}`,
+    `Готовность: ${s}%`,
+    `Файлов: ${state.tree.filter(n=>n.type==="blob").length}`,
+    ``,
+    `ПРОВЕРКИ:`
+  ];
+  state.checks.forEach(c=>lines.push(`${c.s==="ok"?"[ok]":c.s==="warn"?"[!!]":"[XX]"} ${c.t}${c.d?" — "+c.d:""}${c.fix?"\n      → "+c.fix:""}`));
+  lines.push("",`АДРЕСА:`);siteUrls().forEach(l=>lines.push(`${l.n}: ${l.u}`));
+  return lines.join("\n");
+}
+function syncControls(){
+  $("q").value=state.q;$("sortSel").value=state.sort;$("depthVal").textContent=state.depth;
+  $("depthMinus").disabled=state.depth<=1;$("depthPlus").disabled=state.depth>=8;
+  $("density").value=state.density;$("densityVal").textContent=state.density.toFixed(2)+"×";
+  $("accent").value=state.accent||"#7c5cff";$("interval").value=String(state.interval);
+  $("swHidden").setAttribute("aria-checked",String(state.hidden));
+  $("swGroup").setAttribute("aria-checked",String(state.group));
+  $("swProb").setAttribute("aria-checked",String(state.onlyProb));
+  $("swDeep").setAttribute("aria-checked",String(state.deep));
+  document.querySelectorAll("#kindFilters .fchip").forEach(b=>b.classList.toggle("on",b.dataset.k===state.filter));
+  document.documentElement.style.setProperty("--accent",state.accent||"#7c5cff");
+  document.documentElement.style.setProperty("--pad",Math.round(13*state.density)+"px");
+}
+function setTimer(){
+  if(timer){clearInterval(timer);timer=null}
+  if(state.interval>0)timer=setInterval(()=>load(false),state.interval*1000);
+}
+async function load(useCacheFirst=true){
+  if(busy)return;busy=true;
+  const btn=$("refreshBtn");btn.disabled=true;const old=btn.textContent;btn.textContent="⟳ Читаю…";
+  state.error=null;
+  if(useCacheFirst&&loadCache()){buildChecks();paintHero();paintChecks();paintTree();paintRuns();paintLinks()}
+  try{
+    const meta=await gh(`/repos/${state.owner}/${state.repo}`);
+    state.meta=meta;state.branch=meta.default_branch||"main";
+    const tree=await gh(`/repos/${state.owner}/${state.repo}/git/trees/${state.branch}?recursive=1`);
+    state.tree=(tree.tree||[]).filter(n=>n.type==="blob"||n.type==="tree");
+    state.truncated=!!tree.truncated;
+    try{const runs=await gh(`/repos/${state.owner}/${state.repo}/actions/runs?per_page=6`);state.runs=runs.workflow_runs||[]}catch{state.runs=[]}
+    try{state.readme=await raw("README.md")}catch{state.readme=""}
+    if(state.deep){
+      const targets=["docs/index.html","index.html",".github/workflows/pages.yml"].filter(p=>state.tree.some(n=>n.path===p));
+      for(const p of targets){try{state.contents[p]=await raw(p)}catch{}}
+    }
+    state.fetchedAt=Date.now();state.fromCache=false;saveCache();
+    if(!useCacheFirst)toast("Данные обновлены");
+  }catch(e){
+    state.error=e.message||String(e);
+    if(!state.tree.length)loadCache();
+    toast(state.error,"err");
+  }finally{
+    buildChecks();paintHero();paintChecks();paintTree();paintRuns();paintLinks();paintViews();
+    btn.disabled=false;btn.textContent=old;busy=false;
+  }
+}
+$("refreshBtn").onclick=()=>load(false);
+$("copyReport").onclick=()=>copy(report());
+$("exportJson").onclick=()=>{
+  const payload={repo:`${state.owner}/${state.repo}`,branch:state.branch,fetchedAt:state.fetchedAt,
+    score:state.tree.length?score():null,checks:state.checks,
+    files:state.tree.filter(n=>n.type==="blob").map(n=>({path:n.path,size:n.size,kind:kindOf(n.path)})),
+    runs:state.runs.map(r=>({name:r.name,status:r.status,conclusion:r.conclusion,url:r.html_url,created_at:r.created_at})),
+    urls:siteUrls()};
+  download(new Blob([JSON.stringify(payload,null,2)],{type:"application/json"}),"project-status.json");
+  toast("JSON сохранён");
+};
+$("applyRepo").onclick=()=>{
+  const o=$("inOwner").value.trim(),r=$("inRepo").value.trim();
+  if(!o||!r)return toast("Заполните владельца и название","err");
+  state.owner=o;state.repo=r;store.set("st_owner",o);store.set("st_repo",r);
+  state.tree=[];state.checks=[];state.contents={};state.readme="";state.runs=[];state.selected.clear();state.linkProbe={};
+  $("homeLink").setAttribute("href",`https://${o}.github.io/${r}/`);
+  buildChecks();paintHero();paintChecks();paintTree();paintRuns();paintLinks();
+  load(false);
+};
+$("q").addEventListener("input",e=>{state.q=e.target.value;paintTree()});
+$("sortSel").onchange=e=>{state.sort=e.target.value;paintTree()};
+$("depthMinus").onclick=()=>{state.depth=clamp(state.depth-1,1,8);syncControls();paintTree()};
+$("depthPlus").onclick=()=>{state.depth=clamp(state.depth+1,1,8);syncControls();paintTree()};
+$("density").oninput=e=>{state.density=+e.target.value;syncControls()};
+$("accent").oninput=e=>{state.accent=e.target.value;syncControls()};
+$("interval").onchange=e=>{state.interval=+e.target.value;setTimer();toast(state.interval?`Автообновление каждые ${state.interval} с`:"Автообновление выключено","info")};
+function sw(el,key,after){el.onclick=()=>{state[key]=!state[key];el.setAttribute("aria-checked",String(state[key]));after&&after()}}
+sw($("swHidden"),"hidden",paintTree);
+sw($("swGroup"),"group",paintTree);
+sw($("swProb"),"onlyProb",paintTree);
+sw($("swDeep"),"deep",()=>{if(state.deep)load(false);else{buildChecks();paintHero();paintChecks()}});
+document.querySelectorAll("#kindFilters .fchip").forEach(b=>b.onclick=()=>{state.filter=b.dataset.k;syncControls();paintTree()});
+$("resetFilters").onclick=()=>{
+  Object.assign(state,{filter:"all",q:"",sort:"path",depth:4,hidden:true,group:true,onlyProb:false,density:1});
+  syncControls();paintTree();toast("Фильтры сброшены");
+};
+$("saveView").onclick=()=>{
+  const name=`${state.filter==="all"?"все":state.filter}${state.q?` · «${state.q}»`:""} · ${state.sort}`;
+  const v={id:"v"+Date.now(),name,filter:state.filter,sort:state.sort,q:state.q,depth:state.depth,hidden:state.hidden,group:state.group,onlyProb:state.onlyProb};
+  state.views.unshift(v);state.views=state.views.slice(0,8);
+  store.set("st_views",JSON.stringify(state.views));paintViews();
+  toast("Вид сохранён","ok",()=>{state.views=state.views.filter(x=>x.id!==v.id);store.set("st_views",JSON.stringify(state.views));paintViews()});
+};
+$("selAll").onchange=()=>{
+  const vis=visibleFiles();
+  if($("selAll").checked)vis.forEach(f=>state.selected.add(f.path));
+  else vis.forEach(f=>state.selected.delete(f.path));
+  paintTree();
+};
+$("copySel").onclick=()=>copy([...state.selected].join("\n"));
+$("clearSel").onclick=()=>{const back=new Set(state.selected);state.selected.clear();paintTree();toast("Выделение снято","info",()=>{state.selected=back;paintTree()})};
+window.addEventListener("beforeunload",()=>{if(timer)clearInterval(timer)});
+document.addEventListener("visibilitychange",()=>{if(document.hidden){if(timer){clearInterval(timer);timer=null}}else setTimer()});
+
+$("inOwner").value=state.owner;$("inRepo").value=state.repo;
+$("homeLink").setAttribute("href",`https://${state.owner}.github.io/${state.repo}/`);
+syncControls();paintLinks();paintViews();
+load(true);
+</script>
+</body>
+  </html>
