@@ -6,7 +6,7 @@
 <title>AI Marketing Studio — конвейер товарного контента</title>
 <meta name="description" content="Ссылка на товар → карточки, тексты для 5 площадок, топ-10 запросов и вертикальный ролик 9:16. Генерация и рендер прямо в браузере.">
 <meta property="og:title" content="AI Marketing Studio">
-<meta property="og:description" content="Конвейер товарного контента: генерация, карточки в PNG, вертикальный ролик">
+<meta property="og:description" content="Конвейер товарного контента: генерация, библиотека, карточки в PNG, вертикальный ролик">
 <meta property="og:type" content="website">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -87,6 +87,7 @@ a{color:inherit}
 .btn-p:hover{box-shadow:0 14px 40px rgba(124,92,255,.62)}
 .btn-c{background:linear-gradient(100deg,#0b6f86,var(--cyan));color:#03222b;box-shadow:0 10px 28px rgba(34,211,238,.3)}
 .btn-a{background:linear-gradient(100deg,#a35a06,var(--amber));color:#2a1500}
+.btn-b{background:linear-gradient(100deg,#24409e,var(--blue));color:#fff}
 .btn-acid{background:linear-gradient(100deg,#3f7a1e,var(--acid));color:#0d2103}
 .btn-g{background:var(--overlay);border:1px solid var(--line);color:var(--text)}
 .btn-g:hover{border-color:var(--cyan)}
@@ -98,11 +99,12 @@ a{color:inherit}
 .chip.m{color:var(--magenta);border-color:rgba(255,77,157,.42);background:rgba(255,77,157,.1)}
 .chip.a{color:var(--amber);border-color:rgba(255,176,32,.42);background:rgba(255,176,32,.1)}
 .chip.g{color:var(--green);border-color:rgba(61,220,132,.42);background:rgba(61,220,132,.1)}
+.chip.b{color:var(--blue);border-color:rgba(77,124,255,.45);background:rgba(77,124,255,.12)}
 .chip.acid{color:var(--acid);border-color:rgba(139,255,90,.4);background:rgba(139,255,90,.09)}
 .chip.r{color:var(--red);border-color:rgba(255,84,112,.42);background:rgba(255,84,112,.1)}
 .card{background:linear-gradient(180deg,var(--surface2),var(--surface));border:1px solid var(--line);border-radius:18px;padding:22px;box-shadow:0 20px 54px rgba(0,0,0,.4)}
 .kicker{font:800 10px var(--font);letter-spacing:.2em;text-transform:uppercase;color:var(--cyan)}
-.kicker.v{color:var(--violet)}.kicker.m{color:var(--magenta)}.kicker.a{color:var(--amber)}.kicker.acid{color:var(--acid)}
+.kicker.v{color:var(--violet)}.kicker.m{color:var(--magenta)}.kicker.a{color:var(--amber)}.kicker.acid{color:var(--acid)}.kicker.b{color:var(--blue)}
 h2.sec{font:900 clamp(24px,3.4vw,38px)/1.12 var(--disp);margin:10px 0 12px;letter-spacing:-.5px}
 h3{font:800 16px var(--font);margin-bottom:10px}
 .lead{color:var(--muted);font-size:15px;max-width:64ch}
@@ -178,11 +180,13 @@ h1 .g2{background:linear-gradient(96deg,var(--cyan),var(--acid));-webkit-backgro
 .stage-card:hover{transform:translateX(6px)}
 .stage-card.s1:hover{border-color:var(--violet);box-shadow:0 16px 40px rgba(124,92,255,.2)}
 .stage-card.s2:hover{border-color:var(--cyan);box-shadow:0 16px 40px rgba(34,211,238,.18)}
-.stage-card.s3:hover{border-color:var(--amber);box-shadow:0 16px 40px rgba(255,176,32,.18)}
+.stage-card.s3:hover{border-color:var(--blue);box-shadow:0 16px 40px rgba(77,124,255,.18)}
+.stage-card.s4:hover{border-color:var(--amber);box-shadow:0 16px 40px rgba(255,176,32,.18)}
 .snum{width:52px;height:52px;border-radius:15px;display:grid;place-items:center;font:900 19px var(--disp);color:#fff}
 .s1 .snum{background:linear-gradient(140deg,var(--violet-deep),var(--violet))}
 .s2 .snum{background:linear-gradient(140deg,#0b6f86,var(--cyan));color:#04222b}
-.s3 .snum{background:linear-gradient(140deg,#a35a06,var(--amber));color:#2a1500}
+.s3 .snum{background:linear-gradient(140deg,#24409e,var(--blue))}
+.s4 .snum{background:linear-gradient(140deg,#a35a06,var(--amber));color:#2a1500}
 .tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
 .demo-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:20px;align-items:start}
 .pcards{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:13px}
@@ -276,6 +280,7 @@ footer{border-top:1px solid var(--line);padding:34px 0 46px;background:rgba(6,7,
       <span class="nav-div"></span>
       <a class="ext" href="app/" data-surface="app">🛒 Студия</a>
       <a class="ext hot" href="live.html" data-surface="live">⚡ Генерация</a>
+      <a class="ext" href="library.html" data-surface="library">📚 Библиотека</a>
       <a class="ext" href="assets.html" data-surface="assets">🎨 Ассеты</a>
       <a class="ext" href="status.html" data-surface="status">📊 Состояние</a>
     </div>
@@ -309,7 +314,7 @@ footer{border-top:1px solid var(--line);padding:34px 0 46px;background:rgba(6,7,
 
       <div class="stack">
         <span class="chip v">OpenRouter</span><span class="chip c">Groq</span><span class="chip m">Anthropic</span>
-        <span class="chip a">Together · Qwen</span><span class="chip acid">Canvas-рендер</span><span class="chip">MediaRecorder</span>
+        <span class="chip a">Together · Qwen</span><span class="chip b">Библиотека</span><span class="chip acid">Canvas-рендер</span>
         <span class="chip g">Без сборки</span><span class="chip r">Ключ на устройстве</span>
       </div>
     </div>
@@ -358,17 +363,17 @@ footer{border-top:1px solid var(--line);padding:34px 0 46px;background:rgba(6,7,
   <div class="wrap">
     <div class="reveal" style="margin-bottom:20px">
       <span class="kicker acid">Продукт целиком</span>
-      <h2 class="sec">Пять поверхностей, один конвейер</h2>
+      <h2 class="sec">Шесть поверхностей, один конвейер</h2>
       <p class="lead">Каждая страница закрывает свой этап и передаёт результат дальше через память браузера. Открывайте в любом порядке — состояние подхватится автоматически.</p>
     </div>
 
     <div class="flowmap reveal">
-      <svg viewBox="0 0 900 250" role="img" aria-label="Схема конвейера: товар, генерация, ассеты, публикация" style="min-width:720px;display:block">
+      <svg viewBox="0 0 900 250" role="img" aria-label="Схема конвейера: товар, генерация, библиотека, ассеты" style="min-width:720px;display:block">
         <defs>
           <linearGradient id="fv" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#4a2dd4"/><stop offset="1" stop-color="#7c5cff"/></linearGradient>
           <linearGradient id="fc" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0b6f86"/><stop offset="1" stop-color="#22d3ee"/></linearGradient>
+          <linearGradient id="fb" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#24409e"/><stop offset="1" stop-color="#4d7cff"/></linearGradient>
           <linearGradient id="fa" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#a35a06"/><stop offset="1" stop-color="#ffb020"/></linearGradient>
-          <linearGradient id="fg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3f7a1e"/><stop offset="1" stop-color="#8bff5a"/></linearGradient>
         </defs>
         <g font-family="Manrope,sans-serif" font-size="12" fill="#eef1ff">
           <rect x="16" y="86" width="164" height="80" rx="15" fill="#141931" stroke="#252d52"/>
@@ -381,20 +386,20 @@ footer{border-top:1px solid var(--line);padding:34px 0 46px;background:rgba(6,7,
           <text x="320" y="136" text-anchor="middle" font-size="10.5" fill="#04222b">свой ключ · поток</text>
           <text x="320" y="153" text-anchor="middle" font-size="10.5" fill="#04222b">live.html</text>
 
-          <rect x="460" y="86" width="164" height="80" rx="15" fill="url(#fa)" opacity=".93"/>
-          <text x="542" y="116" text-anchor="middle" font-weight="800" fill="#2a1500">3 · Ассеты</text>
-          <text x="542" y="136" text-anchor="middle" font-size="10.5" fill="#2a1500">PNG · ролик</text>
-          <text x="542" y="153" text-anchor="middle" font-size="10.5" fill="#2a1500">assets.html</text>
+          <rect x="460" y="86" width="164" height="80" rx="15" fill="url(#fb)" opacity=".93"/>
+          <text x="542" y="116" text-anchor="middle" font-weight="800">3 · Библиотека</text>
+          <text x="542" y="136" text-anchor="middle" font-size="10.5" fill="#dbe6ff">правка · аналитика</text>
+          <text x="542" y="153" text-anchor="middle" font-size="10.5" fill="#dbe6ff">library.html</text>
 
-          <rect x="682" y="86" width="200" height="80" rx="15" fill="url(#fg)" opacity=".93"/>
-          <text x="782" y="116" text-anchor="middle" font-weight="800" fill="#0d2103">4 · Публикация</text>
-          <text x="782" y="136" text-anchor="middle" font-size="10.5" fill="#0d2103">GitHub Pages · соцсети</text>
-          <text x="782" y="153" text-anchor="middle" font-size="10.5" fill="#0d2103">готовые файлы</text>
+          <rect x="682" y="86" width="200" height="80" rx="15" fill="url(#fa)" opacity=".93"/>
+          <text x="782" y="116" text-anchor="middle" font-weight="800" fill="#2a1500">4 · Ассеты</text>
+          <text x="782" y="136" text-anchor="middle" font-size="10.5" fill="#2a1500">PNG · ролик</text>
+          <text x="782" y="153" text-anchor="middle" font-size="10.5" fill="#2a1500">assets.html</text>
 
           <g stroke-width="2.4" fill="none">
             <path class="flow" d="M180 126 H238" stroke="#22d3ee"/>
-            <path class="flow" d="M402 126 H460" stroke="#ffb020"/>
-            <path class="flow" d="M624 126 H682" stroke="#8bff5a"/>
+            <path class="flow" d="M402 126 H460" stroke="#4d7cff"/>
+            <path class="flow" d="M624 126 H682" stroke="#ffb020"/>
           </g>
           <circle id="lit1" cx="98" cy="76" r="5" fill="#7c5cff" class="node-lit" style="color:#7c5cff"/>
           <circle id="lit2" cx="320" cy="76" r="5" fill="#252d52"/>
@@ -402,9 +407,10 @@ footer{border-top:1px solid var(--line);padding:34px 0 46px;background:rgba(6,7,
           <circle id="lit4" cx="782" cy="76" r="5" fill="#252d52"/>
           <text x="98" y="200" text-anchor="middle" font-size="10.5" fill="#6a7297" id="cap1">товар загружен</text>
           <text x="320" y="200" text-anchor="middle" font-size="10.5" fill="#6a7297" id="cap2">ожидает ключ</text>
-          <text x="542" y="200" text-anchor="middle" font-size="10.5" fill="#6a7297" id="cap3">ожидает карточки</text>
-          <text x="782" y="200" text-anchor="middle" font-size="10.5" fill="#6a7297" id="cap4">сайт опубликован</text>
+          <text x="542" y="200" text-anchor="middle" font-size="10.5" fill="#6a7297" id="cap3">ожидает записи</text>
+          <text x="782" y="200" text-anchor="middle" font-size="10.5" fill="#6a7297" id="cap4">ожидает карточки</text>
           <text x="450" y="34" text-anchor="middle" font-size="11" fill="#98a1c6" font-weight="700">Состояние читается из памяти этого браузера</text>
+          <text x="450" y="232" text-anchor="middle" font-size="10.5" fill="#8bff5a">готовые файлы → публикация в соцсетях и на сайте</text>
         </g>
       </svg>
     </div>
@@ -417,16 +423,16 @@ footer{border-top:1px solid var(--line);padding:34px 0 46px;background:rgba(6,7,
   <div class="wrap pipe">
     <div class="pipe-sticky reveal">
       <span class="kicker v">Конвейер</span>
-      <h2 class="sec">Три шага<br>от ссылки до файлов</h2>
+      <h2 class="sec">Четыре шага<br>от ссылки до файлов</h2>
       <p class="lead">Каждый шаг работает автономно и передаёт результат дальше. Ни один этап не требует сервера: ключ живёт на устройстве, рендер идёт в canvas.</p>
       <div class="row" style="margin-top:18px">
-        <span class="chip g">Прямой запрос к API</span><span class="chip c">Поток токенов</span><span class="chip a">Экспорт PNG и видео</span>
+        <span class="chip g">Прямой запрос к API</span><span class="chip c">Поток токенов</span><span class="chip b">Правка в библиотеке</span><span class="chip a">Экспорт PNG и видео</span>
       </div>
       <div class="card" style="margin-top:18px">
         <span class="kicker acid">Что передаётся между шагами</span>
         <p class="note" style="margin-top:8px;color:var(--muted);font-size:12.5px">
-          Генерация складывает контент-пак в память браузера. Мастерская ассетов читает его сама —
-          карточки, цены и выгоды подставляются в макет без ручного копирования. Ключи в эту память не попадают.
+          Генерация складывает контент-пак в память браузера. Библиотека собирает всё в один список и позволяет править —
+          изменения возвращаются в исходное хранилище. Мастерская ассетов читает уже исправленную версию. Ключи в эту память не попадают.
         </p>
       </div>
     </div>
@@ -444,8 +450,14 @@ footer{border-top:1px solid var(--line);padding:34px 0 46px;background:rgba(6,7,
         <div class="row" style="margin-top:12px"><a class="btn btn-c btn-s" href="live.html">Начать генерацию</a></div>
       </div></div>
       <div class="stage-card s3 reveal"><div class="snum">3</div><div>
+        <h3>Библиотека и правка</h3>
+        <p class="note" style="font-size:13px;color:var(--muted)">Все записи в одном списке: поиск по тексту, фильтры по источнику, шесть сортировок, сохранённые виды и массовые действия. Любая карточка и любой текст правятся на месте, изменения уходят обратно в хранилище. График показывает распределение по провайдерам, площадкам и неделям.</p>
+        <div class="tags"><span class="chip b">Правка на месте</span><span class="chip b">График-аналитика</span><span class="chip b">Экспорт JSON и MD</span><span class="chip">Undo</span></div>
+        <div class="row" style="margin-top:12px"><a class="btn btn-b btn-s" href="library.html">Открыть библиотеку</a></div>
+      </div></div>
+      <div class="stage-card s4 reveal"><div class="snum">4</div><div>
         <h3>Ассеты и публикация</h3>
-        <p class="note" style="font-size:13px;color:var(--muted)">Мастерская забирает карточки из генерации и рендерит их в PNG четырёх форматов до 3× разрешения. Раскладка измеряет текст и ужимает его до отрисовки, поэтому заголовки не обрезаются. Ролик собирается из сцен с переходами и записывается в MP4 или WebM.</p>
+        <p class="note" style="font-size:13px;color:var(--muted)">Мастерская забирает карточки и рендерит их в PNG четырёх форматов до 3× разрешения. Раскладка измеряет текст и ужимает его до отрисовки, поэтому заголовки не обрезаются. Ролик собирается из сцен с переходами и записывается в MP4 или WebM.</p>
         <div class="tags"><span class="chip a">4:5 · 1:1 · 9:16 · 16:9</span><span class="chip a">До 3× качества</span><span class="chip a">Запись ролика</span><span class="chip">Пресеты</span></div>
         <div class="row" style="margin-top:12px"><a class="btn btn-a btn-s" href="assets.html">Собрать ассеты</a></div>
       </div></div>
@@ -485,7 +497,7 @@ footer{border-top:1px solid var(--line);padding:34px 0 46px;background:rgba(6,7,
             <textarea class="txtbox" id="dText" spellcheck="false"></textarea>
             <div class="row" style="justify-content:space-between;margin-top:11px">
               <span class="chip" id="dCount">0</span>
-              <span class="row"><button class="btn btn-g btn-s" id="dCopy">📋 Копировать</button><button class="btn btn-g btn-s" id="dDl">💾 .txt</button><a class="btn btn-acid btn-s" href="assets.html">🎨 В ассеты</a></span>
+              <span class="row"><button class="btn btn-g btn-s" id="dCopy">📋 Копировать</button><button class="btn btn-g btn-s" id="dDl">💾 .txt</button><a class="btn btn-b btn-s" href="library.html">📚 В библиотеку</a></span>
             </div>
           </div>
         </div>
@@ -534,7 +546,7 @@ footer{border-top:1px solid var(--line);padding:34px 0 46px;background:rgba(6,7,
     </div>
     <div class="ship">
       <div class="steps reveal">
-        <div class="step"><b>1</b><div><b style="color:var(--text)">Прямо сейчас, без установки.</b> Откройте генерацию, вставьте ключ провайдера, нажмите «Проверить ключ» и соберите контент-пак. Ассеты рендерятся там же в браузере.</div></div>
+        <div class="step"><b>1</b><div><b style="color:var(--text)">Прямо сейчас, без установки.</b> Откройте генерацию, вставьте ключ провайдера, нажмите «Проверить ключ» и соберите контент-пак. Правьте в библиотеке, рендерите в ассетах.</div></div>
         <div class="step"><b>2</b><div><b style="color:var(--text)">Локальная копия.</b> Склонируйте репозиторий и откройте <code style="font-family:var(--mono);color:var(--cyan)">index.html</code> — сборка и зависимости не нужны.</div></div>
         <div class="step"><b>3</b><div><b style="color:var(--text)">Свой сервер позже.</b> Backend добавит команду, общий доступ и биллинг. Студия переключится в LIVE тумблером, а поле «API base» укажет на ваш домен.</div></div>
         <div class="card" style="margin-top:6px">
@@ -591,6 +603,7 @@ Together   → api.together.xyz → Settings">📋</button></div>
       <a class="btn btn-g btn-s" href="#top">↑ Наверх</a>
       <a class="btn btn-g btn-s" href="status.html">📊 Состояние</a>
       <a class="btn btn-c btn-s" href="live.html">⚡ Генерация</a>
+      <a class="btn btn-b btn-s" href="library.html">📚 Библиотека</a>
       <a class="btn btn-p btn-s" href="assets.html">🎨 Ассеты</a>
     </div>
   </div>
@@ -667,8 +680,9 @@ function readState(){
   const gens=parse(store.get("lv_hist"));
   const real=gens.filter(g=>!g.seeded);
   const cards=real.reduce((n,g)=>n+((g.result&&Array.isArray(g.result.cards))?g.result.cards.length:0),0);
+  const extra=parse(store.get("lib_extra"));
   return{
-    gens:gens.length,real:real.length,cards,
+    gens:gens.length,real:real.length,cards,extra:extra.length,
     presets:parse(store.get("as_presets")).length,
     studio:parse(store.get("ams_hist")).length,
     key:!!store.get("lv_key"),
@@ -679,13 +693,16 @@ function readState(){
 }
 const SURFACES=[
   {id:"app",ic:"🛒",n:"Студия",href:"app/",path:"app/",sc:"var(--violet)",
-   d:"Три вкладки: парсер товара, генератор контент-пака и видеостудия. Дизайн-панель карточек, экспорт PNG, PDF-отчёт, история с поиском иundo.",
+   d:"Три вкладки: парсер товара, генератор контент-пака и видеостудия. Дизайн-панель карточек, экспорт PNG, PDF-отчёт, история с поиском и отменой удаления.",
    tags:["Демо без ключа","3 вкладки","PDF-отчёт"]},
   {id:"live",ic:"⚡",n:"Генерация",href:"live.html",path:"live.html",sc:"var(--cyan)",
    d:"Реальный ответ модели по вашему ключу. Шесть провайдеров, потоковый вывод на осциллографе, проверка ключа, автолимит токенов, история и сохранённые виды.",
    tags:["6 провайдеров","Поток токенов","Свой ключ"]},
+  {id:"library",ic:"📚",n:"Библиотека контента",href:"library.html",path:"library.html",sc:"var(--blue)",
+   d:"Все записи в одном списке: правка карточек и текстов на месте, поиск, фильтры, шесть сортировок, график-аналитика и передача записи в мастерскую ассетов.",
+   tags:["Правка на месте","График-аналитика","Экспорт JSON и MD"]},
   {id:"assets",ic:"🎨",n:"Мастерская ассетов",href:"assets.html",path:"assets.html",sc:"var(--amber)",
-   d:"Забирает карточки из генерации и рендерит PNG в четырёх форматах до 3× качества. Собирает вертикальный ролик из сцен и записывает его в файл.",
+   d:"Забирает карточки из библиотеки и рендерит PNG в четырёх форматах до 3× качества. Собирает вертикальный ролик из сцен и записывает его в файл.",
    tags:["4 формата","До 3× PNG","Запись ролика"]},
   {id:"status",ic:"📊",n:"Состояние проекта",href:"status.html",path:"status.html",sc:"var(--acid)",
    d:"Проверяет репозиторий через открытый API GitHub: обязательные файлы, целостность HTML, имя workflow, лишние папки, последнюю сборку и доступность адресов.",
@@ -698,6 +715,7 @@ function paintSurfaces(st){
   $("surfaces").innerHTML=SURFACES.map(s=>{
     let badge="";
     if(s.id==="live")badge=st.real?`<span class="chip g">${st.real} своих генераций</span>`:st.key?'<span class="chip a">ключ сохранён</span>':'<span class="chip">нужен ключ</span>';
+    if(s.id==="library")badge=(st.real+st.extra)?`<span class="chip g">${st.real+st.extra} записей</span>`:'<span class="chip">ждёт генераций</span>';
     if(s.id==="assets")badge=st.cards?`<span class="chip g">${st.cards} карточек готово</span>`:st.presets?`<span class="chip a">${st.presets} пресетов</span>`:'<span class="chip">ждёт карточки</span>';
     if(s.id==="app")badge=st.studio?`<span class="chip c">${st.studio} записей истории</span>`:'<span class="chip c">готова к работе</span>';
     if(s.id==="status")badge='<span class="chip acid">проверяет репозиторий</span>';
@@ -719,28 +737,28 @@ function paintSurfaces(st){
 }
 function paintProgress(st){
   const chips=[
-    `<span class="chip ${st.real?"g":""}">своих генераций: ${st.real}</span>`,
+    `<span class="chip ${st.real?"g":""}">генераций: ${st.real}</span>`,
+    `<span class="chip ${(st.real+st.extra)?"b":""}">в библиотеке: ${st.real+st.extra}</span>`,
     `<span class="chip ${st.cards?"g":""}">карточек: ${st.cards}</span>`,
-    `<span class="chip ${st.presets?"a":""}">пресетов: ${st.presets}</span>`,
     `<span class="chip ${st.key?"a":"r"}">ключ: ${st.key?"сохранён":"не сохранён"}</span>`,
     st.provider?`<span class="chip c">${esc(st.provider)}</span>`:""
   ].filter(Boolean);
   $("stateChips").innerHTML=chips.join("");
   let title,note,acts;
-  if(!st.real){
+  if(!st.real&&!st.extra){
     title=st.key?"Ключ сохранён — можно генерировать":"Начните с генерации";
     note=st.key
-      ?`Провайдер ${st.provider||"выбран"}, модель ${st.model||"указана"}. Откройте генерацию и соберите первый контент-пак — карточки сразу станут доступны мастерской.`
+      ?`Провайдер ${st.provider||"выбран"}, модель ${st.model||"указана"}. Откройте генерацию и соберите первый контент-пак — запись сразу появится в библиотеке.`
       :"Вставьте ключ OpenRouter или Groq в разделе «Генерация». Проверка ключа занимает один запрос, дальше контент-пак собирается за один клик.";
     acts=`<a class="btn btn-c" href="live.html">⚡ Открыть генерацию</a><a class="btn btn-g" href="app/">🛒 Посмотреть студию</a>`;
   }else if(!st.cards){
-    title="Генерации есть, карточек нет";
-    note="Последняя генерация не вернула карточки. Откройте генерацию, поднимите лимит токенов и повторите — мастерская подхватит результат автоматически.";
-    acts=`<a class="btn btn-c" href="live.html">⚡ Повторить генерацию</a>`;
+    title="Записи есть, карточек нет";
+    note="Последняя генерация не вернула карточки. Откройте библиотеку и добавьте их вручную или повторите генерацию с большим лимитом токенов.";
+    acts=`<a class="btn btn-b" href="library.html">📚 Открыть библиотеку</a><a class="btn btn-g" href="live.html">⚡ Повторить</a>`;
   }else{
     title=`Готово к упаковке: ${st.cards} карточек`;
-    note=`${st.last?`Последний набор: «${st.last.title}». `:""}Мастерская заберёт карточки сама — можно сразу экспортировать PNG и собрать вертикальный ролик.`;
-    acts=`<a class="btn btn-a" href="assets.html">🎨 Собрать ассеты</a><a class="btn btn-g" href="live.html">⚡ Ещё генерация</a>`;
+    note=`${st.last?`Последний набор: «${st.last.title}». `:""}Откройте библиотеку, чтобы поправить текст, или сразу переходите в мастерскую — карточки подхватятся сами.`;
+    acts=`<a class="btn btn-b" href="library.html">📚 Библиотека</a><a class="btn btn-a" href="assets.html">🎨 Собрать ассеты</a>`;
   }
   $("nextTitle").textContent=title;
   $("nextNote").textContent=note;
@@ -754,9 +772,10 @@ function paintProgress(st){
   };
   lit("lit1",true,"#7c5cff",{id:"cap1",text:st.studio?`${st.studio} записей в студии`:"товар загружен"});
   lit("lit2",st.real>0,"#22d3ee",{id:"cap2",text:st.real?`${st.real} генераций`:st.key?"ключ сохранён":"ожидает ключ"});
-  lit("lit3",st.cards>0,"#ffb020",{id:"cap3",text:st.cards?`${st.cards} карточек`:st.presets?`${st.presets} пресетов`:"ожидает карточки"});
-  lit("lit4",true,"#8bff5a",{id:"cap4",text:"сайт опубликован"});
-  document.querySelectorAll('[data-surface="live"]').forEach(a=>a.classList.toggle("hot",!st.real));
+  lit("lit3",(st.real+st.extra)>0,"#4d7cff",{id:"cap3",text:(st.real+st.extra)?`${st.real+st.extra} записей`:"ожидает записи"});
+  lit("lit4",st.cards>0,"#ffb020",{id:"cap4",text:st.cards?`${st.cards} карточек`:st.presets?`${st.presets} пресетов`:"ожидает карточки"});
+  document.querySelectorAll('[data-surface="live"]').forEach(a=>a.classList.toggle("hot",!st.real&&!st.extra));
+  document.querySelectorAll('[data-surface="library"]').forEach(a=>a.classList.toggle("hot",(st.real+st.extra)>0));
   document.querySelectorAll('[data-surface="assets"]').forEach(a=>a.classList.toggle("hot",st.cards>0));
 }
 
@@ -1133,8 +1152,9 @@ const SHIP={
 2. Выберите провайдера (OpenRouter — самый надёжный из браузера)
 3. Вставьте API-ключ → «Проверить ключ»
 4. Заполните товар → «Сгенерировать контент-пак»
-5. Откройте «Ассеты» → карточки подхватятся сами
-6. Экспортируйте PNG и запишите ролик`,note:"Ничего устанавливать не нужно. Ключ по умолчанию не сохраняется."},
+5. Откройте «Библиотеку» — запись уже там, правьте текст
+6. Откройте «Ассеты» → карточки подхватятся сами
+7. Экспортируйте PNG и запишите ролик`,note:"Ничего устанавливать не нужно. Ключ по умолчанию не сохраняется."},
   local:{code:`git clone https://github.com/dorinvest13-spec/Marketpro.git
 cd Marketpro
 
@@ -1144,6 +1164,7 @@ open index.html
 # витрина и остальные страницы
 open docs/index.html
 open docs/live.html
+open docs/library.html
 open docs/assets.html
 
 # или локальный сервер
@@ -1222,7 +1243,7 @@ demoData=buildDemo();paintDemo();
 paintApi();paintShip();onScroll();
 window.addEventListener("focus",()=>{const s=readState();paintProgress(s);paintSurfaces(s)});
 setTimeout(()=>{
-  toast(st.real?`Найдено ${st.real} своих генераций — карточки готовы к упаковке в ассетах.`
+  toast(st.real?`Найдено ${st.real} своих генераций — правьте в библиотеке и упаковывайте в ассетах.`
     :"Витрина работает офлайн. Начните с раздела «Генерация»: ключ, товар, контент-пак.","info");
 },700);
 </script>
