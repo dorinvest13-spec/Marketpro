@@ -10,9 +10,9 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="AI Studio">
-<link rel="manifest" href="manifest.webmanifest">
+<link rel="manifest" id="manifestLink" href="manifest.webmanifest">
 <link rel="icon" href="icon.svg" type="image/svg+xml">
-<link rel="apple-touch-icon" href="icon.svg">
+<link rel="apple-touch-icon" id="appleIcon" href="icon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Unbounded:wght@500;700;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
@@ -108,7 +108,7 @@ h3{font:800 13.5px var(--font);margin-bottom:8px}
 .chip.acid{color:var(--acid);border-color:rgba(139,255,90,.4);background:rgba(139,255,90,.09)}
 .chip.m{color:var(--magenta);border-color:rgba(255,77,157,.42);background:rgba(255,77,157,.1)}
 label.lbl{display:block;font-size:10.5px;color:var(--muted);margin-bottom:6px;font-weight:700}
-.input,.select,textarea{width:100%;background:var(--ink);border:1px solid var(--line);color:var(--text);border-radius:11px;padding:10px 12px;font:500 13px var(--font);outline:none;transition:border .2s,box-shadow .2s}
+.input,.select{width:100%;background:var(--ink);border:1px solid var(--line);color:var(--text);border-radius:11px;padding:10px 12px;font:500 13px var(--font);outline:none;transition:border .2s,box-shadow .2s}
 .input:focus,.select:focus{border-color:var(--coral);box-shadow:0 0 0 3px rgba(255,106,61,.2)}
 .select{appearance:none;cursor:pointer;padding-right:30px;background-image:linear-gradient(45deg,transparent 50%,var(--coral) 50%),linear-gradient(135deg,var(--coral) 50%,transparent 50%);background-position:calc(100% - 16px) 50%,calc(100% - 11px) 50%;background-size:5px 5px;background-repeat:no-repeat}
 input[type=color]{width:100%;height:36px;background:var(--ink);border:1px solid var(--line);border-radius:11px;padding:4px;cursor:pointer}
@@ -119,11 +119,6 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;border-radius:50%;bac
 .switch::after{content:"";position:absolute;top:2px;left:2px;width:17px;height:17px;border-radius:50%;background:var(--coral);transition:transform .25s cubic-bezier(.2,.7,.2,1),background .2s}
 .switch[aria-checked="true"]{background:var(--coral-deep)}
 .switch[aria-checked="true"]::after{transform:translateX(19px);background:#fff}
-.stepper{display:flex;align-items:center;gap:6px;background:var(--ink);border:1px solid var(--line);border-radius:11px;padding:4px}
-.stepper button{width:26px;height:26px;border-radius:8px;border:0;background:var(--overlay);color:var(--text);font-size:14px;cursor:pointer;line-height:1}
-.stepper button:hover:not([disabled]){background:var(--coral-deep)}
-.stepper b{flex:1;text-align:center;font:800 13px var(--font)}
-.stepper button[disabled]{opacity:.4;cursor:not-allowed}
 .deck{display:grid;grid-template-columns:repeat(auto-fit,minmax(148px,1fr));gap:10px}
 .ctrl{background:var(--ink);border:1px solid var(--line);border-radius:12px;padding:10px 12px}
 .ctrl .val{float:right;font:800 10.5px var(--font);color:var(--acid)}
@@ -136,6 +131,16 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;border-radius:50%;bac
 .steps{display:flex;flex-direction:column;gap:7px;margin-top:11px}
 .step{display:grid;grid-template-columns:24px 1fr;gap:10px;align-items:start;background:var(--ink);border:1px solid var(--line);border-radius:11px;padding:9px 11px;font-size:12.5px}
 .step .n{width:24px;height:24px;border-radius:7px;display:grid;place-items:center;background:var(--overlay);border:1px solid var(--line);font:800 11px var(--font);color:var(--coral)}
+.checks{display:flex;flex-direction:column;gap:7px;margin-top:11px}
+.chk{display:grid;grid-template-columns:24px 1fr;gap:10px;background:var(--ink);border:1px solid var(--line);border-radius:11px;padding:9px 11px;font-size:12.5px}
+.chk.ok{border-color:rgba(61,220,132,.35)}
+.chk.warn{border-color:rgba(255,176,32,.4)}
+.chk.err{border-color:rgba(255,84,112,.45);background:rgba(255,84,112,.05)}
+.chk .ic{width:24px;height:24px;border-radius:7px;display:grid;place-items:center;font-size:12px}
+.chk.ok .ic{background:rgba(61,220,132,.15);color:var(--green)}
+.chk.warn .ic{background:rgba(255,176,32,.15);color:var(--amber)}
+.chk.err .ic{background:rgba(255,84,112,.15);color:var(--red)}
+.chk .fix{margin-top:6px;font:11px/1.6 var(--mono);color:var(--sand);background:var(--surface);border:1px solid var(--line);border-radius:9px;padding:7px 9px;word-break:break-word}
 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(244px,1fr));gap:13px}
 .tile{border:1px solid var(--line);border-radius:16px;padding:16px;background:linear-gradient(180deg,var(--surface2),var(--surface));position:relative;overflow:hidden;display:flex;flex-direction:column;gap:9px;transition:transform .2s,border-color .2s,box-shadow .2s}
 .tile::before{content:"";position:absolute;inset:0 auto 0 0;width:3px;background:var(--tc)}
@@ -165,7 +170,7 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;border-radius:50%;bac
 .stat.s2 b{color:var(--cyan)}.stat.s3 b{color:var(--acid)}.stat.s4 b{color:var(--amber)}.stat.s5 b{color:var(--magenta)}
 .drawer{position:fixed;top:0;right:0;bottom:0;width:min(440px,100%);z-index:70;background:var(--surface);border-left:1px solid var(--coral);box-shadow:-24px 0 70px rgba(0,0,0,.68);padding:19px;overflow-y:auto;animation:slide .28s cubic-bezier(.2,.7,.2,1) both}
 .scrim{position:fixed;inset:0;z-index:65;background:var(--scrim);backdrop-filter:blur(4px);animation:pop .2s both}
-.code{background:#080402;border:1px solid var(--line);border-radius:11px;padding:12px;font:11px/1.65 var(--mono);color:var(--acid);overflow-x:auto;white-space:pre-wrap;word-break:break-all;margin-top:10px}
+.code{background:#080402;border:1px solid var(--line);border-radius:11px;padding:12px;font:11px/1.65 var(--mono);color:var(--acid);overflow-x:auto;white-space:pre-wrap;word-break:break-all;margin-top:10px;max-height:300px;overflow-y:auto}
 .toasts{position:fixed;left:16px;bottom:calc(16px + env(safe-area-inset-bottom));z-index:90;display:flex;flex-direction:column;gap:9px;width:min(360px,calc(100vw - 32px))}
 .toast{display:flex;gap:10px;align-items:flex-start;padding:12px 14px;border-radius:13px;border:1px solid var(--line);background:var(--surface2);box-shadow:0 16px 44px rgba(0,0,0,.55);font-size:12.5px;animation:pop .3s both}
 .toast.ok{border-color:rgba(61,220,132,.5)}.toast.err{border-color:rgba(255,84,112,.5)}.toast.info{border-color:rgba(255,106,61,.5)}
@@ -175,9 +180,8 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;border-radius:50%;bac
 .empty{text-align:center;padding:26px 16px}
 .empty .ic{font-size:34px;margin-bottom:10px}
 .band{margin-top:18px}
-.grid2{display:grid;grid-template-columns:minmax(240px,300px) 1fr;gap:18px;align-items:start}
 footer{border-top:1px solid var(--line);padding:26px 0;margin-top:22px;background:rgba(12,7,5,.6)}
-@media (max-width:940px){.grid2{grid-template-columns:1fr}.install{grid-template-columns:1fr;justify-items:center;text-align:center}.install .row{justify-content:center}}
+@media (max-width:940px){.install{grid-template-columns:1fr;justify-items:center;text-align:center}.install .row{justify-content:center}}
 @media (max-width:720px){
   :root{--nav:56px}
   .wrap{padding:0 12px}.nav-in{padding:0 12px;gap:6px}.brand b{display:none}
@@ -210,21 +214,27 @@ footer{border-top:1px solid var(--line);padding:26px 0;margin-top:22px;backgroun
       <div style="min-width:0">
         <span class="kicker acid">Один тап вместо закладок</span>
         <h1>Поставьте студию <em>на рабочий стол</em></h1>
-        <p class="lead">Иконка открывает пускатель напрямую — без адресной строки, без риска попасть на старый сайт. Разделы сохраняются в кэш и открываются даже без сети.</p>
+        <p class="lead">Иконка открывает пускатель напрямую — без адресной строки и без риска попасть на старый сайт. Иконки PNG 192 и 512 собираются прямо здесь, поэтому браузеру не нужны дополнительные файлы в репозитории.</p>
         <div class="row" style="margin-top:13px">
           <button class="btn btn-p" id="installBtn">📲 Установить приложение</button>
           <button class="btn btn-g" id="howBtn">Как вручную</button>
+          <button class="btn btn-c btn-s" id="recheckBtn">⟳ Перепроверить</button>
+        </div>
+        <div class="row" style="margin-top:10px">
+          <span class="chip" id="mfChip">манифест: —</span>
           <span class="chip" id="swChip">офлайн-кэш: —</span>
+          <span class="chip" id="icChip">иконки: —</span>
         </div>
         <div class="steps hidden" id="howBox">
-          <div class="step"><span class="n">1</span><span><b>Android · Chrome:</b> меню «⋮» → «Добавить на главный экран» → «Установить». Если пункта нет — «Создать ярлык».</span></div>
-          <div class="step"><span class="n">2</span><span><b>iPhone · Safari:</b> кнопка «Поделиться» (квадрат со стрелкой) → «На экран «Домой»» → «Добавить».</span></div>
+          <div class="step"><span class="n">1</span><span><b>Android · Chrome:</b> меню «⋮» → «Установить приложение». Если пункта нет — «Добавить на главный экран» или «Создать ярлык».</span></div>
+          <div class="step"><span class="n">2</span><span><b>iPhone · Safari:</b> «Поделиться» → «На экран «Домой»» → «Добавить». Safari не поддерживает установку из манифеста, ярлык — единственный путь.</span></div>
           <div class="step"><span class="n">3</span><span><b>Яндекс.Браузер:</b> меню «⋮» → «Добавить ярлык» / «На главный экран».</span></div>
-          <div class="step"><span class="n">4</span><span>Иконка появится на рабочем столе. Открывайте студию только через неё — адрес всегда правильный.</span></div>
+          <div class="step"><span class="n">4</span><span>Ярлык открывает тот же адрес и работает так же. Разница только в отсутствии отдельного окна без адресной строки.</span></div>
         </div>
         <div class="stats" id="stats"></div>
       </div>
     </div>
+    <div class="checks" id="installChecks"></div>
   </div>
 
   <div class="card band rise" style="animation-delay:.06s">
@@ -238,7 +248,7 @@ footer{border-top:1px solid var(--line);padding:26px 0;margin-top:22px;backgroun
     <div class="deck">
       <div class="ctrl"><label class="lbl" for="icShape">Форма</label><select class="select" id="icShape"><option value="squircle">Скруглённый квадрат</option><option value="circle">Круг</option><option value="hex">Шестиугольник</option><option value="shield">Щит</option></select></div>
       <div class="ctrl"><label class="lbl" for="icPalette">Палитра</label><select class="select" id="icPalette"><option value="ember">Уголь</option><option value="circuit">Схема</option><option value="candy">Карамель</option><option value="forest">Хвоя</option></select></div>
-      <div class="ctrl"><label class="lbl" for="icGlyph">Знак</label><select class="select" id="icGlyph"><option value="ai">AI</option><option value="rocket">Ракета</option><option value="bolt">Молния</option><option value="grid">Сетка</option><option value="m">M</option></select></div>
+      <div class="ctrl"><label class="lbl" for="icGlyph">Знак</label><select class="select" id="icGlyph"><option value="ai">AI</option><option value="m">M</option><option value="bolt">Молния</option><option value="grid">Сетка</option><option value="ring">Кольцо</option></select></div>
       <div class="ctrl"><label class="lbl" for="icBg">Фон</label><select class="select" id="icBg"><option value="linear">Градиент</option><option value="mesh">Mesh</option><option value="rays">Лучи</option><option value="solid">Однотонный</option></select></div>
       <div class="ctrl"><label class="lbl" for="icAccent">Акцент</label><input type="color" id="icAccent" value="#ff6a3d"></div>
       <div class="ctrl"><label class="lbl" for="icSecond">Второй цвет</label><input type="color" id="icSecond" value="#ff4d9d"></div>
@@ -249,14 +259,14 @@ footer{border-top:1px solid var(--line);padding:26px 0;margin-top:22px;backgroun
       <div class="ctrl"><label class="lbl" for="icScale">Размер знака <span class="val" id="icScaleVal">1.00×</span></label><input type="range" id="icScale" min="0.6" max="1.4" step="0.02" value="1"></div>
       <div class="ctrl"><label class="lbl" for="icStroke">Обводка <span class="val" id="icStrokeVal">2</span></label><input type="range" id="icStroke" min="0" max="10" step="1" value="2"></div>
       <div class="ctrl"><label class="lbl">Сетка</label><div class="row" style="gap:8px"><button class="switch" id="icGrid" role="switch" aria-checked="false" aria-label="Направляющая сетка"></button><span class="note">направляющие</span></div></div>
-      <div class="ctrl"><label class="lbl">Safe-zone</label><div class="row" style="gap:8px"><button class="switch" id="icSafe" role="switch" aria-checked="false" aria-label="Зона для maskable"></button><span class="note">для maskable</span></div></div>
+      <div class="ctrl"><label class="lbl">Safe-zone</label><div class="row" style="gap:8px"><button class="switch" id="icSafe" role="switch" aria-checked="false" aria-label="Зона maskable"></button><span class="note">для maskable</span></div></div>
       <div class="ctrl"><label class="lbl">Живой знак</label><div class="row" style="gap:8px"><button class="switch" id="icLive" role="switch" aria-checked="true" aria-label="Анимация знака"></button><span class="note">пульсация</span></div></div>
     </div>
     <div class="row" style="margin-top:12px">
       <button class="btn btn-a btn-s" id="icPng512">⬇ PNG 512</button>
       <button class="btn btn-a btn-s" id="icPng192">⬇ PNG 192</button>
       <button class="btn btn-m btn-s" id="icPngMask">⬇ Maskable 512</button>
-      <button class="btn btn-g btn-s" id="icSvg">⬇ SVG</button>
+      <button class="btn btn-acid btn-s" id="icApply">✓ Применить к установке</button>
       <span class="note" id="icNote"></span>
     </div>
   </div>
@@ -291,7 +301,7 @@ footer{border-top:1px solid var(--line);padding:26px 0;margin-top:22px;backgroun
     </div>
     <div class="grid" id="grid"></div>
     <div class="views" id="views"></div>
-    <p class="note" style="margin-top:11px">Закреплённые разделы идут первыми и попадают в ярлыки приложения при установке. При сортировке «Ручной порядок» плитки можно перетаскивать за ⠿. Частота открытий считается на этом устройстве.</p>
+    <p class="note" style="margin-top:11px">Закреплённые разделы идут первыми. При сортировке «Ручной порядок» плитки перетаскиваются за ⠿. Частота открытий считается на этом устройстве.</p>
   </div>
 
   <div class="card band rise" style="animation-delay:.18s">
@@ -313,7 +323,7 @@ footer{border-top:1px solid var(--line);padding:26px 0;margin-top:22px;backgroun
 </main>
 
 <footer><div class="wrap row" style="justify-content:space-between">
-  <span class="note">AI Marketing Studio · пускатель · устанавливается на рабочий стол, работает офлайн</span>
+  <span class="note">AI Marketing Studio · пускатель · иконки и манифест собираются на устройстве</span>
   <span class="row"><a class="btn btn-g btn-s" href="index.html">Витрина</a><a class="btn btn-g btn-s" href="app/">Студия</a></span>
 </div></footer>
 
@@ -385,32 +395,23 @@ function mix(h1,h2,t){const a=hex2rgb(h1),b=hex2rgb(h2);return`rgb(${Math.round(
 
 /* ---------- sections ---------- */
 const SECTIONS=[
-  {id:"live",ic:"⚡",n:"Генерация",p:"live.html",g:"content",c:"var(--cyan)",
-   d:"Реальный ответ модели по вашему ключу. Шесть провайдеров, потоковый вывод на осциллографе, проверка ключа, автолимит токенов."},
-  {id:"library",ic:"📚",n:"Библиотека",p:"library.html",g:"content",c:"var(--blue)",
-   d:"Все записи в одном списке: правка карточек и текстов на месте, поиск, шесть сортировок, график-аналитика, экспорт."},
-  {id:"assets",ic:"🎨",n:"Ассеты",p:"assets.html",g:"prod",c:"var(--amber)",
-   d:"Карточки в PNG четырёх форматов до 3× качества. Вертикальный ролик из сцен с записью в MP4 или WebM."},
-  {id:"publish",ic:"🚀",n:"Публикация",p:"publish.html",g:"prod",c:"var(--green)",
-   d:"Превью поста в интерфейсе каждой площадки, чек-лист готовности, переход в редактор, отметка о выходе и план недели."},
-  {id:"settings",ic:"⚙️",n:"Настройки и данные",p:"settings.html",g:"service",c:"var(--magenta)",
-   d:"Резервная копия одним файлом, восстановление, единая точка настройки ключа, проверка целостности данных."},
-  {id:"status",ic:"📊",n:"Состояние проекта",p:"status.html",g:"service",c:"var(--acid)",
-   d:"Живая проверка репозитория через API GitHub: файлы, целостность HTML, имя workflow, сборки, доступность адресов."},
-  {id:"vitrine",ic:"🏠",n:"Витрина",p:"index.html",g:"overview",c:"var(--coral)",
-   d:"Обзор конвейера, живой кадр ролика с двенадцатью параметрами, прогресс из памяти браузера, справочник API."},
-  {id:"studio",ic:"🛒",n:"Студия",p:"app/",g:"overview",c:"#7c5cff",
-   d:"Три вкладки на эталонных данных: парсер товара, генератор контент-пака, видеостудия. Работает без ключа."}
+  {id:"live",ic:"⚡",n:"Генерация",p:"live.html",g:"content",c:"var(--cyan)",d:"Реальный ответ модели по вашему ключу. Шесть провайдеров, потоковый вывод на осциллографе, проверка ключа, автолимит токенов."},
+  {id:"library",ic:"📚",n:"Библиотека",p:"library.html",g:"content",c:"var(--blue)",d:"Все записи в одном списке: правка карточек и текстов на месте, поиск, шесть сортировок, график-аналитика, экспорт."},
+  {id:"assets",ic:"🎨",n:"Ассеты",p:"assets.html",g:"prod",c:"var(--amber)",d:"Карточки в PNG четырёх форматов до 3× качества. Вертикальный ролик из сцен с записью в MP4 или WebM."},
+  {id:"publish",ic:"🚀",n:"Публикация",p:"publish.html",g:"prod",c:"var(--green)",d:"Превью поста в интерфейсе каждой площадки, чек-лист готовности, переход в редактор, отметка о выходе и план недели."},
+  {id:"settings",ic:"⚙️",n:"Настройки и данные",p:"settings.html",g:"service",c:"var(--magenta)",d:"Резервная копия одним файлом, восстановление, единая точка настройки ключа, проверка целостности данных."},
+  {id:"status",ic:"📊",n:"Состояние проекта",p:"status.html",g:"service",c:"var(--acid)",d:"Живая проверка репозитория через API GitHub: файлы, целостность HTML, имя workflow, сборки, доступность адресов."},
+  {id:"vitrine",ic:"🏠",n:"Витрина",p:"index.html",g:"overview",c:"var(--coral)",d:"Обзор конвейера, живой кадр ролика с параметрами, прогресс из памяти браузера, справочник API."},
+  {id:"studio",ic:"🛒",n:"Студия",p:"app/",g:"overview",c:"#7c5cff",d:"Три вкладки на эталонных данных: парсер товара, генератор контент-пака, видеостудия. Работает без ключа."}
 ];
 const GROUPS={content:"Контент",prod:"Продакшн",service:"Служебные",overview:"Обзор"};
 const state={
   pins:new Set(arrOf("launch_pins").length?arrOf("launch_pins"):["live","library","assets","publish"]),
-  order:arrOf("launch_order"),
-  uses:objOf("launch_uses"),
-  views:arrOf("launch_views"),
+  order:arrOf("launch_order"),uses:objOf("launch_uses"),views:arrOf("launch_views"),
   sel:new Set(),q:"",sort:"pinned",filter:"all",
   icon:{shape:"squircle",palette:"ember",glyph:"ai",bg:"linear",accent:"#ff6a3d",second:"#ff4d9d",
-    radius:22,glow:1,grain:.05,rotate:0,scale:1,stroke:2,grid:false,safe:false,live:true}
+    radius:22,glow:1,grain:.05,rotate:0,scale:1,stroke:2,grid:false,safe:false,live:true},
+  icons:{i192:null,i512:null,mask:null},manifestUrl:null,swOk:false,promptEvent:null
 };
 try{const v=JSON.parse(store.get("launch_icon")||"null");if(v&&typeof v==="object")Object.assign(state.icon,v)}catch{}
 SECTIONS.forEach(s=>{if(!state.order.includes(s.id))state.order.push(s.id)});
@@ -418,21 +419,19 @@ function savePins(){store.set("launch_pins",JSON.stringify([...state.pins]))}
 function saveOrder(){store.set("launch_order",JSON.stringify(state.order))}
 function bumpUse(id){state.uses[id]=(Number(state.uses[id])||0)+1;store.set("launch_uses",JSON.stringify(state.uses))}
 
-/* ---------- icon studio ---------- */
+/* ---------- icon painter (единый источник для превью, экспорта и манифеста) ---------- */
 const PAL={
   ember:["#ff6a3d","#ff4d9d","#ffb020","#ffd9a0"],
   circuit:["#22d3ee","#4d7cff","#8bff5a","#ffd9a0"],
   candy:["#ff4d9d","#7c5cff","#22d3ee","#ffb020"],
   forest:["#3ddc84","#8bff5a","#22d3ee","#ffd9a0"]
 };
-const cvI=$("iconCv"),cxi=cvI.getContext("2d");
-let iconRaf=null,iconT0=performance.now();
 function shapePath(ctx,shape,x,y,w,h,r){
   ctx.beginPath();
   if(shape==="circle"){ctx.arc(x+w/2,y+h/2,Math.min(w,h)/2,0,Math.PI*2);return}
   if(shape==="hex"){
     const cx=x+w/2,cy=y+h/2,R=Math.min(w,h)/2;
-    for(let i=0;i<6;i++){const a=-Math.PI/2+i*Math.PI/3;const px=cx+Math.cos(a)*R,py=cy+Math.sin(a)*R;i?ctx.lineTo(px,py):ctx.moveTo(px,py)}
+    for(let i=0;i<6;i++){const a=-Math.PI/2+i*Math.PI/3,px=cx+Math.cos(a)*R,py=cy+Math.sin(a)*R;i?ctx.lineTo(px,py):ctx.moveTo(px,py)}
     ctx.closePath();return;
   }
   if(shape==="shield"){
@@ -450,35 +449,28 @@ function drawGlyph(ctx,kind,cx,cy,S,color,rot,scale){
   ctx.save();
   ctx.translate(cx,cy);ctx.rotate(rot*Math.PI/180);ctx.scale(scale,scale);
   ctx.fillStyle=color;ctx.strokeStyle=color;ctx.lineJoin="round";ctx.lineCap="round";
+  const u=S/100;
   if(kind==="ai"){
-    const u=S/100;
     ctx.beginPath();
-    ctx.moveTo(-34*u,38*u);ctx.lineTo(-8*u,-38*u);ctx.lineTo(10*u,-38*u);ctx.lineTo(36*u,38*u);
-    ctx.lineTo(18*u,38*u);ctx.lineTo(13*u,24*u);ctx.lineTo(-11*u,24*u);ctx.lineTo(-16*u,38*u);ctx.closePath();ctx.fill();
-    ctx.beginPath();ctx.moveTo(-8*u,10*u);ctx.lineTo(8*u,10*u);ctx.lineTo(0,-12*u);ctx.closePath();
-    ctx.save();ctx.globalCompositeOperation="destination-out";ctx.fill();ctx.restore();
+    ctx.moveTo(-36*u,38*u);ctx.lineTo(-9*u,-38*u);ctx.lineTo(9*u,-38*u);ctx.lineTo(36*u,38*u);
+    ctx.lineTo(19*u,38*u);ctx.lineTo(13*u,22*u);ctx.lineTo(-13*u,22*u);ctx.lineTo(-19*u,38*u);
+    ctx.closePath();
+    ctx.moveTo(-8*u,8*u);ctx.lineTo(8*u,8*u);ctx.lineTo(0,-14*u);ctx.closePath();
+    ctx.fill("evenodd");
     ctx.beginPath();
     if(ctx.roundRect)ctx.roundRect(44*u,-38*u,15*u,76*u,4*u);else ctx.rect(44*u,-38*u,15*u,76*u);
     ctx.fill();
   }else if(kind==="m"){
-    const u=S/100;ctx.lineWidth=13*u;
+    ctx.lineWidth=13*u;
     ctx.beginPath();ctx.moveTo(-36*u,38*u);ctx.lineTo(-36*u,-38*u);ctx.lineTo(0,10*u);ctx.lineTo(36*u,-38*u);ctx.lineTo(36*u,38*u);ctx.stroke();
-  }else if(kind==="rocket"){
-    const u=S/100;
-    ctx.beginPath();ctx.moveTo(0,-44*u);
-    ctx.quadraticCurveTo(22*u,-12*u,20*u,20*u);
-    ctx.lineTo(-20*u,20*u);ctx.quadraticCurveTo(-22*u,-12*u,0,-44*u);ctx.closePath();ctx.fill();
-    ctx.beginPath();ctx.moveTo(-20*u,4*u);ctx.lineTo(-38*u,30*u);ctx.lineTo(-16*u,24*u);ctx.closePath();ctx.fill();
-    ctx.beginPath();ctx.moveTo(20*u,4*u);ctx.lineTo(38*u,30*u);ctx.lineTo(16*u,24*u);ctx.closePath();ctx.fill();
-    ctx.save();ctx.globalCompositeOperation="destination-out";
-    ctx.beginPath();ctx.arc(0,-12*u,9*u,0,Math.PI*2);ctx.fill();ctx.restore();
-    ctx.beginPath();ctx.moveTo(-9*u,24*u);ctx.lineTo(0,46*u);ctx.lineTo(9*u,24*u);ctx.closePath();ctx.fill();
   }else if(kind==="bolt"){
-    const u=S/100;
     ctx.beginPath();ctx.moveTo(10*u,-46*u);ctx.lineTo(-26*u,6*u);ctx.lineTo(-2*u,6*u);
     ctx.lineTo(-12*u,46*u);ctx.lineTo(28*u,-8*u);ctx.lineTo(2*u,-8*u);ctx.closePath();ctx.fill();
+  }else if(kind==="ring"){
+    ctx.lineWidth=12*u;
+    ctx.beginPath();ctx.arc(0,0,32*u,0,Math.PI*2);ctx.stroke();
+    ctx.beginPath();ctx.arc(0,-32*u,9*u,0,Math.PI*2);ctx.fill();
   }else{
-    const u=S/100;
     for(let r=0;r<3;r++)for(let c=0;c<3;c++){
       const s=(r===1&&c===1)?18*u:13*u;
       const px=(c-1)*28*u-s/2,py=(r-1)*28*u-s/2;
@@ -489,98 +481,109 @@ function drawGlyph(ctx,kind,cx,cy,S,color,rot,scale){
   }
   ctx.restore();
 }
-function renderIcon(now){
+function paintIcon(ctx,S,c,o){
+  const maskable=!!o.maskable,pulse=o.pulse||1;
+  const pal=PAL[c.palette]||PAL.ember;
+  const inset=maskable?S*.1:0;
+  const inner=S-inset*2;
+  ctx.save();
+  if(maskable){ctx.fillStyle=mix(c.accent,"#0c0705",.5);ctx.fillRect(0,0,S,S)}
+  ctx.translate(inset,inset);
+  const T=inner,pad=T*.055,size=T-pad*2;
+  ctx.save();
+  shapePath(ctx,c.shape,pad,pad,size,size,size*(c.radius/100));
+  ctx.clip();
+  ctx.fillStyle="#0c0705";ctx.fillRect(0,0,T,T);
+  if(c.bg==="solid"){
+    const g=ctx.createLinearGradient(pad,pad,pad+size,pad+size);
+    g.addColorStop(0,mix(c.accent,"#0c0705",.35));g.addColorStop(1,mix(c.accent,"#0c0705",.62));
+    ctx.fillStyle=g;ctx.fillRect(0,0,T,T);
+  }else if(c.bg==="mesh"){
+    ctx.fillStyle=mix(c.accent,"#0c0705",.72);ctx.fillRect(0,0,T,T);
+    [[.82,.16,.52,c.accent],[.16,.86,.55,c.second],[.5,.5,.42,pal[2]]].forEach(([fx,fy,fr,col])=>{
+      const g=ctx.createRadialGradient(T*fx,T*fy,0,T*fx,T*fy,T*fr);
+      g.addColorStop(0,rgba(col,.72));g.addColorStop(1,rgba(col,0));
+      ctx.fillStyle=g;ctx.fillRect(0,0,T,T);
+    });
+  }else if(c.bg==="rays"){
+    ctx.fillStyle=mix(c.accent,"#0c0705",.66);ctx.fillRect(0,0,T,T);
+    ctx.save();ctx.translate(T*.5,T*.42);ctx.globalCompositeOperation="lighter";
+    for(let i=0;i<14;i++){
+      const a=i/14*Math.PI*2;
+      const g=ctx.createLinearGradient(0,0,Math.cos(a)*T,Math.sin(a)*T);
+      g.addColorStop(0,rgba(i%2?c.second:c.accent,.5));g.addColorStop(1,rgba(i%2?c.second:c.accent,0));
+      ctx.fillStyle=g;ctx.beginPath();ctx.moveTo(0,0);ctx.arc(0,0,T,a-.075,a+.075);ctx.closePath();ctx.fill();
+    }
+    ctx.restore();
+  }else{
+    const g=ctx.createLinearGradient(pad,pad,pad+size,pad+size);
+    g.addColorStop(0,c.accent);g.addColorStop(.5,c.second);g.addColorStop(1,pal[3]);
+    ctx.fillStyle=g;ctx.fillRect(0,0,T,T);
+  }
+  const gl=ctx.createRadialGradient(T*.3,T*.24,0,T*.3,T*.24,T*.8);
+  gl.addColorStop(0,rgba("#ffd9a0",.34*clamp(c.glow,0,2)));gl.addColorStop(1,rgba("#ffd9a0",0));
+  ctx.fillStyle=gl;ctx.fillRect(0,0,T,T);
+  if(c.grid&&!maskable){
+    ctx.save();ctx.strokeStyle="rgba(12,7,5,.2)";ctx.lineWidth=Math.max(1,T/220);
+    for(let i=1;i<4;i++){
+      ctx.beginPath();ctx.moveTo(pad+size*i/4,pad);ctx.lineTo(pad+size*i/4,pad+size);ctx.stroke();
+      ctx.beginPath();ctx.moveTo(pad,pad+size*i/4);ctx.lineTo(pad+size,pad+size*i/4);ctx.stroke();
+    }
+    ctx.restore();
+  }
+  ctx.save();
+  ctx.shadowBlur=18*c.glow*(T/132);ctx.shadowColor=rgba("#0c0705",.5);
+  drawGlyph(ctx,c.glyph,T/2,T/2,size*.6*pulse,"#fff8f2",c.rotate,c.scale*(maskable?.84:1));
+  ctx.restore();
+  ctx.save();ctx.shadowBlur=12*c.glow*(T/132);ctx.shadowColor=rgba(pal[2],.9);
+  ctx.fillStyle=pal[2];ctx.beginPath();ctx.arc(T*.76,T*.24,size*.045,0,Math.PI*2);ctx.fill();ctx.restore();
+  if(c.grain>0){
+    ctx.save();ctx.globalAlpha=c.grain;
+    const n=Math.round(T*T/240),px=Math.max(1,T/400);
+    for(let i=0;i<n;i++){ctx.fillStyle=Math.random()>.5?"#fff":"#000";ctx.fillRect(Math.random()*T,Math.random()*T,px,px)}
+    ctx.restore();
+  }
+  ctx.restore();
+  if(c.stroke>0){
+    ctx.save();ctx.lineWidth=c.stroke*.6*(T/132);ctx.strokeStyle=rgba(pal[3],.55);
+    shapePath(ctx,c.shape,pad,pad,size,size,size*(c.radius/100));ctx.stroke();ctx.restore();
+  }
+  if(c.safe&&!maskable){
+    ctx.save();ctx.strokeStyle=rgba("#8bff5a",.75);ctx.lineWidth=Math.max(1,T/180);ctx.setLineDash([T/40,T/40]);
+    ctx.beginPath();ctx.arc(T/2,T/2,size*.4,0,Math.PI*2);ctx.stroke();
+    ctx.setLineDash([]);ctx.fillStyle=rgba("#8bff5a",.9);
+    ctx.font=`600 ${Math.max(8,T*.062)}px Manrope,sans-serif`;ctx.textAlign="center";
+    ctx.fillText("maskable",T/2,T*.94);ctx.restore();
+  }
+  ctx.restore();
+}
+const cvI=$("iconCv"),cxi=cvI.getContext("2d");
+let iconRaf=null,iconT0=performance.now();
+function renderPreview(now){
   const c=state.icon;
   const dpr=Math.min(window.devicePixelRatio||1,2);
   const CSS=cvI.clientWidth||132;
   const W=Math.round(CSS*dpr);
   if(cvI.width!==W){cvI.width=W;cvI.height=W}
   cxi.setTransform(dpr,0,0,dpr,0,0);
-  const S=CSS,pad=S*.055,size=S-pad*2;
-  cxi.clearRect(0,0,S,S);
-  const pal=PAL[c.palette]||PAL.ember;
-  const A=c.accent,B=c.second;
+  cxi.clearRect(0,0,CSS,CSS);
   const pulse=c.live&&!RM?1+Math.sin((now-iconT0)/900)*.022:1;
-
-  cxi.save();
-  shapePath(cxi,c.shape,pad,pad,size,size,size*(c.radius/100));
-  cxi.clip();
-  cxi.fillStyle="#0c0705";cxi.fillRect(0,0,S,S);
-  if(c.bg==="solid"){
-    const g=cxi.createLinearGradient(pad,pad,pad+size,pad+size);
-    g.addColorStop(0,mix(A,"#0c0705",.35));g.addColorStop(1,mix(A,"#0c0705",.62));
-    cxi.fillStyle=g;cxi.fillRect(0,0,S,S);
-  }else if(c.bg==="mesh"){
-    cxi.fillStyle=mix(A,"#0c0705",.72);cxi.fillRect(0,0,S,S);
-    [[.82,.16,.52,A],[.16,.86,.55,B],[.5,.5,.42,pal[2]]].forEach(([fx,fy,fr,col])=>{
-      const g=cxi.createRadialGradient(S*fx,S*fy,0,S*fx,S*fy,S*fr);
-      g.addColorStop(0,rgba(col,.72));g.addColorStop(1,rgba(col,0));
-      cxi.fillStyle=g;cxi.fillRect(0,0,S,S);
-    });
-  }else if(c.bg==="rays"){
-    cxi.fillStyle=mix(A,"#0c0705",.66);cxi.fillRect(0,0,S,S);
-    cxi.save();cxi.translate(S*.5,S*.42);cxi.globalCompositeOperation="lighter";
-    for(let i=0;i<14;i++){
-      const a=i/14*Math.PI*2;
-      const g=cxi.createLinearGradient(0,0,Math.cos(a)*S,Math.sin(a)*S);
-      g.addColorStop(0,rgba(i%2?B:A,.5));g.addColorStop(1,rgba(i%2?B:A,0));
-      cxi.fillStyle=g;cxi.beginPath();cxi.moveTo(0,0);cxi.arc(0,0,S,a-.075,a+.075);cxi.closePath();cxi.fill();
-    }
-    cxi.restore();
-  }else{
-    const g=cxi.createLinearGradient(pad,pad,pad+size,pad+size);
-    g.addColorStop(0,A);g.addColorStop(.5,B);g.addColorStop(1,pal[3]);
-    cxi.fillStyle=g;cxi.fillRect(0,0,S,S);
-  }
-  const gl=cxi.createRadialGradient(S*.3,S*.24,0,S*.3,S*.24,S*.8);
-  gl.addColorStop(0,rgba("#ffd9a0",.34*clamp(c.glow,0,2)));gl.addColorStop(1,rgba("#ffd9a0",0));
-  cxi.fillStyle=gl;cxi.fillRect(0,0,S,S);
-
-  if(c.grid){
-    cxi.save();cxi.strokeStyle="rgba(12,7,5,.2)";cxi.lineWidth=1;
-    for(let i=1;i<4;i++){
-      cxi.beginPath();cxi.moveTo(pad+size*i/4,pad);cxi.lineTo(pad+size*i/4,pad+size);cxi.stroke();
-      cxi.beginPath();cxi.moveTo(pad,pad+size*i/4);cxi.lineTo(pad+size,pad+size*i/4);cxi.stroke();
-    }
-    cxi.restore();
-  }
-  cxi.save();
-  cxi.shadowBlur=18*c.glow;cxi.shadowColor=rgba("#0c0705",.5);
-  drawGlyph(cxi,c.glyph,S/2,S/2,size*.62*pulse,"#fff8f2",c.rotate,c.scale);
-  cxi.restore();
-
-  const dotR=size*.045;
-  cxi.save();cxi.shadowBlur=12*c.glow;cxi.shadowColor=rgba(pal[2],.9);
-  cxi.fillStyle=pal[2];cxi.beginPath();cxi.arc(S*.76,S*.24,dotR,0,Math.PI*2);cxi.fill();cxi.restore();
-
-  if(c.grain>0){
-    cxi.save();cxi.globalAlpha=c.grain;
-    const n=Math.round(S*S/240);
-    for(let i=0;i<n;i++){cxi.fillStyle=Math.random()>.5?"#fff":"#000";cxi.fillRect(Math.random()*S,Math.random()*S,1.2,1.2)}
-    cxi.restore();
-  }
-  cxi.restore();
-
-  if(c.stroke>0){
-    cxi.save();cxi.lineWidth=c.stroke*.6;
-    cxi.strokeStyle=rgba(pal[3],.55);
-    shapePath(cxi,c.shape,pad,pad,size,size,size*(c.radius/100));cxi.stroke();cxi.restore();
-  }
-  if(c.safe){
-    cxi.save();cxi.strokeStyle=rgba("#8bff5a",.75);cxi.lineWidth=1.4;cxi.setLineDash([5,5]);
-    cxi.beginPath();cxi.arc(S/2,S/2,size*.4,0,Math.PI*2);cxi.stroke();
-    cxi.setLineDash([]);cxi.fillStyle=rgba("#8bff5a",.9);
-    cxi.font=`600 ${Math.max(8,S*.062)}px Manrope,sans-serif`;cxi.textAlign="center";
-    cxi.fillText("maskable",S/2,S*.94);cxi.restore();
-  }
+  paintIcon(cxi,CSS,c,{pulse});
 }
-function iconLoop(now){renderIcon(now);iconRaf=requestAnimationFrame(iconLoop)}
+function iconLoop(now){renderPreview(now);iconRaf=requestAnimationFrame(iconLoop)}
 function startIcon(){if(iconRaf===null&&state.icon.live&&!RM&&!document.hidden){iconT0=performance.now();iconRaf=requestAnimationFrame(iconLoop)}}
 function stopIcon(){if(iconRaf!==null){cancelAnimationFrame(iconRaf);iconRaf=null}}
-function iconKick(){if(state.icon.live&&!RM){startIcon()}else{stopIcon();renderIcon(performance.now())}}
+function iconKick(){if(state.icon.live&&!RM)startIcon();else{stopIcon();renderPreview(performance.now())}}
 document.addEventListener("visibilitychange",()=>{document.hidden?stopIcon():iconKick()});
-window.addEventListener("resize",()=>renderIcon(performance.now()));
+window.addEventListener("resize",()=>renderPreview(performance.now()));
 window.addEventListener("beforeunload",stopIcon);
+
+function iconCanvas(size,maskable){
+  const cv=document.createElement("canvas");cv.width=size;cv.height=size;
+  const ctx=cv.getContext("2d");
+  paintIcon(ctx,size,state.icon,{maskable});
+  return cv;
+}
 function syncIcon(){
   const c=state.icon;
   $("icShape").value=c.shape;$("icPalette").value=c.palette;$("icGlyph").value=c.glyph;$("icBg").value=c.bg;
@@ -594,15 +597,12 @@ function syncIcon(){
   $("icGrid").setAttribute("aria-checked",String(c.grid));
   $("icSafe").setAttribute("aria-checked",String(c.safe));
   $("icLive").setAttribute("aria-checked",String(c.live));
-  $("icNote").textContent=`${c.shape} · ${c.glyph} · ${c.bg} · знак ${c.scale.toFixed(2)}× ${c.rotate}° · экспорт в PNG и SVG`;
+  $("icNote").textContent=`${c.shape} · ${c.glyph} · ${c.bg} · знак ${c.scale.toFixed(2)}× ${c.rotate}°`;
   store.set("launch_icon",JSON.stringify(c));
   iconKick();
 }
 $("icShape").onchange=e=>{state.icon.shape=e.target.value;syncIcon()};
-$("icPalette").onchange=e=>{
-  state.icon.palette=e.target.value;
-  const p=PAL[e.target.value];state.icon.accent=p[0];state.icon.second=p[1];syncIcon();
-};
+$("icPalette").onchange=e=>{state.icon.palette=e.target.value;const p=PAL[e.target.value];state.icon.accent=p[0];state.icon.second=p[1];syncIcon()};
 $("icGlyph").onchange=e=>{state.icon.glyph=e.target.value;syncIcon()};
 $("icBg").onchange=e=>{state.icon.bg=e.target.value;syncIcon()};
 $("icAccent").oninput=e=>{state.icon.accent=e.target.value;syncIcon()};
@@ -618,131 +618,108 @@ $("icLive").onclick=()=>{state.icon.live=!state.icon.live;syncIcon()};
 $("icReset").onclick=()=>{
   state.icon={shape:"squircle",palette:"ember",glyph:"ai",bg:"linear",accent:"#ff6a3d",second:"#ff4d9d",
     radius:22,glow:1,grain:.05,rotate:0,scale:1,stroke:2,grid:false,safe:false,live:true};
-  syncIcon();toast("Иконка сброшена");
+  syncIcon();buildManifest();toast("Иконка сброшена");
 };
 $("icRandom").onclick=()=>{
   const pick=a=>a[Math.floor(Math.random()*a.length)];
   const pk=pick(Object.keys(PAL)),p=PAL[pk];
-  Object.assign(state.icon,{shape:pick(["squircle","circle","hex","shield"]),palette:pk,glyph:pick(["ai","rocket","bolt","grid","m"]),
+  Object.assign(state.icon,{shape:pick(["squircle","circle","hex","shield"]),palette:pk,glyph:pick(["ai","m","bolt","grid","ring"]),
     bg:pick(["linear","mesh","rays","solid"]),accent:p[0],second:p[1],
     radius:Math.floor(Math.random()*46),glow:+(Math.random()*2.2).toFixed(1),grain:+(Math.random()*.2).toFixed(2),
     rotate:Math.floor(Math.random()*41)-20,scale:+(.75+Math.random()*.55).toFixed(2),stroke:Math.floor(Math.random()*8)});
-  syncIcon();beep("tick");toast("Случайная иконка");
+  syncIcon();buildManifest();beep("tick");toast("Случайная иконка применена к установке");
 };
-function exportIcon(size,maskable,name){
-  const c=state.icon;
-  const cv=document.createElement("canvas");cv.width=size;cv.height=size;
-  const ctx=cv.getContext("2d");
-  const pal=PAL[c.palette]||PAL.ember;
-  const inset=maskable?size*.1:0;
-  const S=size-inset*2;
-  ctx.fillStyle=maskable?mix(c.accent,"#0c0705",.5):"#0c0705";
-  ctx.fillRect(0,0,size,size);
-  ctx.save();ctx.translate(inset,inset);
-  const pad=S*.055,inner=S-pad*2;
-  ctx.save();
-  shapePath(ctx,c.shape,pad,pad,inner,inner,inner*(c.radius/100));ctx.clip();
-  if(c.bg==="mesh"){
-    ctx.fillStyle=mix(c.accent,"#0c0705",.72);ctx.fillRect(0,0,S,S);
-    [[.82,.16,.52,c.accent],[.16,.86,.55,c.second],[.5,.5,.42,pal[2]]].forEach(([fx,fy,fr,col])=>{
-      const g=ctx.createRadialGradient(S*fx,S*fy,0,S*fx,S*fy,S*fr);
-      g.addColorStop(0,rgba(col,.72));g.addColorStop(1,rgba(col,0));
-      ctx.fillStyle=g;ctx.fillRect(0,0,S,S);
-    });
-  }else if(c.bg==="rays"){
-    ctx.fillStyle=mix(c.accent,"#0c0705",.66);ctx.fillRect(0,0,S,S);
-    ctx.save();ctx.translate(S*.5,S*.42);ctx.globalCompositeOperation="lighter";
-    for(let i=0;i<14;i++){
-      const a=i/14*Math.PI*2;
-      const g=ctx.createLinearGradient(0,0,Math.cos(a)*S,Math.sin(a)*S);
-      g.addColorStop(0,rgba(i%2?c.second:c.accent,.5));g.addColorStop(1,rgba(i%2?c.second:c.accent,0));
-      ctx.fillStyle=g;ctx.beginPath();ctx.moveTo(0,0);ctx.arc(0,0,S,a-.075,a+.075);ctx.closePath();ctx.fill();
-    }
-    ctx.restore();
-  }else if(c.bg==="solid"){
-    const g=ctx.createLinearGradient(pad,pad,pad+inner,pad+inner);
-    g.addColorStop(0,mix(c.accent,"#0c0705",.35));g.addColorStop(1,mix(c.accent,"#0c0705",.62));
-    ctx.fillStyle=g;ctx.fillRect(0,0,S,S);
-  }else{
-    const g=ctx.createLinearGradient(pad,pad,pad+inner,pad+inner);
-    g.addColorStop(0,c.accent);g.addColorStop(.5,c.second);g.addColorStop(1,pal[3]);
-    ctx.fillStyle=g;ctx.fillRect(0,0,S,S);
-  }
-  const gl=ctx.createRadialGradient(S*.3,S*.24,0,S*.3,S*.24,S*.8);
-  gl.addColorStop(0,rgba("#ffd9a0",.34*clamp(c.glow,0,2)));gl.addColorStop(1,rgba("#ffd9a0",0));
-  ctx.fillStyle=gl;ctx.fillRect(0,0,S,S);
-  ctx.save();ctx.shadowBlur=18*c.glow*(S/132);ctx.shadowColor=rgba("#0c0705",.5);
-  drawGlyph(ctx,c.glyph,S/2,S/2,inner*.62,"#fff8f2",c.rotate,c.scale*(maskable?.86:1));
-  ctx.restore();
-  ctx.save();ctx.shadowBlur=12*c.glow*(S/132);ctx.shadowColor=rgba(pal[2],.9);
-  ctx.fillStyle=pal[2];ctx.beginPath();ctx.arc(S*.76,S*.24,inner*.045,0,Math.PI*2);ctx.fill();ctx.restore();
-  if(c.grain>0){
-    ctx.save();ctx.globalAlpha=c.grain;
-    const n=Math.round(S*S/240);
-    for(let i=0;i<n;i++){ctx.fillStyle=Math.random()>.5?"#fff":"#000";ctx.fillRect(Math.random()*S,Math.random()*S,size/512*1.4,size/512*1.4)}
-    ctx.restore();
-  }
-  ctx.restore();
-  if(c.stroke>0){
-    ctx.save();ctx.lineWidth=c.stroke*.6*(S/132);ctx.strokeStyle=rgba(pal[3],.55);
-    shapePath(ctx,c.shape,pad,pad,inner,inner,inner*(c.radius/100));ctx.stroke();ctx.restore();
-  }
-  ctx.restore();
+function exportPng(size,maskable,name){
+  const cv=iconCanvas(size,maskable);
   $("iconFlash").classList.remove("go");void $("iconFlash").offsetWidth;$("iconFlash").classList.add("go");
   beep("shutter");
-  cv.toBlob(b=>{
-    if(!b)return toast("Не удалось создать PNG","err");
-    download(b,name);toast(`Сохранено: ${name}`);
-  },"image/png");
+  cv.toBlob(b=>{if(!b)return toast("Не удалось создать PNG","err");download(b,name);toast("Сохранено: "+name)},"image/png");
 }
-$("icPng512").onclick=()=>exportIcon(512,false,"icon-512.png");
-$("icPng192").onclick=()=>exportIcon(192,false,"icon-192.png");
-$("icPngMask").onclick=()=>exportIcon(512,true,"icon-maskable-512.png");
-$("icSvg").onclick=()=>{
-  const c=state.icon,pal=PAL[c.palette]||PAL.ember;
-  const svg=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
-<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${c.accent}"/><stop offset=".5" stop-color="${c.second}"/><stop offset="1" stop-color="${pal[3]}"/></linearGradient>
-<radialGradient id="h" cx=".3" cy=".24" r=".8"><stop offset="0" stop-color="#ffd9a0" stop-opacity="${(.34*clamp(c.glow,0,2)).toFixed(2)}"/><stop offset="1" stop-color="#ffd9a0" stop-opacity="0"/></radialGradient></defs>
-<rect width="512" height="512" fill="#0c0705"/>
-<rect x="28" y="28" width="456" height="456" rx="${Math.round(456*c.radius/100)}" fill="url(#g)"/>
-<rect x="28" y="28" width="456" height="456" rx="${Math.round(456*c.radius/100)}" fill="url(#h)"/>
-<g transform="translate(256 256) rotate(${c.rotate}) scale(${c.scale.toFixed(2)})" fill="#fff8f2">
-<text x="0" y="34" text-anchor="middle" font-family="Unbounded,Manrope,sans-serif" font-size="180" font-weight="900">${esc(c.glyph==="ai"?"AI":c.glyph==="m"?"M":c.glyph==="bolt"?"⚡":c.glyph==="rocket"?"🚀":"▦")}</text></g>
-<circle cx="389" cy="123" r="20" fill="${pal[2]}"/>
-</svg>`;
-  download(new Blob([svg],{type:"image/svg+xml"}),"icon-custom.svg");
-  toast("SVG сохранён");
-};
+$("icPng512").onclick=()=>exportPng(512,false,"icon-512.png");
+$("icPng192").onclick=()=>exportPng(192,false,"icon-192.png");
+$("icPngMask").onclick=()=>exportPng(512,true,"icon-maskable-512.png");
+$("icApply").onclick=()=>{buildManifest();beep("ok");toast("Иконки пересобраны — можно устанавливать")};
+
+/* ---------- runtime manifest ---------- */
+function buildManifest(){
+  try{
+    const c192=iconCanvas(192,false),c512=iconCanvas(512,false),cm=iconCanvas(512,true);
+    state.icons.i192=c192.toDataURL("image/png");
+    state.icons.i512=c512.toDataURL("image/png");
+    state.icons.mask=cm.toDataURL("image/png");
+    $("appleIcon").setAttribute("href",state.icons.i192);
+    const pinned=SECTIONS.filter(s=>state.pins.has(s.id)).slice(0,4);
+    const mf={
+      name:"AI Marketing Studio",
+      short_name:"AI Studio",
+      description:"Конвейер товарного контента: генерация, библиотека, ассеты, публикация.",
+      lang:"ru",dir:"ltr",
+      id:abs("launch.html"),
+      start_url:abs("launch.html"),
+      scope:abs("./"),
+      display:"standalone",
+      display_override:["standalone","minimal-ui","browser"],
+      orientation:"any",
+      background_color:"#0c0705",
+      theme_color:"#ff6a3d",
+      categories:["productivity","business","utilities"],
+      icons:[
+        {src:state.icons.i192,sizes:"192x192",type:"image/png",purpose:"any"},
+        {src:state.icons.i512,sizes:"512x512",type:"image/png",purpose:"any"},
+        {src:state.icons.mask,sizes:"512x512",type:"image/png",purpose:"maskable"}
+      ],
+      shortcuts:(pinned.length?pinned:SECTIONS.slice(0,4)).map(s=>({name:s.n,short_name:s.n.slice(0,12),url:abs(s.p)}))
+    };
+    const href="data:application/manifest+json;charset=utf-8,"+encodeURIComponent(JSON.stringify(mf));
+    $("manifestLink").setAttribute("href",href);
+    state.manifestUrl=href;
+    $("mfChip").textContent="манифест: собран";$("mfChip").className="chip g";
+    $("icChip").textContent="иконки: PNG 192 · 512 · maskable";$("icChip").className="chip g";
+    paintInstallChecks();
+    return true;
+  }catch(e){
+    $("mfChip").textContent="манифест: базовый";$("mfChip").className="chip a";
+    $("icChip").textContent="иконки: не собраны";$("icChip").className="chip r";
+    paintInstallChecks();
+    return false;
+  }
+}
 
 /* ---------- install ---------- */
-let deferred=null;
 const isIOS=/iPad|iPhone|iPod/.test(navigator.userAgent)&&!window.MSStream;
 const standalone=window.matchMedia("(display-mode: standalone)").matches||navigator.standalone===true;
-function paintInstall(){
-  const label=standalone?"✓ Установлено":deferred?"📲 Установить приложение":isIOS?"📲 Как установить на iPhone":"📲 Как установить";
+function paintInstallBtn(){
+  const label=standalone?"✓ Установлено":state.promptEvent?"📲 Установить приложение":isIOS?"📲 Как установить на iPhone":"📲 Способ установки";
   $("installBtn").textContent=label;
   $("installTop").textContent=standalone?"✓":"📲";
-  $("installBtn").disabled=standalone;
-  $("installTop").disabled=standalone;
-  if(standalone)$("howBox").classList.add("hidden");
+  $("installBtn").disabled=standalone;$("installTop").disabled=standalone;
 }
-window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();deferred=e;paintInstall()});
-window.addEventListener("appinstalled",()=>{deferred=null;paintInstall();beep("ok");toast("Приложение установлено — иконка на рабочем столе")});
+window.addEventListener("beforeinstallprompt",e=>{
+  e.preventDefault();state.promptEvent=e;paintInstallBtn();paintInstallChecks();
+});
+window.addEventListener("appinstalled",()=>{
+  state.promptEvent=null;paintInstallBtn();paintInstallChecks();beep("ok");
+  toast("Приложение установлено — иконка на рабочем столе");
+});
 async function doInstall(){
   if(standalone)return toast("Уже открыто как приложение","info");
-  if(deferred){
+  if(!state.icons.i512)buildManifest();
+  if(state.promptEvent){
     try{
-      deferred.prompt();
-      const res=await deferred.userChoice;
+      state.promptEvent.prompt();
+      const res=await state.promptEvent.userChoice;
       if(res&&res.outcome==="accepted"){beep("ok");toast("Установка началась")}
       else toast("Установка отменена — можно вернуться позже","info");
-    }catch{toast("Браузер не дал показать окно — используйте инструкцию","info");$("howBox").classList.remove("hidden")}
-    deferred=null;paintInstall();return;
+    }catch{
+      $("howBox").classList.remove("hidden");
+      toast("Браузер не показал окно — используйте инструкцию","info");
+    }
+    state.promptEvent=null;paintInstallBtn();paintInstallChecks();return;
   }
   $("howBox").classList.remove("hidden");
   $("howBox").scrollIntoView({behavior:"smooth",block:"center"});
   beep("tick");
-  toast(isIOS?"Safari: Поделиться → На экран «Домой»":"Меню браузера → Добавить на главный экран","info");
+  toast(isIOS?"Safari: Поделиться → На экран «Домой»":"Меню «⋮» → Установить приложение / Создать ярлык","info");
 }
 $("installBtn").onclick=doInstall;
 $("installTop").onclick=doInstall;
@@ -751,29 +728,50 @@ $("howBtn").onclick=()=>{
   if(!b.classList.contains("hidden"))b.scrollIntoView({behavior:"smooth",block:"center"});
   beep("tick");
 };
-paintInstall();
+function paintInstallChecks(){
+  const https=location.protocol==="https:"||location.hostname==="localhost"||location.hostname==="127.0.0.1";
+  const rows=[];
+  rows.push(https?{s:"ok",t:"Защищённое соединение",d:location.protocol}
+    :{s:"err",t:"Нужен HTTPS",d:location.protocol,fix:"Откройте сайт по адресу https://…github.io/… — по http или file:// установка невозможна."});
+  rows.push(state.icons.i512?{s:"ok",t:"Иконки PNG 192 и 512 готовы",d:"собраны на устройстве"}
+    :{s:"err",t:"Иконки не собраны",d:"canvas toDataURL",fix:"Нажмите «Применить к установке». Если браузер блокирует canvas — откройте страницу в обычном, не приватном окне."});
+  rows.push(state.manifestUrl?{s:"ok",t:"Манифест подставлен в страницу",d:"start_url · scope · display: standalone"}
+    :{s:"warn",t:"Используется базовый манифест",d:"manifest.webmanifest",fix:"В нём только SVG-иконки — Chrome может отказать. Нажмите «Применить к установке»."});
+  rows.push(state.swOk?{s:"ok",t:"Офлайн-кэш активен",d:"sw.js"}
+    :{s:"warn",t:"Офлайн-кэш ещё не активен",d:"sw.js",fix:"Обновите страницу один раз — сервис-воркер зарегистрируется. Для установки в Chrome он обязателен."});
+  rows.push(standalone?{s:"ok",t:"Открыто как приложение",d:"display-mode: standalone"}
+    :state.promptEvent?{s:"ok",t:"Браузер разрешил установку",d:"beforeinstallprompt получен"}
+    :{s:"warn",t:"Браузер пока не предложил установку",d:"beforeinstallprompt не пришёл",
+      fix:"Chrome показывает предложение не сразу: нужно 30 секунд взаимодействия и два визита. Нажмите «Перепроверить» через полминуты или используйте «Создать ярлык» — результат тот же."});
+  if(isIOS)rows.push({s:"warn",t:"Safari не устанавливает из манифеста",d:"iOS",fix:"Поделиться → На экран «Домой». Это единственный поддерживаемый путь на iPhone."});
+  $("installChecks").innerHTML=rows.map(r=>`<div class="chk ${r.s}">
+    <span class="ic">${r.s==="ok"?"✓":r.s==="warn"?"!":"✕"}</span>
+    <div style="min-width:0"><b style="font:700 12.5px var(--font)">${esc(r.t)}</b>
+      ${r.d?`<div class="note" style="word-break:break-all;margin-top:3px">${esc(r.d)}</div>`:""}
+      ${r.fix?`<div class="fix">${esc(r.fix)}</div>`:""}</div></div>`).join("");
+}
+$("recheckBtn").onclick=async()=>{
+  const b=$("recheckBtn");b.disabled=true;const old=b.textContent;b.innerHTML='<span class="spin"></span>';
+  buildManifest();
+  await initSW();
+  paintInstallChecks();paintInstallBtn();
+  b.disabled=false;b.textContent=old;beep("tick");
+  toast(state.promptEvent?"Браузер готов — нажмите «Установить»":"Проверка обновлена","info");
+};
 
-/* ---------- service worker & network ---------- */
-let swReg=null;
+/* ---------- service worker ---------- */
 async function initSW(){
-  if(!("serviceWorker" in navigator)){$("swChip").textContent="офлайн-кэш: не поддерживается";$("swChip").className="chip r";return}
+  if(!("serviceWorker" in navigator)){
+    $("swChip").textContent="офлайн-кэш: не поддерживается";$("swChip").className="chip r";state.swOk=false;return;
+  }
   try{
-    swReg=await navigator.serviceWorker.register("sw.js",{scope:"./"});
-    $("swChip").textContent="офлайн-кэш: включён";$("swChip").className="chip g";
-    navigator.serviceWorker.addEventListener("message",e=>{
-      if(e.data&&e.data.type==="pong")$("swChip").textContent="офлайн-кэш: "+e.data.version;
-    });
-    if(swReg.active)swReg.active.postMessage("ping");
-    swReg.addEventListener("updatefound",()=>{
-      const nw=swReg.installing;
-      if(!nw)return;
-      nw.addEventListener("statechange",()=>{
-        if(nw.state==="installed"&&navigator.serviceWorker.controller){
-          toast("Обновление загружено","info",null);
-        }
-      });
-    });
-  }catch(e){
+    const reg=await navigator.serviceWorker.register("sw.js",{scope:"./"});
+    await navigator.serviceWorker.ready;
+    state.swOk=!!(navigator.serviceWorker.controller||reg.active);
+    $("swChip").textContent=state.swOk?"офлайн-кэш: активен":"офлайн-кэш: регистрируется";
+    $("swChip").className="chip "+(state.swOk?"g":"a");
+  }catch{
+    state.swOk=false;
     $("swChip").textContent="офлайн-кэш: недоступен";$("swChip").className="chip a";
   }
 }
@@ -784,7 +782,7 @@ function paintNet(){
 }
 window.addEventListener("online",()=>{paintNet();toast("Сеть вернулась","ok")});
 window.addEventListener("offline",()=>{paintNet();toast("Нет сети — работают сохранённые разделы","info")});
-paintNet();initSW();
+paintNet();
 $("warmBtn").onclick=async()=>{
   const btn=$("warmBtn");btn.disabled=true;const old=btn.textContent;
   let ok=0,fail=0;
@@ -803,12 +801,10 @@ $("warmBtn").onclick=async()=>{
 function paintStats(){
   const gens=arrOf("lv_hist"),real=gens.filter(g=>!g.seeded);
   const cards=real.reduce((n,g)=>n+((g?.result?.cards||[]).length),0);
-  const extra=arrOf("lib_extra");
-  const pub=objOf("pub_state");
   let published=0;
-  Object.values(pub).forEach(p=>{if(p?.platforms)Object.values(p.platforms).forEach(x=>{if(x?.status==="done")published++})});
+  Object.values(objOf("pub_state")).forEach(p=>{if(p?.platforms)Object.values(p.platforms).forEach(x=>{if(x?.status==="done")published++})});
   $("stats").innerHTML=[
-    ["",real.length,"генераций"],["s2",real.length+extra.length,"в библиотеке"],
+    ["",real.length,"генераций"],["s2",real.length+arrOf("lib_extra").length,"в библиотеке"],
     ["s4",cards,"карточек"],["s3",published,"вышло"],["s5",state.pins.size,"закреплено"]
   ].map(([c,v,l])=>`<div class="stat ${c}"><b>${esc(v)}</b><span>${esc(l)}</span></div>`).join("");
 }
@@ -889,10 +885,10 @@ function paintBulk(){
 function togglePin(id){
   const was=state.pins.has(id);
   was?state.pins.delete(id):state.pins.add(id);
-  savePins();paintGrid();paintStats();beep("pin");
+  savePins();paintGrid();paintStats();buildManifest();beep("pin");
   const s=SECTIONS.find(x=>x.id===id);
   toast(`${s?s.n:id}: ${was?"снято с закрепа":"закреплено"}`,"info",()=>{
-    was?state.pins.add(id):state.pins.delete(id);savePins();paintGrid();paintStats();
+    was?state.pins.add(id):state.pins.delete(id);savePins();paintGrid();paintStats();buildManifest();
   });
 }
 $("selAll").onchange=()=>{
@@ -904,21 +900,21 @@ $("copySel").onclick=()=>copy(SECTIONS.filter(s=>state.sel.has(s.id)).map(s=>`${
 $("pinSel").onclick=()=>{
   const before=new Set(state.pins);
   state.sel.forEach(id=>state.pins.add(id));
-  savePins();state.sel.clear();paintGrid();paintStats();beep("pin");
-  toast("Закреплено","ok",()=>{state.pins=before;savePins();paintGrid();paintStats()});
+  savePins();state.sel.clear();paintGrid();paintStats();buildManifest();beep("pin");
+  toast("Закреплено","ok",()=>{state.pins=before;savePins();paintGrid();paintStats();buildManifest()});
 };
 $("unpinSel").onclick=()=>{
   const before=new Set(state.pins);
   state.sel.forEach(id=>state.pins.delete(id));
-  savePins();state.sel.clear();paintGrid();paintStats();beep("tick");
-  toast("Снято с закрепа","info",()=>{state.pins=before;savePins();paintGrid();paintStats()});
+  savePins();state.sel.clear();paintGrid();paintStats();buildManifest();beep("tick");
+  toast("Снято с закрепа","info",()=>{state.pins=before;savePins();paintGrid();paintStats();buildManifest()});
 };
 $("pinAll").onclick=()=>{
   const before=new Set(state.pins);
   const all=state.pins.size===SECTIONS.length;
   state.pins=all?new Set():new Set(SECTIONS.map(s=>s.id));
-  savePins();paintGrid();paintStats();beep("pin");
-  toast(all?"Все сняты с закрепа":"Все разделы закреплены","info",()=>{state.pins=before;savePins();paintGrid();paintStats()});
+  savePins();paintGrid();paintStats();buildManifest();beep("pin");
+  toast(all?"Все сняты с закрепа":"Все разделы закреплены","info",()=>{state.pins=before;savePins();paintGrid();paintStats();buildManifest()});
 };
 $("q").oninput=e=>{state.q=e.target.value;paintGrid()};
 $("sort").onchange=e=>{state.sort=e.target.value;paintGrid()};
@@ -984,12 +980,17 @@ function openDetail(id){
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&detailId){$("drawerHost").innerHTML="";detailId=null}});
 
 /* ---------- init ---------- */
-syncIcon();paintStats();paintGrid();paintViews();
-window.addEventListener("focus",()=>{paintStats();paintGrid()});
+syncIcon();paintStats();paintGrid();paintViews();paintInstallBtn();
+buildManifest();
+initSW().then(()=>{paintInstallChecks();paintInstallBtn()});
+paintInstallChecks();
+window.addEventListener("focus",()=>{paintStats();paintGrid();paintInstallChecks()});
+setTimeout(()=>{paintInstallChecks();paintInstallBtn()},12000);
 setTimeout(()=>{
   toast(standalone?"Открыто как приложение — разделы под рукой."
-    :"Нажмите «Установить», чтобы получить иконку на рабочем столе. Работает и без установки.","info");
-},700);
+    :state.promptEvent?"Браузер готов: нажмите «Установить приложение»."
+    :"Иконки собраны. Если Chrome пока не предлагает установку — «Создать ярлык» даёт тот же результат.","info");
+},900);
 </script>
 </body>
 </html>
