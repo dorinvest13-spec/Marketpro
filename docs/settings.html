@@ -1,0 +1,1275 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Настройки и данные — AI Marketing Studio</title>
+<meta name="description" content="Резервная копия всех генераций, восстановление, управление ключом и проверка целостности данных.">
+<meta name="theme-color" content="#ff4d9d">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Unbounded:wght@500;700;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0a0510;--surface:#150b1c;--surface2:#1e1027;--overlay:#2c1838;--scrim:rgba(8,3,12,.88);--line:#3d2249;
+  --pink:#ff4d9d;--pink-deep:#a8195f;--cyan:#22d3ee;--lime:#8bff5a;--amber:#ffb020;
+  --blue:#4d7cff;--violet:#7c5cff;--red:#ff5470;--green:#3ddc84;--sand:#ffd9a0;--slate:#a08fa8;
+  --text:#fbeaf3;--muted:#b795ab;--dim:#7d6480;
+  --font:'Manrope',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+  --disp:'Unbounded',var(--font);--mono:'JetBrains Mono',ui-monospace,Consolas,monospace;
+  --nav:62px;--pad:14px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--font);background:var(--ink);color:var(--text);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased;line-height:1.5}
+::selection{background:var(--pink);color:#fff}
+*{scrollbar-width:thin;scrollbar-color:var(--pink-deep) var(--surface)}
+::-webkit-scrollbar{width:11px;height:11px}
+::-webkit-scrollbar-track{background:var(--surface);border-left:1px solid var(--line)}
+::-webkit-scrollbar-thumb{background:linear-gradient(var(--pink-deep),var(--pink) 55%,var(--sand));border-radius:9px;border:2px solid var(--surface)}
+::-webkit-scrollbar-thumb:hover{background:linear-gradient(var(--cyan),var(--pink))}
+::-webkit-scrollbar-corner{background:var(--surface)}
+:focus-visible{outline:2px solid var(--lime);outline-offset:3px;border-radius:6px}
+a{color:inherit}
+.hidden{display:none!important}
+.amb{position:fixed;inset:0;z-index:-3;background:
+  radial-gradient(58% 46% at 6% 2%,rgba(255,77,157,.24),transparent 62%),
+  radial-gradient(46% 40% at 96% 6%,rgba(124,92,255,.16),transparent 62%),
+  radial-gradient(52% 48% at 80% 98%,rgba(34,211,238,.11),transparent 62%),
+  radial-gradient(40% 34% at 18% 78%,rgba(139,255,90,.07),transparent 64%),var(--ink)}
+.amb::before{content:"";position:absolute;inset:-25%;background:
+  radial-gradient(30% 26% at 32% 36%,rgba(255,77,157,.18),transparent 70%),
+  radial-gradient(26% 24% at 68% 64%,rgba(124,92,255,.13),transparent 70%);
+  animation:drift 28s ease-in-out infinite alternate;filter:blur(15px)}
+.amb::after{content:"";position:absolute;inset:0;opacity:.06;mix-blend-mode:overlay;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E")}
+.mesh{position:fixed;inset:0;z-index:-2;pointer-events:none;opacity:.32;
+  background-image:linear-gradient(rgba(255,77,157,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(255,77,157,.06) 1px,transparent 1px);
+  background-size:58px 58px;mask-image:radial-gradient(80% 62% at 50% 20%,#000,transparent)}
+@keyframes drift{from{transform:translate3d(-3%,-2%,0) rotate(-2deg)}to{transform:translate3d(3%,3%,0) rotate(2deg)}}
+@keyframes rise{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+@keyframes pop{from{opacity:0;transform:translateY(8px) scale(.98)}to{opacity:1;transform:none}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes pulse{0%,100%{opacity:.35}50%{opacity:1}}
+@keyframes slide{from{opacity:0;transform:translateX(24px)}to{opacity:1;transform:none}}
+@keyframes shutter{0%{opacity:0}30%{opacity:.8}100%{opacity:0}}
+.rise{animation:rise .55s cubic-bezier(.2,.7,.2,1) both}
+.wrap{max-width:1340px;margin:0 auto;padding:0 18px}
+.nav{position:fixed;top:0;left:0;right:0;height:var(--nav);z-index:50;backdrop-filter:blur(20px);background:rgba(10,5,16,.9);border-bottom:1px solid var(--line)}
+.nav-in{max-width:1340px;margin:0 auto;height:100%;padding:0 18px;display:flex;align-items:center;gap:9px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;flex:none}
+.mark{width:36px;height:36px;border-radius:11px;display:grid;place-items:center;font:900 12px var(--disp);color:#fff;
+  background:conic-gradient(from 200deg,var(--pink),var(--violet),var(--cyan),var(--amber),var(--pink));box-shadow:0 0 20px rgba(255,77,157,.55)}
+.brand b{font:700 14px var(--disp);background:linear-gradient(90deg,#fff,var(--pink) 50%,var(--sand));-webkit-background-clip:text;background-clip:text;color:transparent;white-space:nowrap}
+.nav-right{display:flex;gap:6px;align-items:center;margin-left:auto;overflow-x:auto;scrollbar-width:none}
+.nav-right::-webkit-scrollbar{display:none}
+.pill{display:inline-flex;align-items:center;gap:7px;font:700 10.5px var(--font);padding:5px 10px;border-radius:999px;border:1px solid var(--line);background:var(--overlay);color:var(--muted);white-space:nowrap}
+.pill i{width:8px;height:8px;border-radius:50%;background:var(--pink);box-shadow:0 0 9px var(--pink);display:block;animation:pulse 2.6s infinite}
+main{padding:calc(var(--nav) + 22px) 0 90px}
+.card{background:linear-gradient(180deg,var(--surface2),var(--surface));border:1px solid var(--line);border-radius:18px;padding:var(--pad);box-shadow:0 20px 54px rgba(0,0,0,.5)}
+.card.hot{border-color:rgba(255,77,157,.45);box-shadow:0 20px 54px rgba(168,25,95,.24)}
+.kicker{font:800 10px var(--font);letter-spacing:.2em;text-transform:uppercase;color:var(--pink)}
+.kicker.c{color:var(--cyan)}.kicker.v{color:var(--violet)}.kicker.a{color:var(--amber)}.kicker.lime{color:var(--lime)}.kicker.g{color:var(--green)}
+h1{font:900 clamp(23px,3.6vw,34px)/1.08 var(--disp);letter-spacing:-.9px;margin:9px 0 10px}
+h1 em{font-style:normal;background:linear-gradient(96deg,var(--pink),var(--violet) 55%,var(--cyan));-webkit-background-clip:text;background-clip:text;color:transparent}
+h2{font:800 16px var(--font);margin-bottom:11px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+h3{font:800 13.5px var(--font);margin-bottom:8px}
+.lead{color:var(--muted);font-size:14px;max-width:62ch}
+.note{font-size:11.5px;color:var(--dim);line-height:1.6}
+.row{display:flex;gap:9px;flex-wrap:wrap;align-items:center}
+.warnbox{display:flex;gap:10px;align-items:flex-start;background:rgba(255,176,32,.08);border:1px solid rgba(255,176,32,.38);border-radius:12px;padding:11px 13px;font-size:12px;color:var(--sand)}
+.btn{border:0;cursor:pointer;font:700 12.5px var(--font);border-radius:11px;padding:10px 15px;display:inline-flex;align-items:center;gap:7px;justify-content:center;text-decoration:none;color:#fff;transition:transform .15s,box-shadow .22s,border-color .2s,opacity .2s}
+.btn:active:not([disabled]){transform:scale(.97)}
+.btn-p{background:linear-gradient(100deg,var(--pink-deep),var(--pink) 52%,var(--sand));box-shadow:0 9px 26px rgba(255,77,157,.38)}
+.btn-p:hover:not([disabled]){box-shadow:0 13px 38px rgba(255,77,157,.58)}
+.btn-c{background:linear-gradient(100deg,#0b6f86,var(--cyan));color:#03222b}
+.btn-a{background:linear-gradient(100deg,#a35a06,var(--amber));color:#2a1500}
+.btn-v{background:linear-gradient(100deg,#4a2dd4,var(--violet))}
+.btn-lime{background:linear-gradient(100deg,#3f7a1e,var(--lime));color:#0d2103}
+.btn-r{background:linear-gradient(100deg,#a81f36,var(--red))}
+.btn-g{background:var(--overlay);border:1px solid var(--line);color:var(--text)}
+.btn-g:hover:not([disabled]){border-color:var(--pink)}
+.btn-s{padding:7px 11px;font-size:11.5px;border-radius:9px}
+.btn[disabled]{opacity:.42;cursor:not-allowed;box-shadow:none}
+.chip{display:inline-flex;align-items:center;gap:6px;font:700 10.5px var(--font);padding:4px 10px;border-radius:999px;border:1px solid var(--line);background:var(--overlay);color:var(--muted);white-space:nowrap}
+.chip.p{color:var(--pink);border-color:rgba(255,77,157,.45);background:rgba(255,77,157,.12)}
+.chip.c{color:var(--cyan);border-color:rgba(34,211,238,.42);background:rgba(34,211,238,.1)}
+.chip.g{color:var(--green);border-color:rgba(61,220,132,.42);background:rgba(61,220,132,.1)}
+.chip.a{color:var(--amber);border-color:rgba(255,176,32,.42);background:rgba(255,176,32,.1)}
+.chip.r{color:var(--red);border-color:rgba(255,84,112,.42);background:rgba(255,84,112,.1)}
+.chip.v{color:var(--violet);border-color:rgba(124,92,255,.45);background:rgba(124,92,255,.12)}
+.chip.lime{color:var(--lime);border-color:rgba(139,255,90,.4);background:rgba(139,255,90,.09)}
+label.lbl{display:block;font-size:10.5px;color:var(--muted);margin-bottom:6px;font-weight:700}
+.input,.select,textarea{width:100%;background:var(--ink);border:1px solid var(--line);color:var(--text);border-radius:11px;padding:10px 12px;font:500 13px var(--font);outline:none;transition:border .2s,box-shadow .2s}
+.input:focus,.select:focus,textarea:focus{border-color:var(--pink);box-shadow:0 0 0 3px rgba(255,77,157,.2)}
+textarea{resize:vertical;line-height:1.6;font-size:12px;font-family:var(--mono)}
+.select{appearance:none;cursor:pointer;padding-right:30px;background-image:linear-gradient(45deg,transparent 50%,var(--pink) 50%),linear-gradient(135deg,var(--pink) 50%,transparent 50%);background-position:calc(100% - 16px) 50%,calc(100% - 11px) 50%;background-size:5px 5px;background-repeat:no-repeat}
+input[type=color]{width:100%;height:36px;background:var(--ink);border:1px solid var(--line);border-radius:11px;padding:4px;cursor:pointer}
+input[type=range]{width:100%;appearance:none;height:6px;border-radius:99px;background:linear-gradient(90deg,var(--pink-deep),var(--sand));outline:none;cursor:pointer}
+input[type=range]::-webkit-slider-thumb{appearance:none;width:16px;height:16px;border-radius:50%;background:#fff;border:3px solid var(--pink);box-shadow:0 0 9px rgba(255,77,157,.7);cursor:pointer}
+input[type=range]::-moz-range-thumb{width:13px;height:13px;border-radius:50%;background:#fff;border:3px solid var(--pink);cursor:pointer}
+.switch{position:relative;width:42px;height:23px;border-radius:999px;background:var(--overlay);border:1px solid var(--line);cursor:pointer;transition:background .2s;flex:none;padding:0}
+.switch::after{content:"";position:absolute;top:2px;left:2px;width:17px;height:17px;border-radius:50%;background:var(--pink);transition:transform .25s cubic-bezier(.2,.7,.2,1),background .2s}
+.switch[aria-checked="true"]{background:var(--pink-deep)}
+.switch[aria-checked="true"]::after{transform:translateX(19px);background:#fff}
+.deck{display:grid;grid-template-columns:repeat(auto-fit,minmax(148px,1fr));gap:10px}
+.ctrl{background:var(--ink);border:1px solid var(--line);border-radius:12px;padding:10px 12px}
+.ctrl .val{float:right;font:800 10.5px var(--font);color:var(--lime)}
+.chart-box{position:relative;border:1px solid var(--line);border-radius:16px;overflow:hidden;background:#07030a}
+.chart-box canvas{width:100%;height:320px;display:block}
+.chart-box .flash{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none}
+.chart-box .flash.go{animation:shutter .4s ease-out}
+.chart-box .tag{position:absolute;top:9px;left:9px;font:800 9px var(--font);letter-spacing:.13em;padding:4px 8px;border-radius:7px;background:rgba(10,5,16,.8);border:1px solid var(--line);color:var(--pink)}
+.legend{display:flex;gap:8px;flex-wrap:wrap;margin-top:11px}
+.lg{display:inline-flex;align-items:center;gap:7px;font:700 11px var(--font);color:var(--muted);background:var(--ink);border:1px solid var(--line);border-radius:999px;padding:5px 11px}
+.lg i{width:11px;height:11px;border-radius:3px;flex:none}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:10px;margin-top:13px}
+.stat{background:var(--ink);border:1px solid var(--line);border-radius:12px;padding:11px}
+.stat b{display:block;font:900 19px var(--disp);line-height:1.15;color:var(--pink)}
+.stat span{font-size:9px;color:var(--dim);text-transform:uppercase;letter-spacing:.11em}
+.stat.s2 b{color:var(--cyan)}.stat.s3 b{color:var(--lime)}.stat.s4 b{color:var(--amber)}.stat.s5 b{color:var(--violet)}
+.quota{margin-top:12px}
+.quota-bar{height:9px;border-radius:99px;background:var(--overlay);overflow:hidden;border:1px solid var(--line)}
+.quota-bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--pink),var(--amber));transition:width .8s cubic-bezier(.2,.7,.2,1)}
+.bulk{display:flex;gap:9px;align-items:center;flex-wrap:wrap;background:var(--ink);border:1px solid var(--line);border-radius:12px;padding:9px 12px;margin-bottom:10px}
+.filters{display:flex;gap:6px;flex-wrap:wrap}
+.fchip{border:1px solid var(--line);background:var(--overlay);color:var(--muted);font:700 11px var(--font);padding:6px 12px;border-radius:999px;cursor:pointer}
+.fchip.on{color:#fff;border-color:var(--pink);background:linear-gradient(100deg,var(--pink-deep),var(--pink))}
+.list{display:flex;flex-direction:column;gap:8px;max-height:420px;overflow-y:auto;padding-right:6px}
+.row-i{display:flex;align-items:center;gap:10px;background:var(--ink);border:1px solid var(--line);border-radius:12px;padding:10px 12px;transition:border-color .2s,transform .15s}
+.row-i:hover{border-color:var(--pink);transform:translateX(4px)}
+.row-i.sel{border-color:var(--lime);background:rgba(139,255,90,.06)}
+.row-i input{accent-color:var(--lime);width:15px;height:15px;flex:none}
+.row-i .t{flex:1;min-width:0}
+.row-i .t b{font:700 12px var(--mono);display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.checks{display:flex;flex-direction:column;gap:7px}
+.chk{display:grid;grid-template-columns:26px 1fr;gap:11px;background:var(--ink);border:1px solid var(--line);border-radius:11px;padding:10px 12px;font-size:12.5px}
+.chk.ok{border-color:rgba(61,220,132,.35)}
+.chk.warn{border-color:rgba(255,176,32,.4)}
+.chk.err{border-color:rgba(255,84,112,.45);background:rgba(255,84,112,.05)}
+.chk .ic{width:26px;height:26px;border-radius:8px;display:grid;place-items:center;font-size:12px}
+.chk.ok .ic{background:rgba(61,220,132,.15);color:var(--green)}
+.chk.warn .ic{background:rgba(255,176,32,.15);color:var(--amber)}
+.chk.err .ic{background:rgba(255,84,112,.15);color:var(--red)}
+.chk .fix{margin-top:6px;font:11px/1.6 var(--mono);color:var(--sand);background:var(--surface);border:1px solid var(--line);border-radius:9px;padding:8px 10px;word-break:break-word}
+.steps{display:flex;flex-direction:column;gap:8px}
+.step{display:grid;grid-template-columns:26px 1fr auto;gap:11px;align-items:center;background:var(--ink);border:1px solid var(--line);border-radius:11px;padding:10px 12px;font-size:12.5px}
+.step.done{border-color:rgba(61,220,132,.4);background:rgba(61,220,132,.05)}
+.step .n{width:26px;height:26px;border-radius:8px;display:grid;place-items:center;background:var(--overlay);border:1px solid var(--line);font:800 11px var(--font);color:var(--muted)}
+.step.done .n{background:rgba(61,220,132,.18);color:var(--green);border-color:rgba(61,220,132,.4)}
+.views{display:flex;flex-direction:column;gap:7px;margin-top:10px}
+.view{display:flex;align-items:center;gap:9px;background:var(--ink);border:1px solid var(--line);border-radius:11px;padding:9px 12px}
+.view b{font:700 12px var(--font);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(520px,100%);z-index:70;background:var(--surface);border-left:1px solid var(--pink);box-shadow:-24px 0 70px rgba(0,0,0,.68);padding:19px;overflow-y:auto;animation:slide .28s cubic-bezier(.2,.7,.2,1) both}
+.scrim{position:fixed;inset:0;z-index:65;background:var(--scrim);backdrop-filter:blur(4px);animation:pop .2s both}
+.code{background:#07030a;border:1px solid var(--line);border-radius:11px;padding:12px;font:11px/1.65 var(--mono);color:var(--lime);overflow-x:auto;white-space:pre-wrap;word-break:break-word;margin-top:10px;max-height:340px;overflow-y:auto}
+.toasts{position:fixed;left:16px;bottom:16px;z-index:90;display:flex;flex-direction:column;gap:9px;width:min(360px,calc(100vw - 32px))}
+.toast{display:flex;gap:10px;align-items:flex-start;padding:12px 14px;border-radius:13px;border:1px solid var(--line);background:var(--surface2);box-shadow:0 16px 44px rgba(0,0,0,.55);font-size:12.5px;animation:pop .3s both}
+.toast.ok{border-color:rgba(61,220,132,.5)}.toast.err{border-color:rgba(255,84,112,.5)}.toast.info{border-color:rgba(255,77,157,.5)}
+.toast .x{margin-left:auto;border:0;background:none;color:var(--dim);cursor:pointer;font-size:14px}
+.toast .undo{border:0;background:none;color:var(--lime);font:700 11.5px var(--font);cursor:pointer;text-decoration:underline}
+.spin{width:15px;height:15px;border:2px solid var(--pink);border-top-color:transparent;border-radius:50%;animation:spin .8s linear infinite;flex:none}
+.empty{text-align:center;padding:26px 16px}
+.empty .ic{font-size:34px;margin-bottom:10px}
+.band{margin-top:18px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:start}
+footer{border-top:1px solid var(--line);padding:26px 0;margin-top:22px;background:rgba(10,5,16,.6)}
+@media (max-width:940px){.grid2{grid-template-columns:1fr}}
+@media (max-width:720px){
+  :root{--nav:56px}
+  .wrap{padding:0 12px}.nav-in{padding:0 12px;gap:6px}.brand b{display:none}
+  .card{padding:13px}.hide-sm{display:none}.drawer{width:100%}
+  .chart-box canvas{height:260px}
+}
+@media (prefers-reduced-motion:reduce){.amb::before,.rise,.pill i{animation:none!important}*{transition-duration:.01ms!important}}
+</style>
+</head>
+<body>
+<div class="amb"></div><div class="mesh"></div>
+
+<nav class="nav"><div class="nav-in">
+  <a class="brand" href="launch.html"><span class="mark">AI</span><b>Настройки</b></a>
+  <span class="pill"><i></i><span id="pillText">чтение…</span></span>
+  <div class="nav-right">
+    <button class="btn btn-g btn-s" id="muteBtn" aria-pressed="false">🔔</button>
+    <a class="btn btn-g btn-s" href="live.html"><span class="hide-sm">Генерация</span>⚡</a>
+    <a class="btn btn-g btn-s" href="library.html"><span class="hide-sm">Библиотека</span>📚</a>
+    <a class="btn btn-g btn-s" href="publish.html"><span class="hide-sm">Публикация</span>🚀</a>
+    <a class="btn btn-g btn-s" href="launch.html"><span class="hide-sm">Пускатель</span>🏠</a>
+  </div>
+</div></nav>
+
+<main class="wrap">
+  <div class="card hot rise">
+    <span class="kicker lime">Хранилище устройства</span>
+    <h1>Ваши данные — <em>под контролем</em></h1>
+    <p class="lead">Всё, что вы сгенерировали и отредактировали, лежит в памяти этого браузера. Здесь можно сделать резервную копию одним файлом, восстановить её на другом устройстве, почистить лишнее и проверить целостность.</p>
+    <div class="warnbox" style="margin-top:13px">
+      <span>⚠️</span>
+      <span>Очистка данных браузера, приватный режим или другой телефон — и генерации исчезнут. Резервная копия занимает один файл и делается за секунду. Сделайте её перед чисткой.</span>
+    </div>
+    <div class="row" style="margin-top:13px">
+      <button class="btn btn-p" id="backupBtn">⬇ Скачать резервную копию</button>
+      <button class="btn btn-c" id="restoreBtn">📥 Восстановить из файла</button>
+      <button class="btn btn-g" id="rescanBtn">⟳ Перечитать</button>
+      <input type="file" id="fileInput" accept="application/json,.json" class="hidden">
+    </div>
+    <div class="row" style="margin-top:11px;gap:8px">
+      <button class="switch" id="incSecrets" role="switch" aria-checked="false" aria-label="Включить ключ в копию"></button>
+      <span class="note">Включить API-ключ в копию — файл станет секретным, храните его закрыто</span>
+    </div>
+    <div class="stats" id="stats"></div>
+    <div class="quota">
+      <div class="row" style="justify-content:space-between;margin-bottom:6px">
+        <span class="note">Занято в хранилище браузера</span>
+        <span class="chip p" id="quotaText">—</span>
+      </div>
+      <div class="quota-bar"><i id="quotaBar"></i></div>
+      <p class="note" style="margin-top:7px" id="quotaNote"></p>
+    </div>
+  </div>
+
+  <div class="card band rise" style="animation-delay:.06s">
+    <div class="row" style="justify-content:space-between;margin-bottom:10px">
+      <div><span class="kicker">Карта данных</span><h2 style="margin:6px 0 0" id="chTitle">Объём по хранилищам</h2></div>
+      <span class="row">
+        <button class="btn btn-g btn-s" id="chReset">↺ Сброс</button>
+        <button class="btn btn-g btn-s" id="chRandom">🎲 Случайно</button>
+        <button class="btn btn-a btn-s" id="chPng">⬇ PNG карты</button>
+      </span>
+    </div>
+    <div class="chart-box">
+      <canvas id="chart" width="1200" height="640" aria-label="Карта распределения данных по хранилищам"></canvas>
+      <div class="flash" id="chFlash"></div>
+      <span class="tag" id="chTag">TREEMAP</span>
+    </div>
+    <div class="legend" id="legend"></div>
+    <div class="deck" style="margin-top:13px">
+      <div class="ctrl"><label class="lbl" for="chType">Тип карты</label><select class="select" id="chType"><option value="treemap">Плитки</option><option value="bars">Столбцы</option><option value="donut">Кольцо</option><option value="stacked">С составом</option></select></div>
+      <div class="ctrl"><label class="lbl" for="chMetric">Метрика</label><select class="select" id="chMetric"><option value="bytes">Байты</option><option value="records">Записи</option><option value="keys">Ключи</option></select></div>
+      <div class="ctrl"><label class="lbl" for="chGroup">Группировка</label><select class="select" id="chGroup"><option value="store">По хранилищу</option><option value="group">По разделу</option><option value="kind">По типу данных</option></select></div>
+      <div class="ctrl"><label class="lbl" for="chPalette">Палитра</label><select class="select" id="chPalette"><option value="bloom">Цветение</option><option value="circuit">Схема</option><option value="sunset">Закат</option><option value="ice">Лёд</option></select></div>
+      <div class="ctrl"><label class="lbl" for="chScale">Шкала</label><select class="select" id="chScale"><option value="linear">Линейная</option><option value="log">Логарифм</option></select></div>
+      <div class="ctrl"><label class="lbl" for="chSort">Порядок</label><select class="select" id="chSort"><option value="value">По величине</option><option value="label">По названию</option><option value="natural">Исходный</option></select></div>
+      <div class="ctrl"><label class="lbl" for="chGlow">Свечение <span class="val" id="chGlowVal">1.0×</span></label><input type="range" id="chGlow" min="0" max="2.5" step="0.1" value="1"></div>
+      <div class="ctrl"><label class="lbl" for="chRound">Скругление <span class="val" id="chRoundVal">8</span></label><input type="range" id="chRound" min="0" max="24" step="1" value="8"></div>
+      <div class="ctrl"><label class="lbl" for="chGap">Зазор <span class="val" id="chGapVal">3</span></label><input type="range" id="chGap" min="0" max="12" step="1" value="3"></div>
+      <div class="ctrl"><label class="lbl" for="chThick">Толщина <span class="val" id="chThickVal">0.70</span></label><input type="range" id="chThick" min="0.3" max="0.95" step="0.02" value="0.7"></div>
+      <div class="ctrl"><label class="lbl" for="chSpeed">Анимация <span class="val" id="chSpeedVal">1.0×</span></label><input type="range" id="chSpeed" min="0.2" max="3" step="0.1" value="1"></div>
+      <div class="ctrl"><label class="lbl" for="chQuality">Качество</label><select class="select" id="chQuality"><option value="1">1× быстрее</option><option value="2" selected>2× чётче</option></select></div>
+      <div class="ctrl"><label class="lbl">Подписи</label><div class="row" style="gap:8px"><button class="switch" id="chValues" role="switch" aria-checked="true" aria-label="Подписи значений"></button><span class="note">на карте</span></div></div>
+      <div class="ctrl"><label class="lbl">Сетка</label><div class="row" style="gap:8px"><button class="switch" id="chGrid" role="switch" aria-checked="true" aria-label="Сетка"></button><span class="note">направляющие</span></div></div>
+      <div class="ctrl"><label class="lbl">Узоры</label><div class="row" style="gap:8px"><button class="switch" id="chHatch" role="switch" aria-checked="false" aria-label="Штриховка"></button><span class="note">различимость без цвета</span></div></div>
+      <div class="ctrl"><label class="lbl">Чужие ключи</label><div class="row" style="gap:8px"><button class="switch" id="chForeign" role="switch" aria-checked="false" aria-label="Показывать ключи других сайтов"></button><span class="note">не от приложения</span></div></div>
+    </div>
+    <p class="note" style="margin-top:10px" id="chNote"></p>
+  </div>
+
+  <div class="grid2 band">
+    <div class="card rise" style="animation-delay:.12s">
+      <span class="kicker v">Ключ и провайдер</span>
+      <h2 style="margin-top:6px">Единая точка настройки</h2>
+      <p class="note" style="margin-bottom:12px">Значения читается разделом «Генерация». Ключ по умолчанию не сохраняется между сессиями.</p>
+      <label class="lbl" for="kProvider">Провайдер по умолчанию</label>
+      <select class="select" id="kProvider"></select>
+      <label class="lbl" style="margin-top:10px" for="kModel">Модель по умолчанию</label>
+      <input class="input" id="kModel" spellcheck="false" placeholder="ID модели">
+      <label class="lbl" style="margin-top:10px" for="kKey">API-ключ <span id="kHost" style="color:var(--cyan)"></span></label>
+      <div class="row" style="gap:7px;flex-wrap:nowrap">
+        <input class="input" id="kKey" type="password" autocomplete="off" spellcheck="false" placeholder="вставьте ключ">
+        <button class="btn btn-g btn-s" id="kEye" style="flex:none" aria-label="Показать ключ">👁</button>
+      </div>
+      <div class="row" style="margin-top:11px;justify-content:space-between">
+        <span class="row" style="gap:8px">
+          <button class="switch" id="kRemember" role="switch" aria-checked="false" aria-label="Запомнить ключ"></button>
+          <span class="note">Запомнить на устройстве</span>
+        </span>
+        <span class="row">
+          <button class="btn btn-g btn-s" id="kForget">Забыть</button>
+          <button class="btn btn-v btn-s" id="kTest">Проверить</button>
+        </span>
+      </div>
+      <div class="row" style="margin-top:11px">
+        <button class="btn btn-p grow" id="kSave">💾 Сохранить настройки</button>
+      </div>
+      <div id="kResult" style="margin-top:11px"></div>
+      <div style="margin-top:14px;padding-top:13px;border-top:1px solid var(--line)">
+        <h3>Общие предпочтения</h3>
+        <div class="row" style="justify-content:space-between;margin-bottom:9px">
+          <span class="note">Звук событий во всех разделах</span>
+          <button class="switch" id="pSound" role="switch" aria-checked="true" aria-label="Звук событий"></button>
+        </div>
+        <label class="lbl" for="pOwner">Репозиторий для диагностики</label>
+        <div class="row" style="gap:7px;flex-wrap:nowrap">
+          <input class="input" id="pOwner" placeholder="владелец" spellcheck="false">
+          <input class="input" id="pRepo" placeholder="название" spellcheck="false">
+        </div>
+        <p class="note" style="margin-top:8px">Эти два поля читает раздел «Состояние проекта». Оставьте пустыми — определит из адреса.</p>
+      </div>
+    </div>
+
+    <div class="card rise" style="animation-delay:.18s">
+      <span class="kicker lime">Готовность к работе</span>
+      <h2 style="margin-top:6px">Прогресс настройки <span class="chip p" id="setupCount">0/6</span></h2>
+      <div class="steps" id="setup"></div>
+      <div style="margin-top:15px;padding-top:13px;border-top:1px solid var(--line)">
+        <span class="kicker a">Целостность данных</span>
+        <div class="checks" id="health" style="margin-top:9px"></div>
+        <div class="row" style="margin-top:11px">
+          <button class="btn btn-g btn-s" id="healthFix">🧹 Убрать осиротевшие отметки</button>
+          <button class="btn btn-g btn-s" id="healthCopy">📋 Отчёт</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card band rise" style="animation-delay:.24s">
+    <div class="row" style="justify-content:space-between;margin-bottom:9px">
+      <h2 style="margin:0">🗄 Хранилища <span class="chip p" id="storeCount">0</span></h2>
+      <button class="btn btn-g btn-s" id="saveView">＋ Сохранить вид</button>
+    </div>
+    <div class="row" style="margin-bottom:10px">
+      <input class="input" id="q" placeholder="Поиск по имени ключа или содержимому…" style="flex:1;min-width:180px">
+      <select class="select" id="sort" style="max-width:190px"><option value="size">По объёму</option><option value="name">По имени</option><option value="records">По записям</option><option value="group">По разделу</option></select>
+    </div>
+    <div class="filters" id="filters" style="margin-bottom:10px"></div>
+    <div class="bulk">
+      <label class="row" style="gap:7px;font-size:12px;cursor:pointer"><input type="checkbox" id="selAll" style="accent-color:var(--lime);width:15px;height:15px">Выбрать все</label>
+      <span class="chip lime" id="selN">0 выбрано</span>
+      <span class="row" style="margin-left:auto">
+        <button class="btn btn-g btn-s" id="expSel" disabled>⬇ JSON</button>
+        <button class="btn btn-g btn-s" id="copySel" disabled>📋 Имена</button>
+        <button class="btn btn-r btn-s" id="delSel" disabled>🗑 Очистить</button>
+      </span>
+    </div>
+    <div class="list" id="list"></div>
+    <div class="views" id="views"></div>
+    <p class="note" style="margin-top:10px">Очистка удаляет ключ из браузера. Каждое удаление можно отменить кнопкой в уведомлении, пока оно видно. Ключи других сайтов показаны только при включённом тумблере и не входят в резервную копию.</p>
+  </div>
+</main>
+
+<footer><div class="wrap row" style="justify-content:space-between">
+  <span class="note">AI Marketing Studio · настройки и данные · всё остаётся на устройстве</span>
+  <span class="row"><a class="btn btn-g btn-s" href="status.html">Состояние</a><a class="btn btn-g btn-s" href="launch.html">Пускатель</a></span>
+</div></footer>
+
+<div id="drawerHost"></div>
+<div class="toasts" id="toasts" role="status" aria-live="polite"></div>
+
+<script>
+"use strict";
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;");
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const uid=p=>(p||"x")+Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+const fmtBytes=n=>n<1024?n+" Б":n<1048576?(n/1024).toFixed(1)+" КБ":(n/1048576).toFixed(2)+" МБ";
+const fmtNum=n=>n>=1e6?(n/1e6).toFixed(1)+"М":n>=1e4?(n/1e3).toFixed(1)+"К":String(Math.round(n));
+const RM=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const store={
+  get(k){try{return localStorage.getItem(k)}catch{return null}},
+  set(k,v){try{localStorage.setItem(k,v);return true}catch{return false}},
+  del(k){try{localStorage.removeItem(k)}catch{}},
+  keys(){try{return Object.keys(localStorage)}catch{return[]}}
+};
+const GROUPS={
+  live:{n:"Генерация",prefix:["lv_"]},
+  library:{n:"Библиотека",prefix:["lib_"]},
+  studio:{n:"Студия",prefix:["ams_"]},
+  assets:{n:"Ассеты",prefix:["as_"]},
+  publish:{n:"Публикация",prefix:["pub_"]},
+  hub:{n:"Витрина",prefix:["hub_"]},
+  status:{n:"Диагностика",prefix:["st_"]},
+  launch:{n:"Пускатель",prefix:["launch_"]},
+  settings:{n:"Настройки",prefix:["set_"]}
+};
+const APP_PREFIX=["lv_","lib_","ams_","as_","pub_","hub_","st_","launch_","set_"];
+const SECRET_KEYS=["lv_key","ams_token"];
+const PROVIDERS={
+  openrouter:{n:"OpenRouter",base:"https://openrouter.ai/api/v1",style:"openai",models:["openai/gpt-4o-mini","anthropic/claude-3.5-sonnet","google/gemini-flash-1.5","meta-llama/llama-3.3-70b-instruct"]},
+  groq:{n:"Groq",base:"https://api.groq.com/openai/v1",style:"openai",models:["llama-3.3-70b-versatile","llama-3.1-8b-instant"]},
+  anthropic:{n:"Anthropic",base:"https://api.anthropic.com/v1",style:"anthropic",models:["claude-sonnet-4-5","claude-3-5-haiku-latest"]},
+  openai:{n:"OpenAI",base:"https://api.openai.com/v1",style:"openai",models:["gpt-4o-mini","gpt-4o"]},
+  together:{n:"Together · Qwen",base:"https://api.together.xyz/v1",style:"openai",models:["Qwen/Qwen2.5-72B-Instruct-Turbo"]},
+  deepseek:{n:"DeepSeek",base:"https://api.deepseek.com",style:"openai",models:["deepseek-chat"]}
+};
+const PALETTES={
+  bloom:["#ff4d9d","#7c5cff","#22d3ee","#8bff5a","#ffb020","#ff5470","#ffd9a0","#4d7cff"],
+  circuit:["#22d3ee","#4d7cff","#8bff5a","#ff4d9d","#ffb020","#7c5cff","#3ddc84","#ffd9a0"],
+  sunset:["#ff5470","#ff4d9d","#ffb020","#ffd9a0","#7c5cff","#4d7cff","#22d3ee","#8bff5a"],
+  ice:["#4d7cff","#22d3ee","#3ddc84","#8bff5a","#7c5cff","#a08fa8","#ffd9a0","#ff4d9d"]
+};
+
+/* ---------- sound ---------- */
+let ac=null,muted=store.get("set_mute")==="1";
+function paintMute(){$("muteBtn").textContent=muted?"🔇":"🔔";$("muteBtn").setAttribute("aria-pressed",String(muted));$("muteBtn").title=muted?"Звук выключен":"Звук включён"}
+function beep(kind){
+  if(muted)return;
+  try{
+    if(!ac)ac=new (window.AudioContext||window.webkitAudioContext)();
+    if(ac.state==="suspended")ac.resume();
+    const t=ac.currentTime,o=ac.createOscillator(),g=ac.createGain();
+    const map={ok:[680,.16,"sine"],err:[175,.25,"sawtooth"],tick:[900,.04,"triangle"],shutter:[1200,.06,"square"],del:[300,.12,"triangle"],save:[520,.14,"sine"]};
+    const[f,d,w]=map[kind]||map.tick;
+    o.type=w;o.frequency.setValueAtTime(f,t);
+    if(kind==="ok"||kind==="save")o.frequency.exponentialRampToValueAtTime(f*1.5,t+d);
+    if(kind==="del"||kind==="shutter")o.frequency.exponentialRampToValueAtTime(f*.45,t+d);
+    g.gain.setValueAtTime(.0001,t);
+    g.gain.exponentialRampToValueAtTime(kind==="tick"?.025:.07,t+.012);
+    g.gain.exponentialRampToValueAtTime(.0001,t+d);
+    o.connect(g);g.connect(ac.destination);o.start(t);o.stop(t+d+.02);
+  }catch{}
+}
+$("muteBtn").onclick=()=>{muted=!muted;store.set("set_mute",muted?"1":"0");paintMute();syncPrefs();if(!muted)beep("tick")};
+document.addEventListener("pointerdown",()=>{if(ac&&ac.state==="suspended")ac.resume()},{once:true});
+paintMute();
+
+function toast(msg,type="ok",undo){
+  const t=document.createElement("div");t.className="toast "+type;
+  t.innerHTML=`<span>${type==="ok"?"✅":type==="err"?"⛔":"ℹ️"}</span><span>${esc(msg)}</span>`+(undo?`<button class="undo">Отменить</button>`:"")+`<button class="x" aria-label="Закрыть">✕</button>`;
+  t.querySelector(".x").onclick=()=>t.remove();
+  if(undo)t.querySelector(".undo").onclick=()=>{try{undo()}finally{t.remove()}};
+  $("toasts").appendChild(t);setTimeout(()=>t.remove(),undo?11000:4400);
+}
+async function copy(text){
+  const s=String(text??"");if(!s)return toast("Нечего копировать","info");
+  try{if(navigator.clipboard&&window.isSecureContext){await navigator.clipboard.writeText(s);toast("Скопировано");beep("tick");return}}catch{}
+  try{
+    const ta=document.createElement("textarea");ta.value=s;ta.setAttribute("readonly","");
+    ta.style.cssText="position:fixed;top:-2000px;opacity:0";document.body.appendChild(ta);
+    ta.select();ta.setSelectionRange(0,s.length);
+    const ok=document.execCommand("copy");ta.remove();
+    toast(ok?"Скопировано":"Скопируйте вручную",ok?"ok":"info");
+  }catch{toast("Копирование недоступно","err")}
+}
+function download(blob,name){
+  const u=URL.createObjectURL(blob),a=document.createElement("a");
+  a.href=u;a.download=name;document.body.appendChild(a);a.click();a.remove();
+  setTimeout(()=>URL.revokeObjectURL(u),6000);
+}
+function hex2rgb(h){const m=/^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(h)||[,"ff","4d","9d"];return[parseInt(m[1],16),parseInt(m[2],16),parseInt(m[3],16)]}
+const rgba=(h,a)=>{const[r,g,b]=hex2rgb(h);return`rgba(${r},${g},${b},${a})`};
+
+/* ---------- state ---------- */
+const state={items:[],sel:new Set(),q:"",sort:"size",filter:"all",views:[],quota:null,incSecrets:false,
+  chart:{type:"treemap",metric:"bytes",group:"store",palette:"bloom",scale:"linear",sort:"value",
+    glow:1,round:8,gap:3,thick:.7,speed:1,quality:2,values:true,grid:true,hatch:false,foreign:false}};
+try{const v=JSON.parse(store.get("set_views")||"[]");if(Array.isArray(v))state.views=v}catch{}
+
+function isApp(key){return APP_PREFIX.some(p=>key.startsWith(p))}
+function groupOf(key){
+  for(const[g,d]of Object.entries(GROUPS))if(d.prefix.some(p=>key.startsWith(p)))return g;
+  return isApp(key)?"other":"foreign";
+}
+function kindOf(val){
+  const s=String(val??"").trim();
+  if(!s)return"пусто";
+  if(s.startsWith("["))return"список";
+  if(s.startsWith("{"))return"объект";
+  if(s==="0"||s==="1")return"флаг";
+  return"значение";
+}
+function countOf(val){
+  try{
+    const v=JSON.parse(val);
+    if(Array.isArray(v))return v.length;
+    if(v&&typeof v==="object")return Object.keys(v).length;
+    return 1;
+  }catch{return String(val??"").length?1:0}
+}
+function scan(){
+  state.items=store.keys().map(k=>{
+    const v=store.get(k)??"";
+    return{key:k,value:v,bytes:(k.length+v.length)*2,records:countOf(v),kind:kindOf(v),
+      group:isApp(k)?groupOf(k):"foreign",app:isApp(k),secret:SECRET_KEYS.includes(k)};
+  }).sort((a,b)=>b.bytes-a.bytes);
+  [...state.sel].forEach(k=>{if(!state.items.some(i=>i.key===k))state.sel.delete(k)});
+}
+function visibleItems(){return state.chart.foreign?state.items:state.items.filter(i=>i.app)}
+function appBytes(){return state.items.filter(i=>i.app).reduce((n,i)=>n+i.bytes,0)}
+function appRecords(){return state.items.filter(i=>i.app&&i.kind==="список").reduce((n,i)=>n+i.records,0)}
+
+/* ---------- chart ---------- */
+const cv=$("chart"),cx=cv.getContext("2d");
+let anim=[],target=[],raf=null,lastTs=0;
+function hues(){return PALETTES[state.chart.palette]||PALETTES.bloom}
+function fitChart(){
+  const dpr=Math.min(window.devicePixelRatio||1,state.chart.quality);
+  const w=cv.clientWidth||1200,h=cv.clientHeight||320;
+  const W=Math.round(w*dpr),H=Math.round(h*dpr);
+  if(cv.width!==W||cv.height!==H){cv.width=W;cv.height=H}
+  cx.setTransform(dpr,0,0,dpr,0,0);
+  return{w,h};
+}
+function rr(ctx,x,y,w,h,r){
+  const rad=Math.max(0,Math.min(r,Math.abs(w)/2,Math.abs(h)/2));
+  ctx.beginPath();
+  if(ctx.roundRect)ctx.roundRect(x,y,w,h,rad);
+  else{ctx.moveTo(x+rad,y);ctx.arcTo(x+w,y,x+w,y+h,rad);ctx.arcTo(x+w,y+h,x,y+h,rad);ctx.arcTo(x,y+h,x,y,rad);ctx.arcTo(x,y,x+w,y,rad);ctx.closePath()}
+}
+function hatch(ctx,x,y,w,h,i){
+  ctx.save();ctx.beginPath();rr(ctx,x,y,w,h,state.chart.round);ctx.clip();
+  ctx.strokeStyle="rgba(10,5,16,.42)";ctx.lineWidth=2.1;
+  const step=7+(i%4)*3,mode=i%3;
+  for(let k=-h;k<w+h;k+=step){
+    ctx.beginPath();
+    if(mode===0){ctx.moveTo(x+k,y);ctx.lineTo(x+k+h,y+h)}
+    else if(mode===1){ctx.moveTo(x+k,y+h);ctx.lineTo(x+k+h,y)}
+    else{ctx.moveTo(x,y+k);ctx.lineTo(x+w,y+k)}
+    ctx.stroke();
+  }
+  ctx.restore();
+}
+function metricOf(i,m){return m==="bytes"?i.bytes:m==="records"?i.records:1}
+function buildSeries(){
+  const{metric,group,sort}=state.chart;
+  const src=visibleItems();
+  let out=[];
+  if(group==="store"){
+    out=src.map(i=>({label:i.key,value:metricOf(i,metric),
+      parts:state.chart.type==="stacked"?[{label:"ключ",value:Math.max(1,i.key.length*2)},{label:"данные",value:Math.max(1,i.value.length*2)}]:null}));
+  }else{
+    const b=new Map();
+    src.forEach(i=>{
+      const key=group==="group"?(i.app?(GROUPS[i.group]?.n||"Прочее"):"Чужие ключи"):i.kind;
+      if(!b.has(key))b.set(key,[]);
+      b.get(key).push(i);
+    });
+    out=[...b.entries()].map(([label,items])=>({label,
+      value:items.reduce((n,i)=>n+metricOf(i,metric),0),
+      parts:state.chart.type==="stacked"?items.slice(0,8).map(i=>({label:i.key,value:Math.max(1,metricOf(i,metric))})):null}));
+  }
+  out=out.filter(o=>o.value>0);
+  if(sort==="value")out.sort((a,b)=>b.value-a.value);
+  if(sort==="label")out.sort((a,b)=>a.label.localeCompare(b.label,"ru"));
+  return out;
+}
+function scaleVal(v,max){
+  if(state.chart.scale==="log"){
+    const lv=Math.log10(Math.max(1,v)),lm=Math.log10(Math.max(10,max));
+    return lm?lv/lm:0;
+  }
+  return max?v/max:0;
+}
+function treemap(items,x,y,w,h){
+  const out=[];let rest=items.filter(i=>i.value>0).slice();
+  let rect={x,y,w,h};let guard=0;
+  while(rest.length&&rect.w>1&&rect.h>1&&guard++<60){
+    const total=rest.reduce((a,b)=>a+b.value,0);
+    if(total<=0)break;
+    const horiz=rect.w>=rect.h;
+    const side=horiz?rect.h:rect.w;
+    let row=[],sum=0,best=Infinity;
+    for(let i=0;i<rest.length;i++){
+      const cand=row.concat([rest[i]]),cs=sum+rest[i].value;
+      const thick=(cs/total)*(horiz?rect.w:rect.h);
+      if(thick<=0)break;
+      const worst=Math.max(...cand.map(it=>{
+        const len=Math.max(.001,(it.value/cs)*side);
+        return Math.max(thick/len,len/thick);
+      }));
+      if(row.length&&worst>best)break;
+      row=cand;sum=cs;best=worst;
+    }
+    if(!row.length){row=[rest[0]];sum=rest[0].value}
+    const thick=(sum/total)*(horiz?rect.w:rect.h);
+    let off=0;
+    row.forEach(it=>{
+      const len=(it.value/sum)*(horiz?rect.h:rect.w);
+      out.push({...it,x:horiz?rect.x:rect.x+off,y:horiz?rect.y+off:rect.y,
+        w:horiz?thick:len,h:horiz?len:thick});
+      off+=len;
+    });
+    if(horiz)rect={x:rect.x+thick,y:rect.y,w:Math.max(0,rect.w-thick),h:rect.h};
+    else rect={x:rect.x,y:rect.y+thick,w:rect.w,h:Math.max(0,rect.h-thick)};
+    rest=rest.slice(row.length);
+  }
+  return out;
+}
+function drawChart(){
+  const{w,h}=fitChart();
+  const c=state.chart,H=hues(),groups=buildSeries();
+  cx.clearRect(0,0,w,h);
+  const bg=cx.createLinearGradient(0,0,w,h);
+  bg.addColorStop(0,"#0b0410");bg.addColorStop(1,"#07030a");
+  cx.fillStyle=bg;cx.fillRect(0,0,w,h);
+  if(!groups.length){
+    cx.fillStyle="rgba(183,149,171,.85)";cx.textAlign="center";
+    cx.font="700 16px Manrope,sans-serif";cx.fillText("Данных пока нет",w/2,h/2);
+    cx.font="500 12px Manrope,sans-serif";cx.fillStyle="rgba(125,100,128,.9)";
+    cx.fillText("Сгенерируйте контент — хранилища появятся здесь",w/2,h/2+22);
+    cx.textAlign="left";return;
+  }
+  while(anim.length<groups.length)anim.push(0);
+  anim.length=groups.length;
+  target=groups.map(g=>g.value);
+  const max=Math.max(...target,1);
+  const pad={l:54,r:16,t:20,b:44};
+  const iw=w-pad.l-pad.r,ih=h-pad.t-pad.b,gap=c.gap;
+
+  if(c.grid&&c.type!=="donut"&&c.type!=="treemap"){
+    cx.save();cx.strokeStyle="rgba(255,77,157,.13)";cx.lineWidth=1;
+    cx.font="600 10px JetBrains Mono,monospace";cx.fillStyle="rgba(125,100,128,.9)";cx.textAlign="right";
+    for(let i=0;i<=4;i++){
+      const y=pad.t+ih-ih*i/4;
+      cx.beginPath();cx.moveTo(pad.l,y);cx.lineTo(w-pad.r,y);cx.stroke();
+      const v=c.scale==="log"?Math.pow(10,Math.log10(Math.max(10,max))*i/4):max*i/4;
+      cx.fillText(c.metric==="bytes"?fmtBytes(v):fmtNum(v),pad.l-8,y+3);
+    }
+    cx.restore();cx.textAlign="left";
+  }
+
+  if(c.type==="treemap"){
+    const items=groups.map((g,i)=>({...g,value:Math.max(1,anim[i]||1),idx:i}));
+    treemap(items,pad.l-38,pad.t-8,iw+38,ih+30).forEach(b=>{
+      const col=H[b.idx%H.length];
+      const x=b.x+gap/2,y=b.y+gap/2,bw=Math.max(1,b.w-gap),bh=Math.max(1,b.h-gap);
+      cx.save();cx.shadowBlur=14*c.glow;cx.shadowColor=rgba(col,.5);
+      const g=cx.createLinearGradient(x,y,x+bw,y+bh);
+      g.addColorStop(0,rgba(col,.95));g.addColorStop(1,rgba(col,.55));
+      cx.fillStyle=g;rr(cx,x,y,bw,bh,c.round);cx.fill();cx.restore();
+      if(c.hatch)hatch(cx,x,y,bw,bh,b.idx);
+      cx.save();cx.strokeStyle=rgba(col,.9);cx.lineWidth=1.2;rr(cx,x,y,bw,bh,c.round);cx.stroke();cx.restore();
+      if(bw>52&&bh>26){
+        cx.save();cx.beginPath();rr(cx,x,y,bw,bh,c.round);cx.clip();
+        cx.fillStyle="rgba(10,5,16,.92)";cx.font="800 11px Manrope,sans-serif";cx.textAlign="left";
+        let lbl=b.label;
+        while(cx.measureText(lbl).width>bw-14&&lbl.length>3)lbl=lbl.slice(0,-1);
+        if(lbl!==b.label)lbl=lbl.slice(0,-1)+"…";
+        cx.fillText(lbl,x+8,y+17);
+        if(c.values&&bh>42){
+          cx.font="700 10px JetBrains Mono,monospace";cx.fillStyle="rgba(10,5,16,.72)";
+          cx.fillText(c.metric==="bytes"?fmtBytes(b.value):fmtNum(b.value),x+8,y+32);
+        }
+        cx.restore();
+      }
+    });
+  }else if(c.type==="bars"||c.type==="stacked"){
+    const slot=iw/groups.length,bw=Math.max(2,slot*c.thick);
+    groups.forEach((g,i)=>{
+      const x=pad.l+slot*i+(slot-bw)/2,v=anim[i]||0,col=H[i%H.length];
+      if(c.type==="stacked"&&g.parts&&g.parts.length){
+        const tot=g.parts.reduce((n,p)=>n+p.value,0)||1;
+        let acc=0;
+        g.parts.forEach((p,j)=>{
+          const bh=(p.value/tot)*scaleVal(v,max)*ih,y=pad.t+ih-acc-bh;
+          const pc=H[j%H.length];
+          cx.save();cx.shadowBlur=11*c.glow;cx.shadowColor=rgba(pc,.5);
+          const gr=cx.createLinearGradient(x,y,x+bw,y+bh);
+          gr.addColorStop(0,rgba(pc,.95));gr.addColorStop(1,rgba(pc,.6));
+          cx.fillStyle=gr;rr(cx,x,y,bw,Math.max(1,bh),Math.min(c.round,bh/2));cx.fill();cx.restore();
+          if(c.hatch)hatch(cx,x,y,bw,Math.max(1,bh),j);
+          acc+=bh;
+        });
+        if(c.values){cx.fillStyle="#fbeaf3";cx.font="800 10.5px Manrope,sans-serif";cx.textAlign="center";
+          cx.fillText(c.metric==="bytes"?fmtBytes(g.value):fmtNum(g.value),x+bw/2,pad.t+ih-acc-7);cx.textAlign="left"}
+      }else{
+        const bh=scaleVal(v,max)*ih,y=pad.t+ih-bh;
+        cx.save();cx.shadowBlur=15*c.glow;cx.shadowColor=rgba(col,.6);
+        const gr=cx.createLinearGradient(x,y,x,y+bh);
+        gr.addColorStop(0,rgba(col,1));gr.addColorStop(1,rgba(col,.5));
+        cx.fillStyle=gr;rr(cx,x,y,bw,Math.max(1,bh),c.round);cx.fill();cx.restore();
+        if(c.hatch)hatch(cx,x,y,bw,Math.max(1,bh),i);
+        cx.save();cx.strokeStyle=rgba(col,.9);cx.lineWidth=1.3;rr(cx,x,y,bw,Math.max(1,bh),c.round);cx.stroke();cx.restore();
+        if(c.values){cx.fillStyle="#fbeaf3";cx.font="800 10.5px Manrope,sans-serif";cx.textAlign="center";
+          cx.fillText(c.metric==="bytes"?fmtBytes(g.value):fmtNum(g.value),x+bw/2,y-7);cx.textAlign="left"}
+      }
+      cx.save();cx.translate(x+bw/2,pad.t+ih+14);
+      let lbl=g.label;const maxW=groups.length>6?70:slot;
+      cx.font="600 10px Manrope,sans-serif";
+      while(cx.measureText(lbl).width>maxW&&lbl.length>3)lbl=lbl.slice(0,-1);
+      if(lbl!==g.label)lbl=lbl.slice(0,-1)+"…";
+      cx.fillStyle="rgba(183,149,171,.95)";cx.textAlign=groups.length>7?"right":"center";
+      if(groups.length>7)cx.rotate(-Math.PI/5);
+      cx.fillText(lbl,0,0);cx.restore();
+    });
+  }else{
+    const cxp=w/2,cyp=pad.t+ih/2,R=Math.min(iw,ih)/2-6,r0=R*(1-c.thick*.72);
+    const tot=anim.reduce((a,b)=>a+b,0)||1;
+    let a0=-Math.PI/2;
+    groups.forEach((g,i)=>{
+      const a1=a0+(anim[i]/tot)*Math.PI*2,col=H[i%H.length];
+      cx.save();cx.shadowBlur=15*c.glow;cx.shadowColor=rgba(col,.6);
+      cx.beginPath();cx.arc(cxp,cyp,R,a0,a1);cx.arc(cxp,cyp,r0,a1,a0,true);cx.closePath();
+      const gr=cx.createLinearGradient(cxp-R,cyp-R,cxp+R,cyp+R);
+      gr.addColorStop(0,rgba(col,1));gr.addColorStop(1,rgba(col,.6));
+      cx.fillStyle=gr;cx.fill();cx.restore();
+      if(c.hatch){
+        cx.save();cx.beginPath();cx.arc(cxp,cyp,R,a0,a1);cx.arc(cxp,cyp,r0,a1,a0,true);cx.closePath();cx.clip();
+        cx.strokeStyle="rgba(10,5,16,.4)";cx.lineWidth=2;
+        for(let k=-2*R;k<2*R;k+=8+(i%4)*3){cx.beginPath();cx.moveTo(cxp-R+k,cyp-R);cx.lineTo(cxp-R+k+2*R,cyp+R);cx.stroke()}
+        cx.restore();
+      }
+      cx.save();cx.strokeStyle="#07030a";cx.lineWidth=2;
+      cx.beginPath();cx.arc(cxp,cyp,R,a0,a1);cx.arc(cxp,cyp,r0,a1,a0,true);cx.closePath();cx.stroke();cx.restore();
+      if(c.values&&a1-a0>.24){
+        const am=(a0+a1)/2,rm=(R+r0)/2;
+        cx.fillStyle="rgba(10,5,16,.92)";cx.font="800 11px Manrope,sans-serif";cx.textAlign="center";
+        cx.fillText(Math.round(g.value/tot*100)+"%",cxp+Math.cos(am)*rm,cyp+Math.sin(am)*rm+4);cx.textAlign="left";
+      }
+      a0=a1;
+    });
+    const total=groups.reduce((n,g)=>n+g.value,0);
+    cx.fillStyle="#fbeaf3";cx.font="900 20px Unbounded,Manrope,sans-serif";cx.textAlign="center";
+    cx.fillText(c.metric==="bytes"?fmtBytes(total):fmtNum(total),cxp,cyp+2);
+    cx.fillStyle="rgba(125,100,128,.95)";cx.font="600 10px Manrope,sans-serif";
+    cx.fillText("всего",cxp,cyp+18);cx.textAlign="left";
+  }
+}
+function tick(ts){
+  const dt=Math.min(64,ts-(lastTs||ts));lastTs=ts;
+  const k=RM?1:clamp(dt/1000*7*state.chart.speed,0,1);
+  let moving=false;
+  for(let i=0;i<target.length;i++){
+    const d=target[i]-(anim[i]||0);
+    if(Math.abs(d)>Math.max(.5,target[i]*.002)){anim[i]=(anim[i]||0)+d*k;moving=true}
+    else anim[i]=target[i];
+  }
+  drawChart();
+  if(moving)raf=requestAnimationFrame(tick);else{raf=null;lastTs=0}
+}
+function kick(){if(raf===null&&!document.hidden){lastTs=0;raf=requestAnimationFrame(tick)}}
+function stopChart(){if(raf!==null){cancelAnimationFrame(raf);raf=null;lastTs=0}}
+document.addEventListener("visibilitychange",()=>{document.hidden?stopChart():kick()});
+window.addEventListener("resize",()=>{fitChart();drawChart()});
+window.addEventListener("beforeunload",stopChart);
+function paintLegend(){
+  const g=buildSeries(),H=hues();
+  let items;
+  if(state.chart.type==="stacked"){
+    const names=new Set();g.forEach(x=>(x.parts||[]).forEach(p=>names.add(p.label)));
+    items=[...names].slice(0,12).map((n,i)=>({n,c:H[i%H.length]}));
+  }else items=g.slice(0,14).map((x,i)=>({n:x.label,c:H[i%H.length]}));
+  $("legend").innerHTML=items.map((it,i)=>`<span class="lg"><i style="background:${it.c}${state.chart.hatch?`;background-image:repeating-linear-gradient(${45+i*30}deg,rgba(10,5,16,.45) 0 2px,transparent 2px 6px)`:""}"></i>${esc(it.n.length>26?it.n.slice(0,25)+"…":it.n)}</span>`).join("");
+  const m={bytes:"Объём",records:"Записи",keys:"Ключи"}[state.chart.metric];
+  const gr={store:"хранилищам",group:"разделам",kind:"типам данных"}[state.chart.group];
+  $("chTitle").textContent=`${m} по ${gr}`;
+  $("chTag").textContent=state.chart.type.toUpperCase();
+  $("chNote").textContent=`${g.length} групп · шкала ${state.chart.scale==="log"?"логарифмическая":"линейная"} · ${state.chart.hatch?"штриховка включена — группы различимы без цвета":"цветовое кодирование"} · чужие ключи ${state.chart.foreign?"показаны":"скрыты"}.`;
+}
+function syncChart(){
+  const c=state.chart;
+  $("chType").value=c.type;$("chMetric").value=c.metric;$("chGroup").value=c.group;
+  $("chPalette").value=c.palette;$("chScale").value=c.scale;$("chSort").value=c.sort;
+  $("chGlow").value=c.glow;$("chGlowVal").textContent=c.glow.toFixed(1)+"×";
+  $("chRound").value=c.round;$("chRoundVal").textContent=c.round;
+  $("chGap").value=c.gap;$("chGapVal").textContent=c.gap;
+  $("chThick").value=c.thick;$("chThickVal").textContent=c.thick.toFixed(2);
+  $("chSpeed").value=c.speed;$("chSpeedVal").textContent=c.speed.toFixed(1)+"×";
+  $("chQuality").value=String(c.quality);
+  $("chValues").setAttribute("aria-checked",String(c.values));
+  $("chGrid").setAttribute("aria-checked",String(c.grid));
+  $("chHatch").setAttribute("aria-checked",String(c.hatch));
+  $("chForeign").setAttribute("aria-checked",String(c.foreign));
+  paintLegend();kick();
+}
+function chChange(){paintLegend();kick()}
+$("chType").onchange=e=>{state.chart.type=e.target.value;anim=[];chChange()};
+$("chMetric").onchange=e=>{state.chart.metric=e.target.value;chChange()};
+$("chGroup").onchange=e=>{state.chart.group=e.target.value;anim=[];chChange()};
+$("chPalette").onchange=e=>{state.chart.palette=e.target.value;chChange()};
+$("chScale").onchange=e=>{state.chart.scale=e.target.value;chChange()};
+$("chSort").onchange=e=>{state.chart.sort=e.target.value;anim=[];chChange()};
+$("chGlow").oninput=e=>{state.chart.glow=+e.target.value;$("chGlowVal").textContent=state.chart.glow.toFixed(1)+"×";drawChart()};
+$("chRound").oninput=e=>{state.chart.round=+e.target.value;$("chRoundVal").textContent=state.chart.round;drawChart()};
+$("chGap").oninput=e=>{state.chart.gap=+e.target.value;$("chGapVal").textContent=state.chart.gap;drawChart()};
+$("chThick").oninput=e=>{state.chart.thick=+e.target.value;$("chThickVal").textContent=state.chart.thick.toFixed(2);drawChart()};
+$("chSpeed").oninput=e=>{state.chart.speed=+e.target.value;$("chSpeedVal").textContent=state.chart.speed.toFixed(1)+"×";kick()};
+$("chQuality").onchange=e=>{state.chart.quality=+e.target.value;fitChart();drawChart();toast("Качество карты: "+state.chart.quality+"×","info")};
+[["chValues","values"],["chGrid","grid"],["chHatch","hatch"]].forEach(([id,k])=>{
+  $(id).onclick=()=>{state.chart[k]=!state.chart[k];syncChart()};
+});
+$("chForeign").onclick=()=>{state.chart.foreign=!state.chart.foreign;anim=[];syncChart();paintList()};
+$("chReset").onclick=()=>{
+  state.chart={type:"treemap",metric:"bytes",group:"store",palette:"bloom",scale:"linear",sort:"value",
+    glow:1,round:8,gap:3,thick:.7,speed:1,quality:2,values:true,grid:true,hatch:false,foreign:false};
+  anim=[];syncChart();paintList();toast("Параметры карты сброшены");
+};
+$("chRandom").onclick=()=>{
+  const pick=a=>a[Math.floor(Math.random()*a.length)];
+  Object.assign(state.chart,{type:pick(["treemap","bars","donut","stacked"]),
+    metric:pick(["bytes","records","keys"]),group:pick(["store","group","kind"]),
+    palette:pick(Object.keys(PALETTES)),scale:pick(["linear","linear","log"]),
+    glow:+(Math.random()*2.2).toFixed(1),round:Math.floor(Math.random()*22),
+    gap:Math.floor(Math.random()*10),thick:+(.35+Math.random()*.55).toFixed(2),hatch:Math.random()>.6});
+  anim=[];syncChart();toast("Случайный вид карты");
+};
+$("chPng").onclick=()=>{
+  drawChart();
+  $("chFlash").classList.remove("go");void $("chFlash").offsetWidth;$("chFlash").classList.add("go");
+  beep("shutter");
+  cv.toBlob(b=>{if(!b)return toast("Не удалось создать PNG","err");download(b,`data-map-${state.chart.type}.png`);toast("Карта сохранена")},"image/png");
+};
+
+/* ---------- stats ---------- */
+function paintStats(){
+  const app=state.items.filter(i=>i.app);
+  const bytes=appBytes();
+  $("stats").innerHTML=[
+    ["",app.length,"хранилищ"],["s2",fmtBytes(bytes),"объём"],
+    ["s3",appRecords(),"записей"],["s4",app.filter(i=>i.secret&&i.value).length,"секретов"],
+    ["s5",state.items.length-app.length,"чужих ключей"]
+  ].map(([c,v,l])=>`<div class="stat ${c}"><b>${esc(v)}</b><span>${esc(l)}</span></div>`).join("");
+  $("pillText").textContent=`${app.length} хранилищ · ${fmtBytes(bytes)}`;
+  const limit=5*1024*1024,pct=clamp(bytes/limit*100,0,100);
+  $("quotaBar").style.width=pct.toFixed(1)+"%";
+  $("quotaText").textContent=`${fmtBytes(bytes)} · ${pct.toFixed(1)}% от 5 МБ`;
+  $("quotaNote").textContent=state.quota
+    ?`Браузер сообщает: занято ${fmtBytes(state.quota.usage||0)} из ${fmtBytes(state.quota.quota||0)} доступных этому сайту. Оценка 5 МБ — типичный практический предел localStorage.`
+    :"Браузер не сообщил квоту. Оценка 5 МБ — типичный практический предел localStorage; при переполнении запись новых генераций начнёт молча отказывать.";
+  if(pct>80)$("quotaNote").textContent+=" Объём близок к пределу — сделайте копию и почистите старые записи.";
+}
+async function readQuota(){
+  try{
+    if(navigator.storage&&navigator.storage.estimate){
+      const e=await navigator.storage.estimate();
+      state.quota={usage:e.usage||0,quota:e.quota||0};
+    }
+  }catch{}
+  paintStats();
+}
+
+/* ---------- health & setup ---------- */
+function arrOf(k){try{const v=JSON.parse(store.get(k)||"[]");return Array.isArray(v)?v:[]}catch{return[]}}
+function objOf(k){try{const v=JSON.parse(store.get(k)||"{}");return v&&typeof v==="object"&&!Array.isArray(v)?v:{}}catch{return{}}}
+function collectIds(){
+  const ids=new Set();
+  arrOf("lv_hist").forEach(x=>{if(x&&x.id)ids.add(String(x.id))});
+  arrOf("lib_extra").forEach(x=>{if(x&&x.id)ids.add(String(x.id))});
+  arrOf("ams_hist").forEach(x=>{if(x&&x.id!=null)ids.add("s"+x.id)});
+  return ids;
+}
+function healthChecks(){
+  const out=[],ids=collectIds(),pub=objOf("pub_state");
+  const orphans=Object.keys(pub).filter(k=>!ids.has(k));
+  if(orphans.length)out.push({s:"warn",t:`Отметки публикации без записи: ${orphans.length}`,d:orphans.slice(0,4).join(", "),
+    fix:"Запись удалена, а отметки остались. Кнопка «Убрать осиротевшие отметки» очистит их."});
+  else out.push({s:"ok",t:"Отметки публикации соответствуют записям",d:"pub_state"});
+
+  const gens=arrOf("lv_hist");
+  let empty=0;
+  gens.forEach(r=>{
+    const cards=r?.result?.cards;
+    const hasText=Object.values(r?.result?.texts||{}).some(v=>String(v||"").trim());
+    if(!(Array.isArray(cards)&&cards.length)&&!hasText)empty++;
+  });
+  if(empty)out.push({s:"warn",t:`Пустых генераций: ${empty} из ${gens.length}`,d:"lv_hist",
+    fix:"Записи без карточек и текстов занимают место. Удалите их в библиотеке."});
+  else if(gens.length)out.push({s:"ok",t:`Все ${gens.length} генераций содержат контент`,d:"lv_hist"});
+  else out.push({s:"warn",t:"Генераций пока нет",d:"lv_hist",fix:"Откройте «Генерацию», вставьте ключ и соберите контент-пак."});
+
+  const key=store.get("lv_key")||"",rem=store.get("lv_remember")==="1";
+  if(key&&!rem)out.push({s:"warn",t:"Ключ есть, но запоминание выключено",d:"lv_key / lv_remember",
+    fix:"Ключ исчезнет при следующей загрузке. Включите «Запомнить на устройстве» и сохраните настройки."});
+  else if(key&&rem)out.push({s:"ok",t:"Ключ сохранён и переживёт перезагрузку",d:"lv_key"});
+  else out.push({s:"warn",t:"Ключ не сохранён",d:"lv_key",fix:"Без ключа работает только демо-режим."});
+
+  const bytes=appBytes();
+  if(bytes>4*1024*1024)out.push({s:"err",t:"Объём близок к пределу хранилища",d:fmtBytes(bytes),
+    fix:"Сделайте резервную копию и удалите старые генерации — иначе новые перестанут сохраняться."});
+  else out.push({s:"ok",t:`Объём в норме: ${fmtBytes(bytes)}`,d:"localStorage"});
+
+  const broken=state.items.filter(i=>i.app&&(i.value.trim().startsWith("[")||i.value.trim().startsWith("{"))&&(()=>{try{JSON.parse(i.value);return false}catch{return true}})());
+  if(broken.length)out.push({s:"err",t:`Повреждённых хранилищ: ${broken.length}`,d:broken.map(i=>i.key).join(", "),
+    fix:"JSON не разбирается. Восстановите из копии или очистите эти ключи."});
+  else out.push({s:"ok",t:"Все хранилища разбираются как корректный JSON",d:"проверка синтаксиса"});
+
+  const b=store.get("set_last_backup");
+  if(b){
+    const days=Math.floor((Date.now()-Number(b))/864e5);
+    out.push(days>7?{s:"warn",t:`Последняя копия ${days} дней назад`,d:"set_last_backup",fix:"Сделайте свежую резервную копию."}
+      :{s:"ok",t:`Копия сделана ${days===0?"сегодня":days+" дн. назад"}`,d:"set_last_backup"});
+  }else out.push({s:"warn",t:"Резервная копия ещё не делалась",d:"set_last_backup",
+    fix:"Нажмите «Скачать резервную копию» — один файл сохранит все генерации и отметки."});
+  return out;
+}
+function paintHealth(){
+  $("health").innerHTML=healthChecks().map(c=>`<div class="chk ${c.s}">
+    <span class="ic">${c.s==="ok"?"✓":c.s==="warn"?"!":"✕"}</span>
+    <div style="min-width:0"><b style="font:700 12.5px var(--font)">${esc(c.t)}</b>
+      ${c.d?`<div class="note" style="word-break:break-all;margin-top:3px">${esc(c.d)}</div>`:""}
+      ${c.fix?`<div class="fix">${esc(c.fix)}</div>`:""}</div></div>`).join("");
+}
+function paintSetup(){
+  const gens=arrOf("lv_hist");
+  const real=gens.filter(g=>!g.seeded);
+  const cards=gens.reduce((n,r)=>n+((r?.result?.cards||[]).length),0);
+  let published=0;
+  Object.values(objOf("pub_state")).forEach(p=>{if(p?.platforms)Object.values(p.platforms).forEach(x=>{if(x?.status==="done")published++})});
+  const steps=[
+    {n:"Ключ провайдера сохранён",done:!!store.get("lv_key"),href:"live.html",cta:"Генерация"},
+    {n:"Первая своя генерация",done:real.length>0,href:"live.html",cta:"Собрать"},
+    {n:"Карточки готовы к упаковке",done:cards>0,href:"library.html",cta:"Библиотека"},
+    {n:"Пресет ассетов сохранён",done:arrOf("as_presets").length>0,href:"assets.html",cta:"Ассеты"},
+    {n:"Хотя бы один пост опубликован",done:published>0,href:"publish.html",cta:"Публикация"},
+    {n:"Резервная копия сделана",done:!!store.get("set_last_backup"),href:null,cta:null}
+  ];
+  $("setupCount").textContent=`${steps.filter(s=>s.done).length}/${steps.length}`;
+  $("setup").innerHTML=steps.map((s,i)=>`<div class="step${s.done?" done":""}">
+    <span class="n">${s.done?"✓":i+1}</span><span>${esc(s.n)}</span>
+    ${s.href&&!s.done?`<a class="btn btn-g btn-s" href="${esc(s.href)}">${esc(s.cta)}</a>`:s.done?'<span class="chip g">готово</span>':'<span class="chip a">сейчас</span>'}
+  </div>`).join("");
+}
+$("healthFix").onclick=()=>{
+  const ids=collectIds(),pub=objOf("pub_state");
+  const orphans=Object.keys(pub).filter(k=>!ids.has(k));
+  if(!orphans.length)return toast("Осиротевших отметок нет","info");
+  const backup=JSON.stringify(pub);
+  orphans.forEach(k=>delete pub[k]);
+  store.set("pub_state",JSON.stringify(pub));
+  scan();refresh();beep("del");
+  toast(`Убрано отметок: ${orphans.length}`,"ok",()=>{store.set("pub_state",backup);scan();refresh()});
+};
+$("healthCopy").onclick=()=>{
+  const L=["AI Marketing Studio — отчёт о данных",`Устройство: ${new Date().toLocaleString("ru-RU")}`,
+    `Хранилищ приложения: ${state.items.filter(i=>i.app).length}`,`Объём: ${fmtBytes(appBytes())}`,""];
+  healthChecks().forEach(c=>L.push(`${c.s==="ok"?"[ok]":c.s==="warn"?"[!!]":"[XX]"} ${c.t}${c.d?" — "+c.d:""}${c.fix?"\n      → "+c.fix:""}`));
+  copy(L.join("\n"));
+};
+
+/* ---------- vault ---------- */
+function detectRepo(){
+  const host=location.hostname;
+  const owner=host.endsWith(".github.io")?host.slice(0,-".github.io".length):"";
+  const files=new Set(["app","docs","index.html","live.html","library.html","assets.html","publish.html","settings.html","status.html","launch.html","404.html","icon.svg","sw.js","manifest.webmanifest"]);
+  const first=(location.pathname.split("/").filter(Boolean)[0]||"");
+  const repo=first&&!files.has(first.toLowerCase())?first:(owner?owner+".github.io":"");
+  return{owner,repo};
+}
+function paintVault(){
+  const p=store.get("lv_provider")||"openrouter";
+  $("kProvider").innerHTML=Object.entries(PROVIDERS).map(([k,v])=>`<option value="${k}"${k===p?" selected":""}>${esc(v.n)}</option>`).join("");
+  const cfg=PROVIDERS[p]||PROVIDERS.openrouter;
+  $("kModel").value=store.get("lv_model")||cfg.models[0];
+  $("kKey").value=store.get("lv_key")||"";
+  $("kRemember").setAttribute("aria-checked",String(store.get("lv_remember")==="1"));
+  $("kHost").textContent="→ "+(()=>{try{return new URL(cfg.base).host}catch{return"—"}})();
+  const d=detectRepo();
+  $("pOwner").value=store.get("st_owner")||d.owner;
+  $("pRepo").value=store.get("st_repo")||d.repo;
+  const anyMute=["hub_mute","lib_mute","as_mute","pub_mute","set_mute","launch_mute"].some(k=>store.get(k)==="1");
+  $("pSound").setAttribute("aria-checked",String(!anyMute));
+}
+function syncPrefs(){
+  const on=$("pSound").getAttribute("aria-checked")==="true";
+  ["hub_mute","lib_mute","as_mute","pub_mute","set_mute","launch_mute"].forEach(k=>store.set(k,on?"0":"1"));
+  muted=!on;paintMute();
+}
+$("kProvider").onchange=e=>{
+  const cfg=PROVIDERS[e.target.value];
+  $("kModel").value=cfg.models[0];
+  $("kHost").textContent="→ "+(()=>{try{return new URL(cfg.base).host}catch{return"—"}})();
+};
+$("kEye").onclick=()=>{const i=$("kKey");i.type=i.type==="password"?"text":"password";$("kEye").textContent=i.type==="password"?"👁":"🙈"};
+$("kRemember").onclick=()=>{$("kRemember").setAttribute("aria-checked",String($("kRemember").getAttribute("aria-checked")!=="true"))};
+$("pSound").onclick=()=>{
+  const on=$("pSound").getAttribute("aria-checked")!=="true";
+  $("pSound").setAttribute("aria-checked",String(on));
+  syncPrefs();if(on)beep("tick");
+  toast(on?"Звук включён во всех разделах":"Звук выключен во всех разделах","info");
+};
+$("kForget").onclick=()=>{
+  const prev=store.get("lv_key")||"";
+  store.del("lv_key");store.set("lv_remember","0");
+  $("kKey").value="";$("kRemember").setAttribute("aria-checked","false");
+  scan();refresh();beep("del");
+  toast("Ключ удалён с устройства","ok",prev?()=>{store.set("lv_key",prev);store.set("lv_remember","1");paintVault();scan();refresh()}:null);
+};
+$("kSave").onclick=()=>{
+  const p=$("kProvider").value,m=$("kModel").value.trim(),k=$("kKey").value.trim();
+  const rem=$("kRemember").getAttribute("aria-checked")==="true";
+  store.set("lv_provider",p);
+  if(m)store.set("lv_model",m);
+  store.set("lv_remember",rem?"1":"0");
+  if(rem&&k)store.set("lv_key",k);
+  if(!rem)store.del("lv_key");
+  const o=$("pOwner").value.trim(),r=$("pRepo").value.trim();
+  if(o)store.set("st_owner",o);else store.del("st_owner");
+  if(r)store.set("st_repo",r);else store.del("st_repo");
+  syncPrefs();scan();refresh();beep("save");
+  toast(rem&&k?"Настройки и ключ сохранены":"Настройки сохранены, ключ не запомнен","ok");
+};
+$("kTest").onclick=async()=>{
+  const p=$("kProvider").value,cfg=PROVIDERS[p],key=$("kKey").value.trim(),model=$("kModel").value.trim()||cfg.models[0];
+  if(!key){$("kResult").innerHTML='<div class="chk err"><span class="ic">✕</span><div>Вставьте ключ для проверки</div></div>';beep("err");return}
+  const btn=$("kTest");btn.disabled=true;const old=btn.textContent;btn.innerHTML='<span class="spin"></span>';
+  $("kResult").innerHTML="";
+  const t0=performance.now();
+  try{
+    const headers={"Content-Type":"application/json"};
+    let url,body;
+    if(cfg.style==="anthropic"){
+      url=cfg.base+"/messages";
+      headers["x-api-key"]=key;headers["anthropic-version"]="2023-06-01";
+      headers["anthropic-dangerous-direct-browser-access"]="true";
+      body={model,max_tokens:8,messages:[{role:"user",content:"ping"}]};
+    }else{
+      url=cfg.base+"/chat/completions";
+      headers.Authorization="Bearer "+key;
+      if(p==="openrouter"){headers["HTTP-Referer"]=location.origin;headers["X-Title"]="AI Marketing Studio"}
+      body={model,max_tokens:8,messages:[{role:"user",content:"ping"}]};
+    }
+    const r=await fetch(url,{method:"POST",headers,body:JSON.stringify(body)});
+    const ms=Math.round(performance.now()-t0);
+    if(r.ok){
+      $("kResult").innerHTML=`<div class="chk ok"><span class="ic">✓</span><div><b>${esc(cfg.n)}</b> отвечает · модель <b>${esc(model)}</b> · ${ms} мс</div></div>`;
+      beep("ok");toast("Ключ работает");
+    }else{
+      const txt=await r.text().catch(()=>"");
+      const msg=r.status===401||r.status===403?"Ключ отклонён":r.status===404?"Модель не найдена":r.status===429?"Лимит исчерпан":"HTTP "+r.status;
+      $("kResult").innerHTML=`<div class="chk err"><span class="ic">✕</span><div><b>${esc(msg)}</b><div class="fix">${esc(txt.slice(0,220))}</div></div></div>`;
+      beep("err");
+    }
+  }catch{
+    $("kResult").innerHTML='<div class="chk err"><span class="ic">✕</span><div><b>Браузер не смог достучаться до провайдера</b><div class="fix">Частая причина — запрет запросов со страниц (CORS). OpenRouter рассчитан на браузерные запросы. Проверьте также интернет.</div></div></div>';
+    beep("err");
+  }finally{btn.disabled=false;btn.textContent=old}
+};
+
+/* ---------- backup / restore ---------- */
+$("incSecrets").onclick=()=>{
+  state.incSecrets=!state.incSecrets;
+  $("incSecrets").setAttribute("aria-checked",String(state.incSecrets));
+  if(state.incSecrets)toast("Ключ войдёт в файл копии — храните его закрыто","info");
+};
+$("backupBtn").onclick=()=>{
+  const data={};
+  state.items.filter(i=>i.app&&(state.incSecrets||!i.secret)).forEach(i=>{data[i.key]=i.value});
+  const payload={app:"ai-marketing-studio",kind:"backup",version:1,
+    includesSecrets:state.incSecrets,createdAt:new Date().toISOString(),origin:location.origin,
+    keys:Object.keys(data).length,data};
+  download(new Blob([JSON.stringify(payload,null,2)],{type:"application/json"}),
+    `ams-backup-${new Date().toISOString().slice(0,10)}.json`);
+  store.set("set_last_backup",String(Date.now()));
+  beep("save");scan();refresh();
+  toast(`Копия сохранена: ${Object.keys(data).length} хранилищ, ${fmtBytes(appBytes())}`);
+};
+$("restoreBtn").onclick=()=>$("fileInput").click();
+$("fileInput").onchange=e=>{
+  const f=e.target.files?.[0];if(!f)return;
+  const rd=new FileReader();
+  rd.onload=ev=>{
+    let payload;
+    try{payload=JSON.parse(String(ev.target.result))}
+    catch{toast("Файл не является корректным JSON","err");beep("err");e.target.value="";return}
+    const data=payload&&payload.data&&typeof payload.data==="object"?payload.data:
+      (payload&&typeof payload==="object"&&!Array.isArray(payload)?payload:null);
+    if(!data){toast("В файле нет данных резервной копии","err");beep("err");e.target.value="";return}
+    const entries=Object.entries(data).filter(([k])=>isApp(k));
+    if(!entries.length){toast("В копии нет ключей приложения","err");beep("err");e.target.value="";return}
+    openRestore(entries,payload,f.name);
+  };
+  rd.onerror=()=>{toast("Файл не читается","err");beep("err")};
+  rd.readAsText(f);e.target.value="";
+};
+function openRestore(entries,payload,fname){
+  const rows=entries.map(([k,v])=>{
+    const cur=store.get(k);
+    return{k,v,st:cur==null?"new":cur===v?"same":"changed",bytes:(k.length+String(v).length)*2};
+  });
+  const counts={new:rows.filter(r=>r.st==="new").length,changed:rows.filter(r=>r.st==="changed").length,same:rows.filter(r=>r.st==="same").length};
+  $("drawerHost").innerHTML=`<div class="scrim" id="scrim"></div><aside class="drawer" role="dialog" aria-modal="true" aria-label="Восстановление копии">
+    <div class="row" style="justify-content:space-between;margin-bottom:12px">
+      <span class="kicker lime">Восстановление</span><button class="btn btn-g btn-s" id="dClose">✕ Закрыть</button></div>
+    <h2 style="font:800 15px var(--font);word-break:break-word">${esc(fname)}</h2>
+    <div class="row" style="margin:10px 0">
+      <span class="chip lime">${counts.new} новых</span>
+      <span class="chip a">${counts.changed} изменённых</span>
+      <span class="chip">${counts.same} совпадают</span>
+      ${payload?.includesSecrets?'<span class="chip r">с ключом</span>':""}</div>
+    <p class="note">${payload?.createdAt?"Создана: "+esc(new Date(payload.createdAt).toLocaleString("ru-RU")):"Дата копии неизвестна"} · ${rows.length} хранилищ · ${fmtBytes(rows.reduce((n,r)=>n+r.bytes,0))}</p>
+    <label class="lbl" style="margin-top:14px" for="rMode">Режим</label>
+    <select class="select" id="rMode">
+      <option value="merge">Дополнить — записать новые и изменённые, остальное не трогать</option>
+      <option value="replace">Заменить — удалить текущие данные приложения и записать копию</option>
+    </select>
+    <div class="list" style="margin-top:12px;max-height:280px">
+      ${rows.map(r=>`<div class="row-i"><span class="t"><b>${esc(r.k)}</b>
+        <span class="note">${fmtBytes(r.bytes)} · ${r.st==="new"?"новый ключ":r.st==="changed"?"перезапишется":"без изменений"}</span></span>
+        <span class="chip ${r.st==="new"?"lime":r.st==="changed"?"a":""}">${r.st==="new"?"new":r.st==="changed"?"upd":"="}</span></div>`).join("")}
+    </div>
+    <div class="row" style="margin-top:15px;position:sticky;bottom:0;background:var(--surface);padding:10px 0">
+      <button class="btn btn-p grow" id="rApply">Восстановить</button>
+      <button class="btn btn-g" id="rCancel">Отмена</button>
+    </div>
+    <p class="note" style="margin-top:9px">Перед применением делается снимок текущего состояния — восстановление можно отменить кнопкой в уведомлении.</p>
+  </aside>`;
+  const close=()=>{$("drawerHost").innerHTML=""};
+  $("scrim").onclick=close;$("dClose").onclick=close;$("rCancel").onclick=close;
+  $("rApply").onclick=()=>{
+    const mode=$("rMode").value;
+    const snapshot={};
+    state.items.filter(i=>i.app).forEach(i=>{snapshot[i.key]=i.value});
+    let written=0,failed=0;
+    if(mode==="replace")state.items.filter(i=>i.app).forEach(i=>store.del(i.key));
+    rows.forEach(r=>{
+      if(mode==="merge"&&r.st==="same")return;
+      if(store.set(r.k,String(r.v)))written++;else failed++;
+    });
+    close();scan();paintVault();refresh();beep(failed?"err":"ok");
+    toast(failed?`Записано ${written}, не удалось ${failed} — хранилище переполнено`:`Восстановлено хранилищ: ${written}`,
+      failed?"err":"ok",()=>{
+        state.items.filter(i=>i.app).forEach(i=>store.del(i.key));
+        Object.entries(snapshot).forEach(([k,v])=>store.set(k,v));
+        scan();paintVault();refresh();
+      });
+  };
+  $("dClose").focus();
+}
+
+/* ---------- list ---------- */
+function listView(){
+  let l=state.items.slice();
+  if(!state.chart.foreign)l=l.filter(i=>i.app);
+  if(state.filter==="secret")l=l.filter(i=>i.secret);
+  else if(state.filter==="data")l=l.filter(i=>i.kind==="список"||i.kind==="объект");
+  else if(state.filter==="prefs")l=l.filter(i=>i.kind==="флаг"||i.kind==="значение");
+  else if(state.filter!=="all")l=l.filter(i=>i.group===state.filter);
+  const q=state.q.trim().toLowerCase();
+  if(q)l=l.filter(i=>(i.key+" "+i.value.slice(0,4000)).toLowerCase().includes(q));
+  const cmp={size:(a,b)=>b.bytes-a.bytes,name:(a,b)=>a.key.localeCompare(b.key),
+    records:(a,b)=>b.records-a.records,group:(a,b)=>a.group.localeCompare(b.group)||b.bytes-a.bytes}[state.sort];
+  return l.sort(cmp);
+}
+function paintFilters(){
+  const groups=[...new Set(state.items.filter(i=>i.app).map(i=>i.group))];
+  const base=[["all","Все"],["data","Данные"],["prefs","Настройки"],["secret","Секреты"]];
+  $("filters").innerHTML=base.map(([k,n])=>`<button class="fchip${state.filter===k?" on":""}" data-f="${k}">${n}</button>`).join("")
+    +groups.map(g=>`<button class="fchip${state.filter===g?" on":""}" data-f="${esc(g)}">${esc(GROUPS[g]?.n||g)}</button>`).join("");
+  $("filters").querySelectorAll("[data-f]").forEach(b=>b.onclick=()=>{state.filter=b.dataset.f;paintFilters();paintList();beep("tick")});
+}
+function paintList(){
+  const l=listView();
+  $("storeCount").textContent=`${l.length} / ${state.items.length}`;
+  $("list").innerHTML=l.length?l.map(i=>{
+    const shown=i.secret&&i.value?"••••••••":i.value.slice(0,60).replace(/\s+/g," ");
+    return `<div class="row-i${state.sel.has(i.key)?" sel":""}" data-k="${esc(i.key)}">
+      <input type="checkbox" data-sel="${esc(i.key)}" ${state.sel.has(i.key)?"checked":""} aria-label="Выбрать ${esc(i.key)}">
+      <span class="t"><b>${esc(i.key)}</b>
+        <span class="note">${esc(GROUPS[i.group]?.n||(i.app?"Прочее":"Чужой ключ"))} · ${esc(i.kind)} · ${i.records} зап. · ${fmtBytes(i.bytes)}</span>
+        <span class="note" style="opacity:.75">${esc(shown)}${i.value.length>60?"…":""}</span></span>
+      ${i.secret?'<span class="chip r">секрет</span>':""}
+      <button class="btn btn-g btn-s" data-open="${esc(i.key)}">Открыть</button>
+      <button class="btn btn-g btn-s" style="color:var(--red)" data-del="${esc(i.key)}" aria-label="Очистить ${esc(i.key)}">✕</button></div>`;
+  }).join(""):`<div class="empty"><div class="ic">🗄</div><p class="note">Ничего не найдено. Измените фильтр или включите показ чужих ключей.</p></div>`;
+  $("list").querySelectorAll("[data-sel]").forEach(c=>c.onchange=e=>{
+    e.stopPropagation();c.checked?state.sel.add(c.dataset.sel):state.sel.delete(c.dataset.sel);
+    c.closest(".row-i").classList.toggle("sel",c.checked);paintBulk();beep("tick");
+  });
+  $("list").querySelectorAll("[data-open]").forEach(b=>b.onclick=e=>{e.stopPropagation();openStore(b.dataset.open)});
+  $("list").querySelectorAll("[data-del]").forEach(b=>b.onclick=e=>{e.stopPropagation();delKey(b.dataset.del)});
+  paintBulk();paintFilters();
+}
+function paintBulk(){
+  const n=state.sel.size;
+  $("selN").textContent=n+" выбрано";
+  ["expSel","copySel","delSel"].forEach(id=>$(id).disabled=!n);
+  const v=listView();$("selAll").checked=v.length>0&&v.every(i=>state.sel.has(i.key));
+}
+function delKey(k){
+  const prev=store.get(k);if(prev==null)return;
+  store.del(k);state.sel.delete(k);scan();refresh();beep("del");
+  toast(`Ключ ${k} очищен`,"info",()=>{store.set(k,prev);scan();paintVault();refresh()});
+}
+$("selAll").onchange=()=>{
+  const v=listView();
+  $("selAll").checked?v.forEach(i=>state.sel.add(i.key)):v.forEach(i=>state.sel.delete(i.key));
+  paintList();
+};
+$("expSel").onclick=()=>{
+  const data={};
+  state.items.filter(i=>state.sel.has(i.key)).forEach(i=>{data[i.key]=i.value});
+  download(new Blob([JSON.stringify({app:"ai-marketing-studio",kind:"partial",version:1,
+    includesSecrets:Object.keys(data).some(k=>SECRET_KEYS.includes(k)),
+    createdAt:new Date().toISOString(),data},null,2)],{type:"application/json"}),"ams-selection.json");
+  beep("save");toast(`Сохранено ключей: ${Object.keys(data).length}`);
+};
+$("copySel").onclick=()=>copy([...state.sel].join("\n"));
+$("delSel").onclick=()=>{
+  const keys=[...state.sel];if(!keys.length)return;
+  const snapshot={};keys.forEach(k=>{const v=store.get(k);if(v!=null)snapshot[k]=v});
+  keys.forEach(k=>store.del(k));state.sel.clear();scan();paintVault();refresh();beep("del");
+  toast(`Очищено ключей: ${keys.length}`,"info",()=>{Object.entries(snapshot).forEach(([k,v])=>store.set(k,v));scan();paintVault();refresh()});
+};
+$("q").oninput=e=>{state.q=e.target.value;paintList()};
+$("sort").onchange=e=>{state.sort=e.target.value;paintList()};
+$("saveView").onclick=()=>{
+  const v={id:uid("v"),name:`${state.filter}${state.q?` · «${state.q}»`:""} · ${state.sort}`,filter:state.filter,q:state.q,sort:state.sort};
+  state.views.unshift(v);state.views=state.views.slice(0,8);
+  store.set("set_views",JSON.stringify(state.views));paintViews();
+  toast("Вид сохранён","ok",()=>{state.views=state.views.filter(x=>x.id!==v.id);store.set("set_views",JSON.stringify(state.views));paintViews()});
+};
+function paintViews(){
+  $("views").innerHTML=state.views.length?state.views.map(v=>`<div class="view"><span class="chip p">вид</span><b>${esc(v.name)}</b>
+    <button class="btn btn-g btn-s" data-apply="${esc(v.id)}">Применить</button>
+    <button class="btn btn-g btn-s" style="color:var(--red)" data-vdel="${esc(v.id)}" aria-label="Удалить вид">✕</button></div>`).join(""):"";
+  $("views").querySelectorAll("[data-apply]").forEach(b=>b.onclick=()=>{
+    const v=state.views.find(x=>x.id===b.dataset.apply);if(!v)return;
+    state.filter=v.filter;state.q=v.q;state.sort=v.sort;
+    $("q").value=v.q;$("sort").value=v.sort;paintList();toast("Вид применён");
+  });
+  $("views").querySelectorAll("[data-vdel]").forEach(b=>b.onclick=()=>{
+    const i=state.views.findIndex(x=>x.id===b.dataset.vdel);if(i<0)return;
+    const[rm]=state.views.splice(i,1);store.set("set_views",JSON.stringify(state.views));paintViews();
+    toast("Вид удалён","info",()=>{state.views.splice(i,0,rm);store.set("set_views",JSON.stringify(state.views));paintViews()});
+  });
+}
+function openStore(k){
+  const i=state.items.find(x=>x.key===k);if(!i)return;
+  let pretty=i.value;try{pretty=JSON.stringify(JSON.parse(i.value),null,2)}catch{}
+  $("drawerHost").innerHTML=`<div class="scrim" id="scrim"></div><aside class="drawer" role="dialog" aria-modal="true" aria-label="Хранилище ${esc(k)}">
+    <div class="row" style="justify-content:space-between;margin-bottom:12px">
+      <span class="kicker">Хранилище</span><button class="btn btn-g btn-s" id="dClose">✕ Закрыть</button></div>
+    <h2 style="font:800 14px var(--mono);word-break:break-all">${esc(k)}</h2>
+    <div class="row" style="margin:10px 0">
+      <span class="chip p">${esc(GROUPS[i.group]?.n||(i.app?"Прочее":"Чужой ключ"))}</span>
+      <span class="chip c">${esc(i.kind)}</span>
+      <span class="chip lime">${i.records} записей</span>
+      <span class="chip a">${fmtBytes(i.bytes)}</span>
+      ${i.secret?'<span class="chip r">секрет</span>':""}</div>
+    <div class="row" style="margin-top:12px">
+      <button class="btn btn-g btn-s" id="dCopy" ${i.secret?"disabled":""}>📋 Содержимое</button>
+      <button class="btn btn-g btn-s" id="dDl">⬇ Файл</button>
+      <button class="btn btn-g btn-s" id="dKey">📋 Имя ключа</button>
+      <button class="btn btn-r btn-s" id="dDel">🗑 Очистить</button>
+    </div>
+    ${i.secret?'<p class="note" style="margin-top:12px">Это секрет. Содержимое не показывается и не копируется отсюда — управляйте им в блоке «Ключ и провайдер».</p>'
+      :`<div class="code">${esc(pretty.slice(0,20000))}${pretty.length>20000?"\n… обрезано для просмотра":""}</div>
+      <label class="lbl" style="margin-top:14px" for="dEdit">Правка значения</label>
+      <textarea id="dEdit" rows="8">${esc(i.value.slice(0,60000))}</textarea>
+      <div class="row" style="margin-top:10px"><button class="btn btn-p grow" id="dSave">💾 Записать</button></div>
+      <p class="note" style="margin-top:8px">Некорректный JSON сломает раздел, который читает этот ключ. Проверка выполняется перед записью.</p>`}
+  </aside>`;
+  const close=()=>{$("drawerHost").innerHTML=""};
+  $("scrim").onclick=close;$("dClose").onclick=close;
+  $("dKey").onclick=()=>copy(k);
+  if($("dCopy"))$("dCopy").onclick=()=>copy(i.value);
+  $("dDl").onclick=()=>{download(new Blob([i.value],{type:"application/json"}),k+".json");toast("Файл сохранён")};
+  $("dDel").onclick=()=>{close();delKey(k)};
+  if($("dSave"))$("dSave").onclick=()=>{
+    const val=$("dEdit").value,t=val.trim();
+    if(t.startsWith("[")||t.startsWith("{")){
+      try{JSON.parse(t)}catch(err){toast("JSON не разбирается: "+err.message,"err");beep("err");return}
+    }
+    const prev=i.value;
+    if(!store.set(k,val)){toast("Не удалось записать — хранилище переполнено","err");beep("err");return}
+    close();scan();refresh();beep("save");
+    toast("Значение записано","ok",()=>{store.set(k,prev);scan();refresh()});
+  };
+  $("dClose").focus();
+}
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&$("drawerHost").innerHTML)$("drawerHost").innerHTML=""});
+$("rescanBtn").onclick=()=>{scan();paintVault();refresh();readQuota();toast("Хранилища перечитаны")};
+
+/* ---------- init ---------- */
+function refresh(){paintStats();paintList();paintViews();paintHealth();paintSetup();paintLegend();kick()}
+scan();paintVault();syncChart();refresh();fitChart();drawChart();kick();readQuota();
+window.addEventListener("focus",()=>{scan();paintVault();refresh()});
+setTimeout(()=>{
+  const app=state.items.filter(i=>i.app).length;
+  toast(app?`Найдено ${app} хранилищ приложения. Сделайте резервную копию — это один файл.`
+    :"Данных пока нет. Начните с «Генерации», затем вернитесь и сохраните копию.","info");
+},650);
+</script>
+</body>
+                                                                                                                                                                                                                           </html>
