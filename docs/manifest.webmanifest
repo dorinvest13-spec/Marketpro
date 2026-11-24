@@ -1,0 +1,26 @@
+{
+  "name": "AI Marketing Studio",
+  "short_name": "AI Studio",
+  "description": "Конвейер товарного контента: генерация, библиотека, ассеты, публикация.",
+  "lang": "ru",
+  "dir": "ltr",
+  "start_url": "./launch.html",
+  "scope": "./",
+  "id": "ai-marketing-studio-launcher",
+  "display": "standalone",
+  "display_override": ["standalone", "minimal-ui", "browser"],
+  "orientation": "any",
+  "background_color": "#0c0705",
+  "theme_color": "#ff6a3d",
+  "categories": ["productivity", "business", "utilities"],
+  "icons": [
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    { "name": "Генерация", "short_name": "Генерация", "url": "./live.html" },
+    { "name": "Библиотека", "short_name": "Библиотека", "url": "./library.html" },
+    { "name": "Ассеты", "short_name": "Ассеты", "url": "./assets.html" },
+    { "name": "Публикация", "short_name": "Публикация", "url": "./publish.html" }
+  ]
+}
