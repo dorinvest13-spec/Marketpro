@@ -2,633 +2,365 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI Marketing Studio — конвейер товарного контента</title>
-<meta name="description" content="Ссылка на товар → карточки, тексты для 5 площадок, топ-10 запросов, вертикальный ролик и публикация. Генерация и рендер прямо в браузере.">
-<meta property="og:title" content="AI Marketing Studio">
-<meta property="og:description" content="Конвейер товарного контента: генерация, библиотека, ассеты, публикация">
-<meta property="og:type" content="website">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Unbounded:wght@500;700;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%237c5cff'/%3E%3Ctext x='16' y='22' font-size='15' font-weight='900' font-family='sans-serif' fill='%23fff' text-anchor='middle'%3EAI%3C/text%3E%3C/svg%3E">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>AI Marketing Studio — вход</title>
+<meta name="description" content="Конвейер товарного контента: генерация, карточки PNG, ролик, публикация. Правильный адрес, вход в один тап и установка на рабочий стол.">
+<meta name="theme-color" content="#2ea8ff">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="AI Studio">
+<link rel="manifest" id="mfLink" href="manifest.webmanifest">
+<link rel="icon" id="favLink" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" id="appleLink" href="icon.svg">
 <style>
 :root{
-  --ink:#06070d;--surface:#0d1020;--surface2:#141931;--overlay:#1c2246;--scrim:rgba(4,5,12,.86);--line:#252d52;
-  --violet:#7c5cff;--violet-deep:#4a2dd4;--cyan:#22d3ee;--magenta:#ff4d9d;--amber:#ffb020;
-  --acid:#8bff5a;--green:#3ddc84;--green-deep:#0f7a45;--red:#ff5470;--blue:#4d7cff;--sand:#ffd9a0;
-  --text:#eef1ff;--muted:#98a1c6;--dim:#6a7297;
-  --font:'Manrope',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
-  --disp:'Unbounded',var(--font);--mono:'JetBrains Mono',ui-monospace,Consolas,monospace;
-  --nav:70px;--hue:0deg;
+  --ink:#050b14;--surface:#0d1725;--surface2:#132234;--overlay:#1b3049;--scrim:rgba(4,9,17,.9);--line:#254463;
+  --azure:#2ea8ff;--azure-deep:#0b5c9e;--acid:#b6ff3d;--magenta:#ff2d78;--amber:#ffb020;
+  --cyan:#22d3ee;--red:#ff4d4d;--green:#2ee06a;--sand:#ffd9a0;--slate:#8fa8bf;--violet:#7c5cff;
+  --text:#eaf4ff;--muted:#a3bad0;--dim:#6d879f;
+  --font:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --nav:58px;--pad:14px;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
-body{font-family:var(--font);background:var(--ink);color:var(--text);overflow-x:hidden;-webkit-font-smoothing:antialiased;line-height:1.55}
-::selection{background:var(--violet);color:#fff}
-*{scrollbar-width:thin;scrollbar-color:var(--violet-deep) var(--surface)}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{font-family:var(--font);background:var(--ink);color:var(--text);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased;line-height:1.5;padding-bottom:env(safe-area-inset-bottom)}
+::selection{background:var(--azure);color:#03121f}
+*{scrollbar-width:thin;scrollbar-color:var(--azure-deep) var(--surface)}
 ::-webkit-scrollbar{width:11px;height:11px}
 ::-webkit-scrollbar-track{background:var(--surface);border-left:1px solid var(--line)}
-::-webkit-scrollbar-thumb{background:linear-gradient(var(--violet-deep),var(--violet) 60%,var(--magenta));border-radius:9px;border:2px solid var(--surface)}
-::-webkit-scrollbar-thumb:hover{background:linear-gradient(var(--cyan),var(--violet))}
+::-webkit-scrollbar-thumb{background:linear-gradient(var(--azure-deep),var(--azure) 55%,var(--acid));border-radius:9px;border:2px solid var(--surface)}
+::-webkit-scrollbar-thumb:hover{background:linear-gradient(var(--acid),var(--azure))}
 ::-webkit-scrollbar-corner{background:var(--surface)}
-:focus-visible{outline:2px solid var(--cyan);outline-offset:3px;border-radius:6px}
-img,canvas,svg{max-width:100%}
+:focus-visible{outline:2px solid var(--acid);outline-offset:3px;border-radius:6px}
 a{color:inherit}
 .hidden{display:none!important}
 .amb{position:fixed;inset:0;z-index:-3;background:
-  radial-gradient(58% 46% at 10% 4%,rgba(124,92,255,.24),transparent 62%),
-  radial-gradient(46% 40% at 92% 8%,rgba(34,211,238,.16),transparent 62%),
-  radial-gradient(52% 48% at 74% 96%,rgba(61,220,132,.12),transparent 62%),
-  radial-gradient(40% 34% at 24% 74%,rgba(255,77,157,.08),transparent 64%),var(--ink);
-  filter:hue-rotate(var(--hue));transition:filter .8s ease}
+  radial-gradient(58% 46% at 6% 2%,rgba(46,168,255,.26),transparent 62%),
+  radial-gradient(46% 40% at 96% 6%,rgba(182,255,61,.13),transparent 62%),
+  radial-gradient(52% 48% at 80% 98%,rgba(255,45,120,.13),transparent 62%),
+  radial-gradient(40% 34% at 18% 78%,rgba(34,211,238,.09),transparent 64%),var(--ink)}
 .amb::before{content:"";position:absolute;inset:-25%;background:
-  radial-gradient(32% 28% at 28% 38%,rgba(124,92,255,.18),transparent 70%),
-  radial-gradient(28% 26% at 72% 62%,rgba(34,211,238,.14),transparent 70%),
-  radial-gradient(24% 22% at 50% 88%,rgba(61,220,132,.10),transparent 72%);
-  animation:drift 30s ease-in-out infinite alternate;filter:blur(14px)}
-.amb::after{content:"";position:absolute;inset:0;opacity:.055;mix-blend-mode:overlay;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E")}
-.mesh{position:fixed;inset:0;z-index:-2;pointer-events:none;opacity:.4;
-  background-image:linear-gradient(rgba(124,92,255,.055) 1px,transparent 1px),linear-gradient(90deg,rgba(124,92,255,.055) 1px,transparent 1px);
-  background-size:64px 64px;mask-image:radial-gradient(78% 62% at 50% 26%,#000,transparent)}
-.orb{position:fixed;border-radius:50%;filter:blur(70px);z-index:-2;pointer-events:none;opacity:.5;will-change:transform}
-.orb.a{width:340px;height:340px;left:-90px;top:14%;background:radial-gradient(circle,rgba(124,92,255,.55),transparent 70%)}
-.orb.b{width:280px;height:280px;right:-70px;top:46%;background:radial-gradient(circle,rgba(34,211,238,.42),transparent 70%)}
-.orb.c{width:240px;height:240px;left:38%;bottom:-80px;background:radial-gradient(circle,rgba(61,220,132,.34),transparent 70%)}
+  radial-gradient(30% 26% at 32% 36%,rgba(46,168,255,.2),transparent 70%),
+  radial-gradient(26% 24% at 68% 64%,rgba(255,45,120,.12),transparent 70%);
+  animation:drift 30s ease-in-out infinite alternate;filter:blur(15px)}
+.amb::after{content:"";position:absolute;inset:0;opacity:.07;mix-blend-mode:overlay;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E")}
+.mesh{position:fixed;inset:0;z-index:-2;pointer-events:none;opacity:.32;
+  background-image:linear-gradient(rgba(46,168,255,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(46,168,255,.06) 1px,transparent 1px);
+  background-size:56px 56px;-webkit-mask-image:radial-gradient(80% 62% at 50% 20%,#000,transparent);mask-image:radial-gradient(80% 62% at 50% 20%,#000,transparent)}
 @keyframes drift{from{transform:translate3d(-3%,-2%,0) rotate(-2deg)}to{transform:translate3d(3%,3%,0) rotate(2deg)}}
-@keyframes rise{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:none}}
-@keyframes pop{from{opacity:0;transform:translateY(9px) scale(.98)}to{opacity:1;transform:none}}
+@keyframes rise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+@keyframes pop{from{opacity:0;transform:translateY(8px) scale(.98)}to{opacity:1;transform:none}}
 @keyframes spin{to{transform:rotate(360deg)}}
-@keyframes dash{to{stroke-dashoffset:-300}}
 @keyframes pulse{0%,100%{opacity:.35}50%{opacity:1}}
-@keyframes shimmer{from{background-position:200% 0}to{background-position:-200% 0}}
-@keyframes glow{0%,100%{filter:drop-shadow(0 0 4px currentColor)}50%{filter:drop-shadow(0 0 14px currentColor)}}
-.nav{position:fixed;top:0;left:0;right:0;height:var(--nav);z-index:60;backdrop-filter:blur(20px);background:rgba(6,7,13,.86);border-bottom:1px solid var(--line)}
-.nav-in{max-width:1320px;margin:0 auto;height:100%;padding:0 18px;display:flex;align-items:center;gap:12px}
-.brand{display:flex;align-items:center;gap:11px;text-decoration:none;flex:none}
-.mark{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;font:900 13px var(--disp);color:#fff;
-  background:conic-gradient(from 200deg,var(--violet),var(--magenta),var(--amber),var(--green),var(--cyan),var(--violet));box-shadow:0 0 22px rgba(124,92,255,.55)}
-.brand b{font:700 15px var(--disp);background:linear-gradient(90deg,#fff,var(--sand) 45%,var(--cyan));-webkit-background-clip:text;background-clip:text;color:transparent;white-space:nowrap}
-.nav-scroll{display:flex;gap:3px;align-items:center;margin-left:auto;overflow-x:auto;scrollbar-width:none;padding:4px 0}
+@keyframes flash{0%{opacity:0}28%{opacity:.82}100%{opacity:0}}
+@keyframes glowline{0%,100%{box-shadow:0 0 0 0 rgba(182,255,61,.45)}50%{box-shadow:0 0 0 7px rgba(182,255,61,0)}}
+@keyframes tap{0%,100%{transform:translateY(0) scale(1)}45%{transform:translateY(-7px) scale(.9)}}
+@keyframes sweep{from{transform:translateX(-100%)}to{transform:translateX(240%)}}
+.rise{animation:rise .5s cubic-bezier(.2,.7,.2,1) both}
+.wrap{max-width:1200px;margin:0 auto;padding:0 16px}
+.nav{position:fixed;top:0;left:0;right:0;height:var(--nav);z-index:50;backdrop-filter:blur(18px);background:rgba(5,11,20,.9);border-bottom:1px solid var(--line);padding-top:env(safe-area-inset-top)}
+.nav-in{max-width:1200px;margin:0 auto;height:var(--nav);padding:0 16px;display:flex;align-items:center;gap:8px}
+.brand{display:flex;align-items:center;gap:9px;text-decoration:none;flex:none}
+.mark{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;font:800 12px var(--font);color:#03121f;
+  background:conic-gradient(from 200deg,var(--azure),var(--acid),var(--cyan),var(--magenta),var(--amber),var(--azure));box-shadow:0 0 18px rgba(46,168,255,.55)}
+.brand b{font:800 13.5px var(--font);letter-spacing:-.01em;background:linear-gradient(90deg,#fff,var(--azure) 52%,var(--acid));-webkit-background-clip:text;background-clip:text;color:transparent;white-space:nowrap}
+.nav-scroll{display:flex;gap:4px;align-items:center;margin-left:auto;overflow-x:auto;scrollbar-width:none}
 .nav-scroll::-webkit-scrollbar{display:none}
-.nav-scroll a{position:relative;text-decoration:none;color:var(--muted);font:600 12.5px var(--font);padding:8px 11px;border-radius:9px;white-space:nowrap;transition:color .2s,background .2s}
-.nav-scroll a:hover{color:var(--text);background:rgba(124,92,255,.1)}
-.nav-scroll a.on{color:#fff}
-.nav-scroll a.on::after{content:"";position:absolute;left:11px;right:11px;bottom:1px;height:2px;border-radius:2px;background:linear-gradient(90deg,var(--violet),var(--cyan))}
-.nav-scroll a.ext{border:1px solid var(--line);background:var(--overlay);color:var(--text);font-weight:700}
-.nav-scroll a.ext:hover{border-color:var(--cyan)}
-.nav-scroll a.ext.hot{border-color:rgba(139,255,90,.45);background:rgba(139,255,90,.1);color:var(--acid)}
-.nav-div{width:1px;height:22px;background:var(--line);flex:none;margin:0 5px}
-.nav-mute{flex:none}
-.progress{position:absolute;left:0;bottom:-1px;height:2px;width:0;background:linear-gradient(90deg,var(--violet),var(--cyan),var(--green));box-shadow:0 0 12px var(--violet)}
-.btn{border:0;cursor:pointer;font:700 13px var(--font);border-radius:12px;padding:11px 17px;display:inline-flex;align-items:center;gap:8px;justify-content:center;text-decoration:none;color:#fff;transition:transform .15s,box-shadow .22s,opacity .2s,border-color .2s}
+.nav-scroll a{font:700 11.5px var(--font);color:var(--muted);text-decoration:none;padding:7px 10px;border-radius:9px;white-space:nowrap}
+.nav-scroll a:hover{color:var(--text);background:var(--overlay)}
+.nav-scroll a.on{color:#03121f;background:linear-gradient(100deg,var(--azure),var(--acid))}
+.pill{display:inline-flex;align-items:center;gap:6px;font:700 10px var(--font);padding:5px 9px;border-radius:999px;border:1px solid var(--line);background:var(--overlay);color:var(--muted);white-space:nowrap;flex:none}
+.pill i{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);display:block;animation:pulse 2.6s infinite}
+.pill.off i{background:var(--amber);box-shadow:0 0 8px var(--amber)}
+main{padding:calc(var(--nav) + 20px + env(safe-area-inset-top)) 0 80px}
+section{scroll-margin-top:calc(var(--nav) + 16px)}
+.card{background:linear-gradient(180deg,var(--surface2),var(--surface));border:1px solid var(--line);border-radius:16px;padding:var(--pad);box-shadow:0 18px 48px rgba(0,0,0,.5)}
+.card.hot{border-color:rgba(46,168,255,.44);box-shadow:0 18px 48px rgba(11,92,158,.24)}
+.kicker{font:800 9.5px var(--font);letter-spacing:.2em;text-transform:uppercase;color:var(--azure)}
+.kicker.a{color:var(--acid)}.kicker.m{color:var(--magenta)}.kicker.m2{color:var(--amber)}.kicker.c{color:var(--cyan)}
+h1{font:800 clamp(22px,4.4vw,34px)/1.06 var(--font);letter-spacing:-.03em;margin:8px 0 10px}
+h1 em{font-style:normal;background:linear-gradient(96deg,var(--azure),var(--acid) 55%,var(--cyan));-webkit-background-clip:text;background-clip:text;color:transparent}
+h2{font:800 15.5px var(--font);letter-spacing:-.01em;margin-bottom:10px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+h3{font:800 13px var(--font);margin-bottom:8px}
+.lead{color:var(--muted);font-size:13.5px;max-width:64ch}
+.note{font-size:11px;color:var(--dim);line-height:1.6}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.btn{border:0;cursor:pointer;font:700 12.5px var(--font);border-radius:10px;padding:11px 16px;display:inline-flex;align-items:center;gap:7px;justify-content:center;text-decoration:none;color:#03121f;transition:transform .14s,box-shadow .2s,border-color .2s,opacity .2s}
 .btn:active:not([disabled]){transform:scale(.97)}
-.btn-p{background:linear-gradient(100deg,var(--violet-deep),var(--violet) 52%,var(--magenta));box-shadow:0 10px 30px rgba(124,92,255,.42)}
-.btn-p:hover{box-shadow:0 14px 40px rgba(124,92,255,.62)}
-.btn-c{background:linear-gradient(100deg,#0b6f86,var(--cyan));color:#03222b;box-shadow:0 10px 28px rgba(34,211,238,.3)}
-.btn-a{background:linear-gradient(100deg,#a35a06,var(--amber));color:#2a1500}
-.btn-b{background:linear-gradient(100deg,#24409e,var(--blue))}
-.btn-g{background:linear-gradient(100deg,var(--green-deep),var(--green));color:#052414;box-shadow:0 10px 28px rgba(61,220,132,.3)}
-.btn-acid{background:linear-gradient(100deg,#3f7a1e,var(--acid));color:#0d2103}
-.btn-o{background:var(--overlay);border:1px solid var(--line);color:var(--text)}
-.btn-o:hover{border-color:var(--cyan)}
-.btn-s{padding:8px 12px;font-size:12px;border-radius:10px}
-.btn[disabled]{opacity:.45;cursor:not-allowed;box-shadow:none}
-.chip{display:inline-flex;align-items:center;gap:6px;font:700 11px var(--font);padding:5px 11px;border-radius:999px;border:1px solid var(--line);background:var(--overlay);color:var(--muted)}
-.chip.v{color:var(--violet);border-color:rgba(124,92,255,.45);background:rgba(124,92,255,.12)}
+.btn-p{background:linear-gradient(100deg,var(--azure-deep),var(--azure) 52%,var(--acid));box-shadow:0 8px 24px rgba(46,168,255,.38)}
+.btn-p:hover:not([disabled]){box-shadow:0 12px 34px rgba(46,168,255,.58)}
+.btn-xl{padding:15px 22px;font-size:14.5px;border-radius:13px}
+.btn-a{background:linear-gradient(100deg,#5f7a12,var(--acid))}
+.btn-m{background:linear-gradient(100deg,#a35a06,var(--amber))}
+.btn-pk{background:linear-gradient(100deg,#a8114f,var(--magenta));color:#fff}
+.btn-c{background:linear-gradient(100deg,#0b6f86,var(--cyan))}
+.btn-g{background:var(--overlay);border:1px solid var(--line);color:var(--text)}
+.btn-g:hover:not([disabled]){border-color:var(--azure)}
+.btn-s{padding:7px 11px;font-size:11.5px;border-radius:9px}
+.btn[disabled]{opacity:.42;cursor:not-allowed;box-shadow:none}
+.chip{display:inline-flex;align-items:center;gap:5px;font:700 10px var(--font);padding:4px 9px;border-radius:999px;border:1px solid var(--line);background:var(--overlay);color:var(--muted);white-space:nowrap}
+.chip.b{color:var(--azure);border-color:rgba(46,168,255,.45);background:rgba(46,168,255,.12)}
+.chip.a{color:var(--acid);border-color:rgba(182,255,61,.42);background:rgba(182,255,61,.1)}
+.chip.m{color:var(--magenta);border-color:rgba(255,45,120,.42);background:rgba(255,45,120,.1)}
+.chip.m2{color:var(--amber);border-color:rgba(255,176,32,.42);background:rgba(255,176,32,.1)}
 .chip.c{color:var(--cyan);border-color:rgba(34,211,238,.42);background:rgba(34,211,238,.1)}
-.chip.m{color:var(--magenta);border-color:rgba(255,77,157,.42);background:rgba(255,77,157,.1)}
-.chip.a{color:var(--amber);border-color:rgba(255,176,32,.42);background:rgba(255,176,32,.1)}
-.chip.g{color:var(--green);border-color:rgba(61,220,132,.45);background:rgba(61,220,132,.12)}
-.chip.b{color:var(--blue);border-color:rgba(77,124,255,.45);background:rgba(77,124,255,.12)}
-.chip.acid{color:var(--acid);border-color:rgba(139,255,90,.4);background:rgba(139,255,90,.09)}
-.chip.r{color:var(--red);border-color:rgba(255,84,112,.42);background:rgba(255,84,112,.1)}
-.card{background:linear-gradient(180deg,var(--surface2),var(--surface));border:1px solid var(--line);border-radius:18px;padding:22px;box-shadow:0 20px 54px rgba(0,0,0,.4)}
-.kicker{font:800 10px var(--font);letter-spacing:.2em;text-transform:uppercase;color:var(--cyan)}
-.kicker.v{color:var(--violet)}.kicker.m{color:var(--magenta)}.kicker.a{color:var(--amber)}.kicker.acid{color:var(--acid)}.kicker.b{color:var(--blue)}.kicker.g{color:var(--green)}
-h2.sec{font:900 clamp(24px,3.4vw,38px)/1.12 var(--disp);margin:10px 0 12px;letter-spacing:-.5px}
-h3{font:800 16px var(--font);margin-bottom:10px}
-.lead{color:var(--muted);font-size:15px;max-width:64ch}
-.note{font-size:11.5px;color:var(--dim);line-height:1.6}
-.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
-.grid{display:grid;gap:16px}
-.input,.select,textarea{width:100%;background:var(--ink);border:1px solid var(--line);color:var(--text);border-radius:12px;padding:11px 13px;font:500 14px var(--font);outline:none;transition:border .2s,box-shadow .2s}
-.input:focus,.select:focus,textarea:focus{border-color:var(--violet);box-shadow:0 0 0 3px rgba(124,92,255,.22)}
-.select{appearance:none;cursor:pointer;padding-right:32px;background-image:linear-gradient(45deg,transparent 50%,var(--cyan) 50%),linear-gradient(135deg,var(--cyan) 50%,transparent 50%);background-position:calc(100% - 17px) 50%,calc(100% - 12px) 50%;background-size:5px 5px;background-repeat:no-repeat}
-input[type=color]{width:100%;height:38px;background:var(--ink);border:1px solid var(--line);border-radius:11px;padding:4px;cursor:pointer}
-input[type=range]{width:100%;appearance:none;height:6px;border-radius:99px;background:linear-gradient(90deg,var(--violet-deep),var(--cyan));outline:none;cursor:pointer}
-input[type=range]::-webkit-slider-thumb{appearance:none;width:17px;height:17px;border-radius:50%;background:#fff;border:3px solid var(--violet);box-shadow:0 0 10px rgba(124,92,255,.75);cursor:pointer}
-input[type=range]::-moz-range-thumb{width:14px;height:14px;border-radius:50%;background:#fff;border:3px solid var(--violet);cursor:pointer}
-label.lbl{display:block;font-size:11px;color:var(--muted);margin-bottom:6px;font-weight:700}
-.switch{position:relative;width:44px;height:24px;border-radius:999px;background:var(--overlay);border:1px solid var(--line);cursor:pointer;transition:background .2s;flex:none;padding:0}
-.switch::after{content:"";position:absolute;top:2px;left:2px;width:18px;height:18px;border-radius:50%;background:var(--cyan);transition:transform .25s cubic-bezier(.2,.7,.2,1),background .2s}
-.switch[aria-checked="true"]{background:var(--violet-deep)}
-.switch[aria-checked="true"]::after{transform:translateX(20px);background:#fff}
-.stepper{display:flex;align-items:center;gap:6px;background:var(--ink);border:1px solid var(--line);border-radius:11px;padding:4px}
-.stepper button{width:27px;height:27px;border-radius:8px;border:0;background:var(--overlay);color:var(--text);font-size:15px;cursor:pointer;line-height:1}
-.stepper button:hover:not([disabled]){background:var(--violet-deep)}
-.stepper b{flex:1;text-align:center;font:800 14px var(--font)}
-.stepper button[disabled]{opacity:.4;cursor:not-allowed}
-.ctrl{background:var(--ink);border:1px solid var(--line);border-radius:12px;padding:10px 12px}
-.ctrl .val{float:right;font:800 11px var(--font);color:var(--cyan)}
-.code{position:relative;background:var(--ink);border:1px solid var(--line);border-radius:13px;padding:15px 46px 15px 16px;font:13px/1.75 var(--mono);color:var(--acid);overflow-x:auto;white-space:pre}
-.code .cp{position:absolute;top:9px;right:9px}
-.spin{width:17px;height:17px;border:2px solid var(--cyan);border-top-color:transparent;border-radius:50%;animation:spin .8s linear infinite;flex:none}
-.skel{border-radius:12px;background:linear-gradient(90deg,var(--surface2) 25%,var(--overlay) 50%,var(--surface2) 75%);background-size:200% 100%;animation:shimmer 1.4s infinite}
-.reveal{opacity:0;transform:translateY(26px)}
-.reveal.in{animation:rise .7s cubic-bezier(.2,.7,.2,1) forwards}
-section{scroll-margin-top:calc(var(--nav) + 18px)}
-.wrap{max-width:1320px;margin:0 auto;padding:0 20px}
-.band{padding:74px 0;position:relative}
-.band+.band{border-top:1px solid rgba(37,45,82,.6)}
-.hero{padding:calc(var(--nav) + 44px) 0 56px}
-.hero-grid{display:grid;grid-template-columns:1.06fr .94fr;gap:36px;align-items:start}
-.hbadge{display:inline-flex;align-items:center;gap:9px;padding:6px 13px;border-radius:999px;border:1px solid rgba(139,255,90,.35);background:rgba(139,255,90,.08);font:700 11.5px var(--font);color:var(--acid)}
-.dot{width:7px;height:7px;border-radius:50%;background:var(--acid);box-shadow:0 0 10px var(--acid);animation:pulse 2s infinite}
-h1{font:900 clamp(31px,5.2vw,58px)/1.04 var(--disp);letter-spacing:-1.6px;margin:16px 0 16px}
-h1 .g1{background:linear-gradient(96deg,var(--violet),var(--magenta) 46%,var(--amber));-webkit-background-clip:text;background-clip:text;color:transparent}
-h1 .g2{background:linear-gradient(96deg,var(--cyan),var(--green));-webkit-background-clip:text;background-clip:text;color:transparent}
-.hero p.lead{font-size:16.5px;max-width:56ch}
-.metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:22px 0}
-.metric{background:var(--ink);border:1px solid var(--line);border-radius:13px;padding:13px 12px}
-.metric b{display:block;font:900 24px var(--disp);line-height:1.1}
-.metric span{font-size:10px;color:var(--dim);text-transform:uppercase;letter-spacing:.1em}
-.m1 b{color:var(--violet)}.m2 b{color:var(--cyan)}.m3 b{color:var(--amber)}.m4 b{color:var(--green)}
-.stack{display:flex;flex-wrap:wrap;gap:7px;margin-top:18px}
-.next{margin-top:20px;border:1px solid rgba(139,255,90,.35);background:linear-gradient(120deg,rgba(139,255,90,.09),rgba(34,211,238,.06));border-radius:16px;padding:16px}
-.next b{font:800 14px var(--font);display:block;margin-bottom:6px}
-.studio{position:sticky;top:calc(var(--nav) + 18px)}
-.stage{display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:start}
-.reel{width:236px;aspect-ratio:9/16;border-radius:22px;border:2px solid var(--line);overflow:hidden;background:#05060c;box-shadow:0 30px 70px rgba(0,0,0,.6),0 0 40px rgba(124,92,255,.18);position:relative;flex:none}
-.reel canvas{width:100%;height:100%;display:block}
-.reel .tag{position:absolute;top:9px;left:9px;font:800 9px var(--font);letter-spacing:.12em;padding:4px 8px;border-radius:7px;background:rgba(6,7,13,.72);border:1px solid var(--line);color:var(--cyan)}
-.deck{display:grid;grid-template-columns:repeat(auto-fit,minmax(128px,1fr));gap:9px}
-.deck-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:11px;flex-wrap:wrap}
-.flowmap{background:var(--ink);border:1px solid var(--line);border-radius:18px;padding:16px;overflow-x:auto}
-.flow{stroke-dasharray:8 10;animation:dash 10s linear infinite}
-.node-lit{animation:glow 2.6s ease-in-out infinite}
-.surfaces{display:grid;grid-template-columns:repeat(auto-fit,minmax(252px,1fr));gap:14px;margin-top:18px}
-.surface{border:1px solid var(--line);border-radius:16px;padding:18px;background:linear-gradient(180deg,var(--surface2),var(--surface));position:relative;overflow:hidden;transition:transform .25s,border-color .25s,box-shadow .25s;display:flex;flex-direction:column;gap:10px}
-.surface::before{content:"";position:absolute;inset:0 auto 0 0;width:3px;background:var(--sc)}
-.surface:hover{transform:translateY(-5px);border-color:var(--sc);box-shadow:0 18px 44px rgba(0,0,0,.4)}
-.surface .ic{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;font-size:19px;background:var(--overlay);border:1px solid var(--line)}
-.surface h3{margin:0}
-.surface .path{font:11px var(--mono);color:var(--sc);word-break:break-all}
-.surface .acts{margin-top:auto;display:flex;gap:7px;flex-wrap:wrap}
-.pipe{display:grid;grid-template-columns:.85fr 1.15fr;gap:34px;align-items:start}
-.pipe-sticky{position:sticky;top:calc(var(--nav) + 30px)}
-.stage-card{display:grid;grid-template-columns:52px 1fr;gap:16px;padding:20px;border-radius:16px;border:1px solid var(--line);background:linear-gradient(180deg,var(--surface2),var(--surface));transition:border-color .3s,transform .3s,box-shadow .3s}
-.stage-card:hover{transform:translateX(6px)}
-.stage-card.s1:hover{border-color:var(--violet);box-shadow:0 16px 40px rgba(124,92,255,.2)}
-.stage-card.s2:hover{border-color:var(--cyan);box-shadow:0 16px 40px rgba(34,211,238,.18)}
-.stage-card.s3:hover{border-color:var(--blue);box-shadow:0 16px 40px rgba(77,124,255,.18)}
-.stage-card.s4:hover{border-color:var(--amber);box-shadow:0 16px 40px rgba(255,176,32,.18)}
-.stage-card.s5:hover{border-color:var(--green);box-shadow:0 16px 40px rgba(61,220,132,.18)}
-.snum{width:52px;height:52px;border-radius:15px;display:grid;place-items:center;font:900 19px var(--disp);color:#fff}
-.s1 .snum{background:linear-gradient(140deg,var(--violet-deep),var(--violet))}
-.s2 .snum{background:linear-gradient(140deg,#0b6f86,var(--cyan));color:#04222b}
-.s3 .snum{background:linear-gradient(140deg,#24409e,var(--blue))}
-.s4 .snum{background:linear-gradient(140deg,#a35a06,var(--amber));color:#2a1500}
-.s5 .snum{background:linear-gradient(140deg,var(--green-deep),var(--green));color:#052414}
-.tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
-.demo-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:20px;align-items:start}
-.pcards{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:13px}
-.pcard{border:1px solid var(--line);border-radius:16px;overflow:hidden;background:radial-gradient(60% 40% at 84% 8%,rgba(124,92,255,.26),transparent 60%),radial-gradient(55% 40% at 12% 90%,rgba(34,211,238,.2),transparent 60%),#0b0e1a;transition:transform .2s,border-color .2s}
-.pcard:hover{transform:translateY(-4px);border-color:var(--amber)}
-.pcard .b{padding:15px;display:flex;flex-direction:column;gap:9px}
-.pcard .thumb{height:104px;border-radius:11px;border:1px solid var(--line);display:grid;place-items:center;font:900 13px var(--disp);color:#fff;text-align:center;padding:8px;background:linear-gradient(135deg,rgba(124,92,255,.5),rgba(34,211,238,.35))}
-.pcard h4{font:800 13.5px var(--font);line-height:1.35}
-.pcard .price{font:900 20px var(--disp);color:var(--amber)}
-.pcard .desc{font-size:11.5px;color:var(--muted);line-height:1.55}
-.pcard ul{list-style:none;display:flex;flex-direction:column;gap:6px;font-size:11.5px;color:var(--muted)}
-.pcard li{display:flex;gap:7px}
-.pcard li::before{content:"✔";color:var(--acid);flex:none}
-.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
-.tab-btn{border:1px solid var(--line);background:var(--overlay);color:var(--muted);font:700 12px var(--font);padding:7px 13px;border-radius:999px;cursor:pointer;transition:.2s}
-.tab-btn.on{color:#fff;border-color:var(--violet);background:var(--violet-deep)}
-.txtbox{width:100%;min-height:210px;background:var(--ink);border:1px solid var(--line);border-radius:13px;padding:14px;color:var(--text);font:13px/1.65 var(--font);resize:vertical;outline:none}
-.txtbox:focus{border-color:var(--violet);box-shadow:0 0 0 3px rgba(124,92,255,.2)}
-.plats{display:grid;grid-template-columns:repeat(auto-fit,minmax(216px,1fr));gap:14px}
-.plat{border:1px solid var(--line);border-radius:16px;padding:18px;background:linear-gradient(180deg,var(--surface2),var(--surface));position:relative;overflow:hidden;transition:transform .25s,border-color .25s}
-.plat::before{content:"";position:absolute;inset:0 auto 0 0;width:3px;background:var(--pc)}
-.plat:hover{transform:translateY(-5px);border-color:var(--pc)}
-.plat .ic{font-size:23px}
-.bar{height:6px;border-radius:99px;background:var(--overlay);overflow:hidden;margin-top:11px}
-.bar i{display:block;height:100%;background:var(--pc);width:0;transition:width 1.1s cubic-bezier(.2,.7,.2,1)}
-.api-tools{display:grid;grid-template-columns:1fr auto auto;gap:11px;margin-bottom:14px}
-.api-list{display:flex;flex-direction:column;gap:9px;max-height:420px;overflow-y:auto;padding-right:6px}
-.ep{border:1px solid var(--line);border-radius:13px;background:var(--ink);overflow:hidden}
-.ep-h{width:100%;border:0;background:none;color:var(--text);display:flex;align-items:center;gap:11px;padding:12px 14px;cursor:pointer;text-align:left;font:600 13px var(--font)}
-.ep-h:hover{background:rgba(124,92,255,.07)}
-.meth{font:800 10px var(--mono);padding:4px 8px;border-radius:6px;flex:none;min-width:56px;text-align:center}
-.m-get{background:rgba(61,220,132,.16);color:var(--green);border:1px solid rgba(61,220,132,.4)}
-.m-post{background:rgba(124,92,255,.16);color:var(--violet);border:1px solid rgba(124,92,255,.45)}
-.m-del{background:rgba(255,84,112,.14);color:var(--red);border:1px solid rgba(255,84,112,.4)}
-.ep-b{padding:0 14px 14px;border-top:1px solid var(--line)}
-.ep-b .code{margin-top:12px;font-size:12px}
-.ship{display:grid;grid-template-columns:.8fr 1.2fr;gap:24px;align-items:start}
-.steps{display:flex;flex-direction:column;gap:12px}
-.step{display:grid;grid-template-columns:28px 1fr;gap:12px;align-items:start;font-size:13.5px;color:var(--muted)}
-.step b{width:28px;height:28px;border-radius:9px;display:grid;place-items:center;background:var(--overlay);border:1px solid var(--line);color:var(--cyan);font:800 12px var(--font)}
-.trust{display:grid;grid-template-columns:repeat(auto-fit,minmax(238px,1fr));gap:14px}
-.tr{border:1px solid var(--line);border-radius:16px;padding:19px;background:linear-gradient(180deg,var(--surface2),var(--surface))}
-.tr .ic{width:38px;height:38px;border-radius:11px;display:grid;place-items:center;font-size:17px;margin-bottom:11px}
-footer{border-top:1px solid var(--line);padding:34px 0 46px;background:rgba(6,7,13,.6)}
-.foot{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;align-items:center}
-.toasts{position:fixed;left:16px;bottom:16px;z-index:90;display:flex;flex-direction:column;gap:9px;width:min(350px,calc(100vw - 32px))}
-.toast{display:flex;gap:10px;align-items:flex-start;padding:12px 14px;border-radius:13px;border:1px solid var(--line);background:var(--surface2);box-shadow:0 16px 44px rgba(0,0,0,.55);font-size:13px;animation:pop .3s both}
-.toast.ok{border-color:rgba(61,220,132,.5)}.toast.err{border-color:rgba(255,84,112,.5)}.toast.info{border-color:rgba(34,211,238,.5)}
-.toast button.x{margin-left:auto;border:0;background:none;color:var(--dim);cursor:pointer;font-size:14px}
-@media (max-width:1080px){
-  .hero-grid,.pipe,.demo-grid,.ship{grid-template-columns:1fr}
-  .studio,.pipe-sticky{position:static}
-  .stage{grid-template-columns:1fr;justify-items:center}
-  .deck{width:100%}
-}
+.chip.g{color:var(--green);border-color:rgba(46,224,106,.42);background:rgba(46,224,106,.1)}
+.chip.r{color:var(--red);border-color:rgba(255,77,77,.42);background:rgba(255,77,77,.1)}
+label.lbl{display:block;font-size:10px;color:var(--muted);margin-bottom:5px;font-weight:700}
+.input,.select{width:100%;background:var(--ink);border:1px solid var(--line);color:var(--text);border-radius:10px;padding:10px 11px;font:500 13px var(--font);outline:none;transition:border .2s,box-shadow .2s}
+.input:focus,.select:focus{border-color:var(--azure);box-shadow:0 0 0 3px rgba(46,168,255,.22)}
+.select{appearance:none;cursor:pointer;padding-right:28px;background-image:linear-gradient(45deg,transparent 50%,var(--azure) 50%),linear-gradient(135deg,var(--azure) 50%,transparent 50%);background-position:calc(100% - 15px) 50%,calc(100% - 10px) 50%;background-size:5px 5px;background-repeat:no-repeat}
+input[type=color]{width:100%;height:34px;background:var(--ink);border:1px solid var(--line);border-radius:10px;padding:3px;cursor:pointer}
+input[type=range]{width:100%;appearance:none;height:6px;border-radius:99px;background:linear-gradient(90deg,var(--azure-deep),var(--acid));outline:none;cursor:pointer}
+input[type=range]::-webkit-slider-thumb{appearance:none;width:17px;height:17px;border-radius:50%;background:#fff;border:3px solid var(--azure);box-shadow:0 0 9px rgba(46,168,255,.7);cursor:pointer}
+input[type=range]::-moz-range-thumb{width:14px;height:14px;border-radius:50%;background:#fff;border:3px solid var(--azure);cursor:pointer}
+.switch{position:relative;width:40px;height:22px;border-radius:999px;background:var(--overlay);border:1px solid var(--line);cursor:pointer;transition:background .2s;flex:none;padding:0}
+.switch::after{content:"";position:absolute;top:2px;left:2px;width:16px;height:16px;border-radius:50%;background:var(--azure);transition:transform .24s cubic-bezier(.2,.7,.2,1),background .2s}
+.switch[aria-checked="true"]{background:var(--azure-deep)}
+.switch[aria-checked="true"]::after{transform:translateX(18px);background:#fff}
+.deck{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:9px}
+.ctrl{background:var(--ink);border:1px solid var(--line);border-radius:11px;padding:9px 11px}
+.ctrl .val{float:right;font:800 10px var(--font);color:var(--acid)}
+.stage{display:grid;grid-template-columns:minmax(230px,320px) 1fr;gap:16px;align-items:start}
+.canvas-box{position:relative;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:#040a12;box-shadow:0 20px 50px rgba(0,0,0,.6)}
+.canvas-box canvas{width:100%;display:block}
+.canvas-box .flash{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none}
+.canvas-box .flash.go{animation:flash .4s ease-out}
+.canvas-box .tag{position:absolute;top:8px;left:8px;font:800 9px var(--font);letter-spacing:.12em;padding:4px 8px;border-radius:7px;background:rgba(5,11,20,.82);border:1px solid var(--line);color:var(--azure)}
+.addr-hero{background:var(--ink);border:1px solid rgba(182,255,61,.4);border-radius:13px;padding:13px;margin-top:12px;animation:glowline 3s ease-in-out infinite}
+.addr-hero .u{font:700 clamp(13px,3.2vw,19px) var(--mono);color:var(--acid);word-break:break-all;line-height:1.35}
+.mock{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+.mock-card{border:1px solid var(--line);border-radius:14px;padding:12px;background:var(--ink);position:relative}
+.mock-card.good{border-color:rgba(182,255,61,.45);background:rgba(182,255,61,.05)}
+.mock-card.bad{border-color:rgba(255,77,77,.45);background:rgba(255,77,77,.05)}
+.mock-card .hd{display:flex;align-items:center;gap:7px;margin-bottom:9px;flex-wrap:wrap}
+.mock-card .hd b{font:800 12px var(--font)}
+.browser{border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#0a1420}
+.browser .top{display:flex;align-items:center;gap:6px;padding:7px 8px;background:#101d2c;border-bottom:1px solid var(--line)}
+.browser .bot{display:flex;align-items:center;gap:6px;padding:7px 8px;background:#101d2c;border-top:1px solid var(--line)}
+.browser .dot{width:7px;height:7px;border-radius:50%;background:#2b4258;flex:none}
+.browser .bar{flex:1;min-width:0;border-radius:7px;padding:5px 8px;font:10.5px var(--mono);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;border:1px solid transparent}
+.browser .bar.url{background:#050d16;border-color:rgba(182,255,61,.55);color:var(--acid)}
+.browser .bar.search{background:#fff;color:#3c4043;border-color:rgba(255,77,77,.5)}
+.browser .body{padding:10px 8px;font:10.5px var(--font);color:var(--dim);min-height:46px}
+.browser .body .g{font:800 15px var(--font);letter-spacing:-.02em;background:linear-gradient(90deg,#4285f4,#ea4335,#fbbc05,#34a853);-webkit-background-clip:text;background-clip:text;color:transparent;display:inline-block;margin-bottom:5px}
+.pointer{position:absolute;font-size:19px;animation:tap 2.2s ease-in-out infinite;pointer-events:none}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(248px,1fr));gap:12px}
+.tile{border:1px solid var(--line);border-radius:15px;padding:15px;background:linear-gradient(180deg,var(--surface2),var(--surface));position:relative;overflow:hidden;display:flex;flex-direction:column;gap:8px;transition:transform .2s,border-color .2s,box-shadow .2s}
+.tile::before{content:"";position:absolute;inset:0 auto 0 0;width:3px;background:var(--tc)}
+.tile:hover{transform:translateY(-4px);border-color:var(--tc);box-shadow:0 16px 40px rgba(0,0,0,.42)}
+.tile.sel{border-color:var(--cyan);background:rgba(34,211,238,.06)}
+.tile .top{display:flex;align-items:center;gap:8px}
+.tile .ic{width:34px;height:34px;flex:none;border-radius:10px;display:grid;place-items:center;font-size:16px;background:var(--overlay);border:1px solid var(--line)}
+.tile input[type=checkbox]{accent-color:var(--cyan);width:15px;height:15px;flex:none}
+.tile b{font:800 13px var(--font)}
+.tile .u{font:10.5px var(--mono);color:var(--tc);word-break:break-all}
+.tile .acts{margin-top:auto;display:flex;gap:6px;flex-wrap:wrap}
+.filters{display:flex;gap:6px;flex-wrap:wrap}
+.fchip{border:1px solid var(--line);background:var(--overlay);color:var(--muted);font:700 11px var(--font);padding:6px 11px;border-radius:999px;cursor:pointer}
+.fchip.on{color:#03121f;border-color:var(--azure);background:linear-gradient(100deg,var(--azure),var(--acid))}
+.bulk{display:flex;gap:8px;align-items:center;flex-wrap:wrap;background:var(--ink);border:1px solid var(--line);border-radius:11px;padding:9px 11px;margin-bottom:10px}
+.tests{display:flex;flex-direction:column;gap:7px;margin-top:11px}
+.test{display:grid;grid-template-columns:24px 1fr auto;gap:10px;align-items:center;background:var(--ink);border:1px solid var(--line);border-radius:11px;padding:10px 11px;font-size:12.5px}
+.test.pass{border-color:rgba(46,224,106,.35)}
+.test.warn{border-color:rgba(255,176,32,.4)}
+.test.fail{border-color:rgba(255,77,77,.45);background:rgba(255,77,77,.05)}
+.test .ic{width:24px;height:24px;border-radius:7px;display:grid;place-items:center;font-size:11px}
+.test.pass .ic{background:rgba(46,224,106,.15);color:var(--green)}
+.test.warn .ic{background:rgba(255,176,32,.15);color:var(--amber)}
+.test.fail .ic{background:rgba(255,77,77,.15);color:var(--red)}
+.test .val{font:10.5px var(--mono);color:var(--slate);text-align:right;max-width:42%;word-break:break-word}
+.test .fix{margin-top:5px;font:10.5px/1.6 var(--mono);color:var(--sand);background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:7px 9px}
+.bar{position:relative;height:9px;border-radius:99px;background:var(--overlay);border:1px solid var(--line);overflow:hidden;margin-top:12px}
+.bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--azure),var(--acid));transition:width .6s cubic-bezier(.2,.7,.2,1)}
+.bar.anim::after{content:"";position:absolute;inset:0;width:38%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.18),transparent);animation:sweep 2.4s linear infinite}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(100px,1fr));gap:9px;margin-top:12px}
+.stat{background:var(--ink);border:1px solid var(--line);border-radius:11px;padding:10px}
+.stat b{display:block;font:800 19px var(--font);letter-spacing:-.02em;line-height:1.15;color:var(--azure)}
+.stat span{font-size:9px;color:var(--dim);text-transform:uppercase;letter-spacing:.1em}
+.stat.s2 b{color:var(--acid)}.stat.s3 b{color:var(--amber)}.stat.s4 b{color:var(--magenta)}.stat.s5 b{color:var(--cyan)}
+.toasts{position:fixed;left:14px;bottom:calc(14px + env(safe-area-inset-bottom));z-index:90;display:flex;flex-direction:column;gap:8px;width:min(350px,calc(100vw - 28px))}
+.toast{display:flex;gap:9px;align-items:flex-start;padding:11px 13px;border-radius:12px;border:1px solid var(--line);background:var(--surface2);box-shadow:0 14px 40px rgba(0,0,0,.55);font-size:12px;animation:pop .28s both}
+.toast.ok{border-color:rgba(46,224,106,.5)}.toast.err{border-color:rgba(255,77,77,.5)}.toast.info{border-color:rgba(46,168,255,.5)}
+.toast .x{margin-left:auto;border:0;background:none;color:var(--dim);cursor:pointer;font-size:13px}
+.spin{width:14px;height:14px;border:2px solid var(--azure);border-top-color:transparent;border-radius:50%;animation:spin .8s linear infinite;flex:none}
+.band{margin-top:16px}
+footer{border-top:1px solid var(--line);padding:22px 0;margin-top:20px;background:rgba(5,11,20,.6)}
+@media (max-width:900px){.stage,.mock{grid-template-columns:1fr}}
 @media (max-width:720px){
-  :root{--nav:60px}
-  .wrap{padding:0 14px}
-  .nav-in{padding:0 12px;gap:8px}
-  .brand b{display:none}
-  .nav-scroll a{padding:7px 9px;font-size:11.5px}
-  .band{padding:50px 0}
-  .metrics{grid-template-columns:repeat(2,1fr)}
-  .api-tools{grid-template-columns:1fr}
-  .reel{width:min(236px,72vw)}
-  .card{padding:16px}
-  .hide-sm{display:none}
+  :root{--nav:54px}
+  .wrap{padding:0 12px}.nav-in{padding:0 12px;gap:6px}.brand b{display:none}
+  .card{padding:12px}.hide-sm{display:none}
 }
-@media (prefers-reduced-motion:reduce){
-  html{scroll-behavior:auto}
-  .amb::before,.flow,.dot,.reveal.in,.node-lit{animation:none!important}
-  .reveal{opacity:1;transform:none}
-  *{transition-duration:.01ms!important}
-}
+@media (prefers-reduced-motion:reduce){.amb::before,.rise,.pill i,.pointer,.addr-hero,.bar.anim::after{animation:none!important}*{transition-duration:.01ms!important}}
 </style>
 </head>
 <body>
 <div class="amb"></div><div class="mesh"></div>
-<div class="orb a" data-par="0.16"></div><div class="orb b" data-par="-0.12"></div><div class="orb c" data-par="0.09"></div>
 
-<nav class="nav">
-  <div class="nav-in">
-    <a class="brand" href="#top"><span class="mark">AI</span><b>Marketing&nbsp;Studio</b></a>
-    <div class="nav-scroll" id="navScroll">
-      <a href="#product">Продукт</a>
-      <a href="#pipeline">Конвейер</a>
-      <a href="#demo">Демо</a>
-      <a href="#platforms">Площадки</a>
-      <a href="#api">API</a>
-      <a href="#ship">Запуск</a>
-      <span class="nav-div"></span>
-      <a class="ext" href="app/" data-surface="app">🛒 Студия</a>
-      <a class="ext hot" href="live.html" data-surface="live">⚡ Генерация</a>
-      <a class="ext" href="library.html" data-surface="library">📚 Библиотека</a>
-      <a class="ext" href="assets.html" data-surface="assets">🎨 Ассеты</a>
-      <a class="ext" href="publish.html" data-surface="publish">🚀 Публикация</a>
-      <a class="ext" href="status.html" data-surface="status">📊 Состояние</a>
-    </div>
-    <button class="btn btn-o btn-s nav-mute" id="muteBtn" aria-pressed="false">🔔</button>
-    <div class="progress" id="prog"></div>
+<nav class="nav"><div class="nav-in">
+  <a class="brand" href="#top"><span class="mark">AI</span><b>Studio</b></a>
+  <span class="pill" id="netPill"><i></i><span id="netText">онлайн</span></span>
+  <div class="nav-scroll" id="navScroll">
+    <a href="#addr">Адрес</a>
+    <a href="#sec">Разделы</a>
+    <a href="#card">Карточка</a>
+    <a href="#check">Проверка</a>
   </div>
-</nav>
+  <button class="btn btn-g btn-s" id="muteBtn" aria-pressed="false" style="flex:none">🔔</button>
+</div></nav>
 
-<main id="top">
-<section class="hero wrap">
-  <div class="hero-grid">
-    <div>
-      <span class="hbadge"><span class="dot"></span>Работает в браузере · без сервера · MIT</span>
-      <h1>Ссылка на товар → <span class="g1">контент-пак</span> и <span class="g2">публикация</span></h1>
-      <p class="lead">Три переупакованные карточки, пять текстов под Telegram, Дзен, ВКонтакте, Одноклассники и сайт, топ-10 запросов, вертикальный ролик и превью поста перед выходом. Генерация идёт напрямую к вашему провайдеру, рендер — на устройстве.</p>
-
-      <div class="metrics">
-        <div class="metric m1"><b data-count="3">0</b><span>карточки</span></div>
-        <div class="metric m2"><b data-count="5">0</b><span>площадки</span></div>
-        <div class="metric m3"><b data-count="10">0</b><span>запросов</span></div>
-        <div class="metric m4"><b data-count="5">0</b><span>шагов до эфира</span></div>
+<main class="wrap" id="top">
+  <div class="card hot rise">
+    <span class="kicker a">Конвейер товарного контента</span>
+    <h1>Ссылка на товар → <em>карточки, тексты и ролик</em></h1>
+    <p class="lead">Генерация по вашему ключу, библиотека с правкой, карточки в PNG до 3×, вертикальный ролик с записью и публикация с превью поста. Всё считается на устройстве.</p>
+    <div class="addr-hero">
+      <span class="kicker a">Правильный адрес этой страницы</span>
+      <div class="u" id="heroUrl">—</div>
+      <div class="row" style="margin-top:10px">
+        <button class="btn btn-p" id="copyHero">📋 Скопировать адрес</button>
+        <button class="btn btn-c btn-s" id="installBtn">📲 На рабочий стол</button>
+        <button class="btn btn-g btn-s" id="saveSelf">💾 Сохранить файл</button>
       </div>
-
-      <div class="next" id="nextBox">
-        <span class="kicker acid">Ваш прогресс</span>
-        <b id="nextTitle">Читаю состояние…</b>
-        <p class="note" id="nextNote" style="color:var(--muted);font-size:12.5px"></p>
-        <div class="row" style="margin-top:11px" id="nextActs"></div>
-        <div class="row" style="margin-top:11px" id="stateChips"></div>
-      </div>
-
-      <div class="stack">
-        <span class="chip v">OpenRouter</span><span class="chip c">Groq</span><span class="chip m">Anthropic</span>
-        <span class="chip a">Together · Qwen</span><span class="chip b">Библиотека</span><span class="chip g">Публикация</span>
-        <span class="chip acid">Canvas-рендер</span><span class="chip r">Ключ на устройстве</span>
-      </div>
+      <p class="note" style="margin-top:8px">Сохраните в закладки или поставьте иконку — тогда адрес больше не придётся набирать вручную.</p>
     </div>
+    <div class="row" style="margin-top:12px">
+      <a class="btn btn-p btn-xl" href="studio.html">🛠 Открыть студию</a>
+      <a class="btn btn-g" href="launch.html">🧭 Пускатель</a>
+      <a class="btn btn-g" href="live.html">⚡ Генерация</a>
+    </div>
+    <div class="stats" id="stats"></div>
+  </div>
 
-    <div class="studio">
-      <div class="card">
-        <div class="deck-head">
-          <div><span class="kicker m">Живой кадр</span><h3 style="margin:5px 0 0">Превью ролика · 1080×1920</h3></div>
-          <span class="chip c" id="reelState">рендер идёт</span>
+  <section id="addr" class="card band rise" style="animation-delay:.05s">
+    <span class="kicker m">Почему бывает 404</span>
+    <h2 style="margin-top:6px">Адресная строка, а не поиск</h2>
+    <p class="lead">Ссылка открывается только из строки браузера. Если вставить её в поле Google, поиск будет искать эти буквы и напишет «did not match any documents». А если открыть домен без папки проекта — GitHub отдаст 404.</p>
+    <div class="mock">
+      <div class="mock-card good">
+        <div class="hd"><span class="chip a">✓ верно</span><b>Chrome — строка сверху</b></div>
+        <div class="browser">
+          <div class="top"><span class="dot"></span><span class="dot"></span><span class="bar url" id="mockTop">—</span></div>
+          <div class="body">Страница открывается сразу.</div>
         </div>
-        <div class="stage">
-          <div class="reel">
-            <canvas id="reel" width="540" height="960" aria-label="Живое превью рекламного ролика"></canvas>
-            <span class="tag">9:16 · LIVE</span>
-          </div>
-          <div style="width:100%">
-            <div class="deck">
-              <div class="ctrl"><label class="lbl" for="cGrade">Грейдинг</label><input type="color" id="cGrade" value="#7c5cff"></div>
-              <div class="ctrl"><label class="lbl" for="cMotion">Динамика <span class="val" id="vMotion">1.0×</span></label><input type="range" id="cMotion" min="0.2" max="2.4" step="0.1" value="1"></div>
-              <div class="ctrl"><label class="lbl" for="cGlow">Свечение <span class="val" id="vGlow">1.0×</span></label><input type="range" id="cGlow" min="0" max="2.5" step="0.1" value="1"></div>
-              <div class="ctrl"><label class="lbl" for="cGrain">Зерно <span class="val" id="vGrain">0.10</span></label><input type="range" id="cGrain" min="0" max="0.4" step="0.02" value="0.1"></div>
-              <div class="ctrl"><label class="lbl" for="cZoom">Наезд камеры <span class="val" id="vZoom">1.00×</span></label><input type="range" id="cZoom" min="0.85" max="1.35" step="0.01" value="1"></div>
-              <div class="ctrl"><label class="lbl">Сцен</label><div class="stepper"><button id="scMinus" aria-label="Меньше сцен">−</button><b id="vScenes">4</b><button id="scPlus" aria-label="Больше сцен">+</button></div></div>
-              <div class="ctrl"><label class="lbl" for="cDur">Хронометраж</label><select class="select" id="cDur"><option value="15">15 сек</option><option value="30">30 сек</option></select></div>
-              <div class="ctrl"><label class="lbl" for="cQuality">Качество</label><select class="select" id="cQuality"><option value="1">1× быстрее</option><option value="2" selected>2× чётче</option></select></div>
-              <div class="ctrl"><label class="lbl" for="cCta">Текст CTA</label><input class="input" id="cCta" value="КУПИТЬ" maxlength="16" style="padding:8px 10px;font-size:12px"></div>
-              <div class="ctrl"><label class="lbl">Субтитры</label><div class="row" style="gap:8px"><button class="switch" id="cSubs" role="switch" aria-checked="true" aria-label="Субтитры"></button><span class="note">в safe-zone</span></div></div>
-              <div class="ctrl"><label class="lbl">Направляющие</label><div class="row" style="gap:8px"><button class="switch" id="cGuides" role="switch" aria-checked="false" aria-label="Направляющие safe-zone"></button><span class="note">сетка кадра</span></div></div>
-              <div class="ctrl"><label class="lbl" for="cProduct">Продукт</label><select class="select" id="cProduct"><option value="0">SoundMax Pro ANC</option><option value="1">AeroBuds Lite</option><option value="2">StudioMax Over-Ear</option></select></div>
-            </div>
-            <div class="row" style="margin-top:11px">
-              <button class="btn btn-o btn-s" id="cReset">↺ Сброс</button>
-              <button class="btn btn-o btn-s" id="cRandom">🎲 Случайно</button>
-              <button class="btn btn-a btn-s" id="cPng">⬇ Кадр PNG</button>
-              <button class="btn btn-c btn-s" id="cRec">● Записать клип</button>
-            </div>
-            <p class="note" id="reelHint" style="margin-top:10px"></p>
-          </div>
+        <span class="pointer" style="right:18px;top:56px">👆</span>
+      </div>
+      <div class="mock-card good">
+        <div class="hd"><span class="chip a">✓ верно</span><b>Яндекс — строка снизу</b></div>
+        <div class="browser">
+          <div class="body">Содержимое страницы</div>
+          <div class="bot"><span class="dot"></span><span class="bar url" id="mockBottom">—</span><span class="dot"></span></div>
+        </div>
+        <span class="pointer" style="right:18px;bottom:52px">👆</span>
+      </div>
+      <div class="mock-card bad">
+        <div class="hd"><span class="chip r">✕ неверно</span><b>Поле поиска Google</b></div>
+        <div class="browser">
+          <div class="top"><span class="dot"></span><span class="dot"></span><span class="bar" style="background:#0a1420;color:var(--dim)">google.com/search?q</span></div>
+          <div class="body"><span class="g">Google</span><br>did not match any documents</div>
+        </div>
+      </div>
+      <div class="mock-card bad">
+        <div class="hd"><span class="chip r">✕ неверно</span><b>Домен без папки проекта</b></div>
+        <div class="browser">
+          <div class="top"><span class="dot"></span><span class="dot"></span><span class="bar search" id="mockRoot">—</span></div>
+          <div class="body">404 · File not found</div>
         </div>
       </div>
     </div>
-  </div>
-</section>
+    <p class="note" style="margin-top:10px">Выделить всё в строке браузера → удалить → вставить адрес выше → Enter. Папка проекта обязательна, пока репозиторий не переименован в <b style="color:var(--text)">dorinvest13-spec.github.io</b>.</p>
+  </section>
 
-<section id="product" class="band">
-  <div class="wrap">
-    <div class="reveal" style="margin-bottom:20px">
-      <span class="kicker acid">Продукт целиком</span>
-      <h2 class="sec">Семь поверхностей, один конвейер</h2>
-      <p class="lead">Каждая страница закрывает свой этап и передаёт результат дальше через память браузера. Открывайте в любом порядке — состояние подхватится автоматически.</p>
+  <section id="sec" class="card band rise" style="animation-delay:.1s">
+    <div class="row" style="justify-content:space-between;margin-bottom:9px">
+      <h2 style="margin:0">🧭 Разделы <span class="chip b" id="secCount">0</span></h2>
+      <span class="row">
+        <button class="btn btn-g btn-s" id="probeBtn">⟳ Проверить</button>
+        <button class="btn btn-g btn-s" id="copyAll">📋 Все адреса</button>
+      </span>
     </div>
-
-    <div class="flowmap reveal">
-      <svg viewBox="0 0 900 250" role="img" aria-label="Схема конвейера: товар, генерация, библиотека, ассеты, публикация" style="min-width:860px;display:block">
-        <defs>
-          <linearGradient id="fv" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#4a2dd4"/><stop offset="1" stop-color="#7c5cff"/></linearGradient>
-          <linearGradient id="fc" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0b6f86"/><stop offset="1" stop-color="#22d3ee"/></linearGradient>
-          <linearGradient id="fb" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#24409e"/><stop offset="1" stop-color="#4d7cff"/></linearGradient>
-          <linearGradient id="fa" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#a35a06"/><stop offset="1" stop-color="#ffb020"/></linearGradient>
-          <linearGradient id="fg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0f7a45"/><stop offset="1" stop-color="#3ddc84"/></linearGradient>
-        </defs>
-        <g font-family="Manrope,sans-serif" font-size="12" fill="#eef1ff">
-          <rect x="11" y="86" width="158" height="80" rx="15" fill="#141931" stroke="#252d52"/>
-          <text x="90" y="115" text-anchor="middle" font-weight="800">1 · Товар</text>
-          <text x="90" y="135" text-anchor="middle" font-size="10.5" fill="#98a1c6">студия · парсер</text>
-          <text x="90" y="152" text-anchor="middle" font-size="10.5" fill="#6a7297">app/</text>
-
-          <rect x="191" y="86" width="158" height="80" rx="15" fill="url(#fc)" opacity=".93"/>
-          <text x="270" y="115" text-anchor="middle" font-weight="800" fill="#04222b">2 · Генерация</text>
-          <text x="270" y="135" text-anchor="middle" font-size="10.5" fill="#04222b">свой ключ · поток</text>
-          <text x="270" y="152" text-anchor="middle" font-size="10.5" fill="#04222b">live.html</text>
-
-          <rect x="371" y="86" width="158" height="80" rx="15" fill="url(#fb)" opacity=".93"/>
-          <text x="450" y="115" text-anchor="middle" font-weight="800">3 · Библиотека</text>
-          <text x="450" y="135" text-anchor="middle" font-size="10.5" fill="#dbe6ff">правка · аналитика</text>
-          <text x="450" y="152" text-anchor="middle" font-size="10.5" fill="#dbe6ff">library.html</text>
-
-          <rect x="551" y="86" width="158" height="80" rx="15" fill="url(#fa)" opacity=".93"/>
-          <text x="630" y="115" text-anchor="middle" font-weight="800" fill="#2a1500">4 · Ассеты</text>
-          <text x="630" y="135" text-anchor="middle" font-size="10.5" fill="#2a1500">PNG · ролик</text>
-          <text x="630" y="152" text-anchor="middle" font-size="10.5" fill="#2a1500">assets.html</text>
-
-          <rect x="731" y="86" width="158" height="80" rx="15" fill="url(#fg)" opacity=".95"/>
-          <text x="810" y="115" text-anchor="middle" font-weight="800" fill="#052414">5 · Публикация</text>
-          <text x="810" y="135" text-anchor="middle" font-size="10.5" fill="#052414">превью · план</text>
-          <text x="810" y="152" text-anchor="middle" font-size="10.5" fill="#052414">publish.html</text>
-
-          <g stroke-width="2.4" fill="none">
-            <path class="flow" d="M169 126 H191" stroke="#22d3ee"/>
-            <path class="flow" d="M349 126 H371" stroke="#4d7cff"/>
-            <path class="flow" d="M529 126 H551" stroke="#ffb020"/>
-            <path class="flow" d="M709 126 H731" stroke="#3ddc84"/>
-          </g>
-          <circle id="lit1" cx="90" cy="76" r="5" fill="#7c5cff" class="node-lit" style="color:#7c5cff"/>
-          <circle id="lit2" cx="270" cy="76" r="5" fill="#252d52"/>
-          <circle id="lit3" cx="450" cy="76" r="5" fill="#252d52"/>
-          <circle id="lit4" cx="630" cy="76" r="5" fill="#252d52"/>
-          <circle id="lit5" cx="810" cy="76" r="5" fill="#252d52"/>
-          <text x="90" y="200" text-anchor="middle" font-size="10" fill="#6a7297" id="cap1">товар загружен</text>
-          <text x="270" y="200" text-anchor="middle" font-size="10" fill="#6a7297" id="cap2">ожидает ключ</text>
-          <text x="450" y="200" text-anchor="middle" font-size="10" fill="#6a7297" id="cap3">ожидает записи</text>
-          <text x="630" y="200" text-anchor="middle" font-size="10" fill="#6a7297" id="cap4">ожидает карточки</text>
-          <text x="810" y="200" text-anchor="middle" font-size="10" fill="#6a7297" id="cap5">ожидает выхода</text>
-          <text x="450" y="34" text-anchor="middle" font-size="11" fill="#98a1c6" font-weight="700">Состояние читается из памяти этого браузера</text>
-          <text x="450" y="232" text-anchor="middle" font-size="10.5" fill="#8bff5a">отметки о выходе и план недели сохраняются локально</text>
-        </g>
-      </svg>
+    <div class="row" style="margin-bottom:9px">
+      <input class="input" id="q" placeholder="Поиск по разделу…" style="flex:1;min-width:170px">
+      <select class="select" id="sort" style="max-width:180px"><option value="order">По порядку</option><option value="az">По названию</option><option value="ok">Сначала рабочие</option></select>
     </div>
-
-    <div class="surfaces" id="surfaces"></div>
-  </div>
-</section>
-
-<section id="pipeline" class="band">
-  <div class="wrap pipe">
-    <div class="pipe-sticky reveal">
-      <span class="kicker v">Конвейер</span>
-      <h2 class="sec">Пять шагов<br>от ссылки до эфира</h2>
-      <p class="lead">Каждый шаг работает автономно и передаёт результат дальше. Ни один этап не требует сервера: ключ живёт на устройстве, рендер идёт в canvas, отметки о публикации — в памяти браузера.</p>
-      <div class="row" style="margin-top:18px">
-        <span class="chip g">Прямой запрос к API</span><span class="chip c">Поток токенов</span><span class="chip b">Правка в библиотеке</span><span class="chip a">PNG и видео</span><span class="chip acid">Превью поста</span>
-      </div>
-      <div class="card" style="margin-top:18px">
-        <span class="kicker acid">Что передаётся между шагами</span>
-        <p class="note" style="margin-top:8px;color:var(--muted);font-size:12.5px">
-          Генерация складывает контент-пак в память браузера. Библиотека собирает всё в один список и позволяет править —
-          изменения возвращаются в исходное хранилище. Ассеты берут исправленную версию, а публикация показывает
-          готовый пост в интерфейсе каждой площадки. Ключи в эту память не попадают.
-        </p>
-      </div>
+    <div class="filters" id="filters" style="margin-bottom:10px"></div>
+    <div class="bulk">
+      <label class="row" style="gap:6px;font-size:11.5px;cursor:pointer"><input type="checkbox" id="selAll" style="accent-color:var(--cyan);width:15px;height:15px">Выбрать все</label>
+      <span class="chip c" id="selN">0 выбрано</span>
+      <button class="btn btn-g btn-s" id="copySel" disabled style="margin-left:auto">📋 Ссылки выбранных</button>
     </div>
-    <div class="grid" style="gap:14px">
-      <div class="stage-card s1 reveal"><div class="snum">1</div><div>
-        <h3>Товар и исходные данные</h3>
-        <p class="note" style="font-size:13px;color:var(--muted)">Студия показывает работу с товаром: галерея с перетаскиванием, характеристики, JSON-превью, три угла подачи и пять текстов с счётчиками объёма. Работает без ключа на эталонных данных — можно оценить интерфейс до подключения провайдера.</p>
-        <div class="tags"><span class="chip v">3 карточки</span><span class="chip v">5 площадок</span><span class="chip v">Дизайн-панель</span><span class="chip">Экспорт PNG</span></div>
-        <div class="row" style="margin-top:12px"><a class="btn btn-o btn-s" href="app/">Открыть студию</a></div>
-      </div></div>
-      <div class="stage-card s2 reveal"><div class="snum">2</div><div>
-        <h3>Реальная генерация</h3>
-        <p class="note" style="font-size:13px;color:var(--muted)">Свой ключ OpenRouter, Groq, Anthropic, Together или DeepSeek. Запрос уходит прямо с устройства, ответ приходит потоком — видно каждый токен на осциллографе. Температура, top-p, лимит, тон, угол подачи и язык меняют результат, автолимит поднимает потолок под объём выбранных площадок.</p>
-        <div class="tags"><span class="chip c">6 провайдеров</span><span class="chip c">Потоковый вывод</span><span class="chip c">Проверка ключа</span><span class="chip">История и виды</span></div>
-        <div class="row" style="margin-top:12px"><a class="btn btn-c btn-s" href="live.html">Начать генерацию</a></div>
-      </div></div>
-      <div class="stage-card s3 reveal"><div class="snum">3</div><div>
-        <h3>Библиотека и правка</h3>
-        <p class="note" style="font-size:13px;color:var(--muted)">Все записи в одном списке: поиск по тексту, фильтры по источнику, шесть сортировок, сохранённые виды и массовые действия. Любая карточка и любой текст правятся на месте, изменения уходят обратно в хранилище. График показывает распределение по провайдерам, площадкам и неделям.</p>
-        <div class="tags"><span class="chip b">Правка на месте</span><span class="chip b">График-аналитика</span><span class="chip b">Экспорт JSON и MD</span><span class="chip">Undo</span></div>
-        <div class="row" style="margin-top:12px"><a class="btn btn-b btn-s" href="library.html">Открыть библиотеку</a></div>
-      </div></div>
-      <div class="stage-card s4 reveal"><div class="snum">4</div><div>
-        <h3>Ассеты</h3>
-        <p class="note" style="font-size:13px;color:var(--muted)">Мастерская забирает карточки и рендерит их в PNG четырёх форматов до 3× разрешения. Раскладка измеряет текст и ужимает его до отрисовки, поэтому заголовки не обрезаются. Ролик собирается из сцен с переходами и записывается в MP4 или WebM.</p>
-        <div class="tags"><span class="chip a">4:5 · 1:1 · 9:16 · 16:9</span><span class="chip a">До 3× качества</span><span class="chip a">Запись ролика</span><span class="chip">Пресеты</span></div>
-        <div class="row" style="margin-top:12px"><a class="btn btn-a btn-s" href="assets.html">Собрать ассеты</a></div>
-      </div></div>
-      <div class="stage-card s5 reveal"><div class="snum">5</div><div>
-        <h3>Публикация</h3>
-        <p class="note" style="font-size:13px;color:var(--muted)">Пост показывается в превью телефона с цветами каждой площадки — до выхода видно, где текст обрежется и как встанет медиа. Чек-лист готовности, переход в редактор площадки одним нажатием, отметка о выходе и план недели с перетаскиванием.</p>
-        <div class="tags"><span class="chip g">Превью 5 площадок</span><span class="chip g">Чек-лист</span><span class="chip g">План недели</span><span class="chip">Комплект MD</span></div>
-        <div class="row" style="margin-top:12px"><a class="btn btn-g btn-s" href="publish.html">Перейти к публикации</a></div>
-      </div></div>
-    </div>
-  </div>
-</section>
+    <div class="tiles" id="tiles"></div>
+    <p class="note" style="margin-top:10px">Адреса строятся из текущего расположения страницы, поэтому всегда указывают на правильную папку. Проверка показывает, какие файлы реально опубликованы.</p>
+  </section>
 
-<section id="demo" class="band">
-  <div class="wrap">
-    <div class="reveal" style="margin-bottom:22px">
-      <span class="kicker c">Демо без ключа</span>
-      <h2 class="sec">Соберите контент-пак прямо здесь</h2>
-      <p class="lead">Тот же движок шаблонов, что и в студии. Работает офлайн — введите товар и получите карточки и тексты с живыми счётчиками объёма. За реальным ответом модели идите в раздел «Генерация».</p>
+  <section id="card" class="card band rise" style="animation-delay:.15s">
+    <div class="row" style="justify-content:space-between;margin-bottom:10px">
+      <div><span class="kicker m2">Карточка адреса</span><h2 style="margin:6px 0 0">Ссылка картинкой — открыть с любого устройства</h2></div>
+      <span class="row">
+        <button class="btn btn-g btn-s" id="acReset">↺ Сброс</button>
+        <button class="btn btn-g btn-s" id="acRandom">🎲 Случайно</button>
+      </span>
     </div>
-    <div class="demo-grid">
-      <div class="card reveal">
-        <span class="kicker v">Вход</span>
-        <div style="margin-top:12px"><label class="lbl" for="dTitle">Название товара</label><input class="input" id="dTitle" value="Беспроводные наушники SoundMax Pro"></div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:11px">
-          <div><label class="lbl" for="dPrice">Цена</label><input class="input" id="dPrice" value="4 990 ₽"></div>
-          <div><label class="lbl" for="dDisc">Скидка</label><input class="input" id="dDisc" value="30%"></div>
+    <div class="stage">
+      <div>
+        <div class="canvas-box">
+          <canvas id="cardCv" width="1080" height="1080" aria-label="Карточка с адресом студии"></canvas>
+          <div class="flash" id="cardFlash"></div>
+          <span class="tag" id="cardTag">1:1 · 1080×1080</span>
         </div>
-        <div style="margin-top:11px"><label class="lbl" for="dFeat">Ключевая выгода</label><input class="input" id="dFeat" value="ANC до 45 дБ и 40 часов работы"></div>
-        <div style="margin-top:11px"><label class="lbl" for="dTone">Тон бренда</label><select class="select" id="dTone"><option>уверенный эксперт</option><option>дружелюбный сосед</option><option>дерзкий challenger</option><option>премиум-сдержанный</option></select></div>
-        <div class="row" style="margin-top:15px">
-          <button class="btn btn-p grow" id="dGen">⚡ Сгенерировать</button>
-          <button class="btn btn-o" id="dReset">↺</button>
+        <div class="row" style="margin-top:10px">
+          <button class="btn btn-p grow" id="acPng">⬇ PNG карточки</button>
+          <button class="btn btn-g btn-s" id="acCopy">📋 Адрес</button>
         </div>
-        <p class="note" style="margin-top:11px">Шаблоны детерминированы с вариативностью. В разделе «Генерация» те же поля уходят в модель, а провайдер меняется одним выбором.</p>
+        <p class="note" style="margin-top:8px">Отправьте картинку себе в мессенджер — адрес читается глазами, набирать вручную не нужно.</p>
       </div>
-      <div class="reveal">
-        <div id="dSkel" class="card hidden"><div class="row" style="margin-bottom:14px"><div class="spin"></div><b style="font-size:13px;color:var(--cyan)">Собираем карточки и тексты…</b></div><div class="pcards"><div class="skel" style="height:230px"></div><div class="skel" style="height:230px"></div></div><div class="skel" style="height:150px;margin-top:14px"></div></div>
-        <div id="dOut">
-          <div class="pcards" id="dCards"></div>
-          <div class="card" style="margin-top:14px">
-            <div class="tabs" id="dTabs"></div>
-            <textarea class="txtbox" id="dText" spellcheck="false"></textarea>
-            <div class="row" style="justify-content:space-between;margin-top:11px">
-              <span class="chip" id="dCount">0</span>
-              <span class="row"><button class="btn btn-o btn-s" id="dCopy">📋 Копировать</button><button class="btn btn-o btn-s" id="dDl">💾 .txt</button><a class="btn btn-g btn-s" href="publish.html">🚀 К публикации</a></span>
-            </div>
-          </div>
+      <div>
+        <span class="kicker a">Параметры — применяются сразу</span>
+        <div class="deck" style="margin-top:9px">
+          <div class="ctrl"><label class="lbl" for="acSize">Формат</label><select class="select" id="acSize"><option value="1:1">1:1 квадрат</option><option value="4:5">4:5 сторис</option><option value="16:9">16:9 баннер</option><option value="9:16">9:16 экран</option></select></div>
+          <div class="ctrl"><label class="lbl" for="acQuality">Качество</label><select class="select" id="acQuality"><option value="1">1× быстро</option><option value="2" selected>2× чётко</option><option value="3">3× печать</option></select></div>
+          <div class="ctrl"><label class="lbl" for="acBg">Фон</label><select class="select" id="acBg"><option value="mesh">Mesh</option><option value="linear">Градиент</option><option value="spot">Прожектор</option><option value="rays">Лучи</option><option value="solid">Однотонный</option></select></div>
+          <div class="ctrl"><label class="lbl" for="acAccent">Акцент</label><input type="color" id="acAccent" value="#2ea8ff"></div>
+          <div class="ctrl"><label class="lbl" for="acSecond">Второй цвет</label><input type="color" id="acSecond" value="#b6ff3d"></div>
+          <div class="ctrl"><label class="lbl" for="acRadius">Скругление <span class="val" id="acRadiusVal">28</span></label><input type="range" id="acRadius" min="0" max="60" step="2" value="28"></div>
+          <div class="ctrl"><label class="lbl" for="acGlow">Свечение <span class="val" id="acGlowVal">1.0×</span></label><input type="range" id="acGlow" min="0" max="2.5" step="0.1" value="1"></div>
+          <div class="ctrl"><label class="lbl" for="acGrain">Зерно <span class="val" id="acGrainVal">0.06</span></label><input type="range" id="acGrain" min="0" max="0.3" step="0.01" value="0.06"></div>
+          <div class="ctrl"><label class="lbl" for="acFont">Кегль адреса <span class="val" id="acFontVal">1.00×</span></label><input type="range" id="acFont" min="0.7" max="1.5" step="0.02" value="1"></div>
+          <div class="ctrl"><label class="lbl" for="acPad">Отступ <span class="val" id="acPadVal">1.00×</span></label><input type="range" id="acPad" min="0.7" max="1.5" step="0.05" value="1"></div>
+          <div class="ctrl"><label class="lbl">Логотип</label><div class="row" style="gap:7px"><button class="switch" id="acLogo" role="switch" aria-checked="true" aria-label="Логотип"></button><span class="note">знак AI</span></div></div>
+          <div class="ctrl"><label class="lbl">Подсказка</label><div class="row" style="gap:7px"><button class="switch" id="acHint" role="switch" aria-checked="true" aria-label="Подсказка"></button><span class="note">куда вставлять</span></div></div>
+          <div class="ctrl"><label class="lbl">Сетка</label><div class="row" style="gap:7px"><button class="switch" id="acGrid" role="switch" aria-checked="false" aria-label="Сетка"></button><span class="note">направляющие</span></div></div>
+          <div class="ctrl"><label class="lbl" for="acTitle">Заголовок</label><input class="input" id="acTitle" value="AI Marketing Studio" maxlength="30" style="padding:8px 10px;font-size:12px"></div>
         </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<section id="platforms" class="band">
-  <div class="wrap">
-    <div class="reveal" style="margin-bottom:22px">
-      <span class="kicker a">Площадки</span>
-      <h2 class="sec">Пять текстов — пять разных голосов</h2>
-      <p class="lead">Счётчики показывают рекомендуемый объём редакции и, где он документирован, жёсткий лимит площадки. Красный загорается только при реальном превышении.</p>
+  <section id="check" class="card band rise" style="animation-delay:.2s">
+    <span class="kicker c">Проверка</span>
+    <h2 style="margin-top:6px">Что измерено в этом браузере</h2>
+    <div class="row">
+      <button class="btn btn-c btn-s" id="checkBtn">⟳ Перепроверить</button>
+      <button class="btn btn-g btn-s" id="iconsBtn">✓ Пересобрать иконки</button>
+      <button class="btn btn-g btn-s" id="copyReport">📋 Отчёт</button>
     </div>
-    <div class="plats" id="plats"></div>
-  </div>
-</section>
-
-<section id="api" class="band">
-  <div class="wrap">
-    <div class="reveal" style="margin-bottom:20px">
-      <span class="kicker c">API для серверного режима</span>
-      <h2 class="sec">Четырнадцать эндпоинтов</h2>
-      <p class="lead">Когда появится свой backend, студия переключится в LIVE и заговорит с ним. Справочник живой: ищите, фильтруйте по методу и сортируйте.</p>
+    <div class="bar anim" id="testBarWrap"><i id="testBar"></i></div>
+    <div class="row" style="margin-top:9px">
+      <span class="chip" id="testSummary">проверок: —</span>
+      <span class="chip" id="mfChip">манифест: —</span>
+      <span class="chip" id="icChip">иконки: —</span>
     </div>
-    <div class="card reveal">
-      <div class="api-tools">
-        <input class="input" id="apiQ" placeholder="Поиск по пути или описанию…" aria-label="Поиск эндпоинта">
-        <select class="select" id="apiSort" style="min-width:170px" aria-label="Сортировка"><option value="group">По разделу</option><option value="path">По пути А→Я</option><option value="method">По методу</option></select>
-        <div class="row" id="apiFilters" style="gap:6px">
-          <button class="tab-btn on" data-m="all">Все</button><button class="tab-btn" data-m="GET">GET</button><button class="tab-btn" data-m="POST">POST</button><button class="tab-btn" data-m="DELETE">DELETE</button>
-        </div>
-      </div>
-      <div class="api-list" id="apiList"></div>
-      <p class="note" style="margin-top:12px" id="apiCount"></p>
-    </div>
-  </div>
-</section>
-
-<section id="ship" class="band">
-  <div class="wrap">
-    <div class="reveal" style="margin-bottom:22px">
-      <span class="kicker acid">Запуск</span>
-      <h2 class="sec">Три способа работать</h2>
-    </div>
-    <div class="ship">
-      <div class="steps reveal">
-        <div class="step"><b>1</b><div><b style="color:var(--text)">Прямо сейчас, без установки.</b> Откройте генерацию, вставьте ключ провайдера, соберите контент-пак. Правьте в библиотеке, рендерите в ассетах, публикуйте через превью.</div></div>
-        <div class="step"><b>2</b><div><b style="color:var(--text)">Локальная копия.</b> Склонируйте репозиторий и откройте <code style="font-family:var(--mono);color:var(--cyan)">index.html</code> — сборка и зависимости не нужны.</div></div>
-        <div class="step"><b>3</b><div><b style="color:var(--text)">Свой сервер позже.</b> Backend добавит команду, общий доступ и биллинг. Студия переключится в LIVE тумблером, а поле «API base» укажет на ваш домен.</div></div>
-        <div class="card" style="margin-top:6px">
-          <span class="kicker m">Где взять ключ</span>
-          <div class="code" style="margin-top:9px">OpenRouter → openrouter.ai/keys
-Groq       → console.groq.com → API Keys
-Anthropic  → console.anthropic.com
-Together   → api.together.xyz → Settings<button class="btn btn-o btn-s cp" data-copy="OpenRouter → openrouter.ai/keys
-Groq       → console.groq.com → API Keys
-Anthropic  → console.anthropic.com
-Together   → api.together.xyz → Settings">📋</button></div>
-          <p class="note" style="margin-top:9px">OpenRouter рассчитан на запросы из браузера и открывает десятки моделей одним ключом — самый надёжный старт.</p>
-        </div>
-      </div>
-      <div class="card reveal">
-        <div class="tabs" id="shipTabs">
-          <button class="tab-btn on" data-s="now">⚡ Сейчас</button>
-          <button class="tab-btn" data-s="local">💻 Локально</button>
-          <button class="tab-btn" data-s="gh">📦 GitHub</button>
-          <button class="tab-btn" data-s="server">☁️ Сервер</button>
-        </div>
-        <div class="code" id="shipCode"></div>
-        <div class="row" style="margin-top:12px;justify-content:space-between">
-          <span class="note" id="shipNote"></span>
-          <button class="btn btn-c btn-s" id="shipCopy">📋 Копировать</button>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section id="trust" class="band">
-  <div class="wrap">
-    <div class="reveal" style="margin-bottom:22px">
-      <span class="kicker m">Защита и честность</span>
-      <h2 class="sec">Что закрыто и что признано открыто</h2>
-    </div>
-    <div class="trust">
-      <div class="tr reveal"><div class="ic" style="background:rgba(255,84,112,.14);border:1px solid rgba(255,84,112,.4)">🔐</div><h3>Ключ на устройстве</h3><p class="note" style="color:var(--muted);font-size:12.5px">По умолчанию ключ живёт до перезагрузки и не сохраняется. Запоминание включается отдельным тумблером с предупреждением. В историю генераций ключ не попадает.</p></div>
-      <div class="tr reveal"><div class="ic" style="background:rgba(124,92,255,.14);border:1px solid rgba(124,92,255,.45)">📡</div><h3>Прямой запрос</h3><p class="note" style="color:var(--muted);font-size:12.5px">Запрос идёт с устройства к выбранному API, посредников нет. Если провайдер запрещает браузерные запросы, страница объясняет это и предлагает совместимый вариант.</p></div>
-      <div class="tr reveal"><div class="ic" style="background:rgba(61,220,132,.14);border:1px solid rgba(61,220,132,.4)">🧩</div><h3>Разбор ответа</h3><p class="note" style="color:var(--muted);font-size:12.5px">JSON чистится от обёрток, разбирается с поиском границ объекта, при провале — один повтор с уточнением. Обрезанный лимитом ответ помечается явно.</p></div>
-      <div class="tr reveal"><div class="ic" style="background:rgba(34,211,238,.14);border:1px solid rgba(34,211,238,.42)">📐</div><h3>Макет без обрезки</h3><p class="note" style="color:var(--muted);font-size:12.5px">Карточка измеряет текст до отрисовки и ужимает кегль под доступную высоту. Заголовки и буллеты не налезают на цену ни в одном из четырёх форматов.</p></div>
-      <div class="tr reveal"><div class="ic" style="background:rgba(255,176,32,.14);border:1px solid rgba(255,176,32,.42)">📊</div><h3>Частотность — оценка</h3><p class="note" style="color:var(--muted);font-size:12.5px">Цифры спроса в демо даёт шаблон, а не Wordstat. Это помечено в интерфейсе. Для решений о закупке подключайте реальный источник.</p></div>
-      <div class="tr reveal"><div class="ic" style="background:rgba(139,255,90,.12);border:1px solid rgba(139,255,90,.4)">🛟</div><h3>Отказ не ломает ядро</h3><p class="note" style="color:var(--muted);font-size:12.5px">Нет ключа — демо. Нет MediaRecorder — остаются PNG. Нет Clipboard API — резервное копирование. Нет сети — витрина и шаблоны работают.</p></div>
-    </div>
-  </div>
-</section>
+    <div class="tests" id="tests"></div>
+    <div class="tests" id="installTests"></div>
+  </section>
 </main>
 
-<footer>
-  <div class="wrap foot">
-    <div class="row"><span class="mark">AI</span><div><b style="font:700 14px var(--disp)">AI Marketing Studio</b><p class="note">MIT · генерация и рендер на устройстве</p></div></div>
-    <div class="row">
-      <a class="btn btn-o btn-s" href="#top">↑ Наверх</a>
-      <a class="btn btn-o btn-s" href="status.html">📊 Состояние</a>
-      <a class="btn btn-c btn-s" href="live.html">⚡ Генерация</a>
-      <a class="btn btn-b btn-s" href="library.html">📚 Библиотека</a>
-      <a class="btn btn-a btn-s" href="assets.html">🎨 Ассеты</a>
-      <a class="btn btn-g btn-s" href="publish.html">🚀 Публикация</a>
-    </div>
-  </div>
-</footer>
+<footer><div class="wrap row" style="justify-content:space-between">
+  <span class="note">AI Marketing Studio · адреса строятся из текущего расположения страницы</span>
+  <span class="row"><a class="btn btn-g btn-s" href="#top">↑ Наверх</a><a class="btn btn-p btn-s" href="studio.html">Открыть студию</a></span>
+</div></footer>
 
 <div class="toasts" id="toasts" role="status" aria-live="polite"></div>
 
@@ -640,14 +372,11 @@ const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
 const RM=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 const store={get(k){try{return localStorage.getItem(k)}catch{return null}},set(k,v){try{localStorage.setItem(k,v);return true}catch{return false}}};
-const parse=s=>{try{const v=JSON.parse(s);return Array.isArray(v)?v:[]}catch{return[]}};
-const parseObj=s=>{try{const v=JSON.parse(s);return v&&typeof v==="object"&&!Array.isArray(v)?v:{}}catch{return{}}};
-const urls=new Set();
-function mkURL(b){const u=URL.createObjectURL(b);urls.add(u);return u}
-window.addEventListener("beforeunload",()=>{urls.forEach(u=>URL.revokeObjectURL(u));stopReel()});
+const arrOf=k=>{try{const v=JSON.parse(store.get(k)||"[]");return Array.isArray(v)?v:[]}catch{return[]}};
+const objOf=k=>{try{const v=JSON.parse(store.get(k)||"{}");return v&&typeof v==="object"&&!Array.isArray(v)?v:{}}catch{return{}}};
+const FF=()=>getComputedStyle(document.body).fontFamily;
 
-/* ---------- sound ---------- */
-let ac=null,muted=store.get("hub_mute")==="1";
+let ac=null,muted=store.get("home_mute")==="1";
 function paintMute(){$("muteBtn").textContent=muted?"🔇":"🔔";$("muteBtn").setAttribute("aria-pressed",String(muted));$("muteBtn").title=muted?"Звук выключен":"Звук включён"}
 function beep(kind){
   if(muted)return;
@@ -655,18 +384,18 @@ function beep(kind){
     if(!ac)ac=new (window.AudioContext||window.webkitAudioContext)();
     if(ac.state==="suspended")ac.resume();
     const t=ac.currentTime,o=ac.createOscillator(),g=ac.createGain();
-    const map={ok:[660,.15,"sine"],err:[180,.24,"sawtooth"],tick:[880,.04,"triangle"],shutter:[1200,.06,"square"],rec:[430,.11,"sine"]};
+    const map={ok:[720,.17,"sine"],err:[168,.24,"sawtooth"],tick:[940,.04,"triangle"],shutter:[1230,.06,"square"],open:[500,.13,"sine"]};
     const[f,d,w]=map[kind]||map.tick;
     o.type=w;o.frequency.setValueAtTime(f,t);
-    if(kind==="ok")o.frequency.exponentialRampToValueAtTime(f*1.5,t+d);
+    if(kind==="ok"||kind==="open")o.frequency.exponentialRampToValueAtTime(f*1.5,t+d);
     if(kind==="shutter")o.frequency.exponentialRampToValueAtTime(f*.4,t+d);
     g.gain.setValueAtTime(.0001,t);
-    g.gain.exponentialRampToValueAtTime(kind==="tick"?.025:.075,t+.012);
+    g.gain.exponentialRampToValueAtTime(kind==="tick"?.022:.06,t+.012);
     g.gain.exponentialRampToValueAtTime(.0001,t+d);
     o.connect(g);g.connect(ac.destination);o.start(t);o.stop(t+d+.02);
   }catch{}
 }
-$("muteBtn").onclick=()=>{muted=!muted;store.set("hub_mute",muted?"1":"0");paintMute();if(!muted)beep("tick")};
+$("muteBtn").onclick=()=>{muted=!muted;store.set("home_mute",muted?"1":"0");paintMute();if(!muted)beep("tick")};
 document.addEventListener("pointerdown",()=>{if(ac&&ac.state==="suspended")ac.resume()},{once:true});
 paintMute();
 
@@ -674,630 +403,597 @@ function toast(msg,type="ok"){
   const t=document.createElement("div");t.className="toast "+type;
   t.innerHTML=`<span>${type==="ok"?"✅":type==="err"?"⛔":"ℹ️"}</span><span>${esc(msg)}</span><button class="x" aria-label="Закрыть">✕</button>`;
   t.querySelector(".x").onclick=()=>t.remove();
-  $("toasts").appendChild(t);setTimeout(()=>t.remove(),4400);
+  $("toasts").appendChild(t);setTimeout(()=>t.remove(),4600);
 }
 async function copy(text){
   const s=String(text??"");if(!s)return toast("Нечего копировать","info");
-  try{if(navigator.clipboard&&window.isSecureContext){await navigator.clipboard.writeText(s);toast("Скопировано");beep("tick");return}}catch{}
+  try{if(navigator.clipboard&&window.isSecureContext){await navigator.clipboard.writeText(s);toast("Скопировано — вставьте в строку браузера");beep("tick");return}}catch{}
   try{
     const ta=document.createElement("textarea");ta.value=s;ta.setAttribute("readonly","");
     ta.style.cssText="position:fixed;top:-2000px;opacity:0";document.body.appendChild(ta);
     ta.select();ta.setSelectionRange(0,s.length);
     const ok=document.execCommand("copy");ta.remove();
-    toast(ok?"Скопировано":"Скопируйте вручную",ok?"ok":"info");
+    toast(ok?"Скопировано — вставьте в строку браузера":"Скопируйте вручную",ok?"ok":"info");
   }catch{toast("Копирование недоступно","err")}
 }
-function download(blob,name){const u=mkURL(blob);const a=document.createElement("a");a.href=u;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>{URL.revokeObjectURL(u);urls.delete(u)},5000)}
-function hex2hsl(h){
-  const m=/^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(h)||[,"7c","5c","ff"];
-  const r=parseInt(m[1],16)/255,g=parseInt(m[2],16)/255,b=parseInt(m[3],16)/255;
+function download(blob,name){
+  const u=URL.createObjectURL(blob),a=document.createElement("a");
+  a.href=u;a.download=name;document.body.appendChild(a);a.click();a.remove();
+  setTimeout(()=>URL.revokeObjectURL(u),8000);
+}
+function hex2rgb(h){const m=/^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(h)||[,"2e","a8","ff"];return[parseInt(m[1],16),parseInt(m[2],16),parseInt(m[3],16)]}
+const rgba=(h,a)=>{const[r,g,b]=hex2rgb(h);return`rgba(${r},${g},${b},${a})`};
+function mix(h1,h2,t){const a=hex2rgb(h1),b=hex2rgb(h2);return`rgb(${Math.round(a[0]+(b[0]-a[0])*t)},${Math.round(a[1]+(b[1]-a[1])*t)},${Math.round(a[2]+(b[2]-a[2])*t)})`}
+function hueShift(h,deg){
+  let[r,g,b]=hex2rgb(h).map(v=>v/255);
   const mx=Math.max(r,g,b),mn=Math.min(r,g,b);let hh=0,s=0;const l=(mx+mn)/2;
   if(mx!==mn){const d=mx-mn;s=l>.5?d/(2-mx-mn):d/(mx+mn);hh=mx===r?((g-b)/d+(g<b?6:0)):mx===g?((b-r)/d+2):((r-g)/d+4);hh/=6}
-  return[hh*360,s*100,l*100];
+  hh=(hh+deg/360+1)%1;
+  const q=l<.5?l*(1+s):l+s-l*s,p=2*l-q;
+  const f=t=>{t=(t+1)%1;return t<1/6?p+(q-p)*6*t:t<.5?q:t<2/3?p+(q-p)*(2/3-t)*6:p};
+  const to=v=>Math.round(f(v)*255).toString(16).padStart(2,"0");
+  return"#"+to(hh+1/3)+to(hh)+to(hh-1/3);
 }
-const hsl=(h,s,l,a=1)=>`hsla(${((h%360)+360)%360},${clamp(s,0,100)}%,${clamp(l,0,100)}%,${a})`;
+function rr(ctx,x,y,w,h,r){
+  const rad=Math.max(0,Math.min(r,Math.abs(w)/2,Math.abs(h)/2));
+  ctx.beginPath();
+  if(ctx.roundRect)ctx.roundRect(x,y,w,h,rad);
+  else{ctx.moveTo(x+rad,y);ctx.arcTo(x+w,y,x+w,y+h,rad);ctx.arcTo(x+w,y+h,x,y+h,rad);ctx.arcTo(x,y+h,x,y,rad);ctx.arcTo(x,y,x+w,y,rad);ctx.closePath()}
+}
+function breakUrl(ctx,url,maxW,maxLines){
+  const out=[];let line="";
+  for(const ch of String(url)){
+    const t=line+ch;
+    if(ctx.measureText(t).width>maxW&&line){out.push(line);line=ch}else line=t;
+  }
+  if(line)out.push(line);
+  if(out.length>maxLines){
+    const cut=out.slice(0,maxLines);let last=cut[maxLines-1];
+    while(ctx.measureText(last+"…").width>maxW&&last.length>1)last=last.slice(0,-1);
+    cut[maxLines-1]=last+"…";return cut;
+  }
+  return out.length?out:[""];
+}
 
-/* ---------- real state ---------- */
-function readState(){
-  const gens=parse(store.get("lv_hist"));
-  const real=gens.filter(g=>!g.seeded);
-  const cards=real.reduce((n,g)=>n+((g.result&&Array.isArray(g.result.cards))?g.result.cards.length:0),0);
-  const extra=parse(store.get("lib_extra"));
-  const pub=parseObj(store.get("pub_state"));
-  let published=0,ready=0,planned=0;
-  Object.values(pub).forEach(p=>{
-    if(p&&p.platforms&&typeof p.platforms==="object"){
-      Object.values(p.platforms).forEach(x=>{
-        if(!x||typeof x!=="object")return;
-        if(x.status==="done")published++;
-        else if(x.status==="ready")ready++;
-      });
-    }
-    if(Array.isArray(p?.plan))planned+=p.plan.length;
-  });
-  return{
-    gens:gens.length,real:real.length,cards,extra:extra.length,
-    presets:parse(store.get("as_presets")).length,
-    studio:parse(store.get("ams_hist")).length,
-    published,ready,planned,
-    key:!!store.get("lv_key"),
-    provider:store.get("lv_provider")||"",
-    model:store.get("lv_model")||"",
-    last:real[0]||null
-  };
+/* ---------- addresses ---------- */
+function baseDir(){
+  const parts=location.pathname.split("/");
+  if(parts.length&&/\.html?$/i.test(parts[parts.length-1]))parts.pop();
+  return parts.join("/")+"/";
 }
-const SURFACES=[
-  {id:"app",ic:"🛒",n:"Студия",href:"app/",path:"app/",sc:"var(--violet)",
-   d:"Три вкладки: парсер товара, генератор контент-пака и видеостудия. Дизайн-панель карточек, экспорт PNG, PDF-отчёт, история с поиском и отменой удаления.",
-   tags:["Демо без ключа","3 вкладки","PDF-отчёт"]},
-  {id:"live",ic:"⚡",n:"Генерация",href:"live.html",path:"live.html",sc:"var(--cyan)",
-   d:"Реальный ответ модели по вашему ключу. Шесть провайдеров, потоковый вывод на осциллографе, проверка ключа, автолимит токенов, история и сохранённые виды.",
-   tags:["6 провайдеров","Поток токенов","Свой ключ"]},
-  {id:"library",ic:"📚",n:"Библиотека контента",href:"library.html",path:"library.html",sc:"var(--blue)",
-   d:"Все записи в одном списке: правка карточек и текстов на месте, поиск, фильтры, шесть сортировок, график-аналитика и передача записи дальше одним нажатием.",
-   tags:["Правка на месте","График-аналитика","Экспорт JSON и MD"]},
-  {id:"assets",ic:"🎨",n:"Мастерская ассетов",href:"assets.html",path:"assets.html",sc:"var(--amber)",
-   d:"Забирает карточки из библиотеки и рендерит PNG в четырёх форматах до 3× качества. Собирает вертикальный ролик из сцен и записывает его в файл.",
-   tags:["4 формата","До 3× PNG","Запись ролика"]},
-  {id:"publish",ic:"🚀",n:"Публикация",href:"publish.html",path:"publish.html",sc:"var(--green)",
-   d:"Пост в превью телефона с цветами каждой площадки, чек-лист готовности, переход в редактор одним нажатием, отметка о выходе и план недели с перетаскиванием.",
-   tags:["Превью 5 площадок","Чек-лист","План недели"]},
-  {id:"status",ic:"📊",n:"Состояние проекта",href:"status.html",path:"status.html",sc:"var(--acid)",
-   d:"Проверяет репозиторий через открытый API GitHub: обязательные файлы, целостность HTML, имя workflow, лишние папки, последнюю сборку и доступность адресов.",
-   tags:["Живая проверка","Отчёт и JSON","Поиск по файлам"]},
-  {id:"404",ic:"🛰",n:"Страница ошибки",href:"net-takogo",path:"404.html",sc:"var(--magenta)",
-   d:"Тестовый сигнал с глитчем вместо стандартной заглушки: восемь параметров помех, живой поиск по разделам и подсказка ближайшего адреса по опечатке.",
-   tags:["Свой 404","8 параметров","Подсказка адреса"]}
+const BASE=location.origin+baseDir();
+const HERE=location.href.split("#")[0];
+const SECTIONS=[
+  {id:"studio",ic:"🛠",n:"Студия — всё в одном",p:"studio.html",g:"main",c:"var(--azure)",d:"Генератор, карточки PNG, ролик, библиотека и самопроверка в одном файле."},
+  {id:"launch",ic:"🧭",n:"Пускатель",p:"launch.html",g:"main",c:"var(--sand)",d:"Плитки разделов, офлайн-кэш, установка на рабочий стол."},
+  {id:"live",ic:"⚡",n:"Генерация",p:"live.html",g:"content",c:"var(--cyan)",d:"Реальный ответ модели по вашему ключу, потоковый вывод."},
+  {id:"library",ic:"📚",n:"Библиотека",p:"library.html",g:"content",c:"var(--magenta)",d:"Все записи: правка на месте, поиск, аналитика, экспорт."},
+  {id:"assets",ic:"🎨",n:"Ассеты",p:"assets.html",g:"prod",c:"var(--amber)",d:"Карточки в PNG четырёх форматов до 3× и вертикальный ролик."},
+  {id:"publish",ic:"🚀",n:"Публикация",p:"publish.html",g:"prod",c:"var(--green)",d:"Превью поста, чек-лист, план недели, переход в редактор."},
+  {id:"settings",ic:"⚙️",n:"Настройки и данные",p:"settings.html",g:"service",c:"var(--acid)",d:"Резервная копия одним файлом, восстановление, ключ."},
+  {id:"install",ic:"📲",n:"Установка",p:"install.html",g:"service",c:"var(--violet)",d:"Довод до иконки на рабочем столе с диагностикой."},
+  {id:"status",ic:"📊",n:"Состояние проекта",p:"status.html",g:"service",c:"#7c5cff",d:"Проверка репозитория через API GitHub."},
+  {id:"app",ic:"🛒",n:"Студия (демо)",p:"app/",g:"main",c:"#7c5cff",d:"Три вкладки на эталонных данных, работает без ключа."}
 ];
-function paintSurfaces(st){
-  $("surfaces").innerHTML=SURFACES.map(s=>{
-    let badge="";
-    if(s.id==="live")badge=st.real?`<span class="chip g">${st.real} своих генераций</span>`:st.key?'<span class="chip a">ключ сохранён</span>':'<span class="chip">нужен ключ</span>';
-    if(s.id==="library")badge=(st.real+st.extra)?`<span class="chip g">${st.real+st.extra} записей</span>`:'<span class="chip">ждёт генераций</span>';
-    if(s.id==="assets")badge=st.cards?`<span class="chip g">${st.cards} карточек готово</span>`:st.presets?`<span class="chip a">${st.presets} пресетов</span>`:'<span class="chip">ждёт карточки</span>';
-    if(s.id==="publish")badge=st.published?`<span class="chip g">${st.published} вышло</span>`:st.ready?`<span class="chip a">${st.ready} готово</span>`:st.planned?`<span class="chip c">${st.planned} в плане</span>`:'<span class="chip">план пуст</span>';
-    if(s.id==="app")badge=st.studio?`<span class="chip c">${st.studio} записей истории</span>`:'<span class="chip c">готова к работе</span>';
-    if(s.id==="status")badge='<span class="chip acid">проверяет репозиторий</span>';
-    if(s.id==="404")badge='<span class="chip m">отдаётся на любой 404</span>';
-    return `<div class="surface reveal" style="--sc:${s.sc}">
-      <div class="row" style="justify-content:space-between"><span class="ic">${s.ic}</span>${badge}</div>
-      <h3>${esc(s.n)}</h3>
-      <div class="path">${esc(s.path)}</div>
-      <p class="note" style="color:var(--muted);font-size:12.5px">${esc(s.d)}</p>
-      <div class="row" style="gap:5px">${s.tags.map(t=>`<span class="chip">${esc(t)}</span>`).join("")}</div>
+const GROUPS={main:"Основные",content:"Контент",prod:"Продакшн",service:"Служебные"};
+const urlOf=p=>BASE+p;
+const state={q:"",sort:"order",filter:"all",sel:new Set(),probes:{},tests:[],testing:false,
+  card:{size:"1:1",quality:2,bg:"mesh",accent:"#2ea8ff",second:"#b6ff3d",radius:28,glow:1,grain:.06,font:1,pad:1,logo:true,hint:true,grid:false,title:"AI Marketing Studio"},
+  icons:{i192:null,i512:null},manifestHref:null,promptEvent:null,installed:false};
+try{const v=JSON.parse(store.get("home_card")||"null");if(v&&typeof v==="object")Object.assign(state.card,v)}catch{}
+
+function paintAddr(){
+  $("heroUrl").textContent=HERE;
+  $("mockTop").textContent=HERE.replace(/^https?:\/\//,"");
+  $("mockBottom").textContent=HERE.replace(/^https?:\/\//,"");
+  $("mockRoot").textContent=location.hostname+"/";
+}
+$("copyHero").onclick=()=>copy(HERE);
+$("acCopy").onclick=()=>copy(HERE);
+$("copyAll").onclick=()=>copy(SECTIONS.map(s=>`${s.n}: ${urlOf(s.p)}`).join("\n"));
+
+/* ---------- tiles ---------- */
+function tileView(){
+  let l=SECTIONS.slice();
+  if(state.filter!=="all")l=l.filter(s=>s.g===state.filter);
+  const q=state.q.trim().toLowerCase();
+  if(q)l=l.filter(s=>(s.n+" "+s.d+" "+s.p).toLowerCase().includes(q));
+  if(state.sort==="az")l=[...l].sort((a,b)=>a.n.localeCompare(b.n,"ru"));
+  if(state.sort==="ok")l=[...l].sort((a,b)=>(state.probes[b.p]==="ok"?1:0)-(state.probes[a.p]==="ok"?1:0));
+  return l;
+}
+function paintFilters(){
+  $("filters").innerHTML=[["all","Все"],...Object.entries(GROUPS)].map(([k,n])=>
+    `<button class="fchip${state.filter===k?" on":""}" data-f="${k}">${esc(n)}</button>`).join("");
+  $("filters").querySelectorAll("[data-f]").forEach(b=>b.onclick=()=>{state.filter=b.dataset.f;paintTiles();beep("tick")});
+}
+function paintTiles(){
+  const l=tileView();
+  $("secCount").textContent=`${l.length} / ${SECTIONS.length}`;
+  $("tiles").innerHTML=l.length?l.map(s=>{
+    const st=state.probes[s.p];
+    const chip=st==="ok"?'<span class="chip g">открывается</span>':st==="fail"?'<span class="chip r">нет файла</span>':st==="wait"?'<span class="chip c">проверка…</span>':'<span class="chip">не проверялось</span>';
+    return `<div class="tile${state.sel.has(s.id)?" sel":""}" style="--tc:${s.c}">
+      <div class="top">
+        <input type="checkbox" data-sel="${s.id}" ${state.sel.has(s.id)?"checked":""} aria-label="Выбрать ${esc(s.n)}">
+        <span class="ic">${s.ic}</span><b>${esc(s.n)}</b>${chip}
+      </div>
+      <div class="u">${esc(urlOf(s.p))}</div>
+      <p class="note">${esc(s.d)}</p>
       <div class="acts">
-        <a class="btn btn-p btn-s" href="${esc(s.href)}" data-open="${esc(s.id)}">Открыть</a>
-        <button class="btn btn-o btn-s" data-copy-link="${esc(s.href)}">📋 Ссылка</button>
+        <a class="btn btn-p btn-s" href="${esc(urlOf(s.p))}" data-open="${s.id}">Открыть</a>
+        <button class="btn btn-g btn-s" data-copy="${esc(urlOf(s.p))}">📋 Адрес</button>
       </div></div>`;
-  }).join("");
-  $("surfaces").querySelectorAll("[data-copy-link]").forEach(b=>b.onclick=()=>copy(new URL(b.dataset.copyLink,location.href).href));
-  $("surfaces").querySelectorAll("[data-open]").forEach(a=>a.addEventListener("click",()=>beep("tick")));
-  document.querySelectorAll(".reveal:not(.in)").forEach(el=>io.observe(el));
-}
-function paintProgress(st){
-  const chips=[
-    `<span class="chip ${st.real?"g":""}">генераций: ${st.real}</span>`,
-    `<span class="chip ${(st.real+st.extra)?"b":""}">в библиотеке: ${st.real+st.extra}</span>`,
-    `<span class="chip ${st.cards?"a":""}">карточек: ${st.cards}</span>`,
-    `<span class="chip ${st.published?"g":""}">вышло: ${st.published}</span>`,
-    `<span class="chip ${st.key?"a":"r"}">ключ: ${st.key?"сохранён":"не сохранён"}</span>`
-  ];
-  $("stateChips").innerHTML=chips.join("");
-  let title,note,acts;
-  if(!st.real&&!st.extra){
-    title=st.key?"Ключ сохранён — можно генерировать":"Начните с генерации";
-    note=st.key
-      ?`Провайдер ${st.provider||"выбран"}, модель ${st.model||"указана"}. Откройте генерацию и соберите первый контент-пак — запись сразу появится в библиотеке.`
-      :"Вставьте ключ OpenRouter или Groq в разделе «Генерация». Проверка ключа занимает один запрос, дальше контент-пак собирается за один клик.";
-    acts=`<a class="btn btn-c" href="live.html">⚡ Открыть генерацию</a><a class="btn btn-o" href="app/">🛒 Посмотреть студию</a>`;
-  }else if(!st.cards){
-    title="Записи есть, карточек нет";
-    note="Последняя генерация не вернула карточки. Откройте библиотеку и добавьте их вручную или повторите генерацию с большим лимитом токенов.";
-    acts=`<a class="btn btn-b" href="library.html">📚 Открыть библиотеку</a><a class="btn btn-o" href="live.html">⚡ Повторить</a>`;
-  }else if(!st.published&&!st.ready){
-    title=`Готово к упаковке: ${st.cards} карточек`;
-    note=`${st.last?`Последний набор: «${st.last.title}». `:""}Соберите PNG и ролик в мастерской, затем откройте публикацию — там пост показывается так, как его увидят в приложении площадки.`;
-    acts=`<a class="btn btn-a" href="assets.html">🎨 Собрать ассеты</a><a class="btn btn-g" href="publish.html">🚀 К публикации</a>`;
-  }else if(st.published){
-    title=`Опубликовано постов: ${st.published}`;
-    note=`${st.ready?`Ещё ${st.ready} отмечены готовыми и ждут выхода. `:""}${st.planned?`В плане ${st.planned} записей. `:""}Откройте публикацию, чтобы продолжить план недели или собрать комплект для отчёта.`;
-    acts=`<a class="btn btn-g" href="publish.html">🚀 Продолжить публикацию</a><a class="btn btn-o" href="library.html">📚 Библиотека</a>`;
-  }else{
-    title=`Готовы к выходу: ${st.ready} постов`;
-    note="Тексты отмечены готовыми. Откройте публикацию, проверьте превью каждой площадки и отметьте выход — план недели сохранится в этом браузере.";
-    acts=`<a class="btn btn-g" href="publish.html">🚀 Открыть публикацию</a><a class="btn btn-a" href="assets.html">🎨 Ассеты</a>`;
-  }
-  $("nextTitle").textContent=title;
-  $("nextNote").textContent=note;
-  $("nextActs").innerHTML=acts;
-  const lit=(id,on,color,cap)=>{
-    const el=$(id);if(!el)return;
-    el.setAttribute("fill",on?color:"#252d52");
-    el.classList.toggle("node-lit",on);
-    el.style.color=color;
-    if(cap){const c=$(cap.id);if(c)c.textContent=cap.text}
-  };
-  lit("lit1",true,"#7c5cff",{id:"cap1",text:st.studio?`${st.studio} записей в студии`:"товар загружен"});
-  lit("lit2",st.real>0,"#22d3ee",{id:"cap2",text:st.real?`${st.real} генераций`:st.key?"ключ сохранён":"ожидает ключ"});
-  lit("lit3",(st.real+st.extra)>0,"#4d7cff",{id:"cap3",text:(st.real+st.extra)?`${st.real+st.extra} записей`:"ожидает записи"});
-  lit("lit4",st.cards>0,"#ffb020",{id:"cap4",text:st.cards?`${st.cards} карточек`:st.presets?`${st.presets} пресетов`:"ожидает карточки"});
-  lit("lit5",st.published>0,"#3ddc84",{id:"cap5",text:st.published?`${st.published} вышло`:st.ready?`${st.ready} готово`:st.planned?`${st.planned} в плане`:"ожидает выхода"});
-  document.querySelectorAll('[data-surface="live"]').forEach(a=>a.classList.toggle("hot",!st.real&&!st.extra));
-  document.querySelectorAll('[data-surface="library"]').forEach(a=>a.classList.toggle("hot",(st.real+st.extra)>0&&!st.cards));
-  document.querySelectorAll('[data-surface="assets"]').forEach(a=>a.classList.toggle("hot",st.cards>0&&!st.published&&!st.ready));
-  document.querySelectorAll('[data-surface="publish"]').forEach(a=>a.classList.toggle("hot",(st.ready>0||st.cards>0)&&!st.published));
-}
-
-/* ---------- reel ---------- */
-const PRODUCTS=[
-  {title:"SoundMax Pro ANC",price:"4 990 ₽",caps:["🔊 Выключи шум города в 1 клик","🎧 ANC -45 дБ + Hi-Res LDAC","⚡ 40 часов без розетки"]},
-  {title:"AeroBuds Lite",price:"2 490 ₽",caps:["🪶 4 грамма в каждом ухе","💧 IPX5 — дождь не помеха","⚡ 28 часов с кейсом"]},
-  {title:"StudioMax Over-Ear",price:"9 900 ₽",caps:["🎚 Мониторная ровная АЧХ","🎧 Graphene 50 мм","🔌 Съёмный кабель 3.5 мм"]}
-];
-const cfg={grade:"#7c5cff",motion:1,glow:1,grain:.1,zoom:1,scenes:4,dur:15,quality:2,cta:"КУПИТЬ",subs:true,guides:false,product:0};
-const reel=$("reel"),rc=reel.getContext("2d");
-let raf=null,t0=performance.now(),visible=true;
-function fitReel(){
-  const dpr=Math.min(window.devicePixelRatio||1,cfg.quality);
-  const w=Math.round(540*dpr),h=Math.round(960*dpr);
-  if(reel.width!==w){reel.width=w;reel.height=h}
-  rc.setTransform(dpr,0,0,dpr,0,0);
-}
-function drawReel(now){
-  const W=540,H=960,p=PRODUCTS[cfg.product];
-  const[gh,gs,gl]=hex2hsl(cfg.grade);
-  const A=[gh,Math.max(62,gs),clamp(gl,45,66)],B=[gh+148,Math.max(62,gs),clamp(gl+6,45,68)];
-  const t=((now-t0)/1000*cfg.motion)%12/12;
-  fitReel();
-  rc.save();
-  rc.translate(W/2,H/2);rc.scale(cfg.zoom,cfg.zoom);rc.translate(-W/2,-H/2);
-  const g=rc.createLinearGradient(0,0,W,H);
-  g.addColorStop(0,hsl(A[0],58,9));g.addColorStop(.5,hsl(A[0],62,17));g.addColorStop(1,hsl(B[0],58,12));
-  rc.fillStyle=g;rc.fillRect(-60,-60,W+120,H+120);
-  rc.save();rc.globalCompositeOperation="lighter";
-  for(let r=0;r<5;r++){
-    const rad=70+((t*300+r*58)%300),al=Math.max(0,1-rad/380)*.85;
-    rc.strokeStyle=r%2?hsl(B[0],B[1],B[2],al):hsl(A[0],A[1],A[2],al);
-    rc.lineWidth=3+cfg.glow;rc.shadowBlur=18*cfg.glow;rc.shadowColor=rc.strokeStyle;
-    rc.beginPath();rc.arc(270,408,rad,0,Math.PI*2);rc.stroke();
-  }
-  rc.restore();
-  const bob=Math.sin(t*Math.PI*2)*7*cfg.motion;
-  rc.save();rc.shadowBlur=26*cfg.glow;rc.shadowColor=hsl(B[0],B[1],B[2],.9);
-  rc.strokeStyle="#fff";rc.lineWidth=14;rc.lineCap="round";
-  if(cfg.product===1){
-    rc.fillStyle=hsl(B[0],B[1],B[2]);
-    rc.beginPath();rc.ellipse(232,410+bob,26,34,-.25,0,7);rc.fill();
-    rc.beginPath();rc.ellipse(308,410+bob,26,34,.25,0,7);rc.fill();
-    rc.strokeStyle="#fff";rc.lineWidth=8;
-    rc.beginPath();rc.moveTo(226,438+bob);rc.lineTo(220,478+bob);rc.stroke();
-    rc.beginPath();rc.moveTo(314,438+bob);rc.lineTo(320,478+bob);rc.stroke();
-  }else{
-    rc.beginPath();rc.arc(270,412+bob,95,Math.PI,0);rc.stroke();
-    rc.fillStyle=hsl(B[0],B[1],B[2]);
-    const w=cfg.product===2?42:34,hh=cfg.product===2?100:86;
-    rc.fillRect(158-(cfg.product===2?8:0),402+bob,w,hh);rc.fillRect(348,402+bob,w,hh);
-  }
-  rc.restore();
-  rc.textAlign="center";
-  rc.fillStyle=hsl(A[0],A[1],A[2],.92);rc.fillRect(112,86,316,42);
-  rc.fillStyle="#fff";rc.font="bold 18px Manrope,sans-serif";rc.fillText("AI PROMO · 9:16",270,113);
-  rc.fillStyle="#fff";rc.font="bold 26px Manrope,sans-serif";
-  rc.fillText(p.title.length>26?p.title.slice(0,25)+"…":p.title,270,636);
-  if(cfg.subs){
-    rc.fillStyle=hsl(B[0],B[1],B[2]+8);rc.font="bold 20px Manrope,sans-serif";
-    rc.fillText(p.caps[Math.min(p.caps.length-1,Math.floor(t*p.caps.length))],270,700);
-  }
-  rc.save();rc.shadowBlur=20*cfg.glow;rc.shadowColor=hsl(A[0],A[1],A[2],.8);
-  rc.fillStyle=hsl(A[0],Math.max(70,A[1]),clamp(A[2]+8,45,62));rc.fillRect(78,786,384,62);rc.restore();
-  rc.fillStyle="#06070d";rc.font="bold 22px Manrope,sans-serif";
-  rc.fillText((cfg.cta+" • "+p.price).slice(0,30),270,825);
-  const scIdx=Math.min(cfg.scenes-1,Math.floor(t*cfg.scenes));
-  for(let i=0;i<cfg.scenes;i++){
-    const bw=(360/cfg.scenes)-8,x=90+i*(360/cfg.scenes);
-    rc.fillStyle=i===scIdx?hsl(B[0],B[1],B[2],.95):"rgba(255,255,255,.22)";
-    rc.fillRect(x,880,bw,5);
-  }
-  rc.fillStyle="rgba(255,255,255,.55)";rc.font="600 12px Manrope,sans-serif";
-  rc.fillText(`сцена ${scIdx+1}/${cfg.scenes} · ${cfg.dur}с · 1080×1920`,270,912);
-  rc.restore();
-  if(cfg.guides){
-    rc.save();rc.strokeStyle="rgba(139,255,90,.5)";rc.lineWidth=1;rc.setLineDash([6,6]);
-    rc.strokeRect(38,120,W-76,H-260);
-    rc.beginPath();rc.moveTo(W/2,0);rc.lineTo(W/2,H);rc.moveTo(0,H/2);rc.lineTo(W,H/2);rc.stroke();
-    rc.setLineDash([]);rc.fillStyle="rgba(139,255,90,.85)";rc.font="600 11px Manrope,sans-serif";rc.textAlign="left";
-    rc.fillText("safe-zone",44,136);rc.restore();
-  }
-  if(cfg.grain>0){
-    rc.save();rc.globalAlpha=cfg.grain;
-    for(let i=0;i<200;i++){rc.fillStyle=Math.random()>.5?"#fff":"#000";rc.fillRect(Math.random()*W,Math.random()*H,1.4,1.4)}
-    rc.restore();
-  }
-}
-function reelLoop(now){drawReel(now);raf=requestAnimationFrame(reelLoop)}
-function startReel(){if(raf!==null||!visible||document.hidden||RM)return;t0=performance.now();raf=requestAnimationFrame(reelLoop)}
-function stopReel(){if(raf!==null){cancelAnimationFrame(raf);raf=null}}
-new IntersectionObserver(es=>{visible=es[0].isIntersecting;visible?startReel():stopReel()},{threshold:.05}).observe(reel);
-document.addEventListener("visibilitychange",()=>{document.hidden?stopReel():startReel()});
-window.addEventListener("resize",()=>{if(raf!==null)fitReel();else drawReel(performance.now())});
-function reelHint(){$("reelHint").textContent=`${cfg.scenes} сцен · ${cfg.dur}с · качество ${cfg.quality}× · грейд ${cfg.grade} · параметры применяются мгновенно`}
-function syncReel(){
-  $("cGrade").value=cfg.grade;$("cMotion").value=cfg.motion;$("cGlow").value=cfg.glow;$("cGrain").value=cfg.grain;
-  $("cZoom").value=cfg.zoom;$("cDur").value=String(cfg.dur);$("cQuality").value=String(cfg.quality);
-  $("cCta").value=cfg.cta;$("cProduct").value=String(cfg.product);
-  $("vMotion").textContent=cfg.motion.toFixed(1)+"×";$("vGlow").textContent=cfg.glow.toFixed(1)+"×";
-  $("vGrain").textContent=cfg.grain.toFixed(2);$("vZoom").textContent=cfg.zoom.toFixed(2)+"×";
-  $("vScenes").textContent=cfg.scenes;
-  $("cSubs").setAttribute("aria-checked",String(cfg.subs));$("cGuides").setAttribute("aria-checked",String(cfg.guides));
-  $("scMinus").disabled=cfg.scenes<=3;$("scPlus").disabled=cfg.scenes>=6;
-  reelHint();if(raf===null)drawReel(performance.now());
-}
-$("cGrade").oninput=e=>{cfg.grade=e.target.value;reelHint();if(raf===null)drawReel(performance.now())};
-$("cMotion").oninput=e=>{cfg.motion=+e.target.value;$("vMotion").textContent=cfg.motion.toFixed(1)+"×";reelHint()};
-$("cGlow").oninput=e=>{cfg.glow=+e.target.value;$("vGlow").textContent=cfg.glow.toFixed(1)+"×";reelHint();if(raf===null)drawReel(performance.now())};
-$("cGrain").oninput=e=>{cfg.grain=+e.target.value;$("vGrain").textContent=cfg.grain.toFixed(2);reelHint();if(raf===null)drawReel(performance.now())};
-$("cZoom").oninput=e=>{cfg.zoom=+e.target.value;$("vZoom").textContent=cfg.zoom.toFixed(2)+"×";reelHint();if(raf===null)drawReel(performance.now())};
-$("cDur").onchange=e=>{cfg.dur=+e.target.value;reelHint()};
-$("cQuality").onchange=e=>{cfg.quality=+e.target.value;fitReel();reelHint();toast("Качество превью: "+cfg.quality+"×","info")};
-$("cCta").oninput=e=>{cfg.cta=e.target.value||"КУПИТЬ";reelHint();if(raf===null)drawReel(performance.now())};
-$("cProduct").onchange=e=>{cfg.product=+e.target.value;reelHint();if(raf===null)drawReel(performance.now())};
-$("scMinus").onclick=()=>{cfg.scenes=clamp(cfg.scenes-1,3,6);syncReel()};
-$("scPlus").onclick=()=>{cfg.scenes=clamp(cfg.scenes+1,3,6);syncReel()};
-function bindSw(el,key){el.onclick=()=>{cfg[key]=!cfg[key];el.setAttribute("aria-checked",String(cfg[key]));reelHint();if(raf===null)drawReel(performance.now())}}
-bindSw($("cSubs"),"subs");bindSw($("cGuides"),"guides");
-$("cReset").onclick=()=>{Object.assign(cfg,{grade:"#7c5cff",motion:1,glow:1,grain:.1,zoom:1,scenes:4,dur:15,quality:2,cta:"КУПИТЬ",subs:true,guides:false,product:0});syncReel();toast("Параметры кадра сброшены")};
-$("cRandom").onclick=()=>{
-  const pal=["#7c5cff","#22d3ee","#ff4d9d","#8bff5a","#ffb020","#4d7cff","#3ddc84"];
-  cfg.grade=pal[Math.floor(Math.random()*pal.length)];
-  cfg.motion=+(0.4+Math.random()*1.9).toFixed(1);
-  cfg.glow=+(Math.random()*2.4).toFixed(1);
-  cfg.grain=+(Math.random()*.32).toFixed(2);
-  cfg.zoom=+(0.9+Math.random()*.4).toFixed(2);
-  cfg.scenes=3+Math.floor(Math.random()*4);
-  cfg.product=Math.floor(Math.random()*PRODUCTS.length);
-  syncReel();toast("Случайный образ применён");
-};
-$("cPng").onclick=()=>{
-  drawReel(performance.now());
-  reel.toBlob(b=>{if(!b)return toast("Не удалось создать PNG","err");download(b,"promo-frame-9x16.png");beep("shutter");toast("Кадр PNG сохранён")},"image/png");
-};
-$("cRec").onclick=async()=>{
-  const btn=$("cRec");
-  if(btn.disabled)return;
-  if(!window.MediaRecorder||!reel.captureStream){toast("Браузер не поддерживает запись — сохраните кадр PNG","info");return}
-  btn.disabled=true;const old=btn.textContent;btn.textContent="● Запись…";$("reelState").textContent="запись клипа";
-  startReel();beep("rec");
-  let stream;
-  try{
-    stream=reel.captureStream(30);
-    const mime=["video/mp4;codecs=avc1.42E01E","video/mp4","video/webm;codecs=vp9","video/webm"].find(m=>{try{return MediaRecorder.isTypeSupported(m)}catch{return false}})||"video/webm";
-    const ext=mime.includes("mp4")?"mp4":"webm";
-    const rec=new MediaRecorder(stream,{mimeType:mime});
-    const chunks=[];
-    rec.ondataavailable=e=>{if(e.data&&e.data.size)chunks.push(e.data)};
-    const done=new Promise((res,rej)=>{rec.onstop=()=>res();rec.onerror=()=>rej(new Error("сбой записи"))});
-    rec.start();await sleep(4200);rec.stop();await done;
-    download(new Blob(chunks,{type:mime}),"promo-9x16."+ext);
-    beep("ok");toast("Клип сохранён (."+ext+")");
-  }catch(e){toast("Запись: "+e.message,"err");beep("err")}
-  finally{
-    try{stream&&stream.getTracks().forEach(t=>t.stop())}catch{}
-    btn.disabled=false;btn.textContent=old;$("reelState").textContent="рендер идёт";
-  }
-};
-
-/* ---------- demo generator ---------- */
-const TONES={
-  "уверенный эксперт":{hook:"Разбираем по фактам:",cta:"Подробные характеристики и заказ",vk:"Судите сами:"},
-  "дружелюбный сосед":{hook:"Смотрите, что нашлось 🙂",cta:"Загляните, пока скидка держится",vk:"Делимся находкой:"},
-  "дерзкий challenger":{hook:"Хватит переплачивать за логотип.",cta:"Забирайте, пока партия не кончилась",vk:"Бросаем вызов ценникам:"},
-  "премиум-сдержанный":{hook:"Сдержанно о главном.",cta:"Оформить заказ",vk:"Коротко о сути:"}
-};
-let demoVar=0,demoData=null,demoTab="telegram";
-function buildDemo(){
-  const title=$("dTitle").value.trim()||"Беспроводные наушники SoundMax Pro";
-  const price=$("dPrice").value.trim()||"4 990 ₽";
-  const disc=$("dDisc").value.trim()||"30%";
-  const feat=$("dFeat").value.trim()||"ANC до 45 дБ и 40 часов работы";
-  const tone=TONES[$("dTone").value]||TONES["уверенный эксперт"];
-  const angles=[["Рациональный","Эмоциональный","Сравнение"],["Практичный","Атмосферный","Выгодный"],["Для работы","Для дороги","Против флагманов"]][demoVar%3];
-  const cards=[
-    {a:angles[0],t:`${title} — ${feat}`,b:`Выгода ${disc}`,d:"Инструмент, который окупается в первый месяц: меньше проводов, меньше розеток, меньше компромиссов.",ul:[feat,"Гарантия 1 год и возврат 14 дней","Комплект без доплат"]},
-    {a:angles[1],t:`${title} — тишина, которую слышно`,b:"Хит сезона",d:"Одно касание — и город остаётся снаружи. Остаётся только то, что вы включили сами.",ul:[feat,"Мягкая посадка на весь день","Матовый корпус без отпечатков"]},
-    {a:angles[2],t:`${title} — флагманские функции без наценки`,b:`Скидка ${disc}`,d:"Те же технологии, что у моделей вдвое дороже, но по честной цене и с полным комплектом.",ul:[feat,"Кейс и кабель уже в коробке","Прямая поставка без наценки"]}
-  ];
-  const telegram=`${tone.hook}
-
-${title} — ${feat}.
-
-🔥 Коротко:
-• ${feat}
-• Комплект без доплат
-• Гарантия и возврат
-
-💥 Сейчас ${price} со скидкой ${disc}.
-
-👉 ${tone.cta}: https://example.shop/product
-
-#новинка #гаджеты #скидки`;
-  const vk=`${tone.vk} ${title}.
-
-${feat} — и это не строчка из рекламы, а то, что чувствуется в первый же день.
-
-✅ ${feat}
-✅ Полный комплект в коробке: футляр, кабель, инструкция
-✅ Мягкая посадка — к вечеру не устаёшь
-✅ ${price} вместо полной цены (-${disc})
-
-Проверили в трёх сценариях: дорога в транспорте, рабочий день в шумном офисе и вечерний фильм дома. Везде результат одинаковый — вокруг становится тише, а звук чище. Заряжать каждый день не приходится, и это, пожалуй, главное бытовое удобство: вещь просто работает, не требуя внимания.
-
-Что для вас важнее при выборе? Пишите в комментариях:
-1 — автономность
-2 — шумоподавление
-3 — цена
-
-Подробности и заказ: https://example.shop/product
-
-#обзор #гаджеты #выгоднаяпокупка`;
-  const ok=`Друзья, делимся удачной находкой — ${title}.
-
-Как часто хочется спокойно послушать музыку или поговорить с близкими, чтобы ничего не мешало? Здесь это решается одним касанием: ${feat}.
-
-Почему берут:
-• Работает долго, заряжать каждый день не нужно.
-• Мягко сидит, не давит даже к вечеру.
-• Голос слышно чисто, без эффекта «под водой».
-• Включается одной кнопкой — разберётся каждый.
-• Провода не путаются и не рвутся в кармане.
-
-Мы проверили их в обычных бытовых ситуациях: поездка в транспорте, работа рядом с шумными соседями, вечерний фильм, разговор по телефону на улице. Во всех случаях впечатление одинаковое — меньше постороннего шума, больше разборчивости. Отдельно порадовало, что настройка не требует приложений и лишних меню: включил и пользуешься, без регистрации и обновлений.
-
-Сейчас действует скидка ${disc}: цена ${price}. В комплекте футляр — можно смело брать в подарок себе, детям или внукам. Гарантия год, вернуть можно в течение двух недель, если не подойдёт.
-
-Подробности и заказ: https://example.shop/product`;
-  const dzen=`# ${title}: месяц использования и честный вывод
-
-${tone.hook} ещё недавно казалось, что за ${feat} нужно отдавать вдвое больше. Этот месяц показал обратное, и дальше — по пунктам, без рекламных формулировок. Я пользовался ими каждый день: дорога, работа, вечерний фильм, звонки на улице. Ниже — то, что действительно заметно, и то, что оказалось не таким важным, как обещает упаковка.
-
-## Первое впечатление и комплектация
-Комплектация оказалась полнее ожиданий: футляр, кабель, инструкция на русском языке. Корпус матовый, отпечатки не собирает, шарниры без люфта и посторонних скрипов. Вес распределён равномерно, так что через час уже не вспоминаешь, что что-то надето. Отдельно отмечу футляр: он жёсткий, с сетчатым карманом внутри, и в сумке ничего не мнётся. Мелочь, но именно такие мелочи решают, будет ли вещь постоянно жить в рюкзаке или останется дома на полке.
-
-## Что даёт ${feat} на практике
-В транспорте гул уходит первым — остаётся музыка на комфортной громкости, и слушать можно тише, чем раньше. В офисе исчезает ровный шум кондиционера и стук клавиатур по соседству. Дома слышно только то, что вы включили сами. Разница заметна уже в первый день, и к ней быстро привыкаешь. Важный нюанс: мир не исчезает полностью — резкие звуки вроде объявления или сигнала всё равно пробиваются. И это скорее плюс, чем недостаток: вы не выпадаете из реальности и не пропускаете важное.
-
-## Посадка и долгое ношение
-Первые пару дней посадка ощущается непривычно плотной, потом перестаёшь её замечать. Через восемь часов рабочего дня уши не горят, а давление на макушку не появляется — это главное отличие от дешёвых моделей, которые начинали напоминать о себе уже через час. С очками тоже нормально: дужки не впиваются, хотя полностью исключить лёгкое ощущение по бокам нельзя. Если голова крупная, стоит примерить перед покупкой.
-
-## Автономность и зарядка
-Заявленные цифры подтверждаются в спокойном режиме использования. При активном — расход выше, но розетку искать всё равно приходится редко, примерно раз в полторы недели. Быстрая зарядка выручает утром: несколько минут у кабеля дают запас на дорогу и половину рабочего дня. Приятно, что не нужно каждый вечер вспоминать про заряд — вещь просто работает в фоновом режиме жизни.
-
-## Звонки и микрофон
-Голос передаётся разборчиво даже на улице: собеседник не переспрашивает и не жалуется на ветер. В помещении разговор вообще неотличим от разговора по телефону без гарнитуры. Это тот пункт, который редко выносят в рекламу, а зря — для рабочих созвонов он важнее, чем разница в оттенках баса. Из ограничений: в очень шумном месте вроде стройки собеседник всё же услышит фон.
-
-## Кому подойдёт, а кому нет
-Подойдёт тем, кто много ездит, работает в шумном помещении или просто хочет тишины вечером дома. Не подойдёт тем, кому нужен эталонный студийный мониторинг или специфический профессиональный кодек — здесь честный бытовой баланс, а не измерительный инструмент. Также стоит подумать дважды, если вы принципиально носите только внутриканальные модели: полноразмерная конструкция летом ощутимо теплее.
-
-## Итог
-За ${price} со скидкой ${disc} набор возможностей выглядит избыточным в хорошем смысле: вы получаете больше, чем ожидали от этой цены, и не платите за логотип. Если ваши задачи совпали с описанными — переплата за именитый бренд не выглядит обоснованной. Если нужен профессиональный инструмент, смотрите в другую сторону и не экономьте.
-
-Подпишитесь, чтобы не пропустить следующий разбор: тестируем то, что реально покупают, и пишем без рекламных формулировок.`;
-  const website=`SEO Title: ${title} — купить со скидкой ${disc}
-Meta Description: ${title}: ${feat}. Цена ${price}, гарантия 1 год, быстрая доставка.
-
-<h1>${title}</h1>
-<p>${feat}. Сегодня <strong>${price}</strong> со скидкой ${disc}.</p>
-<h2>Преимущества</h2>
-<ul><li>${feat}</li><li>Полный комплект</li><li>Гарантия 1 год</li></ul>
-<h2>Отзыв</h2>
-<blockquote>Пользуюсь месяц — к покупке вопросов нет.</blockquote>
-<h2>FAQ</h2>
-<p><strong>Подойдёт для телефона?</strong> Да, совместимо с iOS и Android.</p>
-<button>${tone.cta}</button>`;
-  return{cards,texts:{telegram,vk,ok,dzen,website},title};
-}
-const PLAT_META={
-  telegram:{n:"Telegram",rec:[150,1024],hard:4096,note:"1024 — подпись к медиа, 4096 — пост"},
-  dzen:{n:"Дзен",rec:[3000,7000],hard:null,note:"рекомендация дочитываемости"},
-  vk:{n:"ВКонтакте",rec:[500,2000],hard:null,note:"рекомендуемый объём"},
-  ok:{n:"Одноклассники",rec:[800,3000],hard:null,note:"рекомендуемый объём"},
-  website:{n:"Сайт",rec:[400,10000],hard:null,note:"структура + SEO"}
-};
-function paintDemo(){
-  if(!demoData)return;
-  $("dCards").innerHTML=demoData.cards.map(c=>`<div class="pcard"><div class="b">
-    <div class="row" style="justify-content:space-between"><span class="chip v">${esc(c.a)}</span><span class="chip a">${esc(c.b)}</span></div>
-    <div class="thumb">${esc(demoData.title.slice(0,30))}</div>
-    <h4>${esc(c.t)}</h4><div class="price">${esc($("dPrice").value||"4 990 ₽")}</div>
-    <p class="desc">${esc(c.d)}</p>
-    <ul>${c.ul.map(u=>`<li>${esc(u)}</li>`).join("")}</ul></div></div>`).join("");
-  $("dTabs").innerHTML=Object.keys(PLAT_META).map(k=>`<button class="tab-btn ${k===demoTab?"on":""}" data-t="${k}">${PLAT_META[k].n}</button>`).join("");
-  $("dTabs").querySelectorAll("[data-t]").forEach(b=>b.onclick=()=>{demoTab=b.dataset.t;paintDemo();beep("tick")});
-  $("dText").value=demoData.texts[demoTab]||"";
-  updCount();
-}
-function updCount(){
-  const m=PLAT_META[demoTab],len=$("dText").value.length;
-  const cls=m.hard&&len>m.hard?"r":(len<m.rec[0]||len>m.rec[1]?"a":"g");
-  const el=$("dCount");el.className="chip "+cls;
-  el.textContent=m.hard?`${len} / ${m.hard} · ${m.note}`:`${len} · рек. ${m.rec[0]}–${m.rec[1]}`;
-}
-$("dText").addEventListener("input",updCount);
-$("dGen").onclick=async()=>{
-  const b=$("dGen");if(b.disabled)return;b.disabled=true;
-  $("dOut").classList.add("hidden");$("dSkel").classList.remove("hidden");
-  await sleep(700);
-  demoVar++;demoData=buildDemo();paintDemo();
-  $("dSkel").classList.add("hidden");$("dOut").classList.remove("hidden");
-  b.disabled=false;beep("ok");toast("Контент-пак собран: 3 карточки и 5 текстов");
-};
-$("dReset").onclick=()=>{
-  $("dTitle").value="Беспроводные наушники SoundMax Pro";$("dPrice").value="4 990 ₽";
-  $("dDisc").value="30%";$("dFeat").value="ANC до 45 дБ и 40 часов работы";$("dTone").selectedIndex=0;
-  demoVar=0;demoData=buildDemo();demoTab="telegram";paintDemo();toast("Демо сброшено");
-};
-$("dCopy").onclick=()=>copy($("dText").value);
-$("dDl").onclick=()=>{download(new Blob([$("dText").value],{type:"text/plain;charset=utf-8"}),demoTab+".txt");toast("Файл сохранён")};
-
-/* ---------- platforms ---------- */
-const PLATS=[
-  {ic:"📱",n:"Telegram",c:"var(--cyan)",d:"Короткие абзацы, эмодзи, хештеги и одна ссылка-действие. Безопасный объём — до 1024 знаков, чтобы текст влез и в подпись к медиа.",rec:"150–1024",fill:72},
-  {ic:"📰",n:"Дзен",c:"var(--amber)",d:"Лонгрид с интригующим заголовком, подзаголовками и честными минусами товара. Объём под дочитываемость, а не под жёсткий лимит.",rec:"3000–7000",fill:96},
-  {ic:"📘",n:"ВКонтакте",c:"var(--blue)",d:"Разговорный тон, умеренные эмодзи и вопрос для комментариев — вовлечение важнее перечисления характеристик.",rec:"500–2000",fill:58},
-  {ic:"🟦",n:"Одноклассники",c:"var(--green)",d:"Тёплый домашний голос для аудитории 35+: польза, надёжность, подарок близким. Без сленга и англицизмов.",rec:"800–3000",fill:78},
-  {ic:"🌐",n:"Сайт",c:"var(--magenta)",d:"H1 и H2, буллеты преимуществ, шаблон отзыва, FAQ, CTA-кнопка и SEO title до 60 знаков с meta до 160.",rec:"400–10000",fill:88}
-];
-$("plats").innerHTML=PLATS.map(p=>`<div class="plat reveal" style="--pc:${p.c}">
-  <div class="ic">${p.ic}</div><h3 style="margin:8px 0 6px">${p.n}</h3>
-  <p class="note" style="color:var(--muted);font-size:12.5px">${p.d}</p>
-  <div class="row" style="justify-content:space-between;margin-top:12px"><span class="chip">${p.rec}</span><span class="note">рекомендация</span></div>
-  <div class="bar"><i data-fill="${p.fill}"></i></div></div>`).join("");
-
-/* ---------- api ---------- */
-const EPS=[
-  {m:"GET",p:"/api/health",g:"Служебное",d:"Режим, провайдер, наличие ключей, ffmpeg",ex:'{"status":"ok","mode":"demo","llm_provider":"qwen","ffmpeg":true}'},
-  {m:"POST",p:"/api/parse",g:"Контент",d:"Парсинг URL с SSRF-фильтром и выбором полей",ex:'{"url":"https://shop.example/p/1","fields":{"price":true,"photos":true}}'},
-  {m:"POST",p:"/api/generate",g:"Контент",d:"3 карточки + 5 текстов + image-промпты",ex:'{"product":{"title":"SoundMax Pro","price":"4 990 ₽"},"seo_keywords":["наушники anc"]}'},
-  {m:"POST",p:"/api/keywords",g:"Контент",d:"Топ-10 запросов и insights",ex:'{"product_name":"наушники","geo":"Россия"}'},
-  {m:"POST",p:"/api/video",g:"Видео",d:"Раскадровка, master-prompt и SEO",ex:'{"idea":"шум метро → тишина","duration":15,"platform":"TikTok"}'},
-  {m:"POST",p:"/api/video/render",g:"Видео",d:"Задача на каждую сцену",ex:'{"scenes":[{"prompt":"subway hook","duration":5}],"platform":"TikTok"}'},
-  {m:"GET",p:"/api/video/status/{id}",g:"Видео",d:"Статус задачи и ссылка на клип",ex:'{"status":"SUCCEEDED","video_url":"https://…/clip.mp4"}'},
-  {m:"POST",p:"/api/video/assemble",g:"Видео",d:"ffmpeg → MP4, без ffmpeg → ZIP",ex:'{"urls":["https://…/s1.mp4","https://…/s2.mp4"]}'},
-  {m:"POST",p:"/api/auth/register",g:"Аккаунт",d:"Регистрация, стартовый баланс токенов",ex:'{"email":"you@studio.ru","password":"min8chars"}'},
-  {m:"POST",p:"/api/auth/login",g:"Аккаунт",d:"Вход, JWT на 30 дней",ex:'{"email":"you@studio.ru","password":"min8chars"}'},
-  {m:"GET",p:"/api/me",g:"Аккаунт",d:"Баланс, расход и разбивка по эндпоинтам",ex:'{"tokens_balance":8766,"tokens_used":1234,"usage":[]}'},
-  {m:"GET",p:"/api/history",g:"История",d:"Серверная история генераций",ex:'[{"id":1,"type":"Генерация","title":"SoundMax Pro","payload":{}}]'},
-  {m:"POST",p:"/api/history",g:"История",d:"Запись своей генерации в историю",ex:'{"type":"Заметка","title":"Кампания","payload":{"note":"…"}}'},
-  {m:"DELETE",p:"/api/history/{id}",g:"История",d:"Удаление записи и очистка истории",ex:'{"deleted":12}'}
-];
-let apiM="all";
-function paintApi(){
-  const q=($("apiQ").value||"").toLowerCase(),sort=$("apiSort").value;
-  let list=EPS.filter(e=>(apiM==="all"||e.m===apiM)&&(!q||(e.p+" "+e.d+" "+e.g).toLowerCase().includes(q)));
-  if(sort==="path")list=[...list].sort((a,b)=>a.p.localeCompare(b.p));
-  if(sort==="method")list=[...list].sort((a,b)=>a.m.localeCompare(b.m)||a.p.localeCompare(b.p));
-  $("apiList").innerHTML=list.length?list.map((e,i)=>`<div class="ep">
-    <button class="ep-h" aria-expanded="false"><span class="meth m-${e.m.toLowerCase()}">${e.m}</span>
-      <span style="flex:1;min-width:0"><b style="font-family:var(--mono);font-size:12.5px">${esc(e.p)}</b><br><span class="note">${esc(e.d)}</span></span>
-      <span class="chip">${esc(e.g)}</span></button>
-    <div class="ep-b hidden"><div class="code">${esc(e.ex)}<button class="btn btn-o btn-s cp" data-ex="${i}">📋</button></div></div></div>`).join("")
-    :`<p class="note" style="text-align:center;padding:24px">Ничего не найдено — измените запрос или фильтр.</p>`;
-  $("apiCount").textContent=`Показано ${list.length} из ${EPS.length} эндпоинтов`;
-  $("apiList").querySelectorAll(".ep-h").forEach(h=>h.onclick=()=>{
-    const b=h.nextElementSibling,closed=b.classList.toggle("hidden");
-    h.setAttribute("aria-expanded",String(!closed));beep("tick");
+  }).join(""):'<p class="note" style="padding:16px">Ничего не найдено — очистите поиск.</p>';
+  $("tiles").querySelectorAll("[data-copy]").forEach(b=>b.onclick=()=>copy(b.dataset.copy));
+  $("tiles").querySelectorAll("[data-open]").forEach(a=>a.addEventListener("click",()=>beep("open")));
+  $("tiles").querySelectorAll("[data-sel]").forEach(c=>c.onchange=()=>{
+    c.checked?state.sel.add(c.dataset.sel):state.sel.delete(c.dataset.sel);
+    c.closest(".tile").classList.toggle("sel",c.checked);paintBulk();beep("tick");
   });
-  $("apiList").querySelectorAll("[data-ex]").forEach(b=>b.onclick=ev=>{ev.stopPropagation();copy(list[+b.dataset.ex].ex)});
+  paintFilters();paintBulk();
 }
-$("apiQ").addEventListener("input",paintApi);
-$("apiSort").addEventListener("change",paintApi);
-$("apiFilters").querySelectorAll("[data-m]").forEach(b=>b.onclick=()=>{
-  $("apiFilters").querySelectorAll("[data-m]").forEach(x=>x.classList.remove("on"));
-  b.classList.add("on");apiM=b.dataset.m;paintApi();
-});
-
-/* ---------- ship ---------- */
-const SHIP={
-  now:{code:`1. Откройте раздел «Генерация»
-2. Выберите провайдера (OpenRouter — самый надёжный из браузера)
-3. Вставьте API-ключ → «Проверить ключ»
-4. Заполните товар → «Сгенерировать контент-пак»
-5. Откройте «Библиотеку» — запись уже там, правьте текст
-6. Откройте «Ассеты» → карточки подхватятся сами
-7. Экспортируйте PNG и запишите ролик
-8. Откройте «Публикацию» → превью, чек-лист, редактор площадки`,note:"Ничего устанавливать не нужно. Ключ по умолчанию не сохраняется."},
-  local:{code:`git clone https://github.com/dorinvest13-spec/Marketpro.git
-cd Marketpro
-
-# студия
-open index.html
-
-# витрина и остальные страницы
-open docs/index.html
-open docs/live.html
-open docs/library.html
-open docs/assets.html
-open docs/publish.html
-
-# или локальный сервер
-python -m http.server 8000`,note:"Сборка и зависимости не требуются — чистый HTML и JS."},
-  gh:{code:`git add .
-git commit -m "feat: конвейер контента"
-git push
-
-# Settings → Pages → Source: GitHub Actions
-# вкладка Actions покажет сборку
-# сайт: https://<логин>.github.io/<репозиторий>/`,note:"Workflow собирает витрину в корень и студию в /app/."},
-  server:{code:`# позже: свой backend для команды и биллинга
-cp .env.example .env
-docker compose up -d --build
-
-# студия переключается в LIVE тумблером,
-# поле «API base» указывает на ваш домен
-# обязательно: JWT_SECRET, CORS_ORIGINS, HTTPS`,note:"Файлы backend добавляются отдельным шагом; до этого работает браузерный режим."}
+function paintBulk(){
+  $("selN").textContent=state.sel.size+" выбрано";
+  $("copySel").disabled=!state.sel.size;
+  const v=tileView();$("selAll").checked=v.length>0&&v.every(s=>state.sel.has(s.id));
+}
+$("selAll").onchange=()=>{
+  const v=tileView();
+  $("selAll").checked?v.forEach(s=>state.sel.add(s.id)):v.forEach(s=>state.sel.delete(s.id));
+  paintTiles();
 };
-let shipTab="now";
-function paintShip(){
-  const s=SHIP[shipTab];
-  $("shipCode").innerHTML=esc(s.code)+`<button class="btn btn-o btn-s cp" id="shipCp">📋</button>`;
-  $("shipNote").textContent=s.note;
-  $("shipCp").onclick=()=>copy(s.code);
-}
-$("shipTabs").querySelectorAll("[data-s]").forEach(b=>b.onclick=()=>{
-  $("shipTabs").querySelectorAll("[data-s]").forEach(x=>x.classList.remove("on"));
-  b.classList.add("on");shipTab=b.dataset.s;paintShip();beep("tick");
-});
-$("shipCopy").onclick=()=>copy(SHIP[shipTab].code);
-document.querySelectorAll("[data-copy]").forEach(b=>b.onclick=()=>copy(b.dataset.copy));
+$("copySel").onclick=()=>copy(SECTIONS.filter(s=>state.sel.has(s.id)).map(s=>`${s.n}: ${urlOf(s.p)}`).join("\n"));
+$("q").oninput=e=>{state.q=e.target.value;paintTiles()};
+$("sort").onchange=e=>{state.sort=e.target.value;paintTiles()};
+$("probeBtn").onclick=async()=>{
+  if(location.protocol==="file:"){toast("Страница открыта как файл — соседние разделы не проверяются","info");return}
+  const b=$("probeBtn");b.disabled=true;const old=b.textContent;
+  let ok=0,fail=0;
+  for(let i=0;i<SECTIONS.length;i++){
+    const s=SECTIONS[i];
+    b.innerHTML=`<span class="spin"></span> ${i+1}/${SECTIONS.length}`;
+    state.probes[s.p]="wait";paintTiles();
+    try{const r=await fetch(urlOf(s.p),{cache:"no-store"});
+      if(r.ok){state.probes[s.p]="ok";ok++}else{state.probes[s.p]="fail";fail++}}
+    catch{state.probes[s.p]="fail";fail++}
+    paintTiles();
+  }
+  b.disabled=false;b.textContent=old;
+  beep(fail&&!ok?"err":"ok");
+  toast(`Проверено: ${ok} доступно, ${fail} отсутствует`,fail&&!ok?"info":"ok");
+};
 
-/* ---------- scroll ---------- */
-const secs=[...document.querySelectorAll("section[id]")];
-const links=[...document.querySelectorAll('#navScroll a[href^="#"]')];
+/* ---------- address card ---------- */
+const SIZES={"1:1":[1080,1080],"4:5":[1080,1350],"16:9":[1200,675],"9:16":[1080,1920]};
+const cardCv=$("cardCv"),cardCx=cardCv.getContext("2d");
+function paintCardTo(ctx,W,H,c,url){
+  const A=c.accent,B=c.second,ff=FF();
+  ctx.fillStyle="#050b14";ctx.fillRect(0,0,W,H);
+  if(c.bg==="solid"){
+    const g=ctx.createLinearGradient(0,0,0,H);
+    g.addColorStop(0,mix(A,"#050b14",.5));g.addColorStop(1,"#050b14");
+    ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+  }else if(c.bg==="linear"){
+    const g=ctx.createLinearGradient(0,0,W,H);
+    g.addColorStop(0,mix(A,"#050b14",.26));g.addColorStop(.55,"#0a1420");g.addColorStop(1,mix(B,"#050b14",.34));
+    ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+  }else if(c.bg==="spot"){
+    const g=ctx.createRadialGradient(W*.5,H*.3,W*.04,W*.5,H*.3,H*.9);
+    g.addColorStop(0,rgba(A,.36));g.addColorStop(1,"#050b14");
+    ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+  }else if(c.bg==="rays"){
+    ctx.fillStyle=mix(A,"#050b14",.74);ctx.fillRect(0,0,W,H);
+    ctx.save();ctx.translate(W*.5,H*.28);ctx.globalCompositeOperation="lighter";
+    for(let i=0;i<16;i++){
+      const a=i/16*Math.PI*2;
+      const g=ctx.createLinearGradient(0,0,Math.cos(a)*H,Math.sin(a)*H);
+      g.addColorStop(0,rgba(i%2?B:A,.22));g.addColorStop(1,rgba(i%2?B:A,0));
+      ctx.fillStyle=g;ctx.beginPath();ctx.moveTo(0,0);ctx.arc(0,0,H*1.2,a-.055,a+.055);ctx.closePath();ctx.fill();
+    }
+    ctx.restore();
+  }else{
+    ctx.fillStyle="#08111c";ctx.fillRect(0,0,W,H);
+    [[W*.84,H*.14,H*.32,A],[W*.14,H*.86,H*.34,B],[W*.5,H*.5,H*.28,hueShift(A,60)]].forEach(([cx,cy,r,col])=>{
+      const g=ctx.createRadialGradient(cx,cy,0,cx,cy,r);
+      g.addColorStop(0,rgba(col,.32));g.addColorStop(1,rgba(col,0));
+      ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+    });
+  }
+  const pad=Math.round(W*.06*c.pad),inner=W-pad*2;
+  if(c.grid){
+    ctx.save();ctx.strokeStyle=rgba(A,.16);ctx.lineWidth=Math.max(1,W*.0015);
+    for(let i=1;i<4;i++){
+      ctx.beginPath();ctx.moveTo(pad+inner*i/4,pad);ctx.lineTo(pad+inner*i/4,H-pad);ctx.stroke();
+      ctx.beginPath();ctx.moveTo(pad,pad+(H-pad*2)*i/4);ctx.lineTo(W-pad,pad+(H-pad*2)*i/4);ctx.stroke();
+    }
+    ctx.restore();
+  }
+  let y=pad;
+  if(c.logo){
+    const s=Math.round(W*.1);
+    ctx.save();ctx.shadowBlur=24*c.glow;ctx.shadowColor=rgba(A,.75);
+    const g=ctx.createLinearGradient(pad,y,pad+s,y+s);
+    g.addColorStop(0,A);g.addColorStop(.5,B);g.addColorStop(1,"#ffd9a0");
+    ctx.fillStyle=g;rr(ctx,pad,y,s,s,s*.28);ctx.fill();ctx.restore();
+    ctx.fillStyle="#04101c";ctx.font=`800 ${s*.42}px ${ff}`;ctx.textAlign="center";ctx.textBaseline="middle";
+    ctx.fillText("AI",pad+s/2,y+s/2);
+    ctx.textAlign="left";ctx.textBaseline="alphabetic";
+    y+=s+Math.round(W*.035);
+  }
+  const tfs=W*.055;
+  ctx.font=`800 ${tfs}px ${ff}`;ctx.fillStyle="#eaf4ff";
+  const title=String(c.title||"AI Marketing Studio");
+  let tl=title;
+  while(ctx.measureText(tl).width>inner&&tl.length>4)tl=tl.slice(0,-1);
+  if(tl!==title)tl=tl.slice(0,-1)+"…";
+  y+=tfs;ctx.fillText(tl,pad,y);
+  y+=Math.round(W*.028);
+  const sfs=W*.026;
+  ctx.font=`600 ${sfs}px ${ff}`;ctx.fillStyle=rgba(B,.95);
+  ctx.fillText("карточки · тексты · ролик · публикация",pad,y+sfs*.2);
+  y+=sfs+Math.round(W*.045);
+
+  const boxPad=Math.round(W*.032);
+  const ufs=W*.032*c.font;
+  ctx.font=`700 ${ufs}px ui-monospace,Menlo,Consolas,monospace`;
+  const lines=breakUrl(ctx,url,inner-boxPad*2,6);
+  const boxH=lines.length*ufs*1.42+boxPad*2;
+  ctx.save();ctx.shadowBlur=20*c.glow;ctx.shadowColor=rgba(B,.4);
+  ctx.fillStyle="rgba(5,11,20,.82)";rr(ctx,pad,y,inner,boxH,Math.min(c.radius,W*.03));ctx.fill();ctx.restore();
+  ctx.save();ctx.strokeStyle=rgba(B,.6);ctx.lineWidth=Math.max(1.5,W*.0022);
+  rr(ctx,pad,y,inner,boxH,Math.min(c.radius,W*.03));ctx.stroke();ctx.restore();
+  let uy=y+boxPad+ufs;
+  ctx.fillStyle=B;ctx.font=`700 ${ufs}px ui-monospace,Menlo,Consolas,monospace`;
+  lines.forEach(l=>{ctx.fillText(l,pad+boxPad,uy);uy+=ufs*1.42});
+  y+=boxH+Math.round(W*.035);
+
+  if(c.hint&&y<H-pad-W*.06){
+    const hfs=W*.024;
+    ctx.font=`600 ${hfs}px ${ff}`;ctx.fillStyle="rgba(163,186,208,.95)";
+    const hint="Вставьте адрес в строку браузера, не в поиск Google";
+    let hl=hint;
+    while(ctx.measureText(hl).width>inner&&hl.length>6)hl=hl.slice(0,-1);
+    if(hl!==hint)hl=hl.slice(0,-1)+"…";
+    ctx.fillText(hl,pad,y+hfs*.2);
+  }
+  const ffs=W*.022;
+  ctx.font=`700 ${ffs}px ${ff}`;ctx.fillStyle=rgba(A,.85);
+  ctx.fillText("AI MARKETING STUDIO",pad,H-pad*.6);
+  ctx.textAlign="right";ctx.fillStyle="rgba(109,135,159,.9)";
+  ctx.font=`600 ${ffs*.9}px ui-monospace,Menlo,monospace`;
+  ctx.fillText(c.size,W-pad,H-pad*.6);ctx.textAlign="left";
+
+  if(c.grain>0){
+    ctx.save();ctx.globalAlpha=c.grain;
+    const n=Math.round(W*H/5200);
+    for(let i=0;i<n;i++){ctx.fillStyle=Math.random()>.5?"#fff":"#000";ctx.fillRect(Math.random()*W,Math.random()*H,W*.0016,W*.0016)}
+    ctx.restore();
+  }
+  ctx.save();ctx.strokeStyle=rgba(A,.3);ctx.lineWidth=Math.max(1,W*.0022);
+  rr(ctx,W*.012,W*.012,W-W*.024,H-W*.024,c.radius);ctx.stroke();ctx.restore();
+}
+function renderCard(){
+  const[W,H]=SIZES[state.card.size];
+  cardCv.width=W;cardCv.height=H;cardCv.style.aspectRatio=W+" / "+H;
+  $("cardTag").textContent=`${state.card.size} · ${W}×${H}`;
+  paintCardTo(cardCx,W,H,state.card,HERE);
+}
+function syncCard(){
+  const c=state.card;
+  $("acSize").value=c.size;$("acQuality").value=String(c.quality);$("acBg").value=c.bg;
+  $("acAccent").value=c.accent;$("acSecond").value=c.second;
+  $("acRadius").value=c.radius;$("acRadiusVal").textContent=c.radius;
+  $("acGlow").value=c.glow;$("acGlowVal").textContent=c.glow.toFixed(1)+"×";
+  $("acGrain").value=c.grain;$("acGrainVal").textContent=c.grain.toFixed(2);
+  $("acFont").value=c.font;$("acFontVal").textContent=c.font.toFixed(2)+"×";
+  $("acPad").value=c.pad;$("acPadVal").textContent=c.pad.toFixed(2)+"×";
+  $("acLogo").setAttribute("aria-checked",String(c.logo));
+  $("acHint").setAttribute("aria-checked",String(c.hint));
+  $("acGrid").setAttribute("aria-checked",String(c.grid));
+  $("acTitle").value=c.title;
+  store.set("home_card",JSON.stringify(c));
+  renderCard();
+}
+$("acSize").onchange=e=>{state.card.size=e.target.value;syncCard()};
+$("acQuality").onchange=e=>{state.card.quality=+e.target.value;syncCard();toast("Качество экспорта: "+state.card.quality+"×","info")};
+$("acBg").onchange=e=>{state.card.bg=e.target.value;syncCard()};
+$("acAccent").oninput=e=>{state.card.accent=e.target.value;syncCard()};
+$("acSecond").oninput=e=>{state.card.second=e.target.value;syncCard()};
+[["acRadius","radius"],["acGlow","glow"],["acGrain","grain"],["acFont","font"],["acPad","pad"]].forEach(([id,k])=>{
+  $(id).oninput=e=>{state.card[k]=+e.target.value;syncCard()};
+});
+[["acLogo","logo"],["acHint","hint"],["acGrid","grid"]].forEach(([id,k])=>{
+  $(id).onclick=()=>{state.card[k]=!state.card[k];syncCard()};
+});
+$("acTitle").oninput=e=>{state.card.title=e.target.value;syncCard()};
+$("acReset").onclick=()=>{
+  state.card={size:"1:1",quality:2,bg:"mesh",accent:"#2ea8ff",second:"#b6ff3d",radius:28,glow:1,grain:.06,font:1,pad:1,logo:true,hint:true,grid:false,title:"AI Marketing Studio"};
+  syncCard();toast("Карточка сброшена");
+};
+$("acRandom").onclick=()=>{
+  const pick=a=>a[Math.floor(Math.random()*a.length)];
+  const acc=pick(["#2ea8ff","#b6ff3d","#ff2d78","#ffb020","#22d3ee","#7c5cff"]);
+  Object.assign(state.card,{accent:acc,second:hueShift(acc,140),
+    bg:pick(["mesh","linear","spot","rays","solid"]),size:pick(["1:1","4:5","16:9","9:16"]),
+    radius:Math.round(Math.random()*30)*2,glow:+(Math.random()*2.2).toFixed(1),
+    grain:+(Math.random()*.2).toFixed(2),font:+(.85+Math.random()*.5).toFixed(2),
+    pad:+(.85+Math.random()*.5).toFixed(2)});
+  syncCard();beep("tick");toast("Случайный вид карточки");
+};
+$("acPng").onclick=()=>{
+  const[W,H]=SIZES[state.card.size],q=state.card.quality;
+  const cv=document.createElement("canvas");cv.width=W*q;cv.height=H*q;
+  const ctx=cv.getContext("2d");ctx.setTransform(q,0,0,q,0,0);
+  paintCardTo(ctx,W,H,state.card,HERE);
+  $("cardFlash").classList.remove("go");void $("cardFlash").offsetWidth;$("cardFlash").classList.add("go");
+  beep("shutter");
+  cv.toBlob(b=>{if(!b)return toast("Не удалось создать PNG","err");download(b,`studio-address-${W}x${H}@${q}x.png`);toast("Карточка сохранена")},"image/png");
+};
+
+/* ---------- icons + install ---------- */
+function iconCanvas(size,maskable){
+  const cv=document.createElement("canvas");cv.width=size;cv.height=size;
+  const ctx=cv.getContext("2d");
+  const A=state.card.accent,B=state.card.second;
+  const inset=maskable?size*.1:0,S=size-inset*2;
+  if(maskable){ctx.fillStyle=mix(A,"#050b14",.5);ctx.fillRect(0,0,size,size)}
+  ctx.save();ctx.translate(inset,inset);
+  const pad=S*.06,inner=S-pad*2,r=inner*.22;
+  ctx.save();rr(ctx,pad,pad,inner,inner,r);ctx.clip();
+  const g=ctx.createLinearGradient(pad,pad,pad+inner,pad+inner);
+  g.addColorStop(0,A);g.addColorStop(.55,B);g.addColorStop(1,"#ffd9a0");
+  ctx.fillStyle=g;ctx.fillRect(0,0,S,S);
+  const gl=ctx.createRadialGradient(S*.3,S*.24,0,S*.3,S*.24,S*.8);
+  gl.addColorStop(0,"rgba(255,255,255,.34)");gl.addColorStop(1,"rgba(255,255,255,0)");
+  ctx.fillStyle=gl;ctx.fillRect(0,0,S,S);
+  const u=inner/100*(maskable?.84:1);
+  ctx.save();ctx.translate(S/2,S/2);ctx.fillStyle="#04101c";
+  ctx.beginPath();
+  ctx.moveTo(-36*u,38*u);ctx.lineTo(-9*u,-38*u);ctx.lineTo(9*u,-38*u);ctx.lineTo(36*u,38*u);
+  ctx.lineTo(19*u,38*u);ctx.lineTo(13*u,22*u);ctx.lineTo(-13*u,22*u);ctx.lineTo(-19*u,38*u);ctx.closePath();
+  ctx.moveTo(-8*u,8*u);ctx.lineTo(8*u,8*u);ctx.lineTo(0,-14*u);ctx.closePath();
+  ctx.fill("evenodd");
+  rr(ctx,44*u,-38*u,15*u,76*u,4*u);ctx.fill();
+  ctx.restore();
+  ctx.fillStyle="#04101c";ctx.beginPath();ctx.arc(S*.78,S*.22,inner*.045,0,Math.PI*2);ctx.fill();
+  ctx.restore();
+  ctx.strokeStyle="rgba(255,217,160,.5)";ctx.lineWidth=Math.max(1,S/200);
+  rr(ctx,pad,pad,inner,inner,r);ctx.stroke();
+  ctx.restore();
+  return cv;
+}
+function buildManifest(){
+  try{
+    state.icons.i192=iconCanvas(192,false).toDataURL("image/png");
+    state.icons.i512=iconCanvas(512,false).toDataURL("image/png");
+    const mask=iconCanvas(512,true).toDataURL("image/png");
+    $("appleLink").setAttribute("href",state.icons.i192);
+    $("favLink").setAttribute("type","image/png");
+    $("favLink").setAttribute("href",state.icons.i192);
+    const start=new URL(location.pathname,location.origin).href;
+    const scope=new URL("./",location.href).href;
+    const mf={name:"AI Marketing Studio",short_name:"AI Studio",
+      description:"Конвейер товарного контента.",lang:"ru",dir:"ltr",
+      id:start,start_url:start,scope,display:"standalone",
+      display_override:["standalone","minimal-ui","browser"],orientation:"any",
+      background_color:"#050b14",theme_color:"#2ea8ff",
+      categories:["productivity","business","utilities"],
+      icons:[
+        {src:state.icons.i192,sizes:"192x192",type:"image/png",purpose:"any"},
+        {src:state.icons.i512,sizes:"512x512",type:"image/png",purpose:"any"},
+        {src:mask,sizes:"512x512",type:"image/png",purpose:"maskable"}
+      ],
+      shortcuts:SECTIONS.slice(0,4).map(s=>({name:s.n.slice(0,28),short_name:s.n.slice(0,12),url:urlOf(s.p)}))};
+    const json=JSON.stringify(mf);
+    let href;
+    try{
+      if(state.manifestHref&&state.manifestHref.startsWith("blob:"))URL.revokeObjectURL(state.manifestHref);
+      href=URL.createObjectURL(new Blob([json],{type:"application/manifest+json"}));
+    }catch{href="data:application/manifest+json;charset=utf-8,"+encodeURIComponent(json)}
+    state.manifestHref=href;
+    $("mfLink").setAttribute("href",href);
+    $("mfChip").textContent="манифест: собран";$("mfChip").className="chip g";
+    $("icChip").textContent="иконки: PNG 192 · 512";$("icChip").className="chip g";
+    paintInstall();
+    return true;
+  }catch{
+    $("mfChip").textContent="манифест: базовый";$("mfChip").className="chip m2";
+    $("icChip").textContent="иконки: не собраны";$("icChip").className="chip r";
+    paintInstall();return false;
+  }
+}
+$("iconsBtn").onclick=()=>{buildManifest();beep("ok");toast("Иконки и манифест пересобраны")};
+const isIOS=/iPad|iPhone|iPod/.test(navigator.userAgent)&&!window.MSStream;
+const isYandex=/YaBrowser/i.test(navigator.userAgent);
+state.installed=window.matchMedia("(display-mode: standalone)").matches||navigator.standalone===true;
+function paintInstallBtn(){
+  $("installBtn").textContent=state.installed?"✓ Установлено":state.promptEvent?"📲 Установить":isIOS?"📲 На экран «Домой»":"📲 На рабочий стол";
+  $("installBtn").disabled=state.installed;
+}
+window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();state.promptEvent=e;paintInstallBtn();paintInstall();toast("Браузер разрешил установку","ok")});
+window.addEventListener("appinstalled",()=>{state.installed=true;state.promptEvent=null;paintInstallBtn();paintInstall();paintStats();beep("ok");toast("Приложение установлено")});
+$("installBtn").onclick=async()=>{
+  if(state.installed)return toast("Уже открыто как приложение","info");
+  if(!state.icons.i512)buildManifest();
+  if(state.promptEvent){
+    try{
+      state.promptEvent.prompt();
+      const r=await state.promptEvent.userChoice;
+      if(r&&r.outcome==="accepted"){beep("ok");toast("Установка началась")}else toast("Установка отменена","info");
+    }catch{toast("Браузер не показал окно — используйте меню","info")}
+    state.promptEvent=null;paintInstallBtn();paintInstall();return;
+  }
+  beep("tick");
+  toast(isIOS?"Safari: Поделиться → На экран «Домой»":isYandex?"Яндекс: «⋮» → Добавить ярлык / На главный экран":"Меню «⋮» → Установить приложение / Создать ярлык","info");
+};
+function paintInstall(){
+  const https=location.protocol==="https:"||location.hostname==="localhost";
+  const rows=[];
+  rows.push(https?{s:"pass",t:"Защищённое соединение",v:location.protocol}
+    :{s:"warn",t:"Установка требует HTTPS",v:location.protocol,fix:"Откройте страницу по https://…github.io/… — инструменты работают и по file://, но иконку поставить нельзя."});
+  rows.push(state.icons.i512?{s:"pass",t:"Иконки PNG собраны",v:"192 · 512 · maskable"}
+    :{s:"warn",t:"Иконки не собраны",v:"canvas",fix:"Нажмите «Пересобрать иконки»."});
+  rows.push(state.manifestHref?{s:"pass",t:"Манифест подставлен",v:"standalone"}
+    :{s:"warn",t:"Манифест базовый",v:"manifest.webmanifest",fix:"Нажмите «Пересобрать иконки»."});
+  rows.push("serviceWorker" in navigator?{s:"pass",t:"Сервис-воркер поддерживается",v:"navigator.serviceWorker"}
+    :{s:"warn",t:"Сервис-воркер не поддерживается",v:"браузер",fix:"Chrome может ограничиться ярлыком — иконка и адрес будут те же."});
+  rows.push(state.installed?{s:"pass",t:"Открыто как приложение",v:"standalone"}
+    :state.promptEvent?{s:"pass",t:"Браузер разрешил установку",v:"beforeinstallprompt"}
+    :{s:"warn",t:"Окно установки пока не предложено",v:"нет prompt",fix:"«Создать ярлык» в меню браузера даёт ту же иконку и тот же адрес — это равноценный путь."});
+  $("installTests").innerHTML=rows.map(r=>`<div class="test ${r.s}">
+    <span class="ic">${r.s==="pass"?"✓":"!"}</span>
+    <div style="min-width:0"><b style="font:700 12px var(--font)">${esc(r.t)}</b>${r.fix?`<div class="fix">${esc(r.fix)}</div>`:""}</div>
+    <span class="val">${esc(r.v)}</span></div>`).join("");
+}
+
+/* ---------- self tests ---------- */
+const TESTS=[
+  {id:"addr",n:"Адрес страницы",run:()=>({v:location.pathname||"/",s:baseDir()==="/"?"warn":"pass",
+    fix:baseDir()==="/"?"Открыт корень домена. Если проект лежит в папке, добавьте её к адресу.":null})},
+  {id:"canvas",n:"Canvas 2D",run:()=>{
+    const c=document.createElement("canvas");c.width=32;c.height=32;
+    const x=c.getContext("2d");if(!x)throw new Error("контекст недоступен");
+    x.fillStyle="#2ea8ff";x.fillRect(0,0,32,32);
+    const d=x.getImageData(16,16,1,1).data;
+    if(d[0]!==46||d[1]!==168||d[2]!==255)throw new Error("пиксель не совпал");
+    return{v:"rgb "+d[0]+","+d[1]+","+d[2]};
+  }},
+  {id:"png",n:"Экспорт PNG",async run(){
+    const c=document.createElement("canvas");c.width=64;c.height=64;
+    const x=c.getContext("2d");
+    const g=x.createLinearGradient(0,0,64,64);g.addColorStop(0,"#2ea8ff");g.addColorStop(1,"#b6ff3d");
+    x.fillStyle=g;x.fillRect(0,0,64,64);
+    const b=await new Promise(res=>c.toBlob(res,"image/png"));
+    if(!b||!b.size)throw new Error("toBlob пустой");
+    return{v:Math.round(b.size/1024)+" КБ · image/png"};
+  }},
+  {id:"urlwrap",n:"Перенос длинного адреса",run:()=>{
+    const x=document.createElement("canvas").getContext("2d");
+    x.font="700 32px ui-monospace,Menlo,monospace";
+    const lines=breakUrl(x,HERE,420,6);
+    if(!lines.length)throw new Error("перенос не сработал");
+    return{v:lines.length+" строк"};
+  }},
+  {id:"storage",n:"Память браузера",run:()=>{
+    const k="__p"+Date.now();
+    localStorage.setItem(k,"x".repeat(1024));
+    const back=localStorage.getItem(k);localStorage.removeItem(k);
+    if(!back||back.length!==1024)throw new Error("запись не совпала");
+    return{v:"запись 1 КБ подтверждена"};
+  },soft:true,fix:"Приватный режим или file:// блокируют память. Настройки карточки не сохранятся между сессиями."},
+  {id:"clipboard",n:"Буфер обмена",run:()=>{
+    if(navigator.clipboard&&window.isSecureContext)return{v:"clipboard API"};
+    if(document.queryCommandSupported&&document.queryCommandSupported("copy"))
+      return{v:"execCommand fallback",s:"warn",fix:"Резервное копирование через выделение — работает так же."};
+    throw new Error("нет способа");
+  },soft:true,fix:"Копирование недоступно — выделите адрес вручную."},
+  {id:"recorder",n:"Запись видео",run:()=>{
+    if(!window.MediaRecorder)throw new Error("MediaRecorder отсутствует");
+    const c=document.createElement("canvas");c.width=32;c.height=32;
+    if(!c.captureStream)throw new Error("captureStream отсутствует");
+    const ok=["video/mp4","video/webm;codecs=vp9","video/webm"].filter(m=>{try{return MediaRecorder.isTypeSupported(m)}catch{return false}});
+    if(!ok.length)throw new Error("нет формата");
+    return{v:ok[0].replace("video/","")};
+  },soft:true,fix:"Ролик записать нельзя, карточки PNG работают. Откройте в Chrome на Android или Safari на iOS 15+."},
+  {id:"manifest",n:"Манифест приложения",async run(){
+    if(!state.manifestHref)throw new Error("не собран");
+    const r=await fetch(state.manifestHref);const j=await r.json();
+    if(!j.icons||j.icons.length<2)throw new Error("нет иконок");
+    return{v:j.icons.length+" иконки · "+j.display};
+  },soft:true,fix:"Нажмите «Пересобрать иконки»."},
+  {id:"viewport",n:"Область просмотра",run:()=>{
+    const w=window.innerWidth,h=window.innerHeight;
+    const over=document.documentElement.scrollWidth>w+2;
+    return{v:w+"×"+h+(over?" · вылет":" · без вылета"),s:over?"warn":"pass",
+      fix:over?"Обнаружен горизонтальный вылет — обновите страницу.":null};
+  }},
+  {id:"net",n:"Сеть",run:()=>navigator.onLine?{v:"онлайн"}:{v:"офлайн",s:"warn",fix:"Инструменты работают офлайн, онлайн-разделы недоступны."},soft:true}
+];
+function renderTests(){
+  $("tests").innerHTML=state.tests.map(t=>`<div class="test ${t.s==="run"?"warn":t.s}">
+    <span class="ic">${t.s==="pass"?"✓":t.s==="warn"?"!":t.s==="fail"?"✕":"…"}</span>
+    <div style="min-width:0"><b style="font:700 12px var(--font)">${esc(t.n)}</b>${t.fix?`<div class="fix">${esc(t.fix)}</div>`:""}</div>
+    <span class="val">${esc(t.v||"")}</span></div>`).join("");
+  const done=state.tests.filter(t=>t.s!=="run").length;
+  const pass=state.tests.filter(t=>t.s==="pass").length;
+  const warn=state.tests.filter(t=>t.s==="warn").length;
+  const fail=state.tests.filter(t=>t.s==="fail").length;
+  $("testBar").style.width=Math.round(done/TESTS.length*100)+"%";
+  $("testBarWrap").classList.toggle("anim",state.testing);
+  $("testSummary").textContent=`проверок: ${done}/${TESTS.length} · ${pass} ок · ${warn} предупр · ${fail} сбой`;
+  $("testSummary").className="chip "+(fail?"r":warn?"m2":"g");
+}
+async function runTests(){
+  if(state.testing)return;
+  state.testing=true;
+  state.tests=TESTS.map(t=>({id:t.id,n:t.n,s:"run",v:"выполняется"}));
+  renderTests();
+  const b=$("checkBtn");b.disabled=true;const old=b.textContent;b.innerHTML='<span class="spin"></span> Проверяю…';
+  for(const t of TESTS){
+    const row=state.tests.find(x=>x.id===t.id);
+    await sleep(35);
+    try{const r=await t.run();row.s=r.s||"pass";row.v=r.v||"ок";row.fix=r.fix||null}
+    catch(e){row.s=t.soft?"warn":"fail";row.v=String(e.message||e).slice(0,50);row.fix=t.fix||"Проверка не прошла."}
+    renderTests();
+  }
+  state.testing=false;b.disabled=false;b.textContent=old;
+  renderTests();paintInstall();
+  const fail=state.tests.filter(t=>t.s==="fail").length;
+  beep(fail?"err":"ok");
+  toast(fail?`${fail} проверок не прошло — смотрите обходные пути`:"Проверки завершены в этом браузере",fail?"err":"ok");
+}
+$("checkBtn").onclick=runTests;
+$("copyReport").onclick=()=>{
+  const L=["AI Marketing Studio — отчёт",new Date().toLocaleString("ru-RU"),"Адрес: "+HERE,""];
+  state.tests.forEach(t=>L.push(`${t.s==="pass"?"[ok]":t.s==="warn"?"[!!]":"[XX]"} ${t.n} — ${t.v||""}${t.fix?"\n      → "+t.fix:""}`));
+  copy(L.join("\n"));
+};
+
+/* ---------- misc ---------- */
+function paintStats(){
+  const gens=arrOf("lv_hist"),real=gens.filter(g=>!g.seeded);
+  const cards=real.reduce((n,g)=>n+((g?.result?.cards||[]).length),0);
+  let published=0;
+  Object.values(objOf("pub_state")).forEach(p=>{if(p?.platforms)Object.values(p.platforms).forEach(x=>{if(x?.status==="done")published++})});
+  const ok=Object.values(state.probes).filter(v=>v==="ok").length;
+  $("stats").innerHTML=[
+    ["",SECTIONS.length,"разделов"],["s2",ok,"доступно"],["s3",real.length,"генераций"],
+    ["s4",cards,"карточек"],["s5",published,"вышло"]
+  ].map(([c,v,l])=>`<div class="stat ${c}"><b>${esc(v)}</b><span>${esc(l)}</span></div>`).join("");
+}
+$("saveSelf").onclick=()=>{
+  try{
+    download(new Blob(["<!DOCTYPE html>\n"+document.documentElement.outerHTML],{type:"text/html;charset=utf-8"}),"ai-studio-home.html");
+    beep("ok");toast("Файл сохранён — откройте его без сети");
+  }catch(e){toast("Не удалось сохранить: "+e.message,"err")}
+};
+const secs=[...document.querySelectorAll("main section[id]")];
+const links=[...document.querySelectorAll('#navScroll a')];
 let ticking=false;
 function onScroll(){
   if(ticking)return;ticking=true;
   requestAnimationFrame(()=>{
-    const y=window.scrollY,h=document.documentElement.scrollHeight-innerHeight;
-    $("prog").style.width=(h>0?clamp(y/h,0,1)*100:0)+"%";
     let cur=null;
-    secs.forEach(s=>{if(s.getBoundingClientRect().top<=150)cur=s.id});
+    secs.forEach(s=>{if(s.getBoundingClientRect().top<=130)cur=s.id});
     links.forEach(a=>a.classList.toggle("on",a.getAttribute("href")==="#"+cur));
-    document.documentElement.style.setProperty("--hue",(clamp(y/Math.max(1,h),0,1)*26).toFixed(1)+"deg");
-    if(!RM)document.querySelectorAll("[data-par]").forEach(o=>{
-      o.style.transform=`translate3d(0,${(y*parseFloat(o.dataset.par)).toFixed(1)}px,0)`;
-    });
     ticking=false;
   });
 }
 window.addEventListener("scroll",onScroll,{passive:true});
-const io=new IntersectionObserver(es=>{
-  es.forEach(e=>{
-    if(!e.isIntersecting)return;
-    e.target.classList.add("in");
-    e.target.querySelectorAll?.("[data-fill]").forEach(b=>{b.style.width=b.dataset.fill+"%"});
-    e.target.querySelectorAll?.("[data-count]").forEach(n=>{
-      if(n.dataset.done)return;n.dataset.done="1";
-      const to=+n.dataset.count;let v=0;
-      const step=()=>{v+=Math.max(1,Math.ceil(to/22));n.textContent=Math.min(v,to);if(v<to)requestAnimationFrame(step)};
-      RM?n.textContent=to:step();
-    });
-    io.unobserve(e.target);
-  });
-},{threshold:.14,rootMargin:"0px 0px -6% 0px"});
-document.querySelectorAll(".reveal").forEach(el=>io.observe(el));
-document.querySelectorAll(".metric b[data-count]").forEach(el=>io.observe(el.closest(".metric")));
+window.addEventListener("resize",renderCard);
+function paintNet(){
+  $("netPill").className="pill"+(navigator.onLine?"":" off");
+  $("netText").textContent=navigator.onLine?"онлайн":"офлайн";
+}
+window.addEventListener("online",()=>{paintNet();paintInstall();toast("Сеть вернулась","ok")});
+window.addEventListener("offline",()=>{paintNet();paintInstall();toast("Сети нет — страница продолжает работать","info")});
 
 /* ---------- init ---------- */
-const st=readState();
-paintSurfaces(st);paintProgress(st);
-syncReel();drawReel(performance.now());startReel();
-demoData=buildDemo();paintDemo();
-paintApi();paintShip();onScroll();
-window.addEventListener("focus",()=>{const s=readState();paintProgress(s);paintSurfaces(s)});
-setTimeout(()=>{
-  toast(st.published?`Опубликовано ${st.published} постов — продолжите план недели в разделе «Публикация».`
-    :st.real?`Найдено ${st.real} своих генераций — правьте в библиотеке, упаковывайте в ассетах, публикуйте через превью.`
-    :"Витрина работает офлайн. Начните с раздела «Генерация»: ключ, товар, контент-пак.","info");
-},700);
+paintAddr();paintNet();paintTiles();paintStats();syncCard();
+buildManifest();paintInstallBtn();paintInstall();
+runTests();
+setTimeout(()=>toast("Адрес выше — правильный. Скопируйте его и сохраните в закладки, чтобы не набирать вручную.","info"),800);
 </script>
 </body>
 </html>
