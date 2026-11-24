@@ -2,187 +2,331 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Кадр не найден — AI Marketing Studio</title>
-<meta name="robots" content="noindex">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Точка входа — AI Marketing Studio</title>
+<meta name="description" content="Находит рабочий адрес студии и открывает любой раздел в один тап.">
+<meta name="theme-color" content="#a3e635">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="AI Studio">
+<link rel="manifest" id="mfLink" href="manifest.webmanifest">
+<link rel="icon" id="favLink" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" id="appleLink" href="icon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Unbounded:wght@500;700;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%237c5cff'/%3E%3Ctext x='16' y='22' font-size='15' font-weight='900' font-family='sans-serif' fill='%23fff' text-anchor='middle'%3EAI%3C/text%3E%3C/svg%3E">
 <style>
 :root{
-  --ink:#06070d;--surface:#0d1020;--surface2:#141931;--overlay:#1c2246;--line:#252d52;
-  --violet:#7c5cff;--violet-deep:#4a2dd4;--cyan:#22d3ee;--magenta:#ff4d9d;--amber:#ffb020;
-  --acid:#8bff5a;--green:#3ddc84;--red:#ff5470;--sand:#ffd9a0;
-  --text:#eef1ff;--muted:#98a1c6;--dim:#6a7297;
+  --ink:#07090b;--surface:#101418;--surface2:#171d22;--overlay:#212a31;--scrim:rgba(5,7,9,.88);--line:#2c3841;
+  --lime:#a3e635;--lime-deep:#4d7c0f;--cyan:#22d3ee;--magenta:#ff4d9d;--amber:#ffb020;
+  --blue:#4d7cff;--violet:#7c5cff;--red:#ff5470;--green:#3ddc84;--sand:#ffd9a0;--slate:#8fa0ab;
+  --text:#eef5f0;--muted:#9fb0ba;--dim:#6b7c86;
   --font:'Manrope',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
   --disp:'Unbounded',var(--font);--mono:'JetBrains Mono',ui-monospace,Consolas,monospace;
+  --nav:62px;--pad:14px;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:var(--font);background:var(--ink);color:var(--text);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased;line-height:1.55}
-::selection{background:var(--violet);color:#fff}
-*{scrollbar-width:thin;scrollbar-color:var(--violet-deep) var(--surface)}
+html{scroll-behavior:smooth}
+body{font-family:var(--font);background:var(--ink);color:var(--text);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased;line-height:1.5;padding-bottom:env(safe-area-inset-bottom)}
+::selection{background:var(--lime);color:#0d1503}
+*{scrollbar-width:thin;scrollbar-color:var(--lime-deep) var(--surface)}
 ::-webkit-scrollbar{width:11px;height:11px}
 ::-webkit-scrollbar-track{background:var(--surface);border-left:1px solid var(--line)}
-::-webkit-scrollbar-thumb{background:linear-gradient(var(--violet-deep),var(--violet) 60%,var(--magenta));border-radius:9px;border:2px solid var(--surface)}
-::-webkit-scrollbar-thumb:hover{background:linear-gradient(var(--cyan),var(--violet))}
+::-webkit-scrollbar-thumb{background:linear-gradient(var(--lime-deep),var(--lime) 55%,var(--sand));border-radius:9px;border:2px solid var(--surface)}
+::-webkit-scrollbar-thumb:hover{background:linear-gradient(var(--cyan),var(--lime))}
+::-webkit-scrollbar-corner{background:var(--surface)}
 :focus-visible{outline:2px solid var(--cyan);outline-offset:3px;border-radius:6px}
 a{color:inherit}
-.amb{position:fixed;inset:0;z-index:-2;background:
-  radial-gradient(56% 44% at 8% 6%,rgba(124,92,255,.26),transparent 62%),
-  radial-gradient(44% 38% at 94% 10%,rgba(34,211,238,.16),transparent 62%),
-  radial-gradient(50% 46% at 76% 94%,rgba(255,77,157,.14),transparent 62%),var(--ink)}
+.hidden{display:none!important}
+.amb{position:fixed;inset:0;z-index:-3;background:
+  radial-gradient(58% 46% at 8% 2%,rgba(163,230,53,.20),transparent 62%),
+  radial-gradient(46% 40% at 94% 8%,rgba(34,211,238,.14),transparent 62%),
+  radial-gradient(52% 48% at 78% 98%,rgba(255,77,157,.10),transparent 62%),
+  radial-gradient(40% 34% at 20% 78%,rgba(77,124,255,.08),transparent 64%),var(--ink)}
 .amb::before{content:"";position:absolute;inset:-25%;background:
-  radial-gradient(30% 26% at 30% 40%,rgba(124,92,255,.18),transparent 70%),
-  radial-gradient(26% 24% at 70% 62%,rgba(255,176,32,.10),transparent 72%);
-  animation:drift 24s ease-in-out infinite alternate;filter:blur(14px)}
+  radial-gradient(30% 26% at 32% 36%,rgba(163,230,53,.16),transparent 70%),
+  radial-gradient(26% 24% at 68% 64%,rgba(34,211,238,.12),transparent 70%);
+  animation:drift 30s ease-in-out infinite alternate;filter:blur(15px)}
 .amb::after{content:"";position:absolute;inset:0;opacity:.06;mix-blend-mode:overlay;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E")}
-.mesh{position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.4;
-  background-image:linear-gradient(rgba(124,92,255,.055) 1px,transparent 1px),linear-gradient(90deg,rgba(124,92,255,.055) 1px,transparent 1px);
-  background-size:64px 64px;mask-image:radial-gradient(76% 60% at 50% 24%,#000,transparent)}
+.mesh{position:fixed;inset:0;z-index:-2;pointer-events:none;opacity:.34;
+  background-image:linear-gradient(rgba(163,230,53,.055) 1px,transparent 1px),linear-gradient(90deg,rgba(163,230,53,.055) 1px,transparent 1px);
+  background-size:58px 58px;mask-image:radial-gradient(80% 62% at 50% 20%,#000,transparent)}
 @keyframes drift{from{transform:translate3d(-3%,-2%,0) rotate(-2deg)}to{transform:translate3d(3%,3%,0) rotate(2deg)}}
 @keyframes rise{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
 @keyframes pop{from{opacity:0;transform:translateY(8px) scale(.98)}to{opacity:1;transform:none}}
-@keyframes blink{0%,49%{opacity:1}50%,100%{opacity:.25}}
-.rise{animation:rise .6s cubic-bezier(.2,.7,.2,1) both}
-.wrap{max-width:1180px;margin:0 auto;padding:0 20px}
-.top{padding:18px 0;border-bottom:1px solid var(--line);backdrop-filter:blur(16px);background:rgba(6,7,13,.7);position:sticky;top:0;z-index:20}
-.top-in{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
-.brand{display:flex;align-items:center;gap:11px;text-decoration:none;margin-right:auto}
-.mark{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;font:900 13px var(--disp);color:#fff;
-  background:conic-gradient(from 200deg,var(--violet),var(--magenta),var(--amber),var(--cyan),var(--violet));box-shadow:0 0 22px rgba(124,92,255,.55)}
-.brand b{font:700 15px var(--disp);background:linear-gradient(90deg,#fff,var(--sand) 45%,var(--cyan));-webkit-background-clip:text;background-clip:text;color:transparent}
-main{padding:44px 0 70px}
-.grid{display:grid;grid-template-columns:1.1fr .9fr;gap:36px;align-items:start}
-.badge{display:inline-flex;align-items:center;gap:9px;padding:6px 13px;border-radius:999px;border:1px solid rgba(255,84,112,.4);background:rgba(255,84,112,.1);font:700 11.5px var(--font);color:var(--red)}
-.dot{width:7px;height:7px;border-radius:50%;background:var(--red);box-shadow:0 0 10px var(--red);animation:blink 1.4s infinite}
-h1{font:900 clamp(52px,12vw,120px)/.9 var(--disp);letter-spacing:-4px;margin:16px 0 6px;
-  background:linear-gradient(96deg,var(--violet),var(--magenta) 44%,var(--amber));-webkit-background-clip:text;background-clip:text;color:transparent}
-h2{font:800 clamp(18px,2.6vw,25px)/1.25 var(--disp);margin-bottom:12px}
-.lead{color:var(--muted);font-size:15px;max-width:52ch}
-.path{margin-top:16px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:11px 14px;font:12.5px var(--mono);color:var(--amber);word-break:break-all}
-.path span{color:var(--dim)}
-.hint{margin-top:12px;display:flex;gap:10px;align-items:flex-start;background:rgba(139,255,90,.08);border:1px solid rgba(139,255,90,.35);border-radius:12px;padding:12px 14px;font-size:13px;color:var(--acid)}
-.card{background:linear-gradient(180deg,var(--surface2),var(--surface));border:1px solid var(--line);border-radius:18px;padding:20px;box-shadow:0 20px 54px rgba(0,0,0,.4)}
-.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
-.btn{border:0;cursor:pointer;font:700 13px var(--font);border-radius:12px;padding:11px 17px;display:inline-flex;align-items:center;gap:8px;justify-content:center;text-decoration:none;color:#fff;transition:transform .15s,box-shadow .22s,border-color .2s}
-.btn:active{transform:scale(.97)}
-.btn-p{background:linear-gradient(100deg,var(--violet-deep),var(--violet) 52%,var(--magenta));box-shadow:0 10px 30px rgba(124,92,255,.42)}
-.btn-p:hover{box-shadow:0 14px 40px rgba(124,92,255,.62)}
-.btn-c{background:linear-gradient(100deg,#0b6f86,var(--cyan));color:#03222b}
-.btn-a{background:linear-gradient(100deg,#a35a06,var(--amber));color:#2a1500}
-.btn-g{background:var(--overlay);border:1px solid var(--line);color:var(--text)}
-.btn-g:hover{border-color:var(--cyan)}
-.btn-s{padding:8px 12px;font-size:12px;border-radius:10px}
-.input{width:100%;background:var(--ink);border:1px solid var(--line);color:var(--text);border-radius:12px;padding:12px 14px;font:500 14px var(--font);outline:none;transition:border .2s,box-shadow .2s}
-.input:focus{border-color:var(--violet);box-shadow:0 0 0 3px rgba(124,92,255,.22)}
-label.lbl{display:block;font-size:11px;color:var(--muted);margin-bottom:6px;font-weight:700}
-.dests{display:flex;flex-direction:column;gap:8px;margin-top:12px;max-height:340px;overflow-y:auto;padding-right:5px}
-.dest{display:flex;align-items:center;gap:12px;text-decoration:none;background:var(--ink);border:1px solid var(--line);border-radius:12px;padding:12px 14px;transition:border-color .2s,transform .2s,background .2s}
-.dest:hover{border-color:var(--violet);transform:translateX(5px);background:rgba(124,92,255,.06)}
-.dest .ic{width:34px;height:34px;flex:none;border-radius:10px;display:grid;place-items:center;font-size:16px;background:var(--overlay);border:1px solid var(--line)}
-.dest b{font:700 13.5px var(--font);display:block}
-.dest small{color:var(--dim);font-size:11.5px}
-.dest .go{margin-left:auto;color:var(--cyan);font-size:16px}
-.count{font:700 11px var(--font);color:var(--dim);margin-top:10px}
-.stage{display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:start}
-.reel{width:210px;aspect-ratio:9/16;border-radius:20px;border:2px solid var(--line);overflow:hidden;background:#05060c;position:relative;flex:none;box-shadow:0 26px 60px rgba(0,0,0,.6),0 0 34px rgba(255,77,157,.14)}
-.reel canvas{width:100%;height:100%;display:block}
-.reel .tag{position:absolute;top:8px;left:8px;font:800 9px var(--font);letter-spacing:.12em;padding:4px 8px;border-radius:7px;background:rgba(6,7,13,.75);border:1px solid var(--line);color:var(--red)}
-.deck{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:9px}
-.ctrl{background:var(--ink);border:1px solid var(--line);border-radius:12px;padding:10px 12px}
-.ctrl .val{float:right;font:800 11px var(--font);color:var(--cyan)}
-input[type=color]{width:100%;height:36px;background:var(--ink);border:1px solid var(--line);border-radius:11px;padding:4px;cursor:pointer}
-input[type=range]{width:100%;appearance:none;height:6px;border-radius:99px;background:linear-gradient(90deg,var(--violet-deep),var(--cyan));outline:none;cursor:pointer}
-input[type=range]::-webkit-slider-thumb{appearance:none;width:17px;height:17px;border-radius:50%;background:#fff;border:3px solid var(--violet);box-shadow:0 0 10px rgba(124,92,255,.75);cursor:pointer}
-input[type=range]::-moz-range-thumb{width:14px;height:14px;border-radius:50%;background:#fff;border:3px solid var(--violet);cursor:pointer}
-.switch{position:relative;width:44px;height:24px;border-radius:999px;background:var(--overlay);border:1px solid var(--line);cursor:pointer;transition:background .2s;flex:none;padding:0}
-.switch::after{content:"";position:absolute;top:2px;left:2px;width:18px;height:18px;border-radius:50%;background:var(--cyan);transition:transform .25s cubic-bezier(.2,.7,.2,1),background .2s}
-.switch[aria-checked="true"]{background:var(--violet-deep)}
-.switch[aria-checked="true"]::after{transform:translateX(20px);background:#fff}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes pulse{0%,100%{opacity:.35}50%{opacity:1}}
+@keyframes slide{from{opacity:0;transform:translateX(24px)}to{opacity:1;transform:none}}
+@keyframes shutter{0%{opacity:0}30%{opacity:.8}100%{opacity:0}}
+.rise{animation:rise .55s cubic-bezier(.2,.7,.2,1) both}
+.wrap{max-width:1300px;margin:0 auto;padding:0 18px}
+.nav{position:fixed;top:0;left:0;right:0;height:var(--nav);z-index:50;backdrop-filter:blur(20px);background:rgba(7,9,11,.9);border-bottom:1px solid var(--line);padding-top:env(safe-area-inset-top)}
+.nav-in{max-width:1300px;margin:0 auto;height:var(--nav);padding:0 18px;display:flex;align-items:center;gap:9px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;flex:none}
+.mark{width:36px;height:36px;border-radius:11px;display:grid;place-items:center;font:900 12px var(--disp);color:#0d1503;
+  background:conic-gradient(from 200deg,var(--lime),var(--cyan),var(--blue),var(--magenta),var(--amber),var(--lime));box-shadow:0 0 20px rgba(163,230,53,.5)}
+.brand b{font:700 14px var(--disp);background:linear-gradient(90deg,#fff,var(--lime) 52%,var(--cyan));-webkit-background-clip:text;background-clip:text;color:transparent;white-space:nowrap}
+.nav-right{display:flex;gap:6px;align-items:center;margin-left:auto;overflow-x:auto;scrollbar-width:none}
+.nav-right::-webkit-scrollbar{display:none}
+.pill{display:inline-flex;align-items:center;gap:7px;font:700 10.5px var(--font);padding:5px 10px;border-radius:999px;border:1px solid var(--line);background:var(--overlay);color:var(--muted);white-space:nowrap}
+.pill i{width:8px;height:8px;border-radius:50%;background:var(--dim);display:block}
+.pill.ok i{background:var(--lime);box-shadow:0 0 9px var(--lime);animation:pulse 2.4s infinite}
+.pill.warn i{background:var(--amber);box-shadow:0 0 9px var(--amber)}
+.pill.err i{background:var(--red);box-shadow:0 0 9px var(--red)}
+main{padding:calc(var(--nav) + 22px + env(safe-area-inset-top)) 0 90px}
+.card{background:linear-gradient(180deg,var(--surface2),var(--surface));border:1px solid var(--line);border-radius:18px;padding:var(--pad);box-shadow:0 20px 54px rgba(0,0,0,.5)}
+.card.hot{border-color:rgba(163,230,53,.42);box-shadow:0 20px 54px rgba(77,124,15,.22)}
+.kicker{font:800 10px var(--font);letter-spacing:.2em;text-transform:uppercase;color:var(--lime)}
+.kicker.c{color:var(--cyan)}.kicker.m{color:var(--magenta)}.kicker.a{color:var(--amber)}.kicker.b{color:var(--blue)}
+h1{font:900 clamp(23px,4vw,36px)/1.06 var(--disp);letter-spacing:-1px;margin:9px 0 10px}
+h1 em{font-style:normal;background:linear-gradient(96deg,var(--lime),var(--cyan) 58%,var(--blue));-webkit-background-clip:text;background-clip:text;color:transparent}
+h2{font:800 16px var(--font);margin-bottom:11px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+h3{font:800 13.5px var(--font);margin-bottom:8px}
+.lead{color:var(--muted);font-size:14px;max-width:62ch}
 .note{font-size:11.5px;color:var(--dim);line-height:1.6}
-.kicker{font:800 10px var(--font);letter-spacing:.2em;text-transform:uppercase;color:var(--magenta)}
-.toasts{position:fixed;right:16px;bottom:16px;z-index:60;display:flex;flex-direction:column;gap:9px;width:min(330px,calc(100vw - 32px))}
-.toast{display:flex;gap:10px;align-items:flex-start;padding:12px 14px;border-radius:13px;border:1px solid rgba(34,211,238,.5);background:var(--surface2);box-shadow:0 16px 44px rgba(0,0,0,.55);font-size:13px;animation:pop .3s both}
-.toast button{margin-left:auto;border:0;background:none;color:var(--dim);cursor:pointer;font-size:14px}
-footer{border-top:1px solid var(--line);padding:26px 0;background:rgba(6,7,13,.6)}
-@media (max-width:960px){.grid{grid-template-columns:1fr}.stage{grid-template-columns:1fr;justify-items:center}.deck{width:100%}}
-@media (max-width:720px){.wrap{padding:0 14px}.brand b{display:none}.reel{width:min(210px,66vw)}.card{padding:16px}main{padding:30px 0 50px}}
-@media (prefers-reduced-motion:reduce){.amb::before,.dot,.rise{animation:none!important}*{transition-duration:.01ms!important}}
+.row{display:flex;gap:9px;flex-wrap:wrap;align-items:center}
+.btn{border:0;cursor:pointer;font:700 12.5px var(--font);border-radius:11px;padding:11px 16px;display:inline-flex;align-items:center;gap:7px;justify-content:center;text-decoration:none;color:#0d1503;transition:transform .15s,box-shadow .22s,border-color .2s,opacity .2s}
+.btn:active:not([disabled]){transform:scale(.97)}
+.btn-p{background:linear-gradient(100deg,var(--lime-deep),var(--lime) 52%,var(--sand));box-shadow:0 9px 26px rgba(163,230,53,.36)}
+.btn-p:hover:not([disabled]){box-shadow:0 13px 38px rgba(163,230,53,.56)}
+.btn-c{background:linear-gradient(100deg,#0b6f86,var(--cyan));color:#03222b}
+.btn-a{background:linear-gradient(100deg,#a35a06,var(--amber))}
+.btn-m{background:linear-gradient(100deg,#a8195f,var(--magenta));color:#fff}
+.btn-b{background:linear-gradient(100deg,#24409e,var(--blue));color:#fff}
+.btn-r{background:linear-gradient(100deg,#a81f36,var(--red));color:#fff}
+.btn-g{background:var(--overlay);border:1px solid var(--line);color:var(--text)}
+.btn-g:hover:not([disabled]){border-color:var(--lime)}
+.btn-s{padding:7px 11px;font-size:11.5px;border-radius:9px}
+.btn[disabled]{opacity:.42;cursor:not-allowed;box-shadow:none}
+.chip{display:inline-flex;align-items:center;gap:6px;font:700 10.5px var(--font);padding:4px 10px;border-radius:999px;border:1px solid var(--line);background:var(--overlay);color:var(--muted);white-space:nowrap}
+.chip.l{color:var(--lime);border-color:rgba(163,230,53,.45);background:rgba(163,230,53,.12)}
+.chip.c{color:var(--cyan);border-color:rgba(34,211,238,.42);background:rgba(34,211,238,.1)}
+.chip.g{color:var(--green);border-color:rgba(61,220,132,.42);background:rgba(61,220,132,.1)}
+.chip.a{color:var(--amber);border-color:rgba(255,176,32,.42);background:rgba(255,176,32,.1)}
+.chip.r{color:var(--red);border-color:rgba(255,84,112,.42);background:rgba(255,84,112,.1)}
+.chip.b{color:var(--blue);border-color:rgba(77,124,255,.45);background:rgba(77,124,255,.12)}
+.chip.m{color:var(--magenta);border-color:rgba(255,77,157,.42);background:rgba(255,77,157,.1)}
+label.lbl{display:block;font-size:10.5px;color:var(--muted);margin-bottom:6px;font-weight:700}
+.input,.select{width:100%;background:var(--ink);border:1px solid var(--line);color:var(--text);border-radius:11px;padding:10px 12px;font:500 13px var(--font);outline:none;transition:border .2s,box-shadow .2s}
+.input:focus,.select:focus{border-color:var(--lime);box-shadow:0 0 0 3px rgba(163,230,53,.2)}
+.select{appearance:none;cursor:pointer;padding-right:30px;background-image:linear-gradient(45deg,transparent 50%,var(--lime) 50%),linear-gradient(135deg,var(--lime) 50%,transparent 50%);background-position:calc(100% - 16px) 50%,calc(100% - 11px) 50%;background-size:5px 5px;background-repeat:no-repeat}
+input[type=color]{width:100%;height:36px;background:var(--ink);border:1px solid var(--line);border-radius:11px;padding:4px;cursor:pointer}
+input[type=range]{width:100%;appearance:none;height:6px;border-radius:99px;background:linear-gradient(90deg,var(--lime-deep),var(--cyan));outline:none;cursor:pointer}
+input[type=range]::-webkit-slider-thumb{appearance:none;width:17px;height:17px;border-radius:50%;background:#fff;border:3px solid var(--lime);box-shadow:0 0 9px rgba(163,230,53,.7);cursor:pointer}
+input[type=range]::-moz-range-thumb{width:14px;height:14px;border-radius:50%;background:#fff;border:3px solid var(--lime);cursor:pointer}
+.switch{position:relative;width:42px;height:23px;border-radius:999px;background:var(--overlay);border:1px solid var(--line);cursor:pointer;transition:background .2s;flex:none;padding:0}
+.switch::after{content:"";position:absolute;top:2px;left:2px;width:17px;height:17px;border-radius:50%;background:var(--lime);transition:transform .25s cubic-bezier(.2,.7,.2,1),background .2s}
+.switch[aria-checked="true"]{background:var(--lime-deep)}
+.switch[aria-checked="true"]::after{transform:translateX(19px);background:#fff}
+.stepper{display:flex;align-items:center;gap:6px;background:var(--ink);border:1px solid var(--line);border-radius:11px;padding:4px}
+.stepper button{width:26px;height:26px;border-radius:8px;border:0;background:var(--overlay);color:var(--text);font-size:14px;cursor:pointer;line-height:1}
+.stepper button:hover:not([disabled]){background:var(--lime-deep)}
+.stepper b{flex:1;text-align:center;font:800 13px var(--font)}
+.stepper button[disabled]{opacity:.4;cursor:not-allowed}
+.deck{display:grid;grid-template-columns:repeat(auto-fit,minmax(146px,1fr));gap:10px}
+.ctrl{background:var(--ink);border:1px solid var(--line);border-radius:12px;padding:10px 12px}
+.ctrl .val{float:right;font:800 10.5px var(--font);color:var(--cyan)}
+.beacon{display:grid;grid-template-columns:auto 1fr;gap:20px;align-items:center}
+.scope{position:relative;width:230px;height:230px;flex:none;border-radius:50%;overflow:hidden;background:#05070a;border:1px solid var(--line);box-shadow:0 22px 54px rgba(0,0,0,.6),0 0 40px rgba(163,230,53,.14)}
+.scope canvas{width:100%;height:100%;display:block}
+.scope .tag{position:absolute;top:10px;left:50%;transform:translateX(-50%);font:800 9px var(--font);letter-spacing:.14em;padding:4px 9px;border-radius:7px;background:rgba(7,9,11,.8);border:1px solid var(--line);color:var(--lime)}
+.scope .flash{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none}
+.scope .flash.go{animation:shutter .4s ease-out}
+.probes{display:flex;flex-direction:column;gap:7px;margin-top:12px}
+.probe{display:grid;grid-template-columns:22px 1fr auto;gap:10px;align-items:center;background:var(--ink);border:1px solid var(--line);border-radius:11px;padding:9px 11px;font-size:12.5px}
+.probe.ok{border-color:rgba(163,230,53,.45);background:rgba(163,230,53,.06)}
+.probe.err{border-color:rgba(255,84,112,.32)}
+.probe.wait{border-color:rgba(255,176,32,.35)}
+.probe .st{width:22px;height:22px;border-radius:7px;display:grid;place-items:center;font-size:11px;background:var(--overlay)}
+.probe.ok .st{background:rgba(163,230,53,.18);color:var(--lime)}
+.probe.err .st{background:rgba(255,84,112,.14);color:var(--red)}
+.probe.wait .st{background:rgba(255,176,32,.14);color:var(--amber)}
+.probe .p{font:11.5px var(--mono);word-break:break-all;min-width:0}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(242px,1fr));gap:13px}
+.tile{border:1px solid var(--line);border-radius:16px;padding:16px;background:linear-gradient(180deg,var(--surface2),var(--surface));position:relative;overflow:hidden;display:flex;flex-direction:column;gap:9px;transition:transform .2s,border-color .2s,box-shadow .2s}
+.tile::before{content:"";position:absolute;inset:0 auto 0 0;width:3px;background:var(--tc)}
+.tile:hover{transform:translateY(-4px);border-color:var(--tc);box-shadow:0 16px 40px rgba(0,0,0,.42)}
+.tile.sel{border-color:var(--cyan);background:rgba(34,211,238,.06)}
+.tile.drag{opacity:.35}
+.tile .top{display:flex;align-items:center;gap:9px}
+.tile .ic{width:36px;height:36px;flex:none;border-radius:11px;display:grid;place-items:center;font-size:17px;background:var(--overlay);border:1px solid var(--line)}
+.tile .grip{cursor:grab;color:var(--dim);font-size:14px;user-select:none;margin-left:auto}
+.tile input[type=checkbox]{accent-color:var(--cyan);width:15px;height:15px;flex:none}
+.tile b{font:800 13.5px var(--font)}
+.tile .path{font:11px var(--mono);color:var(--tc);word-break:break-all}
+.tile .acts{margin-top:auto;display:flex;gap:7px;flex-wrap:wrap}
+.pin{border:1px solid var(--line);background:var(--overlay);color:var(--muted);cursor:pointer;border-radius:9px;padding:6px 9px;font:700 11px var(--font);transition:.2s}
+.pin.on{color:#0d1503;border-color:var(--amber);background:linear-gradient(100deg,var(--amber),var(--sand))}
+.filters{display:flex;gap:6px;flex-wrap:wrap}
+.fchip{border:1px solid var(--line);background:var(--overlay);color:var(--muted);font:700 11px var(--font);padding:6px 12px;border-radius:999px;cursor:pointer;transition:.2s}
+.fchip.on{color:#0d1503;border-color:var(--lime);background:linear-gradient(100deg,var(--lime),var(--sand))}
+.bulk{display:flex;gap:9px;align-items:center;flex-wrap:wrap;background:var(--ink);border:1px solid var(--line);border-radius:12px;padding:9px 12px;margin-bottom:11px}
+.views{display:flex;flex-direction:column;gap:7px;margin-top:10px}
+.view{display:flex;align-items:center;gap:9px;background:var(--ink);border:1px solid var(--line);border-radius:11px;padding:9px 12px}
+.view b{font:700 12px var(--font);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(104px,1fr));gap:10px;margin-top:13px}
+.stat{background:var(--ink);border:1px solid var(--line);border-radius:12px;padding:11px}
+.stat b{display:block;font:900 19px var(--disp);line-height:1.15;color:var(--lime)}
+.stat span{font-size:9px;color:var(--dim);text-transform:uppercase;letter-spacing:.11em}
+.stat.s2 b{color:var(--cyan)}.stat.s3 b{color:var(--amber)}.stat.s4 b{color:var(--magenta)}.stat.s5 b{color:var(--blue)}
+.checks{display:flex;flex-direction:column;gap:7px;margin-top:11px}
+.chk{display:grid;grid-template-columns:24px 1fr;gap:10px;background:var(--ink);border:1px solid var(--line);border-radius:11px;padding:9px 11px;font-size:12.5px}
+.chk.ok{border-color:rgba(61,220,132,.35)}
+.chk.warn{border-color:rgba(255,176,32,.4)}
+.chk.err{border-color:rgba(255,84,112,.45);background:rgba(255,84,112,.05)}
+.chk .ic{width:24px;height:24px;border-radius:7px;display:grid;place-items:center;font-size:12px}
+.chk.ok .ic{background:rgba(61,220,132,.15);color:var(--green)}
+.chk.warn .ic{background:rgba(255,176,32,.15);color:var(--amber)}
+.chk.err .ic{background:rgba(255,84,112,.15);color:var(--red)}
+.chk .fix{margin-top:6px;font:11px/1.6 var(--mono);color:var(--sand);background:var(--surface);border:1px solid var(--line);border-radius:9px;padding:7px 9px;word-break:break-word}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(430px,100%);z-index:70;background:var(--surface);border-left:1px solid var(--lime);box-shadow:-24px 0 70px rgba(0,0,0,.68);padding:19px;overflow-y:auto;animation:slide .28s cubic-bezier(.2,.7,.2,1) both}
+.scrim{position:fixed;inset:0;z-index:65;background:var(--scrim);backdrop-filter:blur(4px);animation:pop .2s both}
+.code{background:#05070a;border:1px solid var(--line);border-radius:11px;padding:12px;font:11px/1.65 var(--mono);color:var(--lime);overflow-x:auto;white-space:pre-wrap;word-break:break-all;margin-top:10px;max-height:280px;overflow-y:auto}
+.toasts{position:fixed;left:16px;bottom:calc(16px + env(safe-area-inset-bottom));z-index:90;display:flex;flex-direction:column;gap:9px;width:min(360px,calc(100vw - 32px))}
+.toast{display:flex;gap:10px;align-items:flex-start;padding:12px 14px;border-radius:13px;border:1px solid var(--line);background:var(--surface2);box-shadow:0 16px 44px rgba(0,0,0,.55);font-size:12.5px;animation:pop .3s both}
+.toast.ok{border-color:rgba(163,230,53,.5)}.toast.err{border-color:rgba(255,84,112,.5)}.toast.info{border-color:rgba(34,211,238,.5)}
+.toast .x{margin-left:auto;border:0;background:none;color:var(--dim);cursor:pointer;font-size:14px}
+.toast .undo{border:0;background:none;color:var(--cyan);font:700 11.5px var(--font);cursor:pointer;text-decoration:underline}
+.spin{width:15px;height:15px;border:2px solid var(--lime);border-top-color:transparent;border-radius:50%;animation:spin .8s linear infinite;flex:none}
+.empty{text-align:center;padding:24px 16px}
+.empty .ic{font-size:32px;margin-bottom:10px}
+.band{margin-top:18px}
+footer{border-top:1px solid var(--line);padding:24px 0;margin-top:22px;background:rgba(7,9,11,.6)}
+@media (max-width:940px){.beacon{grid-template-columns:1fr;justify-items:center;text-align:center}.beacon .row{justify-content:center}.scope{width:200px;height:200px}}
+@media (max-width:720px){
+  :root{--nav:56px}
+  .wrap{padding:0 12px}.nav-in{padding:0 12px;gap:6px}.brand b{display:none}
+  .card{padding:13px}.hide-sm{display:none}.drawer{width:100%}
+  .scope{width:min(200px,66vw);height:min(200px,66vw)}
+}
+@media (prefers-reduced-motion:reduce){.amb::before,.rise,.pill.ok i{animation:none!important}*{transition-duration:.01ms!important}}
 </style>
 </head>
 <body>
 <div class="amb"></div><div class="mesh"></div>
 
-<div class="top"><div class="wrap top-in">
-  <a class="brand" id="brandLink" href="./"><span class="mark">AI</span><b>Marketing&nbsp;Studio</b></a>
-  <button class="btn btn-g btn-s" id="backBtn">← Назад</button>
-  <a class="btn btn-p btn-s" id="studioLink" href="app/">🚀 В студию</a>
-</div></div>
+<nav class="nav"><div class="nav-in">
+  <a class="brand" id="brandLink" href="./"><span class="mark">AI</span><b>Точка&nbsp;входа</b></a>
+  <span class="pill" id="statePill"><i></i><span id="stateText">поиск…</span></span>
+  <div class="nav-right">
+    <button class="btn btn-g btn-s" id="muteBtn" aria-pressed="false">🔔</button>
+    <button class="btn btn-p btn-s" id="openTop">🚀 Открыть</button>
+    <button class="btn btn-g btn-s" id="rescanTop" aria-label="Пересканировать">⟳</button>
+  </div>
+</div></nav>
 
 <main class="wrap">
-  <div class="grid">
-    <div class="rise">
-      <span class="badge"><span class="dot"></span>Сигнал потерян</span>
-      <h1>404</h1>
-      <h2>Такого кадра в монтаже нет</h2>
-      <p class="lead">Адрес не найден: страница переехала, в ссылке опечатка или раздел ещё не опубликован. Ниже — все рабочие направления сайта, поиск по ним живой.</p>
-      <div class="path"><span>запрошено:</span> <b id="reqPath">—</b></div>
-      <div class="hint hidden" id="suggest">
-        <span>💡</span><span id="suggestText"></span>
+  <div class="card hot rise">
+    <div class="beacon">
+      <div class="scope">
+        <canvas id="scope" width="460" height="460" aria-label="Радар поиска адреса студии"></canvas>
+        <div class="flash" id="scopeFlash"></div>
+        <span class="tag" id="scopeTag">СКАН</span>
       </div>
-
-      <div class="card" style="margin-top:18px">
-        <label class="lbl" for="q">Куда хотели попасть?</label>
-        <input class="input" id="q" placeholder="студия, демо, api, запуск, видео…" autocomplete="off">
-        <div class="dests" id="dests"></div>
-        <p class="count" id="destCount"></p>
-      </div>
-
-      <div class="row" style="margin-top:16px">
-        <a class="btn btn-p" id="homeLink" href="./">🏠 На главную</a>
-        <button class="btn btn-g" id="copyHome">📋 Ссылка на главную</button>
+      <div style="min-width:0">
+        <span class="kicker">Адрес не найден? Найдём</span>
+        <h1 id="heroTitle">Ищу <em>рабочий адрес</em> студии</h1>
+        <p class="lead" id="heroLead">Страница проверяет возможные расположения проекта на этом домене и открывает то, которое отвечает. Ничего не нужно вводить вручную.</p>
+        <div class="row" style="margin-top:13px">
+          <a class="btn btn-p" id="openMain" href="#">🚀 Открыть студию</a>
+          <button class="btn btn-c" id="rescanBtn">⟳ Пересканировать</button>
+          <button class="btn btn-g" id="installBtn">📲 На рабочий стол</button>
+        </div>
+        <div class="row" style="margin-top:11px">
+          <input class="input" id="manualPath" placeholder="свой путь, например /Marketpro/" style="max-width:260px" spellcheck="false">
+          <button class="btn btn-g btn-s" id="manualBtn">Проверить</button>
+        </div>
+        <div class="stats" id="stats"></div>
       </div>
     </div>
+    <div class="probes" id="probes"></div>
+  </div>
 
-    <div class="card rise" style="animation-delay:.1s">
-      <div class="row" style="justify-content:space-between;margin-bottom:12px">
-        <div><span class="kicker">Тестовый сигнал</span><h2 style="font-size:16px;margin:6px 0 0">Кадр без источника</h2></div>
-        <span class="badge" id="sigState">NO SIGNAL</span>
-      </div>
-      <div class="stage">
-        <div class="reel">
-          <canvas id="cv" width="540" height="960" aria-label="Тестовый кадр с помехами"></canvas>
-          <span class="tag">9:16 · ERR</span>
-        </div>
-        <div style="width:100%">
-          <div class="deck">
-            <div class="ctrl"><label class="lbl" for="cGlitch">Глитч <span class="val" id="vGlitch">0.55</span></label><input type="range" id="cGlitch" min="0" max="1" step="0.05" value="0.55"></div>
-            <div class="ctrl"><label class="lbl" for="cNoise">Шум <span class="val" id="vNoise">0.18</span></label><input type="range" id="cNoise" min="0" max="0.5" step="0.02" value="0.18"></div>
-            <div class="ctrl"><label class="lbl" for="cSpeed">Скорость <span class="val" id="vSpeed">1.0×</span></label><input type="range" id="cSpeed" min="0.2" max="2.6" step="0.1" value="1"></div>
-            <div class="ctrl"><label class="lbl" for="cBars">Полосы <span class="val" id="vBars">0.70</span></label><input type="range" id="cBars" min="0" max="1" step="0.05" value="0.7"></div>
-            <div class="ctrl"><label class="lbl" for="cGrade">Грейд</label><input type="color" id="cGrade" value="#ff4d9d"></div>
-            <div class="ctrl"><label class="lbl">Скан-линии</label><div class="row" style="gap:8px"><button class="switch" id="cScan" role="switch" aria-checked="true" aria-label="Скан-линии"></button><span class="note">CRT</span></div></div>
-            <div class="ctrl"><label class="lbl">Стоп-кадр</label><div class="row" style="gap:8px"><button class="switch" id="cFreeze" role="switch" aria-checked="false" aria-label="Стоп-кадр"></button><span class="note">пауза</span></div></div>
-            <div class="ctrl"><label class="lbl">Safe-zone</label><div class="row" style="gap:8px"><button class="switch" id="cSafe" role="switch" aria-checked="false" aria-label="Направляющие"></button><span class="note">сетка</span></div></div>
-          </div>
-          <div class="row" style="margin-top:11px">
-            <button class="btn btn-g btn-s" id="cRandom">🎲 Сбой</button>
-            <button class="btn btn-g btn-s" id="cReset">↺ Сброс</button>
-            <button class="btn btn-a btn-s" id="cPng">⬇ Кадр</button>
-          </div>
-          <p class="note" style="margin-top:10px">Кадр рисуется локально и реагирует на параметры сразу. Ничего не отправляется на сервер.</p>
-        </div>
-      </div>
+  <div class="card band rise" style="animation-delay:.06s">
+    <div class="row" style="justify-content:space-between;margin-bottom:10px">
+      <div><span class="kicker c">Радар</span><h2 style="margin:6px 0 0">Параметры скана — применяются сразу</h2></div>
+      <span class="row">
+        <button class="btn btn-g btn-s" id="scReset">↺ Сброс</button>
+        <button class="btn btn-g btn-s" id="scRandom">🎲 Случайно</button>
+        <button class="btn btn-a btn-s" id="scPng">⬇ Кадр PNG</button>
+      </span>
+    </div>
+    <div class="deck">
+      <div class="ctrl"><label class="lbl" for="scSpeed">Скорость развёртки <span class="val" id="scSpeedVal">1.0×</span></label><input type="range" id="scSpeed" min="0.2" max="3" step="0.1" value="1"></div>
+      <div class="ctrl"><label class="lbl" for="scRings">Кольца <span class="val" id="scRingsVal">4</span></label><input type="range" id="scRings" min="2" max="8" step="1" value="4"></div>
+      <div class="ctrl"><label class="lbl" for="scSweep">Ширина луча <span class="val" id="scSweepVal">42°</span></label><input type="range" id="scSweep" min="8" max="120" step="2" value="42"></div>
+      <div class="ctrl"><label class="lbl" for="scTrail">Шлейф <span class="val" id="scTrailVal">0.86</span></label><input type="range" id="scTrail" min="0.4" max="0.97" step="0.01" value="0.86"></div>
+      <div class="ctrl"><label class="lbl" for="scGlow">Свечение <span class="val" id="scGlowVal">1.0×</span></label><input type="range" id="scGlow" min="0" max="2.5" step="0.1" value="1"></div>
+      <div class="ctrl"><label class="lbl" for="scGrain">Зерно <span class="val" id="scGrainVal">0.08</span></label><input type="range" id="scGrain" min="0" max="0.35" step="0.01" value="0.08"></div>
+      <div class="ctrl"><label class="lbl" for="scBlip">Размер отметок <span class="val" id="scBlipVal">1.0×</span></label><input type="range" id="scBlip" min="0.5" max="2.2" step="0.1" value="1"></div>
+      <div class="ctrl"><label class="lbl" for="scZoom">Масштаб <span class="val" id="scZoomVal">1.00×</span></label><input type="range" id="scZoom" min="0.7" max="1.35" step="0.01" value="1"></div>
+      <div class="ctrl"><label class="lbl" for="scHue">Оттенок</label><input type="color" id="scHue" value="#a3e635"></div>
+      <div class="ctrl"><label class="lbl" for="scSecond">Второй цвет</label><input type="color" id="scSecond" value="#22d3ee"></div>
+      <div class="ctrl"><label class="lbl" for="scQuality">Качество</label><select class="select" id="scQuality"><option value="1">1× быстрее</option><option value="2" selected>2× чётче</option></select></div>
+      <div class="ctrl"><label class="lbl">Сетка</label><div class="row" style="gap:8px"><button class="switch" id="scGrid" role="switch" aria-checked="true" aria-label="Сетка радара"></button><span class="note">направляющие</span></div></div>
+      <div class="ctrl"><label class="lbl">Подписи</label><div class="row" style="gap:8px"><button class="switch" id="scLabels" role="switch" aria-checked="true" aria-label="Подписи отметок"></button><span class="note">имена путей</span></div></div>
+      <div class="ctrl"><label class="lbl">Развёртка</label><div class="row" style="gap:8px"><button class="switch" id="scRun" role="switch" aria-checked="true" aria-label="Анимация развёртки"></button><span class="note">вращение</span></div></div>
+    </div>
+    <p class="note" style="margin-top:10px" id="scNote"></p>
+  </div>
+
+  <div class="card band rise" style="animation-delay:.12s">
+    <div class="row" style="justify-content:space-between;margin-bottom:9px">
+      <h2 style="margin:0">🚀 Разделы <span class="chip l" id="secCount">0</span></h2>
+      <span class="row">
+        <button class="btn btn-g btn-s" id="pinAll">Закрепить все</button>
+        <button class="btn btn-g btn-s" id="saveView">＋ Сохранить вид</button>
+      </span>
+    </div>
+    <div class="row" style="margin-bottom:10px">
+      <input class="input" id="q" placeholder="Поиск по названию или описанию…" style="flex:1;min-width:180px">
+      <select class="select" id="sort" style="max-width:196px">
+        <option value="pinned">Сначала закреплённые</option>
+        <option value="manual">Ручной порядок</option>
+        <option value="az">По названию</option>
+        <option value="group">По группе</option>
+        <option value="used">По частоте открытия</option>
+      </select>
+    </div>
+    <div class="filters" id="filters" style="margin-bottom:11px"></div>
+    <div class="bulk">
+      <label class="row" style="gap:7px;font-size:12px;cursor:pointer"><input type="checkbox" id="selAll" style="accent-color:var(--cyan);width:15px;height:15px">Выбрать все</label>
+      <span class="chip c" id="selN">0 выбрано</span>
+      <span class="row" style="margin-left:auto">
+        <button class="btn btn-g btn-s" id="copySel" disabled>📋 Ссылки</button>
+        <button class="btn btn-g btn-s" id="pinSel" disabled>📌 Закрепить</button>
+        <button class="btn btn-r btn-s" id="unpinSel" disabled>✕ Снять</button>
+      </span>
+    </div>
+    <div class="grid" id="grid"></div>
+    <div class="views" id="views"></div>
+    <p class="note" style="margin-top:11px">Адреса строятся от найденного расположения проекта. Закреплённые идут первыми и попадают в ярлыки установленного приложения. При сортировке «Ручной порядок» плитки перетаскиваются за ⠿.</p>
+  </div>
+
+  <div class="card band rise" style="animation-delay:.18s">
+    <span class="kicker a">Установка и диагностика</span>
+    <div class="row" style="margin-top:9px">
+      <button class="btn btn-p btn-s" id="installBtn2">📲 Установить приложение</button>
+      <button class="btn btn-g btn-s" id="iconsBtn">✓ Пересобрать иконки</button>
+      <span class="chip" id="mfChip">манифест: —</span>
+      <span class="chip" id="icChip">иконки: —</span>
+    </div>
+    <div class="checks" id="checks"></div>
+    <div class="note" style="margin-top:11px;display:flex;flex-direction:column;gap:6px">
+      <span>• Если Chrome предлагает только «Создать ярлык» — это равноценный путь: иконка откроет тот же адрес.</span>
+      <span>• На iPhone установка идёт через «Поделиться» → «На экран «Домой»».</span>
+      <span>• Чтобы этот файл работал в корне домена, репозиторий должен называться <b style="color:var(--text)">dorinvest13-spec.github.io</b> и содержать <b style="color:var(--text)">index.html</b>.</span>
     </div>
   </div>
 </main>
 
 <footer><div class="wrap row" style="justify-content:space-between">
-  <span class="note">AI Marketing Studio · MIT · страница ошибки не индексируется</span>
-  <a class="btn btn-g btn-s" id="footHome" href="./">На главную</a>
+  <span class="note">AI Marketing Studio · точка входа · находит проект и открывает разделы</span>
+  <span class="row"><a class="btn btn-g btn-s" id="footOpen" href="#">Открыть студию</a></span>
 </div></footer>
 
+<div id="drawerHost"></div>
 <div class="toasts" id="toasts" role="status" aria-live="polite"></div>
 
 <script>
@@ -191,237 +335,672 @@ const $=id=>document.getElementById(id);
 const esc=s=>String(s??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;");
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 const RM=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const uid=p=>(p||"x")+Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+const store={get(k){try{return localStorage.getItem(k)}catch{return null}},set(k,v){try{localStorage.setItem(k,v);return true}catch{return false}},del(k){try{localStorage.removeItem(k)}catch{}}};
+const arrOf=k=>{try{const v=JSON.parse(store.get(k)||"[]");return Array.isArray(v)?v:[]}catch{return[]}};
+const objOf=k=>{try{const v=JSON.parse(store.get(k)||"{}");return v&&typeof v==="object"&&!Array.isArray(v)?v:{}}catch{return{}}};
 
-const RESERVED=new Set(["","app","docs","doc","demo","api","ship","pipeline","platforms","arch","trust","index.html","404.html","assets","static"]);
-function siteBase(){
-  const seg=(location.pathname.split("/").filter(Boolean)[0]||"").toLowerCase();
-  return RESERVED.has(seg)?"/":"/"+seg+"/";
+/* ---------- sound ---------- */
+let ac=null,muted=store.get("gateway_mute")==="1";
+function paintMute(){$("muteBtn").textContent=muted?"🔇":"🔔";$("muteBtn").setAttribute("aria-pressed",String(muted));$("muteBtn").title=muted?"Звук выключен":"Звук включён"}
+function beep(kind){
+  if(muted)return;
+  try{
+    if(!ac)ac=new (window.AudioContext||window.webkitAudioContext)();
+    if(ac.state==="suspended")ac.resume();
+    const t=ac.currentTime,o=ac.createOscillator(),g=ac.createGain();
+    const map={ok:[720,.18,"sine"],err:[170,.24,"sawtooth"],tick:[940,.04,"triangle"],ping:[1180,.09,"sine"],shutter:[1240,.06,"square"],pin:[580,.1,"triangle"],open:[500,.13,"sine"]};
+    const[f,d,w]=map[kind]||map.tick;
+    o.type=w;o.frequency.setValueAtTime(f,t);
+    if(kind==="ok"||kind==="open")o.frequency.exponentialRampToValueAtTime(f*1.5,t+d);
+    if(kind==="ping")o.frequency.exponentialRampToValueAtTime(f*.7,t+d);
+    if(kind==="shutter")o.frequency.exponentialRampToValueAtTime(f*.4,t+d);
+    g.gain.setValueAtTime(.0001,t);
+    g.gain.exponentialRampToValueAtTime(kind==="tick"?.022:.065,t+.012);
+    g.gain.exponentialRampToValueAtTime(.0001,t+d);
+    o.connect(g);g.connect(ac.destination);o.start(t);o.stop(t+d+.02);
+  }catch{}
 }
-const BASE=siteBase();
-function url(p){return BASE+p}
+$("muteBtn").onclick=()=>{muted=!muted;store.set("gateway_mute",muted?"1":"0");paintMute();if(!muted)beep("tick")};
+document.addEventListener("pointerdown",()=>{if(ac&&ac.state==="suspended")ac.resume()},{once:true});
+paintMute();
 
-function toast(msg){
-  const t=document.createElement("div");t.className="toast";
-  t.innerHTML=`<span>ℹ️</span><span>${esc(msg)}</span><button aria-label="Закрыть">✕</button>`;
-  t.querySelector("button").onclick=()=>t.remove();
-  $("toasts").appendChild(t);setTimeout(()=>t.remove(),4000);
+function toast(msg,type="ok",undo){
+  const t=document.createElement("div");t.className="toast "+type;
+  t.innerHTML=`<span>${type==="ok"?"✅":type==="err"?"⛔":"ℹ️"}</span><span>${esc(msg)}</span>`+(undo?`<button class="undo">Отменить</button>`:"")+`<button class="x" aria-label="Закрыть">✕</button>`;
+  t.querySelector(".x").onclick=()=>t.remove();
+  if(undo)t.querySelector(".undo").onclick=()=>{try{undo()}finally{t.remove()}};
+  $("toasts").appendChild(t);setTimeout(()=>t.remove(),undo?9000:4400);
 }
 async function copy(text){
-  try{if(navigator.clipboard&&window.isSecureContext){await navigator.clipboard.writeText(text);toast("Ссылка скопирована");return}}catch{}
+  const s=String(text??"");if(!s)return toast("Нечего копировать","info");
+  try{if(navigator.clipboard&&window.isSecureContext){await navigator.clipboard.writeText(s);toast("Скопировано");beep("tick");return}}catch{}
   try{
-    const ta=document.createElement("textarea");ta.value=text;ta.setAttribute("readonly","");
+    const ta=document.createElement("textarea");ta.value=s;ta.setAttribute("readonly","");
     ta.style.cssText="position:fixed;top:-2000px;opacity:0";document.body.appendChild(ta);
-    ta.select();const ok=document.execCommand("copy");ta.remove();
-    toast(ok?"Ссылка скопирована":"Скопируйте вручную: "+text);
-  }catch{toast("Копирование недоступно")}
+    ta.select();ta.setSelectionRange(0,s.length);
+    const ok=document.execCommand("copy");ta.remove();
+    toast(ok?"Скопировано":"Скопируйте вручную",ok?"ok":"info");
+  }catch{toast("Копирование недоступно","err")}
 }
+function download(blob,name){
+  const u=URL.createObjectURL(blob),a=document.createElement("a");
+  a.href=u;a.download=name;document.body.appendChild(a);a.click();a.remove();
+  setTimeout(()=>URL.revokeObjectURL(u),6000);
+}
+function hex2rgb(h){const m=/^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(h)||[,"a3","e6","35"];return[parseInt(m[1],16),parseInt(m[2],16),parseInt(m[3],16)]}
+const rgba=(h,a)=>{const[r,g,b]=hex2rgb(h);return`rgba(${r},${g},${b},${a})`};
+function mix(h1,h2,t){const a=hex2rgb(h1),b=hex2rgb(h2);return`rgb(${Math.round(a[0]+(b[0]-a[0])*t)},${Math.round(a[1]+(b[1]-a[1])*t)},${Math.round(a[2]+(b[2]-a[2])*t)})`}
 
-const DESTS=[
-  {ic:"🏠",n:"Главная витрина",d:"обзор проекта и живое превью",p:"",k:"home главная витрина лендинг overview"},
-  {ic:"🚀",n:"Студия",d:"парсер, карточки, тексты, ролик",p:"app/",k:"studio студия приложение app генератор"},
-  {ic:"⚙️",n:"Конвейер",d:"три шага от ссылки до публикации",p:"#pipeline",k:"pipeline конвейер шаги парсинг"},
-  {ic:"⚡",n:"Живое демо",d:"генерация контент-пака в браузере",p:"#demo",k:"demo демо генерация карточки тексты"},
-  {ic:"📱",n:"Площадки",d:"Telegram, Дзен, ВК, ОК, сайт",p:"#platforms",k:"platforms площадки telegram дзен вк одноклассники сайт"},
-  {ic:"🧩",n:"Архитектура",d:"схема модулей и потоков данных",p:"#arch",k:"arch архитектура схема backend fastapi"},
-  {ic:"🔌",n:"API",d:"справочник эндпоинтов с поиском",p:"#api",k:"api эндпоинты rest справочник"},
-  {ic:"📦",n:"Запуск",d:"Docker, локально, VPS, GitHub",p:"#ship",k:"ship запуск docker vps установка deploy"},
-  {ic:"🛡",n:"Защита",d:"SSRF, биллинг, лимиты, честность",p:"#trust",k:"trust защита безопасность ssrf биллинг"}
+/* ---------- sections ---------- */
+const SECTIONS=[
+  {id:"vitrine",ic:"🏠",n:"Витрина",p:"index.html",g:"overview",c:"var(--lime)",d:"Обзор конвейера, живой кадр ролика, прогресс из памяти браузера, справочник API."},
+  {id:"launch",ic:"🧭",n:"Пускатель",p:"launch.html",g:"overview",c:"var(--sand)",d:"Все разделы плитками, установка на рабочий стол, офлайн-кэш и своя иконка приложения."},
+  {id:"live",ic:"⚡",n:"Генерация",p:"live.html",g:"content",c:"var(--cyan)",d:"Реальный ответ модели по вашему ключу. Шесть провайдеров, потоковый вывод, проверка ключа."},
+  {id:"library",ic:"📚",n:"Библиотека",p:"library.html",g:"content",c:"var(--blue)",d:"Все записи в одном списке: правка на месте, поиск, сортировки, график-аналитика, экспорт."},
+  {id:"assets",ic:"🎨",n:"Ассеты",p:"assets.html",g:"prod",c:"var(--amber)",d:"Карточки в PNG четырёх форматов до 3× и вертикальный ролик с записью в файл."},
+  {id:"publish",ic:"🚀",n:"Публикация",p:"publish.html",g:"prod",c:"var(--green)",d:"Превью поста в каждой площадке, чек-лист, переход в редактор, отметка о выходе и план недели."},
+  {id:"settings",ic:"⚙️",n:"Настройки и данные",p:"settings.html",g:"service",c:"var(--magenta)",d:"Резервная копия одним файлом, восстановление, ключ, проверка целостности данных."},
+  {id:"status",ic:"📊",n:"Состояние проекта",p:"status.html",g:"service",c:"var(--violet)",d:"Проверка репозитория через API GitHub: файлы, целостность HTML, workflow, сборки."},
+  {id:"studio",ic:"🛒",n:"Студия",p:"app/",g:"overview",c:"#7c5cff",d:"Три вкладки на эталонных данных: парсер, генератор, видеостудия. Работает без ключа."}
 ];
-function lev(a,b){
-  a=a.toLowerCase();b=b.toLowerCase();
-  const m=a.length,n=b.length;
-  if(!m)return n;if(!n)return m;
-  let prev=Array.from({length:n+1},(_,i)=>i),cur=new Array(n+1);
-  for(let i=1;i<=m;i++){
-    cur[0]=i;
-    for(let j=1;j<=n;j++){
-      cur[j]=Math.min(prev[j]+1,cur[j-1]+1,prev[j-1]+(a[i-1]===b[j-1]?0:1));
-    }
-    [prev,cur]=[cur,prev];
-  }
-  return prev[n];
-}
-function paintDests(){
-  const q=($("q").value||"").trim().toLowerCase();
-  const list=DESTS.filter(d=>!q||(d.n+" "+d.d+" "+d.k+" "+d.p).toLowerCase().includes(q));
-  $("dests").innerHTML=list.length?list.map(d=>`<a class="dest" href="${esc(url(d.p))}">
-    <span class="ic">${d.ic}</span><span><b>${esc(d.n)}</b><small>${esc(d.d)}</small></span><span class="go">→</span></a>`).join("")
-    :`<p class="note" style="padding:18px;text-align:center">Ничего не нашлось. Откройте главную — там есть всё.</p>`;
-  $("destCount").textContent=`Показано ${list.length} из ${DESTS.length} разделов`;
-}
-$("q").addEventListener("input",paintDests);
+const GROUPS={content:"Контент",prod:"Продакшн",service:"Служебные",overview:"Обзор"};
+const state={
+  base:null,probes:[],scanning:false,
+  pins:new Set(arrOf("gateway_pins").length?arrOf("gateway_pins"):["live","library","assets","publish"]),
+  order:arrOf("gateway_order"),uses:objOf("gateway_uses"),views:arrOf("gateway_views"),
+  sel:new Set(),q:"",sort:"pinned",filter:"all",
+  icons:{i192:null,i512:null,mask:null},manifestUrl:null,promptEvent:null,
+  sc:{speed:1,rings:4,sweep:42,trail:.86,glow:1,grain:.08,blip:1,zoom:1,hue:"#a3e635",second:"#22d3ee",quality:2,grid:true,labels:true,run:true}
+};
+try{const v=JSON.parse(store.get("gateway_scope")||"null");if(v&&typeof v==="object")Object.assign(state.sc,v)}catch{}
+SECTIONS.forEach(s=>{if(!state.order.includes(s.id))state.order.push(s.id)});
+const savedBase=store.get("gateway_base");
+function savePins(){store.set("gateway_pins",JSON.stringify([...state.pins]))}
+function saveOrder(){store.set("gateway_order",JSON.stringify(state.order))}
+function bumpUse(id){state.uses[id]=(Number(state.uses[id])||0)+1;store.set("gateway_uses",JSON.stringify(state.uses))}
+function urlFor(p){return state.base?state.base+p:null}
+function absFor(p){const u=urlFor(p);return u?new URL(u,location.origin).href:null}
 
-const reqRaw=location.pathname+location.search;
-$("reqPath").textContent=reqRaw;
-(function suggest(){
-  const tail=(location.pathname.split("/").filter(Boolean).pop()||"").replace(/\.html?$/i,"");
-  if(!tail)return;
-  let best=null,bestScore=Infinity;
-  DESTS.forEach(d=>{
-    const cand=(d.p.replace(/^#/,"")||"home");
-    const s=Math.min(lev(tail,cand),lev(tail,d.n.split(" ")[0]));
-    if(s<bestScore){bestScore=s;best=d}
-  });
-  if(best&&bestScore<=Math.max(2,Math.floor(tail.length/2))){
-    $("suggest").classList.remove("hidden");
-    $("suggestText").innerHTML=`Возможно, вы искали <a href="${esc(url(best.p))}" style="color:var(--cyan);font-weight:700">${esc(best.n)}</a> — открыть?`;
-  }
-})();
-
-["brandLink","homeLink","footHome"].forEach(id=>$(id).setAttribute("href",url("")));
-$("studioLink").setAttribute("href",url("app/"));
-$("backBtn").onclick=()=>{if(history.length>1)history.back();else location.href=url("")};
-$("copyHome").onclick=()=>copy(location.origin+url(""));
-paintDests();
-
-/* ---------- тестовый кадр ---------- */
-function hex2hsl(h){
-  const m=/^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(h)||[,"ff","4d","9d"];
-  const r=parseInt(m[1],16)/255,g=parseInt(m[2],16)/255,b=parseInt(m[3],16)/255;
-  const mx=Math.max(r,g,b),mn=Math.min(r,g,b);let hh=0,s=0;const l=(mx+mn)/2;
-  if(mx!==mn){const d=mx-mn;s=l>.5?d/(2-mx-mn):d/(mx+mn);hh=mx===r?((g-b)/d+(g<b?6:0)):mx===g?((b-r)/d+2):((r-g)/d+4);hh/=6}
-  return[hh*360,s*100,l*100];
-}
-const hsl=(h,s,l,a=1)=>`hsla(${((h%360)+360)%360},${clamp(s,0,100)}%,${clamp(l,0,100)}%,${a})`;
-const cfg={glitch:.55,noise:.18,speed:1,bars:.7,grade:"#ff4d9d",scan:true,freeze:false,safe:false};
-const cv=$("cv"),cx=cv.getContext("2d");
-let raf=null,t0=performance.now(),lastFrame=0;
-function fit(){
-  const dpr=Math.min(window.devicePixelRatio||1,2);
-  const w=Math.round(540*dpr),h=Math.round(960*dpr);
-  if(cv.width!==w){cv.width=w;cv.height=h}
+/* ---------- radar ---------- */
+const cv=$("scope"),cx=cv.getContext("2d");
+let raf=null,t0=performance.now(),sweep=0,lastFrame=0;
+function fitScope(){
+  const dpr=Math.min(window.devicePixelRatio||1,state.sc.quality);
+  const S=cv.clientWidth||220;
+  const W=Math.round(S*dpr);
+  if(cv.width!==W){cv.width=W;cv.height=W}
   cx.setTransform(dpr,0,0,dpr,0,0);
+  return S;
 }
-function draw(now){
-  const W=540,H=960;
-  const[gh,gs,gl]=hex2hsl(cfg.grade);
-  const A=[gh,Math.max(60,gs),clamp(gl,42,64)],B=[gh+150,Math.max(60,gs),clamp(gl+6,42,66)];
-  const t=(now-t0)/1000*cfg.speed;
-  fit();
-  const bg=cx.createLinearGradient(0,0,W,H);
-  bg.addColorStop(0,hsl(A[0],52,8));bg.addColorStop(1,hsl(B[0],52,11));
-  cx.fillStyle=bg;cx.fillRect(0,0,W,H);
+function drawScope(now){
+  const S=fitScope(),c=state.sc;
+  const dt=Math.min(64,now-(lastFrame||now));lastFrame=now;
+  if(c.run&&!RM)sweep=(sweep+dt/1000*c.speed*1.15)%(Math.PI*2);
+  const cxp=S/2,cyp=S/2,R=(S/2-6)*c.zoom;
+  cx.clearRect(0,0,S,S);
+  const bg=cx.createRadialGradient(cxp,cyp,0,cxp,cyp,R);
+  bg.addColorStop(0,mix(c.hue,"#05070a",.82));bg.addColorStop(1,"#05070a");
+  cx.fillStyle=bg;cx.beginPath();cx.arc(cxp,cyp,R,0,Math.PI*2);cx.fill();
 
-  if(cfg.bars>0){
-    const cols=[A[0],A[0]+40,B[0],B[0]+40,A[0]+150,B[0]+150,A[0]+280];
-    const bw=W/cols.length;
-    cx.save();cx.globalAlpha=cfg.bars*.55;
-    cols.forEach((h,i)=>{
-      const jitter=(Math.sin(t*2+i)*.5+.5)*cfg.glitch*22;
-      cx.fillStyle=hsl(h,68,52);
-      cx.fillRect(i*bw+jitter,150,bw+2,430);
-    });
-    cx.restore();
-    cx.save();cx.globalAlpha=cfg.bars*.35;
-    cols.forEach((h,i)=>{
-      cx.fillStyle=hsl(h,40,26);
-      cx.fillRect(i*bw,580,bw+2,70);
-    });
+  if(c.grid){
+    cx.save();cx.strokeStyle=rgba(c.hue,.18);cx.lineWidth=1;
+    for(let i=1;i<=c.rings;i++){cx.beginPath();cx.arc(cxp,cyp,R*i/c.rings,0,Math.PI*2);cx.stroke()}
+    for(let i=0;i<8;i++){
+      const a=i*Math.PI/4;
+      cx.beginPath();cx.moveTo(cxp,cyp);cx.lineTo(cxp+Math.cos(a)*R,cyp+Math.sin(a)*R);cx.stroke();
+    }
     cx.restore();
   }
 
-  const slices=Math.round(cfg.glitch*16);
-  for(let i=0;i<slices;i++){
-    const y=Math.random()*H,h=4+Math.random()*30;
-    const dx=(Math.random()-.5)*90*cfg.glitch;
+  cx.save();
+  cx.globalCompositeOperation="lighter";
+  const half=c.sweep*Math.PI/360;
+  const steps=Math.max(8,Math.round(c.sweep/3));
+  for(let i=0;i<steps;i++){
+    const t=i/steps,a=sweep-half*2*t;
+    const alpha=(1-t)*.34*clamp(c.trail*1.1,0,1);
+    const g=cx.createLinearGradient(cxp,cyp,cxp+Math.cos(a)*R,cyp+Math.sin(a)*R);
+    g.addColorStop(0,rgba(c.hue,alpha));g.addColorStop(1,rgba(c.second,0));
+    cx.fillStyle=g;
+    cx.beginPath();cx.moveTo(cxp,cyp);
+    cx.arc(cxp,cyp,R,a-half/steps*2.2,a+half/steps*2.2);cx.closePath();cx.fill();
+  }
+  cx.strokeStyle=rgba(c.hue,.9);cx.lineWidth=1.8;
+  cx.shadowBlur=14*c.glow;cx.shadowColor=rgba(c.hue,.8);
+  cx.beginPath();cx.moveTo(cxp,cyp);cx.lineTo(cxp+Math.cos(sweep)*R,cyp+Math.sin(sweep)*R);cx.stroke();
+  cx.restore();
+
+  const list=state.probes.length?state.probes:[{path:"/…",status:"wait"}];
+  list.forEach((p,i)=>{
+    const a=-Math.PI/2+(i/Math.max(1,list.length))*Math.PI*2;
+    const frac=p.status==="ok"?.42:p.status==="err"?.86:.64;
+    const rr=R*frac;
+    const x=cxp+Math.cos(a)*rr,y=cyp+Math.sin(a)*rr;
+    const col=p.status==="ok"?c.hue:p.status==="err"?"#ff5470":"#ffb020";
+    let delta=Math.abs(((a-sweep)%(Math.PI*2)+Math.PI*2)%(Math.PI*2));
+    if(delta>Math.PI)delta=Math.PI*2-delta;
+    const hot=clamp(1-delta/1.1,0,1);
+    const rad=(3.2+hot*3.4)*c.blip;
+    cx.save();
+    cx.shadowBlur=(10+hot*20)*c.glow;cx.shadowColor=rgba(col,.85);
+    cx.fillStyle=rgba(col,.55+hot*.45);
+    cx.beginPath();cx.arc(x,y,rad,0,Math.PI*2);cx.fill();
+    if(p.status==="ok"){
+      cx.strokeStyle=rgba(col,.35+hot*.4);cx.lineWidth=1.4;
+      cx.beginPath();cx.arc(x,y,rad+5+hot*6,0,Math.PI*2);cx.stroke();
+    }
+    cx.restore();
+    if(c.labels&&S>170){
+      cx.save();
+      cx.fillStyle=rgba("#eef5f0",.5+hot*.45);
+      cx.font=`600 ${Math.max(8,S*.042)}px JetBrains Mono,monospace`;
+      cx.textAlign=Math.cos(a)>=0?"left":"right";
+      const lbl=p.path.replace(/^\//,"").replace(/\/$/,"")||"корень";
+      cx.fillText(lbl.length>14?lbl.slice(0,13)+"…":lbl,x+(Math.cos(a)>=0?rad+5:-rad-5),y+3);
+      cx.restore();
+    }
+  });
+
+  cx.save();
+  cx.fillStyle=rgba(c.hue,.9);cx.shadowBlur=12*c.glow;cx.shadowColor=rgba(c.hue,.8);
+  cx.beginPath();cx.arc(cxp,cyp,3.4*c.blip,0,Math.PI*2);cx.fill();cx.restore();
+
+  if(c.grain>0){
+    cx.save();cx.globalAlpha=c.grain;cx.beginPath();cx.arc(cxp,cyp,R,0,Math.PI*2);cx.clip();
+    const n=Math.round(S*S/150);
+    for(let i=0;i<n;i++){cx.fillStyle=Math.random()>.5?"#fff":"#000";cx.fillRect(Math.random()*S,Math.random()*S,1.2,1.2)}
+    cx.restore();
+  }
+  cx.save();cx.strokeStyle=rgba(c.hue,.4);cx.lineWidth=1.4;
+  cx.beginPath();cx.arc(cxp,cyp,R,0,Math.PI*2);cx.stroke();cx.restore();
+}
+function loop(now){drawScope(now);raf=requestAnimationFrame(loop)}
+function startScope(){if(raf===null&&!document.hidden){lastFrame=0;raf=requestAnimationFrame(loop)}}
+function stopScope(){if(raf!==null){cancelAnimationFrame(raf);raf=null;lastFrame=0}}
+document.addEventListener("visibilitychange",()=>{document.hidden?stopScope():startScope()});
+window.addEventListener("resize",()=>drawScope(performance.now()));
+window.addEventListener("beforeunload",stopScope);
+function syncScope(){
+  const c=state.sc;
+  $("scSpeed").value=c.speed;$("scSpeedVal").textContent=c.speed.toFixed(1)+"×";
+  $("scRings").value=c.rings;$("scRingsVal").textContent=c.rings;
+  $("scSweep").value=c.sweep;$("scSweepVal").textContent=c.sweep+"°";
+  $("scTrail").value=c.trail;$("scTrailVal").textContent=c.trail.toFixed(2);
+  $("scGlow").value=c.glow;$("scGlowVal").textContent=c.glow.toFixed(1)+"×";
+  $("scGrain").value=c.grain;$("scGrainVal").textContent=c.grain.toFixed(2);
+  $("scBlip").value=c.blip;$("scBlipVal").textContent=c.blip.toFixed(1)+"×";
+  $("scZoom").value=c.zoom;$("scZoomVal").textContent=c.zoom.toFixed(2)+"×";
+  $("scHue").value=c.hue;$("scSecond").value=c.second;$("scQuality").value=String(c.quality);
+  $("scGrid").setAttribute("aria-checked",String(c.grid));
+  $("scLabels").setAttribute("aria-checked",String(c.labels));
+  $("scRun").setAttribute("aria-checked",String(c.run));
+  $("scopeTag").textContent=state.scanning?"СКАН":state.base?"НАЙДЕНО":"НЕТ СИГНАЛА";
+  $("scNote").textContent=`${state.probes.length} отметок · развёртка ${c.run&&!RM?"вращается":"остановлена"} · луч ${c.sweep}° · шлейф ${c.trail.toFixed(2)} · качество ${c.quality}×`;
+  store.set("gateway_scope",JSON.stringify(c));
+  if(raf===null)drawScope(performance.now());
+}
+$("scSpeed").oninput=e=>{state.sc.speed=+e.target.value;syncScope()};
+$("scRings").oninput=e=>{state.sc.rings=+e.target.value;syncScope()};
+$("scSweep").oninput=e=>{state.sc.sweep=+e.target.value;syncScope()};
+$("scTrail").oninput=e=>{state.sc.trail=+e.target.value;syncScope()};
+$("scGlow").oninput=e=>{state.sc.glow=+e.target.value;syncScope()};
+$("scGrain").oninput=e=>{state.sc.grain=+e.target.value;syncScope()};
+$("scBlip").oninput=e=>{state.sc.blip=+e.target.value;syncScope()};
+$("scZoom").oninput=e=>{state.sc.zoom=+e.target.value;syncScope()};
+$("scHue").oninput=e=>{state.sc.hue=e.target.value;syncScope()};
+$("scSecond").oninput=e=>{state.sc.second=e.target.value;syncScope()};
+$("scQuality").onchange=e=>{state.sc.quality=+e.target.value;fitScope();syncScope()};
+[["scGrid","grid"],["scLabels","labels"],["scRun","run"]].forEach(([id,k])=>{
+  $(id).onclick=()=>{state.sc[k]=!state.sc[k];syncScope()};
+});
+$("scReset").onclick=()=>{
+  state.sc={speed:1,rings:4,sweep:42,trail:.86,glow:1,grain:.08,blip:1,zoom:1,hue:"#a3e635",second:"#22d3ee",quality:2,grid:true,labels:true,run:true};
+  syncScope();toast("Параметры радара сброшены");
+};
+$("scRandom").onclick=()=>{
+  const pick=a=>a[Math.floor(Math.random()*a.length)];
+  Object.assign(state.sc,{speed:+(0.4+Math.random()*2.2).toFixed(1),rings:2+Math.floor(Math.random()*7),
+    sweep:10+Math.floor(Math.random()*100),trail:+(.5+Math.random()*.45).toFixed(2),
+    glow:+(Math.random()*2.3).toFixed(1),grain:+(Math.random()*.25).toFixed(2),
+    blip:+(.6+Math.random()*1.4).toFixed(1),zoom:+(.8+Math.random()*.5).toFixed(2),
+    hue:pick(["#a3e635","#22d3ee","#ff4d9d","#ffb020","#4d7cff","#3ddc84"]),
+    second:pick(["#22d3ee","#ff4d9d","#a3e635","#ffd9a0","#7c5cff"])});
+  syncScope();beep("tick");toast("Случайный вид радара");
+};
+$("scPng").onclick=()=>{
+  drawScope(performance.now());
+  $("scopeFlash").classList.remove("go");void $("scopeFlash").offsetWidth;$("scopeFlash").classList.add("go");
+  beep("shutter");
+  cv.toBlob(b=>{if(!b)return toast("Не удалось создать PNG","err");download(b,"radar-scan.png");toast("Кадр сохранён")},"image/png");
+};
+
+/* ---------- probe ---------- */
+const CANDIDATES=["/Marketpro/","/marketpro/","/MarketPro/","/ai-marketing-studio/","/studio/","/ams/","/"];
+function hereBase(){
+  const parts=location.pathname.split("/").filter(Boolean);
+  if(parts.length&&/\.html?$/i.test(parts[parts.length-1]))parts.pop();
+  return "/"+(parts.length?parts.join("/")+"/":"");
+}
+function paintProbes(){
+  $("probes").innerHTML=state.probes.map(p=>`<div class="probe ${p.status}">
+    <span class="st">${p.status==="ok"?"✓":p.status==="err"?"✕":"…"}</span>
+    <span class="p">${esc(p.path)}${p.note?` <span class="note">${esc(p.note)}</span>`:""}</span>
+    ${p.status==="ok"?`<button class="btn btn-p btn-s" data-use="${esc(p.path)}">Взять</button>`:`<span class="chip ${p.status==="err"?"r":"a"}">${p.status==="err"?p.code||"нет":"ждём"}</span>`}
+  </div>`).join("")||'<p class="note" style="padding:12px">Проверка ещё не запускалась.</p>';
+  $("probes").querySelectorAll("[data-use]").forEach(b=>b.onclick=()=>setBase(b.dataset.use,true));
+}
+async function probeOne(path){
+  const rec={path,status:"wait",code:null,note:""};
+  state.probes.push(rec);paintProbes();syncScope();
+  const targets=[path+"launch.html",path+"index.html"];
+  for(const t of targets){
     try{
-      const img=cx.getImageData(0,Math.max(0,Math.round(y*(cv.height/H))),cv.width,Math.max(1,Math.round(h*(cv.height/H))));
-      cx.putImageData(img,Math.round(dx*(cv.width/W)),Math.max(0,Math.round(y*(cv.height/H))));
-    }catch{}
-    cx.fillStyle=hsl(Math.random()>.5?A[0]:B[0],85,60,.16*cfg.glitch);
-    cx.fillRect(dx,y,W,h);
+      const r=await fetch(t,{cache:"no-store",redirect:"follow"});
+      rec.code=r.status;
+      if(r.ok){
+        const txt=await r.text();
+        if(/AI Marketing Studio|Пускатель|конвейер/i.test(txt)){
+          rec.status="ok";rec.note=t.replace(path,"")||"index.html";
+          beep("ping");paintProbes();syncScope();return rec;
+        }
+        rec.note="ответ без признаков студии";
+      }
+    }catch(e){rec.code="сеть"}
   }
-
-  cx.save();
-  cx.textAlign="center";
-  const blink=(Math.floor(t*2)%2)===0;
-  cx.fillStyle=blink?"#fff":hsl(A[0],80,70,.55);
-  cx.font="900 46px Unbounded,Manrope,sans-serif";
-  const shift=(Math.random()-.5)*10*cfg.glitch;
-  cx.fillText("NO SIGNAL",270+shift,690);
-  cx.fillStyle=hsl(B[0],80,66,.9);
-  cx.font="600 17px 'JetBrains Mono',monospace";
-  const tc=`00:${String(Math.floor(t)%60).padStart(2,"0")}:${String(Math.floor(t*30)%30).padStart(2,"0")}`;
-  cx.fillText("ERR 404 · "+tc,270,724);
-  cx.fillStyle="rgba(255,255,255,.5)";
-  cx.font="600 13px Manrope,sans-serif";
-  cx.fillText("источник не найден · проверьте адрес",270,752);
-  cx.restore();
-
-  cx.save();
-  cx.strokeStyle=hsl(A[0],80,62,.85);cx.lineWidth=3;
-  cx.strokeRect(28,28,W-56,H-56);
-  cx.restore();
-
-  if(cfg.scan){
-    cx.save();cx.globalAlpha=.16;cx.fillStyle="#000";
-    for(let y=0;y<H;y+=4)cx.fillRect(0,y,W,2);
-    cx.restore();
-    const sweep=(t*160)%H;
-    cx.save();cx.globalAlpha=.1;cx.fillStyle="#fff";cx.fillRect(0,sweep,W,26);cx.restore();
-  }
-  if(cfg.noise>0){
-    cx.save();cx.globalAlpha=cfg.noise;
-    for(let i=0;i<260;i++){cx.fillStyle=Math.random()>.5?"#fff":"#000";cx.fillRect(Math.random()*W,Math.random()*H,1.6,1.6)}
-    cx.restore();
-  }
-  if(cfg.safe){
-    cx.save();cx.strokeStyle="rgba(139,255,90,.55)";cx.lineWidth=1;cx.setLineDash([6,6]);
-    cx.strokeRect(44,120,W-88,H-250);
-    cx.beginPath();cx.moveTo(W/2,0);cx.lineTo(W/2,H);cx.moveTo(0,H/2);cx.lineTo(W,H/2);cx.stroke();
-    cx.setLineDash([]);cx.fillStyle="rgba(139,255,90,.9)";cx.font="600 11px Manrope,sans-serif";cx.textAlign="left";
-    cx.fillText("safe-zone",50,136);cx.restore();
-  }
-  lastFrame=now;
+  rec.status="err";paintProbes();syncScope();return rec;
 }
-function loop(now){draw(now);raf=requestAnimationFrame(loop)}
-function start(){if(raf!==null||cfg.freeze||document.hidden||RM)return;t0=performance.now()-(lastFrame?lastFrame-t0:0);raf=requestAnimationFrame(loop)}
-function stop(){if(raf!==null){cancelAnimationFrame(raf);raf=null}}
-function still(){if(raf===null)draw(lastFrame||performance.now())}
-document.addEventListener("visibilitychange",()=>{document.hidden?stop():start()});
-window.addEventListener("resize",()=>{fit();still()});
-window.addEventListener("beforeunload",stop);
-
-function sync(){
-  $("cGlitch").value=cfg.glitch;$("cNoise").value=cfg.noise;$("cSpeed").value=cfg.speed;
-  $("cBars").value=cfg.bars;$("cGrade").value=cfg.grade;
-  $("vGlitch").textContent=cfg.glitch.toFixed(2);$("vNoise").textContent=cfg.noise.toFixed(2);
-  $("vSpeed").textContent=cfg.speed.toFixed(1)+"×";$("vBars").textContent=cfg.bars.toFixed(2);
-  $("cScan").setAttribute("aria-checked",String(cfg.scan));
-  $("cFreeze").setAttribute("aria-checked",String(cfg.freeze));
-  $("cSafe").setAttribute("aria-checked",String(cfg.safe));
-  $("sigState").textContent=cfg.freeze?"FREEZE":"NO SIGNAL";
-  still();
+function setBase(base,announce){
+  state.base=base;store.set("gateway_base",base);
+  $("statePill").className="pill ok";
+  $("stateText").textContent=base==="/"?"корень домена":base.replace(/\//g,"");
+  $("heroTitle").innerHTML='Проект найден: <em>'+esc(base==="/"?"/":base)+'</em>';
+  $("heroLead").textContent="Адрес проверен и отвечает. Открывайте любой раздел — ссылки ниже уже указывают на рабочее расположение.";
+  const u=urlFor("launch.html")||urlFor("index.html");
+  ["openMain","openTop","footOpen"].forEach(id=>{
+    const el=$(id);
+    if(el.tagName==="A")el.setAttribute("href",u);
+    else el.onclick=()=>{beep("open");location.href=u};
+  });
+  $("brandLink").setAttribute("href",urlFor("index.html"));
+  $("openMain").textContent="🚀 Открыть пускатель";
+  paintGrid();paintStats();buildManifest();paintChecks();syncScope();
+  if(announce){beep("ok");toast("Адрес установлен: "+base)}
 }
-$("cGlitch").oninput=e=>{cfg.glitch=+e.target.value;$("vGlitch").textContent=cfg.glitch.toFixed(2);still()};
-$("cNoise").oninput=e=>{cfg.noise=+e.target.value;$("vNoise").textContent=cfg.noise.toFixed(2);still()};
-$("cSpeed").oninput=e=>{cfg.speed=+e.target.value;$("vSpeed").textContent=cfg.speed.toFixed(1)+"×";still()};
-$("cBars").oninput=e=>{cfg.bars=+e.target.value;$("vBars").textContent=cfg.bars.toFixed(2);still()};
-$("cGrade").oninput=e=>{cfg.grade=e.target.value;still()};
-function sw(el,key,after){el.onclick=()=>{cfg[key]=!cfg[key];el.setAttribute("aria-checked",String(cfg[key]));after&&after();still()}}
-sw($("cScan"),"scan");
-sw($("cSafe"),"safe");
-sw($("cFreeze"),"freeze",()=>{cfg.freeze?stop():start();$("sigState").textContent=cfg.freeze?"FREEZE":"NO SIGNAL"});
-$("cReset").onclick=()=>{Object.assign(cfg,{glitch:.55,noise:.18,speed:1,bars:.7,grade:"#ff4d9d",scan:true,freeze:false,safe:false});sync();start();toast("Параметры кадра сброшены")};
-$("cRandom").onclick=()=>{
-  const pal=["#ff4d9d","#7c5cff","#22d3ee","#ffb020","#8bff5a","#ff5470"];
-  cfg.grade=pal[Math.floor(Math.random()*pal.length)];
-  cfg.glitch=+(Math.random()).toFixed(2);
-  cfg.noise=+(Math.random()*.42).toFixed(2);
-  cfg.speed=+(0.3+Math.random()*2.1).toFixed(1);
-  cfg.bars=+(Math.random()).toFixed(2);
-  sync();toast("Случайный сбой применён");
+function setNoBase(){
+  state.base=null;
+  $("statePill").className="pill err";$("stateText").textContent="не найдено";
+  $("heroTitle").innerHTML='Ни один адрес <em>не ответил</em>';
+  $("heroLead").textContent="Проверенные пути не отдали студию. Впишите путь вручную, если проект лежит в другой папке, или проверьте, что репозиторий публичный и сборка Pages зелёная.";
+  $("openMain").textContent="📊 Проверить состояние";
+  $("openMain").setAttribute("href","https://github.com/dorinvest13-spec?tab=repositories");
+  $("openTop").onclick=()=>window.open("https://github.com/dorinvest13-spec?tab=repositories","_blank","noopener");
+  $("footOpen").setAttribute("href","https://github.com/dorinvest13-spec?tab=repositories");
+  paintGrid();paintStats();paintChecks();syncScope();
+}
+async function runScan(){
+  if(state.scanning)return;
+  state.scanning=true;state.probes=[];
+  const btns=[$("rescanBtn"),$("rescanTop")];
+  btns.forEach(b=>b.disabled=true);
+  const old=$("rescanBtn").textContent;$("rescanBtn").innerHTML='<span class="spin"></span> Сканирую…';
+  $("statePill").className="pill warn";$("stateText").textContent="скан…";
+  syncScope();
+  const here=hereBase();
+  const list=[...new Set([savedBase,here,...CANDIDATES].filter(Boolean))];
+  let found=null;
+  for(const p of list){
+    const r=await probeOne(p);
+    if(r.status==="ok"&&!found){found=p;break}
+  }
+  state.scanning=false;
+  btns.forEach(b=>b.disabled=false);$("rescanBtn").textContent=old;
+  if(found)setBase(found,true);
+  else{setNoBase();beep("err");toast("Ни один путь не ответил — впишите адрес вручную","err")}
+}
+$("rescanBtn").onclick=runScan;
+$("rescanTop").onclick=runScan;
+$("manualBtn").onclick=async()=>{
+  let v=$("manualPath").value.trim();
+  if(!v)return toast("Впишите путь, например /Marketpro/","info");
+  if(/^https?:\/\//i.test(v)){try{v=new URL(v).pathname}catch{}}
+  if(!v.startsWith("/"))v="/"+v;
+  if(!v.endsWith("/"))v+="/";
+  const r=await probeOne(v);
+  if(r.status==="ok")setBase(v,true);
+  else{beep("err");toast("Путь не ответил: "+v,"err")}
 };
-$("cPng").onclick=()=>{
-  still();
-  cv.toBlob(b=>{
-    if(!b)return toast("Не удалось сохранить кадр");
-    const u=URL.createObjectURL(b),a=document.createElement("a");
-    a.href=u;a.download="no-signal-404.png";document.body.appendChild(a);a.click();a.remove();
-    setTimeout(()=>URL.revokeObjectURL(u),4000);toast("Кадр сохранён");
-  },"image/png");
+$("manualPath").addEventListener("keydown",e=>{if(e.key==="Enter")$("manualBtn").click()});
+
+/* ---------- stats ---------- */
+function paintStats(){
+  const gens=arrOf("lv_hist"),real=gens.filter(g=>!g.seeded);
+  const cards=real.reduce((n,g)=>n+((g?.result?.cards||[]).length),0);
+  let published=0;
+  Object.values(objOf("pub_state")).forEach(p=>{if(p?.platforms)Object.values(p.platforms).forEach(x=>{if(x?.status==="done")published++})});
+  const ok=state.probes.filter(p=>p.status==="ok").length;
+  $("stats").innerHTML=[
+    ["",ok,"найдено"],["s2",real.length,"генераций"],["s3",cards,"карточек"],
+    ["s4",published,"вышло"],["s5",state.pins.size,"закреплено"]
+  ].map(([c,v,l])=>`<div class="stat ${c}"><b>${esc(v)}</b><span>${esc(l)}</span></div>`).join("");
+}
+
+/* ---------- grid ---------- */
+function view(){
+  let l=SECTIONS.slice();
+  if(state.filter==="pinned")l=l.filter(s=>state.pins.has(s.id));
+  else if(state.filter!=="all")l=l.filter(s=>s.g===state.filter);
+  const q=state.q.trim().toLowerCase();
+  if(q)l=l.filter(s=>(s.n+" "+s.d+" "+s.p).toLowerCase().includes(q));
+  const cmp={
+    pinned:(a,b)=>(state.pins.has(b.id)?1:0)-(state.pins.has(a.id)?1:0)||a.n.localeCompare(b.n,"ru"),
+    manual:(a,b)=>state.order.indexOf(a.id)-state.order.indexOf(b.id),
+    az:(a,b)=>a.n.localeCompare(b.n,"ru"),
+    group:(a,b)=>a.g.localeCompare(b.g)||a.n.localeCompare(b.n,"ru"),
+    used:(a,b)=>(Number(state.uses[b.id])||0)-(Number(state.uses[a.id])||0)||a.n.localeCompare(b.n,"ru")
+  }[state.sort];
+  return l.sort(cmp);
+}
+function paintFilters(){
+  const base=[["all","Все"],["pinned","Закреплённые"]];
+  $("filters").innerHTML=base.map(([k,n])=>`<button class="fchip${state.filter===k?" on":""}" data-f="${k}">${n}</button>`).join("")
+    +Object.entries(GROUPS).map(([k,n])=>`<button class="fchip${state.filter===k?" on":""}" data-f="${k}">${n}</button>`).join("");
+  $("filters").querySelectorAll("[data-f]").forEach(b=>b.onclick=()=>{state.filter=b.dataset.f;paintFilters();paintGrid();beep("tick")});
+}
+function paintGrid(){
+  const l=view();
+  $("secCount").textContent=`${l.length} / ${SECTIONS.length}`;
+  $("grid").innerHTML=l.map(s=>{
+    const pinned=state.pins.has(s.id),uses=Number(state.uses[s.id])||0;
+    const href=urlFor(s.p);
+    return `<div class="tile${state.sel.has(s.id)?" sel":""}" style="--tc:${s.c}" data-id="${s.id}" draggable="${state.sort==="manual"}">
+      <div class="top">
+        <input type="checkbox" data-sel="${s.id}" ${state.sel.has(s.id)?"checked":""} aria-label="Выбрать ${esc(s.n)}">
+        <span class="ic">${s.ic}</span>
+        <button class="pin${pinned?" on":""}" data-pin="${s.id}" aria-pressed="${pinned}">${pinned?"📌 закреплено":"📌 закрепить"}</button>
+        ${state.sort==="manual"?'<span class="grip" aria-hidden="true">⠿</span>':""}
+      </div>
+      <b>${esc(s.n)}</b>
+      <div class="path">${esc(href||("…/"+s.p))}</div>
+      <p class="note">${esc(s.d)}</p>
+      <div class="row" style="gap:5px"><span class="chip">${esc(GROUPS[s.g])}</span>${uses?`<span class="chip c">открыто ${uses}</span>`:""}${href?"":'<span class="chip a">адрес не найден</span>'}</div>
+      <div class="acts">
+        ${href?`<a class="btn btn-p btn-s" href="${esc(href)}" data-open="${s.id}">Открыть</a>`:`<button class="btn btn-g btn-s" disabled>Нет адреса</button>`}
+        <button class="btn btn-g btn-s" data-detail="${s.id}">Детали</button>
+      </div></div>`;
+  }).join("")||`<div class="empty"><div class="ic">🔍</div><p class="note">Ничего не найдено. Измените фильтр или очистите поиск.</p></div>`;
+  $("grid").querySelectorAll("[data-sel]").forEach(c=>c.onchange=e=>{
+    e.stopPropagation();c.checked?state.sel.add(c.dataset.sel):state.sel.delete(c.dataset.sel);
+    c.closest(".tile").classList.toggle("sel",c.checked);paintBulk();beep("tick");
+  });
+  $("grid").querySelectorAll("[data-pin]").forEach(b=>b.onclick=e=>{e.stopPropagation();togglePin(b.dataset.pin)});
+  $("grid").querySelectorAll("[data-detail]").forEach(b=>b.onclick=e=>{e.stopPropagation();openDetail(b.dataset.detail)});
+  $("grid").querySelectorAll("[data-open]").forEach(a=>a.addEventListener("click",()=>{bumpUse(a.dataset.open);beep("open")}));
+  if(state.sort==="manual"){
+    let dragId=null;
+    $("grid").querySelectorAll(".tile").forEach(el=>{
+      el.ondragstart=()=>{dragId=el.dataset.id;el.classList.add("drag")};
+      el.ondragend=()=>{dragId=null;el.classList.remove("drag")};
+      el.ondragover=e=>e.preventDefault();
+      el.ondrop=e=>{
+        e.preventDefault();const to=el.dataset.id;if(!dragId||dragId===to)return;
+        const from=state.order.indexOf(dragId),ti=state.order.indexOf(to);
+        if(from<0||ti<0)return;
+        state.order.splice(ti,0,state.order.splice(from,1)[0]);
+        saveOrder();paintGrid();toast("Порядок обновлён");
+      };
+    });
+  }
+  paintBulk();paintFilters();
+}
+function paintBulk(){
+  const n=state.sel.size;
+  $("selN").textContent=n+" выбрано";
+  ["copySel","pinSel","unpinSel"].forEach(id=>$(id).disabled=!n);
+  const v=view();$("selAll").checked=v.length>0&&v.every(s=>state.sel.has(s.id));
+}
+function togglePin(id){
+  const was=state.pins.has(id);
+  was?state.pins.delete(id):state.pins.add(id);
+  savePins();paintGrid();paintStats();buildManifest();beep("pin");
+  const s=SECTIONS.find(x=>x.id===id);
+  toast(`${s?s.n:id}: ${was?"снято с закрепа":"закреплено"}`,"info",()=>{
+    was?state.pins.add(id):state.pins.delete(id);savePins();paintGrid();paintStats();buildManifest();
+  });
+}
+$("selAll").onchange=()=>{
+  const v=view();
+  $("selAll").checked?v.forEach(s=>state.sel.add(s.id)):v.forEach(s=>state.sel.delete(s.id));
+  paintGrid();
 };
-sync();draw(performance.now());start();
+$("copySel").onclick=()=>{
+  const rows=SECTIONS.filter(s=>state.sel.has(s.id)).map(s=>`${s.n}: ${absFor(s.p)||"адрес не найден"}`);
+  copy(rows.join("\n"));
+};
+$("pinSel").onclick=()=>{
+  const before=new Set(state.pins);
+  state.sel.forEach(id=>state.pins.add(id));
+  savePins();state.sel.clear();paintGrid();paintStats();buildManifest();beep("pin");
+  toast("Закреплено","ok",()=>{state.pins=before;savePins();paintGrid();paintStats();buildManifest()});
+};
+$("unpinSel").onclick=()=>{
+  const before=new Set(state.pins);
+  state.sel.forEach(id=>state.pins.delete(id));
+  savePins();state.sel.clear();paintGrid();paintStats();buildManifest();beep("tick");
+  toast("Снято с закрепа","info",()=>{state.pins=before;savePins();paintGrid();paintStats();buildManifest()});
+};
+$("pinAll").onclick=()=>{
+  const before=new Set(state.pins);
+  const all=state.pins.size===SECTIONS.length;
+  state.pins=all?new Set():new Set(SECTIONS.map(s=>s.id));
+  savePins();paintGrid();paintStats();buildManifest();beep("pin");
+  toast(all?"Все сняты с закрепа":"Все разделы закреплены","info",()=>{state.pins=before;savePins();paintGrid();paintStats();buildManifest()});
+};
+$("q").oninput=e=>{state.q=e.target.value;paintGrid()};
+$("sort").onchange=e=>{state.sort=e.target.value;paintGrid()};
+$("saveView").onclick=()=>{
+  const v={id:uid("v"),name:`${state.filter}${state.q?` · «${state.q}»`:""} · ${state.sort}`,filter:state.filter,q:state.q,sort:state.sort};
+  state.views.unshift(v);state.views=state.views.slice(0,8);
+  store.set("gateway_views",JSON.stringify(state.views));paintViews();
+  toast("Вид сохранён","ok",()=>{state.views=state.views.filter(x=>x.id!==v.id);store.set("gateway_views",JSON.stringify(state.views));paintViews()});
+};
+function paintViews(){
+  $("views").innerHTML=state.views.length?state.views.map(v=>`<div class="view"><span class="chip l">вид</span><b>${esc(v.name)}</b>
+    <button class="btn btn-g btn-s" data-apply="${esc(v.id)}">Применить</button>
+    <button class="btn btn-g btn-s" style="color:var(--red)" data-vdel="${esc(v.id)}" aria-label="Удалить вид">✕</button></div>`).join(""):"";
+  $("views").querySelectorAll("[data-apply]").forEach(b=>b.onclick=()=>{
+    const v=state.views.find(x=>x.id===b.dataset.apply);if(!v)return;
+    state.filter=v.filter;state.q=v.q;state.sort=v.sort;
+    $("q").value=v.q;$("sort").value=v.sort;paintGrid();toast("Вид применён");
+  });
+  $("views").querySelectorAll("[data-vdel]").forEach(b=>b.onclick=()=>{
+    const i=state.views.findIndex(x=>x.id===b.dataset.vdel);if(i<0)return;
+    const[rm]=state.views.splice(i,1);store.set("gateway_views",JSON.stringify(state.views));paintViews();
+    toast("Вид удалён","info",()=>{state.views.splice(i,0,rm);store.set("gateway_views",JSON.stringify(state.views));paintViews()});
+  });
+}
+let detailId=null;
+function openDetail(id){
+  const s=SECTIONS.find(x=>x.id===id);if(!s)return;
+  detailId=id;
+  const pinned=state.pins.has(id),uses=Number(state.uses[id])||0,href=urlFor(s.p),full=absFor(s.p);
+  $("drawerHost").innerHTML=`<div class="scrim" id="scrim"></div><aside class="drawer" role="dialog" aria-modal="true" aria-label="${esc(s.n)}">
+    <div class="row" style="justify-content:space-between;margin-bottom:12px">
+      <span class="kicker">Раздел</span><button class="btn btn-g btn-s" id="dClose">✕ Закрыть</button></div>
+    <div class="row" style="margin-bottom:10px"><span class="ic" style="width:44px;height:44px;font-size:21px">${s.ic}</span>
+      <h2 style="margin:0;font:800 17px var(--font)">${esc(s.n)}</h2></div>
+    <div class="row" style="margin-bottom:12px">
+      <span class="chip l">${esc(GROUPS[s.g])}</span>
+      ${pinned?'<span class="chip a">закреплено</span>':""}
+      ${uses?`<span class="chip c">открыто ${uses} раз</span>`:""}</div>
+    <p class="note" style="color:var(--muted);font-size:13px">${esc(s.d)}</p>
+    <h3 style="margin-top:15px">Адрес</h3>
+    <div class="code">${esc(full||"Адрес проекта ещё не найден. Запустите скан или впишите путь вручную.")}</div>
+    <div class="row" style="margin-top:13px">
+      ${href?`<a class="btn btn-p grow" href="${esc(href)}" id="dOpen">Открыть раздел</a>`:'<button class="btn btn-g grow" disabled>Нет адреса</button>'}
+      <button class="btn btn-g" id="dCopy" ${full?"":"disabled"}>📋 Ссылка</button>
+      <button class="btn btn-a" id="dPin">${pinned?"Снять закреп":"Закрепить"}</button>
+    </div>
+    <h3 style="margin-top:16px">Что нужно для работы</h3>
+    <div class="note" style="display:flex;flex-direction:column;gap:6px">
+      <span>• Репозиторий проекта должен быть публичным, а сборка Pages — зелёной.</span>
+      <span>• Данные живут в памяти браузера: сделайте резервную копию в «Настройках».</span>
+      ${s.id==="live"?'<span>• Нужен API-ключ провайдера. Без ключа работает демо-режим.</span>':""}
+      ${s.id==="assets"?'<span>• Запись ролика требует MediaRecorder. Если недоступен — сохраняйте PNG.</span>':""}
+      ${s.id==="status"?'<span>• Проверка идёт через открытый API GitHub: 60 запросов в час без входа.</span>':""}
+    </div>
+  </aside>`;
+  const close=()=>{$("drawerHost").innerHTML="";detailId=null};
+  $("scrim").onclick=close;$("dClose").onclick=close;
+  if($("dCopy"))$("dCopy").onclick=()=>copy(full||"");
+  $("dPin").onclick=()=>{togglePin(id);close()};
+  if($("dOpen"))$("dOpen").addEventListener("click",()=>{bumpUse(id);beep("open")});
+  $("dClose").focus();
+}
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&detailId){$("drawerHost").innerHTML="";detailId=null}});
+
+/* ---------- icons + manifest ---------- */
+function paintIconCanvas(size,maskable){
+  const cv=document.createElement("canvas");cv.width=size;cv.height=size;
+  const ctx=cv.getContext("2d");
+  const hue=state.sc.hue,second=state.sc.second;
+  const inset=maskable?size*.1:0,S=size-inset*2;
+  if(maskable){ctx.fillStyle=mix(hue,"#05070a",.5);ctx.fillRect(0,0,size,size)}
+  ctx.save();ctx.translate(inset,inset);
+  const pad=S*.06,inner=S-pad*2,r=inner*.22;
+  ctx.save();
+  ctx.beginPath();
+  if(ctx.roundRect)ctx.roundRect(pad,pad,inner,inner,r);
+  else{ctx.moveTo(pad+r,pad);ctx.arcTo(pad+inner,pad,pad+inner,pad+inner,r);ctx.arcTo(pad+inner,pad+inner,pad,pad+inner,r);ctx.arcTo(pad,pad+inner,pad,pad,r);ctx.arcTo(pad,pad,pad+inner,pad,r);ctx.closePath()}
+  ctx.clip();
+  const g=ctx.createLinearGradient(pad,pad,pad+inner,pad+inner);
+  g.addColorStop(0,hue);g.addColorStop(.55,second);g.addColorStop(1,"#ffd9a0");
+  ctx.fillStyle=g;ctx.fillRect(0,0,S,S);
+  const gl=ctx.createRadialGradient(S*.3,S*.24,0,S*.3,S*.24,S*.8);
+  gl.addColorStop(0,"rgba(255,255,255,.34)");gl.addColorStop(1,"rgba(255,255,255,0)");
+  ctx.fillStyle=gl;ctx.fillRect(0,0,S,S);
+  ctx.strokeStyle="rgba(5,7,10,.18)";ctx.lineWidth=Math.max(1,S/220);
+  for(let i=1;i<4;i++){
+    ctx.beginPath();ctx.moveTo(pad+inner*i/4,pad);ctx.lineTo(pad+inner*i/4,pad+inner);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(pad,pad+inner*i/4);ctx.lineTo(pad+inner,pad+inner*i/4);ctx.stroke();
+  }
+  const u=inner/100*(maskable?.84:1);
+  ctx.save();ctx.translate(S/2,S/2);
+  ctx.fillStyle="#0b1005";
+  ctx.beginPath();
+  ctx.moveTo(-36*u,38*u);ctx.lineTo(-9*u,-38*u);ctx.lineTo(9*u,-38*u);ctx.lineTo(36*u,38*u);
+  ctx.lineTo(19*u,38*u);ctx.lineTo(13*u,22*u);ctx.lineTo(-13*u,22*u);ctx.lineTo(-19*u,38*u);ctx.closePath();
+  ctx.moveTo(-8*u,8*u);ctx.lineTo(8*u,8*u);ctx.lineTo(0,-14*u);ctx.closePath();
+  ctx.fill("evenodd");
+  ctx.beginPath();
+  if(ctx.roundRect)ctx.roundRect(44*u,-38*u,15*u,76*u,4*u);else ctx.rect(44*u,-38*u,15*u,76*u);
+  ctx.fill();
+  ctx.restore();
+  ctx.fillStyle="#0b1005";ctx.beginPath();ctx.arc(S*.78,S*.22,inner*.045,0,Math.PI*2);ctx.fill();
+  ctx.restore();
+  ctx.strokeStyle="rgba(255,217,160,.5)";ctx.lineWidth=Math.max(1,S/200);
+  ctx.beginPath();
+  if(ctx.roundRect)ctx.roundRect(pad,pad,inner,inner,r);else ctx.rect(pad,pad,inner,inner);
+  ctx.stroke();
+  ctx.restore();
+  return cv;
+}
+function buildManifest(){
+  try{
+    state.icons.i192=paintIconCanvas(192,false).toDataURL("image/png");
+    state.icons.i512=paintIconCanvas(512,false).toDataURL("image/png");
+    state.icons.mask=paintIconCanvas(512,true).toDataURL("image/png");
+    $("appleLink").setAttribute("href",state.icons.i192);
+    $("favLink").setAttribute("type","image/png");
+    $("favLink").setAttribute("href",state.icons.i192);
+    const start=absFor("launch.html")||new URL(location.pathname,location.origin).href;
+    const scopeBase=state.base?new URL(state.base,location.origin).href:new URL("./",location.href).href;
+    const pinned=SECTIONS.filter(s=>state.pins.has(s.id)).slice(0,4);
+    const mf={
+      name:"AI Marketing Studio",short_name:"AI Studio",
+      description:"Точка входа в конвейер товарного контента.",
+      lang:"ru",dir:"ltr",id:start,start_url:start,scope:scopeBase,
+      display:"standalone",display_override:["standalone","minimal-ui","browser"],orientation:"any",
+      background_color:"#07090b",theme_color:"#a3e635",
+      categories:["productivity","business","utilities"],
+      icons:[
+        {src:state.icons.i192,sizes:"192x192",type:"image/png",purpose:"any"},
+        {src:state.icons.i512,sizes:"512x512",type:"image/png",purpose:"any"},
+        {src:state.icons.mask,sizes:"512x512",type:"image/png",purpose:"maskable"}
+      ],
+      shortcuts:(pinned.length?pinned:SECTIONS.slice(0,4)).map(s=>({name:s.n,short_name:s.n.slice(0,12),url:absFor(s.p)||start}))
+    };
+    state.manifestUrl="data:application/manifest+json;charset=utf-8,"+encodeURIComponent(JSON.stringify(mf));
+    $("mfLink").setAttribute("href",state.manifestUrl);
+    $("mfChip").textContent="манифест: собран";$("mfChip").className="chip l";
+    $("icChip").textContent="иконки: PNG 192 · 512";$("icChip").className="chip l";
+    paintChecks();return true;
+  }catch{
+    $("mfChip").textContent="манифест: базовый";$("mfChip").className="chip a";
+    $("icChip").textContent="иконки: не собраны";$("icChip").className="chip r";
+    paintChecks();return false;
+  }
+}
+$("iconsBtn").onclick=()=>{buildManifest();beep("ok");toast("Иконки и манифест пересобраны")};
+
+/* ---------- install ---------- */
+const isIOS=/iPad|iPhone|iPod/.test(navigator.userAgent)&&!window.MSStream;
+const standalone=window.matchMedia("(display-mode: standalone)").matches||navigator.standalone===true;
+function paintInstallBtn(){
+  const label=standalone?"✓ Установлено":state.promptEvent?"📲 Установить приложение":isIOS?"📲 Как установить на iPhone":"📲 Способ установки";
+  $("installBtn").textContent=label;
+  $("installBtn2").textContent=label;
+  $("installBtn").disabled=standalone;$("installBtn2").disabled=standalone;
+}
+window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();state.promptEvent=e;paintInstallBtn();paintChecks()});
+window.addEventListener("appinstalled",()=>{state.promptEvent=null;paintInstallBtn();paintChecks();beep("ok");toast("Приложение установлено")});
+async function doInstall(){
+  if(standalone)return toast("Уже открыто как приложение","info");
+  if(!state.icons.i512)buildManifest();
+  if(state.promptEvent){
+    try{
+      state.promptEvent.prompt();
+      const r=await state.promptEvent.userChoice;
+      if(r&&r.outcome==="accepted"){beep("ok");toast("Установка началась")}
+      else toast("Установка отменена","info");
+    }catch{toast("Браузер не показал окно — используйте «Создать ярлык»","info")}
+    state.promptEvent=null;paintInstallBtn();paintChecks();return;
+  }
+  beep("tick");
+  toast(isIOS?"Safari: Поделиться → На экран «Домой»":"Меню «⋮» → Установить приложение или Создать ярлык","info");
+  $("checks").scrollIntoView({behavior:"smooth",block:"center"});
+}
+$("installBtn").onclick=doInstall;
+$("installBtn2").onclick=doInstall;
+function paintChecks(){
+  const https=location.protocol==="https:"||location.hostname==="localhost";
+  const rows=[];
+  rows.push(state.base?{s:"ok",t:"Адрес проекта найден",d:state.base}
+    :{s:"err",t:"Адрес проекта не найден",d:"ни один путь не ответил",fix:"Впишите путь вручную или проверьте, что репозиторий публичный и сборка Pages зелёная."});
+  rows.push(https?{s:"ok",t:"Защищённое соединение",d:location.protocol}
+    :{s:"err",t:"Нужен HTTPS",d:location.protocol,fix:"Откройте страницу по адресу https://…github.io/…"});
+  rows.push(state.icons.i512?{s:"ok",t:"Иконки PNG 192 и 512 готовы",d:"собраны на устройстве"}
+    :{s:"warn",t:"Иконки не собраны",d:"canvas",fix:"Нажмите «Пересобрать иконки». В приватном режиме canvas может быть заблокирован."});
+  rows.push(state.manifestUrl?{s:"ok",t:"Манифест подставлен",d:"display: standalone · start_url абсолютный"}
+    :{s:"warn",t:"Манифест базовый",d:"manifest.webmanifest",fix:"Нажмите «Пересобрать иконки» — манифест будет собран с PNG."});
+  rows.push(standalone?{s:"ok",t:"Открыто как приложение",d:"standalone"}
+    :state.promptEvent?{s:"ok",t:"Браузер разрешил установку",d:"beforeinstallprompt"}
+    :{s:"warn",t:"Браузер пока не предложил установку",d:"нет beforeinstallprompt",
+      fix:"В этом репозитории нет сервис-воркера, поэтому Chrome может ограничиться ярлыком. «Создать ярлык» даёт тот же доступ. Полная установка доступна из пускателя внутри проекта."});
+  if(isIOS)rows.push({s:"warn",t:"Safari не ставит из манифеста",d:"iOS",fix:"Поделиться → На экран «Домой» — единственный путь на iPhone."});
+  $("checks").innerHTML=rows.map(r=>`<div class="chk ${r.s}">
+    <span class="ic">${r.s==="ok"?"✓":r.s==="warn"?"!":"✕"}</span>
+    <div style="min-width:0"><b style="font:700 12.5px var(--font)">${esc(r.t)}</b>
+      ${r.d?`<div class="note" style="word-break:break-all;margin-top:3px">${esc(r.d)}</div>`:""}
+      ${r.fix?`<div class="fix">${esc(r.fix)}</div>`:""}</div></div>`).join("");
+}
+
+/* ---------- init ---------- */
+syncScope();paintStats();paintGrid();paintViews();paintInstallBtn();paintProbes();paintChecks();
+buildManifest();drawScope(performance.now());startScope();
+window.addEventListener("focus",()=>{paintStats();paintGrid();paintChecks()});
+runScan();
+setTimeout(()=>{paintChecks();paintInstallBtn()},12000);
 </script>
 </body>
-                                </html>
+</html>
