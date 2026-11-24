@@ -1,0 +1,1089 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Установка — AI Marketing Studio</title>
+<meta name="description" content="Установка студии на рабочий стол: иконки, манифест, сервис-воркер и пошаговый довод до иконки.">
+<meta name="theme-color" content="#00d3a7">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="AI Studio">
+<link rel="manifest" id="mfLink" href="manifest.webmanifest">
+<link rel="icon" id="favLink" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" id="appleLink" href="icon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Unbounded:wght@500;700;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#04090c;--surface:#0c151a;--surface2:#122029;--overlay:#1b2f3a;--scrim:rgba(3,8,10,.9);--line:#25404e;
+  --teal:#00d3a7;--teal-deep:#046b57;--magenta:#ff2d78;--amber:#ffb020;--indigo:#5b6cff;
+  --lime:#b6ff3d;--cyan:#22d3ee;--red:#ff4d4d;--green:#2ee06a;--sand:#ffd9a0;--slate:#8fa6b0;
+  --text:#eafaf6;--muted:#9db6bf;--dim:#6a8590;
+  --font:'Manrope',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+  --disp:'Unbounded',var(--font);--mono:'JetBrains Mono',ui-monospace,Consolas,monospace;
+  --nav:62px;--pad:14px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{font-family:var(--font);background:var(--ink);color:var(--text);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased;line-height:1.5;padding-bottom:env(safe-area-inset-bottom)}
+::selection{background:var(--teal);color:#02201a}
+*{scrollbar-width:thin;scrollbar-color:var(--teal-deep) var(--surface)}
+::-webkit-scrollbar{width:11px;height:11px}
+::-webkit-scrollbar-track{background:var(--surface);border-left:1px solid var(--line)}
+::-webkit-scrollbar-thumb{background:linear-gradient(var(--teal-deep),var(--teal) 55%,var(--lime));border-radius:9px;border:2px solid var(--surface)}
+::-webkit-scrollbar-thumb:hover{background:linear-gradient(var(--lime),var(--teal))}
+::-webkit-scrollbar-corner{background:var(--surface)}
+:focus-visible{outline:2px solid var(--lime);outline-offset:3px;border-radius:6px}
+a{color:inherit}
+.hidden{display:none!important}
+.amb{position:fixed;inset:0;z-index:-3;background:
+  radial-gradient(58% 46% at 6% 2%,rgba(0,211,167,.24),transparent 62%),
+  radial-gradient(46% 40% at 96% 6%,rgba(91,108,255,.18),transparent 62%),
+  radial-gradient(52% 48% at 80% 98%,rgba(255,45,120,.12),transparent 62%),
+  radial-gradient(40% 34% at 18% 78%,rgba(182,255,61,.08),transparent 64%),var(--ink)}
+.amb::before{content:"";position:absolute;inset:-25%;background:
+  radial-gradient(30% 26% at 32% 36%,rgba(0,211,167,.18),transparent 70%),
+  radial-gradient(26% 24% at 68% 64%,rgba(91,108,255,.14),transparent 70%);
+  animation:drift 30s ease-in-out infinite alternate;filter:blur(15px)}
+.amb::after{content:"";position:absolute;inset:0;opacity:.06;mix-blend-mode:overlay;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E")}
+.mesh{position:fixed;inset:0;z-index:-2;pointer-events:none;opacity:.34;
+  background-image:linear-gradient(rgba(0,211,167,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(0,211,167,.06) 1px,transparent 1px);
+  background-size:56px 56px;-webkit-mask-image:radial-gradient(80% 62% at 50% 20%,#000,transparent);mask-image:radial-gradient(80% 62% at 50% 20%,#000,transparent)}
+@keyframes drift{from{transform:translate3d(-3%,-2%,0) rotate(-2deg)}to{transform:translate3d(3%,3%,0) rotate(2deg)}}
+@keyframes rise{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+@keyframes pop{from{opacity:0;transform:translateY(8px) scale(.98)}to{opacity:1;transform:none}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes pulse{0%,100%{opacity:.35}50%{opacity:1}}
+@keyframes halo{0%,100%{transform:scale(1);opacity:.4}50%{transform:scale(1.1);opacity:.75}}
+@keyframes slide{from{opacity:0;transform:translateX(24px)}to{opacity:1;transform:none}}
+@keyframes flash{0%{opacity:0}28%{opacity:.82}100%{opacity:0}}
+@keyframes sweep{from{transform:translateX(-100%)}to{transform:translateX(220%)}}
+.rise{animation:rise .55s cubic-bezier(.2,.7,.2,1) both}
+.wrap{max-width:1300px;margin:0 auto;padding:0 16px}
+.nav{position:fixed;top:0;left:0;right:0;height:var(--nav);z-index:50;backdrop-filter:blur(20px);background:rgba(4,9,12,.9);border-bottom:1px solid var(--line);padding-top:env(safe-area-inset-top)}
+.nav-in{max-width:1300px;margin:0 auto;height:var(--nav);padding:0 16px;display:flex;align-items:center;gap:8px}
+.brand{display:flex;align-items:center;gap:9px;text-decoration:none;flex:none}
+.mark{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;font:900 12px var(--disp);color:#02201a;
+  background:conic-gradient(from 200deg,var(--teal),var(--lime),var(--cyan),var(--indigo),var(--magenta),var(--teal));box-shadow:0 0 18px rgba(0,211,167,.5)}
+.brand b{font:700 13.5px var(--disp);background:linear-gradient(90deg,#fff,var(--teal) 52%,var(--lime));-webkit-background-clip:text;background-clip:text;color:transparent;white-space:nowrap}
+.nav-right{display:flex;gap:6px;align-items:center;margin-left:auto;overflow-x:auto;scrollbar-width:none}
+.nav-right::-webkit-scrollbar{display:none}
+.pill{display:inline-flex;align-items:center;gap:6px;font:700 10px var(--font);padding:5px 9px;border-radius:999px;border:1px solid var(--line);background:var(--overlay);color:var(--muted);white-space:nowrap;flex:none}
+.pill i{width:7px;height:7px;border-radius:50%;background:var(--dim);display:block}
+.pill.ok i{background:var(--teal);box-shadow:0 0 8px var(--teal);animation:pulse 2.4s infinite}
+.pill.warn i{background:var(--amber);box-shadow:0 0 8px var(--amber)}
+.pill.err i{background:var(--red);box-shadow:0 0 8px var(--red)}
+main{padding:calc(var(--nav) + 20px + env(safe-area-inset-top)) 0 84px}
+section{scroll-margin-top:calc(var(--nav) + 16px)}
+.card{background:linear-gradient(180deg,var(--surface2),var(--surface));border:1px solid var(--line);border-radius:16px;padding:var(--pad);box-shadow:0 18px 48px rgba(0,0,0,.5)}
+.card.hot{border-color:rgba(0,211,167,.44);box-shadow:0 18px 48px rgba(4,107,87,.24)}
+.kicker{font:800 9.5px var(--font);letter-spacing:.2em;text-transform:uppercase;color:var(--teal)}
+.kicker.m{color:var(--magenta)}.kicker.a{color:var(--amber)}.kicker.i{color:var(--indigo)}.kicker.l{color:var(--lime)}.kicker.c{color:var(--cyan)}
+h1{font:900 clamp(22px,4.4vw,34px)/1.06 var(--disp);letter-spacing:-.03em;margin:8px 0 10px}
+h1 em{font-style:normal;background:linear-gradient(96deg,var(--teal),var(--lime) 52%,var(--cyan));-webkit-background-clip:text;background-clip:text;color:transparent}
+h2{font:800 15.5px var(--font);margin-bottom:10px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+h3{font:800 13px var(--font);margin-bottom:8px}
+.lead{color:var(--muted);font-size:13.5px;max-width:62ch}
+.note{font-size:11px;color:var(--dim);line-height:1.6}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.btn{border:0;cursor:pointer;font:700 12.5px var(--font);border-radius:10px;padding:11px 16px;display:inline-flex;align-items:center;gap:7px;justify-content:center;text-decoration:none;color:#02201a;transition:transform .14s,box-shadow .2s,border-color .2s,opacity .2s}
+.btn:active:not([disabled]){transform:scale(.97)}
+.btn-p{background:linear-gradient(100deg,var(--teal-deep),var(--teal) 52%,var(--lime));box-shadow:0 8px 24px rgba(0,211,167,.36)}
+.btn-p:hover:not([disabled]){box-shadow:0 12px 34px rgba(0,211,167,.56)}
+.btn-xl{padding:15px 22px;font-size:14.5px;border-radius:13px}
+.btn-m{background:linear-gradient(100deg,#a8114f,var(--magenta));color:#fff}
+.btn-a{background:linear-gradient(100deg,#a35a06,var(--amber))}
+.btn-i{background:linear-gradient(100deg,#2b34a8,var(--indigo));color:#fff}
+.btn-c{background:linear-gradient(100deg,#0b6f86,var(--cyan));color:#03222b}
+.btn-r{background:linear-gradient(100deg,#a3231c,var(--red));color:#fff}
+.btn-g{background:var(--overlay);border:1px solid var(--line);color:var(--text)}
+.btn-g:hover:not([disabled]){border-color:var(--teal)}
+.btn-s{padding:7px 11px;font-size:11.5px;border-radius:9px}
+.btn[disabled]{opacity:.42;cursor:not-allowed;box-shadow:none}
+.chip{display:inline-flex;align-items:center;gap:5px;font:700 10px var(--font);padding:4px 9px;border-radius:999px;border:1px solid var(--line);background:var(--overlay);color:var(--muted);white-space:nowrap}
+.chip.t{color:var(--teal);border-color:rgba(0,211,167,.45);background:rgba(0,211,167,.12)}
+.chip.l{color:var(--lime);border-color:rgba(182,255,61,.42);background:rgba(182,255,61,.1)}
+.chip.m{color:var(--magenta);border-color:rgba(255,45,120,.42);background:rgba(255,45,120,.1)}
+.chip.a{color:var(--amber);border-color:rgba(255,176,32,.42);background:rgba(255,176,32,.1)}
+.chip.i{color:var(--indigo);border-color:rgba(91,108,255,.45);background:rgba(91,108,255,.12)}
+.chip.c{color:var(--cyan);border-color:rgba(34,211,238,.42);background:rgba(34,211,238,.1)}
+.chip.g{color:var(--green);border-color:rgba(46,224,106,.42);background:rgba(46,224,106,.1)}
+.chip.r{color:var(--red);border-color:rgba(255,77,77,.42);background:rgba(255,77,77,.1)}
+label.lbl{display:block;font-size:10px;color:var(--muted);margin-bottom:5px;font-weight:700}
+.input,.select{width:100%;background:var(--ink);border:1px solid var(--line);color:var(--text);border-radius:10px;padding:10px 11px;font:500 13px var(--font);outline:none;transition:border .2s,box-shadow .2s}
+.input:focus,.select:focus{border-color:var(--teal);box-shadow:0 0 0 3px rgba(0,211,167,.2)}
+.select{appearance:none;cursor:pointer;padding-right:28px;background-image:linear-gradient(45deg,transparent 50%,var(--teal) 50%),linear-gradient(135deg,var(--teal) 50%,transparent 50%);background-position:calc(100% - 15px) 50%,calc(100% - 10px) 50%;background-size:5px 5px;background-repeat:no-repeat}
+input[type=color]{width:100%;height:34px;background:var(--ink);border:1px solid var(--line);border-radius:10px;padding:3px;cursor:pointer}
+input[type=range]{width:100%;appearance:none;height:6px;border-radius:99px;background:linear-gradient(90deg,var(--teal-deep),var(--lime));outline:none;cursor:pointer}
+input[type=range]::-webkit-slider-thumb{appearance:none;width:17px;height:17px;border-radius:50%;background:#fff;border:3px solid var(--teal);box-shadow:0 0 9px rgba(0,211,167,.7);cursor:pointer}
+input[type=range]::-moz-range-thumb{width:14px;height:14px;border-radius:50%;background:#fff;border:3px solid var(--teal);cursor:pointer}
+.switch{position:relative;width:40px;height:22px;border-radius:999px;background:var(--overlay);border:1px solid var(--line);cursor:pointer;transition:background .2s;flex:none;padding:0}
+.switch::after{content:"";position:absolute;top:2px;left:2px;width:16px;height:16px;border-radius:50%;background:var(--teal);transition:transform .24s cubic-bezier(.2,.7,.2,1),background .2s}
+.switch[aria-checked="true"]{background:var(--teal-deep)}
+.switch[aria-checked="true"]::after{transform:translateX(18px);background:#fff}
+.stepper{display:flex;align-items:center;gap:5px;background:var(--ink);border:1px solid var(--line);border-radius:10px;padding:4px}
+.stepper button{width:25px;height:25px;border-radius:7px;border:0;background:var(--overlay);color:var(--text);font-size:14px;cursor:pointer;line-height:1}
+.stepper button:hover:not([disabled]){background:var(--teal-deep)}
+.stepper b{flex:1;text-align:center;font:800 13px var(--font)}
+.stepper button[disabled]{opacity:.4;cursor:not-allowed}
+.deck{display:grid;grid-template-columns:repeat(auto-fit,minmax(142px,1fr));gap:9px}
+.ctrl{background:var(--ink);border:1px solid var(--line);border-radius:11px;padding:9px 11px}
+.ctrl .val{float:right;font:800 10px var(--font);color:var(--lime)}
+.hero{display:grid;grid-template-columns:auto 1fr;gap:20px;align-items:center}
+.icon-stage{position:relative;width:154px;height:154px;flex:none;display:grid;place-items:center}
+.icon-stage::before{content:"";position:absolute;inset:-16px;border-radius:50%;background:radial-gradient(circle,rgba(0,211,167,.42),transparent 68%);animation:halo 4.6s ease-in-out infinite;pointer-events:none}
+.icon-stage canvas{position:relative;width:132px;height:132px;display:block;border-radius:30px;box-shadow:0 18px 44px rgba(0,0,0,.6)}
+.icon-stage .flash{position:absolute;inset:0;border-radius:30px;background:#fff;opacity:0;pointer-events:none}
+.icon-stage .flash.go{animation:flash .4s ease-out}
+.readiness{position:relative;height:9px;border-radius:99px;background:var(--overlay);border:1px solid var(--line);overflow:hidden;margin-top:12px}
+.readiness i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--teal),var(--lime));transition:width .6s cubic-bezier(.2,.7,.2,1)}
+.readiness::after{content:"";position:absolute;inset:0;width:40%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.18),transparent);animation:sweep 2.6s linear infinite}
+.checks{display:flex;flex-direction:column;gap:7px;margin-top:12px}
+.chk{display:grid;grid-template-columns:24px 1fr auto;gap:10px;align-items:center;background:var(--ink);border:1px solid var(--line);border-radius:11px;padding:10px 11px;font-size:12.5px}
+.chk.ok{border-color:rgba(46,224,106,.35)}
+.chk.warn{border-color:rgba(255,176,32,.4)}
+.chk.err{border-color:rgba(255,77,77,.45);background:rgba(255,77,77,.05)}
+.chk .ic{width:24px;height:24px;border-radius:7px;display:grid;place-items:center;font-size:12px}
+.chk.ok .ic{background:rgba(46,224,106,.15);color:var(--green)}
+.chk.warn .ic{background:rgba(255,176,32,.15);color:var(--amber)}
+.chk.err .ic{background:rgba(255,77,77,.15);color:var(--red)}
+.chk .fix{margin-top:5px;font:10.5px/1.6 var(--mono);color:var(--sand);background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:7px 9px;word-break:break-word}
+.coach{display:flex;flex-direction:column;gap:8px;margin-top:12px}
+.step{display:grid;grid-template-columns:26px 1fr;gap:11px;align-items:start;background:var(--ink);border:1px solid var(--line);border-radius:11px;padding:11px 12px;font-size:12.5px}
+.step .n{width:26px;height:26px;border-radius:8px;display:grid;place-items:center;background:var(--overlay);border:1px solid var(--line);font:800 11px var(--font);color:var(--teal)}
+.step.done{border-color:rgba(46,224,106,.4);background:rgba(46,224,106,.05)}
+.step.done .n{background:rgba(46,224,106,.18);color:var(--green);border-color:rgba(46,224,106,.4)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(238px,1fr));gap:12px}
+.tile{border:1px solid var(--line);border-radius:15px;padding:15px;background:linear-gradient(180deg,var(--surface2),var(--surface));position:relative;overflow:hidden;display:flex;flex-direction:column;gap:8px;transition:transform .2s,border-color .2s,box-shadow .2s}
+.tile::before{content:"";position:absolute;inset:0 auto 0 0;width:3px;background:var(--tc)}
+.tile:hover{transform:translateY(-4px);border-color:var(--tc);box-shadow:0 16px 40px rgba(0,0,0,.42)}
+.tile.sel{border-color:var(--cyan);background:rgba(34,211,238,.06)}
+.tile.drag{opacity:.35}
+.tile .top{display:flex;align-items:center;gap:8px}
+.tile .ic{width:34px;height:34px;flex:none;border-radius:10px;display:grid;place-items:center;font-size:16px;background:var(--overlay);border:1px solid var(--line)}
+.tile .grip{cursor:grab;color:var(--dim);font-size:13px;user-select:none;margin-left:auto}
+.tile input[type=checkbox]{accent-color:var(--cyan);width:15px;height:15px;flex:none}
+.tile b{font:800 13px var(--font)}
+.tile .path{font:10.5px var(--mono);color:var(--tc);word-break:break-all}
+.tile .acts{margin-top:auto;display:flex;gap:6px;flex-wrap:wrap}
+.pin{border:1px solid var(--line);background:var(--overlay);color:var(--muted);cursor:pointer;border-radius:9px;padding:6px 9px;font:700 10.5px var(--font);transition:.2s}
+.pin.on{color:#02201a;border-color:var(--amber);background:linear-gradient(100deg,var(--amber),var(--sand))}
+.filters{display:flex;gap:6px;flex-wrap:wrap}
+.fchip{border:1px solid var(--line);background:var(--overlay);color:var(--muted);font:700 11px var(--font);padding:6px 11px;border-radius:999px;cursor:pointer;transition:.2s}
+.fchip.on{color:#02201a;border-color:var(--teal);background:linear-gradient(100deg,var(--teal),var(--lime))}
+.bulk{display:flex;gap:8px;align-items:center;flex-wrap:wrap;background:var(--ink);border:1px solid var(--line);border-radius:11px;padding:9px 11px;margin-bottom:10px}
+.views{display:flex;flex-direction:column;gap:6px;margin-top:10px}
+.view{display:flex;align-items:center;gap:8px;background:var(--ink);border:1px solid var(--line);border-radius:10px;padding:8px 11px}
+.view b{font:700 11.5px var(--font);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(100px,1fr));gap:9px;margin-top:12px}
+.stat{background:var(--ink);border:1px solid var(--line);border-radius:11px;padding:10px}
+.stat b{display:block;font:900 19px var(--disp);line-height:1.15;color:var(--teal)}
+.stat span{font-size:9px;color:var(--dim);text-transform:uppercase;letter-spacing:.1em}
+.stat.s2 b{color:var(--lime)}.stat.s3 b{color:var(--amber)}.stat.s4 b{color:var(--magenta)}.stat.s5 b{color:var(--indigo)}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(430px,100%);z-index:70;background:var(--surface);border-left:1px solid var(--teal);box-shadow:-22px 0 66px rgba(0,0,0,.7);padding:17px;overflow-y:auto;animation:slide .26s cubic-bezier(.2,.7,.2,1) both}
+.scrim{position:fixed;inset:0;z-index:65;background:var(--scrim);backdrop-filter:blur(4px);animation:pop .2s both}
+.code{background:#03080a;border:1px solid var(--line);border-radius:10px;padding:11px;font:10.5px/1.65 var(--mono);color:var(--lime);overflow-x:auto;white-space:pre-wrap;word-break:break-all;margin-top:9px;max-height:280px;overflow-y:auto}
+.toasts{position:fixed;left:14px;bottom:calc(14px + env(safe-area-inset-bottom));z-index:90;display:flex;flex-direction:column;gap:8px;width:min(350px,calc(100vw - 28px))}
+.toast{display:flex;gap:9px;align-items:flex-start;padding:11px 13px;border-radius:12px;border:1px solid var(--line);background:var(--surface2);box-shadow:0 14px 40px rgba(0,0,0,.55);font-size:12px;animation:pop .28s both}
+.toast.ok{border-color:rgba(46,224,106,.5)}.toast.err{border-color:rgba(255,77,77,.5)}.toast.info{border-color:rgba(0,211,167,.5)}
+.toast .x{margin-left:auto;border:0;background:none;color:var(--dim);cursor:pointer;font-size:13px}
+.toast .undo{border:0;background:none;color:var(--lime);font:700 11px var(--font);cursor:pointer;text-decoration:underline}
+.spin{width:14px;height:14px;border:2px solid var(--teal);border-top-color:transparent;border-radius:50%;animation:spin .8s linear infinite;flex:none}
+.empty{text-align:center;padding:24px 14px}
+.empty .ic{font-size:30px;margin-bottom:9px}
+.band{margin-top:16px}
+footer{border-top:1px solid var(--line);padding:22px 0;margin-top:20px;background:rgba(4,9,12,.6)}
+@media (max-width:940px){.hero{grid-template-columns:1fr;justify-items:center;text-align:center}.hero .row{justify-content:center}}
+@media (max-width:720px){
+  :root{--nav:56px}
+  .wrap{padding:0 12px}.nav-in{padding:0 12px;gap:6px}.brand b{display:none}
+  .card{padding:12px}.hide-sm{display:none}.drawer{width:100%}
+  .icon-stage{width:130px;height:130px}.icon-stage canvas{width:112px;height:112px}
+}
+@media (prefers-reduced-motion:reduce){.amb::before,.rise,.pill.ok i,.icon-stage::before,.readiness::after{animation:none!important}*{transition-duration:.01ms!important}}
+</style>
+</head>
+<body>
+<div class="amb"></div><div class="mesh"></div>
+
+<nav class="nav"><div class="nav-in">
+  <a class="brand" href="index.html"><span class="mark">AI</span><b>Установка</b></a>
+  <span class="pill" id="statePill"><i></i><span id="stateText">проверка…</span></span>
+  <div class="nav-right">
+    <button class="btn btn-g btn-s" id="muteBtn" aria-pressed="false">🔔</button>
+    <button class="btn btn-p btn-s" id="installTop">📲 Установить</button>
+    <a class="btn btn-g btn-s" href="launch.html"><span class="hide-sm">Пускатель</span>🧭</a>
+  </div>
+</div></nav>
+
+<main class="wrap">
+  <div class="card hot rise">
+    <div class="hero">
+      <div class="icon-stage">
+        <canvas id="iconCv" width="264" height="264" aria-label="Иконка приложения"></canvas>
+        <div class="flash" id="iconFlash"></div>
+      </div>
+      <div style="min-width:0">
+        <span class="kicker l">Довод до иконки на рабочем столе</span>
+        <h1 id="heroTitle">Готовлю <em>установку</em></h1>
+        <p class="lead" id="heroLead">Страница собирает PNG-иконки 192 и 512, подставляет манифест с абсолютным адресом запуска и включает офлайн-кэш. Каждая проверка ниже показывает, что именно мешает установке, и чинится кнопкой.</p>
+        <div class="row" style="margin-top:13px">
+          <button class="btn btn-p btn-xl" id="installMain">📲 Установить приложение</button>
+          <button class="btn btn-g" id="coachBtn">Показать шаги вручную</button>
+          <button class="btn btn-c btn-s" id="fixAll">⟳ Починить всё</button>
+        </div>
+        <div class="readiness"><i id="readyBar"></i></div>
+        <div class="row" style="margin-top:9px">
+          <span class="chip" id="readyChip">готовность: —</span>
+          <span class="chip" id="mfChip">манифест: —</span>
+          <span class="chip" id="swChip">офлайн: —</span>
+          <span class="chip" id="icChip">иконки: —</span>
+        </div>
+        <div class="stats" id="stats"></div>
+      </div>
+    </div>
+    <div class="checks" id="checks"></div>
+    <div class="coach hidden" id="coach">
+      <div class="step" id="cs1"><span class="n">1</span><span><b>Android · Chrome:</b> меню «⋮» справа сверху → <b>Установить приложение</b>. Если такого пункта нет — <b>Добавить на главный экран</b> или <b>Создать ярлык</b>. Ярлык даёт ту же иконку и тот же адрес.</span></div>
+      <div class="step" id="cs2"><span class="n">2</span><span><b>Яндекс.Браузер:</b> меню «⋮» → <b>Добавить ярлык</b> / <b>На главный экран</b>.</span></div>
+      <div class="step" id="cs3"><span class="n">3</span><span><b>Samsung Internet:</b> меню «☰» → <b>Добавить страницу в</b> → <b>Главный экран</b>.</span></div>
+      <div class="step" id="cs4"><span class="n">4</span><span><b>iPhone · Safari:</b> кнопка <b>Поделиться</b> (квадрат со стрелкой вверх) → <b>На экран «Домой»</b> → <b>Добавить</b>. Safari не ставит из манифеста — это единственный путь.</span></div>
+      <div class="step" id="cs5"><span class="n">5</span><span>Иконка появилась на рабочем столе. Открывайте студию только через неё — адрес всегда правильный, старый сайт не подставится.</span></div>
+    </div>
+  </div>
+
+  <section class="card band rise" style="animation-delay:.06s">
+    <div class="row" style="justify-content:space-between;margin-bottom:10px">
+      <div><span class="kicker">Иконка приложения</span><h2 style="margin:6px 0 0">Соберите свою — применяется к установке сразу</h2></div>
+      <span class="row">
+        <button class="btn btn-g btn-s" id="icReset">↺ Сброс</button>
+        <button class="btn btn-g btn-s" id="icRandom">🎲 Случайно</button>
+      </span>
+    </div>
+    <div class="deck">
+      <div class="ctrl"><label class="lbl" for="icShape">Форма</label><select class="select" id="icShape"><option value="squircle">Скруглённый квадрат</option><option value="circle">Круг</option><option value="hex">Шестиугольник</option><option value="shield">Щит</option></select></div>
+      <div class="ctrl"><label class="lbl" for="icPalette">Палитра</label><select class="select" id="icPalette"><option value="mint">Мята</option><option value="circuit">Схема</option><option value="candy">Карамель</option><option value="ember">Уголь</option></select></div>
+      <div class="ctrl"><label class="lbl" for="icGlyph">Знак</label><select class="select" id="icGlyph"><option value="ai">AI</option><option value="m">M</option><option value="bolt">Молния</option><option value="grid">Сетка</option><option value="ring">Кольцо</option></select></div>
+      <div class="ctrl"><label class="lbl" for="icBg">Фон</label><select class="select" id="icBg"><option value="linear">Градиент</option><option value="mesh">Mesh</option><option value="rays">Лучи</option><option value="solid">Однотонный</option></select></div>
+      <div class="ctrl"><label class="lbl" for="icAccent">Акцент</label><input type="color" id="icAccent" value="#00d3a7"></div>
+      <div class="ctrl"><label class="lbl" for="icSecond">Второй цвет</label><input type="color" id="icSecond" value="#5b6cff"></div>
+      <div class="ctrl"><label class="lbl" for="icRadius">Скругление <span class="val" id="icRadiusVal">24</span></label><input type="range" id="icRadius" min="0" max="50" step="1" value="24"></div>
+      <div class="ctrl"><label class="lbl" for="icGlow">Свечение <span class="val" id="icGlowVal">1.0×</span></label><input type="range" id="icGlow" min="0" max="2.5" step="0.1" value="1"></div>
+      <div class="ctrl"><label class="lbl" for="icGrain">Зерно <span class="val" id="icGrainVal">0.05</span></label><input type="range" id="icGrain" min="0" max="0.3" step="0.01" value="0.05"></div>
+      <div class="ctrl"><label class="lbl" for="icRotate">Поворот знака <span class="val" id="icRotateVal">0°</span></label><input type="range" id="icRotate" min="-30" max="30" step="1" value="0"></div>
+      <div class="ctrl"><label class="lbl" for="icScale">Размер знака <span class="val" id="icScaleVal">1.00×</span></label><input type="range" id="icScale" min="0.6" max="1.4" step="0.02" value="1"></div>
+      <div class="ctrl"><label class="lbl" for="icStroke">Обводка <span class="val" id="icStrokeVal">2</span></label><input type="range" id="icStroke" min="0" max="10" step="1" value="2"></div>
+      <div class="ctrl"><label class="lbl">Сетка</label><div class="row" style="gap:7px"><button class="switch" id="icGrid" role="switch" aria-checked="false" aria-label="Направляющая сетка"></button><span class="note">направляющие</span></div></div>
+      <div class="ctrl"><label class="lbl">Safe-zone</label><div class="row" style="gap:7px"><button class="switch" id="icSafe" role="switch" aria-checked="false" aria-label="Зона maskable"></button><span class="note">для maskable</span></div></div>
+      <div class="ctrl"><label class="lbl">Живой знак</label><div class="row" style="gap:7px"><button class="switch" id="icLive" role="switch" aria-checked="true" aria-label="Пульсация знака"></button><span class="note">пульсация</span></div></div>
+    </div>
+    <div class="row" style="margin-top:11px">
+      <button class="btn btn-a btn-s" id="icPng512">⬇ PNG 512</button>
+      <button class="btn btn-a btn-s" id="icPng192">⬇ PNG 192</button>
+      <button class="btn btn-m btn-s" id="icPngMask">⬇ Maskable 512</button>
+      <button class="btn btn-p btn-s" id="icApply">✓ Применить к установке</button>
+      <span class="note" id="icNote"></span>
+    </div>
+  </section>
+
+  <section class="card band rise" style="animation-delay:.12s">
+    <div class="row" style="justify-content:space-between;margin-bottom:9px">
+      <h2 style="margin:0">🧭 Разделы <span class="chip t" id="secCount">0</span></h2>
+      <span class="row">
+        <button class="btn btn-g btn-s" id="pinAll">Закрепить все</button>
+        <button class="btn btn-g btn-s" id="saveView">＋ Сохранить вид</button>
+      </span>
+    </div>
+    <div class="row" style="margin-bottom:9px">
+      <input class="input" id="q" placeholder="Поиск по названию или описанию…" style="flex:1;min-width:170px">
+      <select class="select" id="sort" style="max-width:190px">
+        <option value="pinned">Сначала закреплённые</option>
+        <option value="manual">Ручной порядок</option>
+        <option value="az">По названию</option>
+        <option value="group">По группе</option>
+        <option value="used">По частоте открытия</option>
+      </select>
+    </div>
+    <div class="filters" id="filters" style="margin-bottom:10px"></div>
+    <div class="bulk">
+      <label class="row" style="gap:6px;font-size:11.5px;cursor:pointer"><input type="checkbox" id="selAll" style="accent-color:var(--cyan);width:15px;height:15px">Выбрать все</label>
+      <span class="chip c" id="selN">0 выбрано</span>
+      <span class="row" style="margin-left:auto">
+        <button class="btn btn-g btn-s" id="copySel" disabled>📋 Ссылки</button>
+        <button class="btn btn-g btn-s" id="pinSel" disabled>📌 Закрепить</button>
+        <button class="btn btn-r btn-s" id="unpinSel" disabled>✕ Снять</button>
+      </span>
+    </div>
+    <div class="grid" id="grid"></div>
+    <div class="views" id="views"></div>
+    <p class="note" style="margin-top:10px">Закреплённые разделы становятся ярлыками приложения при установке —长按 иконку на рабочем столе покажет их. При сортировке «Ручной порядок» плитки перетаскиваются за ⠿.</p>
+  </section>
+
+  <section class="card band rise" style="animation-delay:.18s">
+    <span class="kicker a">Офлайн и проверка</span>
+    <h2 style="margin-top:6px">Чтобы работало без сети</h2>
+    <div class="row">
+      <button class="btn btn-c btn-s" id="warmBtn">📥 Загрузить все разделы в кэш</button>
+      <button class="btn btn-g btn-s" id="swRetry">⟳ Перезапустить сервис-воркер</button>
+      <a class="btn btn-g btn-s" href="status.html">📊 Состояние проекта</a>
+    </div>
+    <div class="note" style="margin-top:9px" id="warmNote"></div>
+    <div class="checks" id="envChecks"></div>
+  </section>
+</main>
+
+<footer><div class="wrap row" style="justify-content:space-between">
+  <span class="note">AI Marketing Studio · установка · иконки и манифест собираются на устройстве</span>
+  <span class="row"><a class="btn btn-g btn-s" href="index.html">Витрина</a><a class="btn btn-p btn-s" href="launch.html">Пускатель</a></span>
+</div></footer>
+
+<div id="drawerHost"></div>
+<div class="toasts" id="toasts" role="status" aria-live="polite"></div>
+
+<script>
+"use strict";
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;");
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const RM=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const uid=p=>(p||"x")+Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+const store={get(k){try{return localStorage.getItem(k)}catch{return null}},set(k,v){try{localStorage.setItem(k,v);return true}catch{return false}},del(k){try{localStorage.removeItem(k)}catch{}}};
+const arrOf=k=>{try{const v=JSON.parse(store.get(k)||"[]");return Array.isArray(v)?v:[]}catch{return[]}};
+const objOf=k=>{try{const v=JSON.parse(store.get(k)||"{}");return v&&typeof v==="object"&&!Array.isArray(v)?v:{}}catch{return{}}};
+const abs=p=>{try{return new URL(p,location.href).href}catch{return p}};
+
+/* ---------- sound ---------- */
+let ac=null,muted=store.get("install_mute")==="1";
+function paintMute(){$("muteBtn").textContent=muted?"🔇":"🔔";$("muteBtn").setAttribute("aria-pressed",String(muted));$("muteBtn").title=muted?"Звук выключен":"Звук включён"}
+function beep(kind){
+  if(muted)return;
+  try{
+    if(!ac)ac=new (window.AudioContext||window.webkitAudioContext)();
+    if(ac.state==="suspended")ac.resume();
+    const t=ac.currentTime,o=ac.createOscillator(),g=ac.createGain();
+    const map={ok:[720,.18,"sine"],installed:[880,.3,"sine"],err:[170,.24,"sawtooth"],tick:[940,.04,"triangle"],shutter:[1240,.06,"square"],pin:[580,.1,"triangle"],open:[500,.13,"sine"]};
+    const[f,d,w]=map[kind]||map.tick;
+    o.type=w;o.frequency.setValueAtTime(f,t);
+    if(kind==="ok"||kind==="open")o.frequency.exponentialRampToValueAtTime(f*1.5,t+d);
+    if(kind==="installed"){o.frequency.setValueAtTime(f,t);o.frequency.exponentialRampToValueAtTime(f*2,t+d*.6)}
+    if(kind==="shutter")o.frequency.exponentialRampToValueAtTime(f*.4,t+d);
+    g.gain.setValueAtTime(.0001,t);
+    g.gain.exponentialRampToValueAtTime(kind==="tick"?.022:.065,t+.012);
+    g.gain.exponentialRampToValueAtTime(.0001,t+d);
+    o.connect(g);g.connect(ac.destination);o.start(t);o.stop(t+d+.02);
+  }catch{}
+}
+$("muteBtn").onclick=()=>{muted=!muted;store.set("install_mute",muted?"1":"0");paintMute();if(!muted)beep("tick")};
+document.addEventListener("pointerdown",()=>{if(ac&&ac.state==="suspended")ac.resume()},{once:true});
+paintMute();
+
+function toast(msg,type="ok",undo){
+  const t=document.createElement("div");t.className="toast "+type;
+  t.innerHTML=`<span>${type==="ok"?"✅":type==="err"?"⛔":"ℹ️"}</span><span>${esc(msg)}</span>`+(undo?`<button class="undo">Отменить</button>`:"")+`<button class="x" aria-label="Закрыть">✕</button>`;
+  t.querySelector(".x").onclick=()=>t.remove();
+  if(undo)t.querySelector(".undo").onclick=()=>{try{undo()}finally{t.remove()}};
+  $("toasts").appendChild(t);setTimeout(()=>t.remove(),undo?9000:4400);
+}
+async function copy(text){
+  const s=String(text??"");if(!s)return toast("Нечего копировать","info");
+  try{if(navigator.clipboard&&window.isSecureContext){await navigator.clipboard.writeText(s);toast("Скопировано");beep("tick");return}}catch{}
+  try{
+    const ta=document.createElement("textarea");ta.value=s;ta.setAttribute("readonly","");
+    ta.style.cssText="position:fixed;top:-2000px;opacity:0";document.body.appendChild(ta);
+    ta.select();ta.setSelectionRange(0,s.length);
+    const ok=document.execCommand("copy");ta.remove();
+    toast(ok?"Скопировано":"Скопируйте вручную",ok?"ok":"info");
+  }catch{toast("Копирование недоступно","err")}
+}
+function download(blob,name){
+  const u=URL.createObjectURL(blob),a=document.createElement("a");
+  a.href=u;a.download=name;document.body.appendChild(a);a.click();a.remove();
+  setTimeout(()=>URL.revokeObjectURL(u),7000);
+}
+function hex2rgb(h){const m=/^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(h)||[,"00","d3","a7"];return[parseInt(m[1],16),parseInt(m[2],16),parseInt(m[3],16)]}
+const rgba=(h,a)=>{const[r,g,b]=hex2rgb(h);return`rgba(${r},${g},${b},${a})`};
+function mix(h1,h2,t){const a=hex2rgb(h1),b=hex2rgb(h2);return`rgb(${Math.round(a[0]+(b[0]-a[0])*t)},${Math.round(a[1]+(b[1]-a[1])*t)},${Math.round(a[2]+(b[2]-a[2])*t)})`}
+
+/* ---------- sections ---------- */
+const SECTIONS=[
+  {id:"launch",ic:"🧭",n:"Пускатель",p:"launch.html",g:"overview",c:"var(--sand)",d:"Все разделы плитками, офлайн-кэш и своя иконка. Хорошая стартовая страница приложения."},
+  {id:"live",ic:"⚡",n:"Генерация",p:"live.html",g:"content",c:"var(--cyan)",d:"Реальный ответ модели по вашему ключу. Шесть провайдеров, потоковый вывод, проверка ключа."},
+  {id:"library",ic:"📚",n:"Библиотека",p:"library.html",g:"content",c:"var(--indigo)",d:"Все записи в одном списке: правка на месте, поиск, сортировки, график-аналитика, экспорт."},
+  {id:"assets",ic:"🎨",n:"Ассеты",p:"assets.html",g:"prod",c:"var(--amber)",d:"Карточки в PNG четырёх форматов до 3× и вертикальный ролик с записью в файл."},
+  {id:"publish",ic:"🚀",n:"Публикация",p:"publish.html",g:"prod",c:"var(--green)",d:"Превью поста в каждой площадке, чек-лист, переход в редактор, отметка о выходе и план недели."},
+  {id:"settings",ic:"⚙️",n:"Настройки и данные",p:"settings.html",g:"service",c:"var(--magenta)",d:"Резервная копия одним файлом, восстановление, ключ, проверка целостности данных."},
+  {id:"status",ic:"📊",n:"Состояние проекта",p:"status.html",g:"service",c:"var(--lime)",d:"Проверка репозитория через API GitHub: файлы, целостность HTML, workflow, сборки."},
+  {id:"vitrine",ic:"🏠",n:"Витрина",p:"index.html",g:"overview",c:"var(--teal)",d:"Обзор конвейера, живой кадр ролика, прогресс из памяти браузера, справочник API."},
+  {id:"studio",ic:"🛒",n:"Студия",p:"app/",g:"overview",c:"#7c5cff",d:"Три вкладки на эталонных данных: парсер, генератор, видеостудия. Работает без ключа."}
+];
+const GROUPS={content:"Контент",prod:"Продакшн",service:"Служебные",overview:"Обзор"};
+const state={
+  pins:new Set(arrOf("install_pins").length?arrOf("install_pins"):["live","library","assets","publish"]),
+  order:arrOf("install_order"),uses:objOf("install_uses"),views:arrOf("install_views"),
+  sel:new Set(),q:"",sort:"pinned",filter:"all",
+  icon:{shape:"squircle",palette:"mint",glyph:"ai",bg:"linear",accent:"#00d3a7",second:"#5b6cff",
+    radius:24,glow:1,grain:.05,rotate:0,scale:1,stroke:2,grid:false,safe:false,live:true},
+  icons:{i192:null,i512:null,mask:null},
+  manifestHref:null,manifestKind:null,swReady:false,swReg:null,promptEvent:null,installed:false,startOk:null
+};
+try{const v=JSON.parse(store.get("install_icon")||"null");if(v&&typeof v==="object")Object.assign(state.icon,v)}catch{}
+SECTIONS.forEach(s=>{if(!state.order.includes(s.id))state.order.push(s.id)});
+function savePins(){store.set("install_pins",JSON.stringify([...state.pins]))}
+function saveOrder(){store.set("install_order",JSON.stringify(state.order))}
+function bumpUse(id){state.uses[id]=(Number(state.uses[id])||0)+1;store.set("install_uses",JSON.stringify(state.uses))}
+
+/* ---------- icon painter ---------- */
+const PAL={
+  mint:["#00d3a7","#5b6cff","#b6ff3d","#ffd9a0"],
+  circuit:["#22d3ee","#5b6cff","#b6ff3d","#ffd9a0"],
+  candy:["#ff2d78","#7c5cff","#22d3ee","#ffb020"],
+  ember:["#ff6a3d","#ffb020","#b6ff3d","#ffd9a0"]
+};
+function shapePath(ctx,shape,x,y,w,h,r){
+  ctx.beginPath();
+  if(shape==="circle"){ctx.arc(x+w/2,y+h/2,Math.min(w,h)/2,0,Math.PI*2);return}
+  if(shape==="hex"){
+    const cx=x+w/2,cy=y+h/2,R=Math.min(w,h)/2;
+    for(let i=0;i<6;i++){const a=-Math.PI/2+i*Math.PI/3,px=cx+Math.cos(a)*R,py=cy+Math.sin(a)*R;i?ctx.lineTo(px,py):ctx.moveTo(px,py)}
+    ctx.closePath();return;
+  }
+  if(shape==="shield"){
+    const cx=x+w/2;
+    ctx.moveTo(cx,y);ctx.lineTo(x+w,y+h*.22);
+    ctx.quadraticCurveTo(x+w,y+h*.78,cx,y+h);
+    ctx.quadraticCurveTo(x,y+h*.78,x,y+h*.22);ctx.closePath();return;
+  }
+  const rad=Math.max(0,Math.min(r,w/2,h/2));
+  if(ctx.roundRect)ctx.roundRect(x,y,w,h,rad);
+  else{ctx.moveTo(x+rad,y);ctx.arcTo(x+w,y,x+w,y+h,rad);ctx.arcTo(x+w,y+h,x,y+h,rad);ctx.arcTo(x,y+h,x,y,rad);ctx.arcTo(x,y,x+w,y,rad);ctx.closePath()}
+}
+function drawGlyph(ctx,kind,cx,cy,S,color,rot,scale){
+  ctx.save();
+  ctx.translate(cx,cy);ctx.rotate(rot*Math.PI/180);ctx.scale(scale,scale);
+  ctx.fillStyle=color;ctx.strokeStyle=color;ctx.lineJoin="round";ctx.lineCap="round";
+  const u=S/100;
+  if(kind==="ai"){
+    ctx.beginPath();
+    ctx.moveTo(-36*u,38*u);ctx.lineTo(-9*u,-38*u);ctx.lineTo(9*u,-38*u);ctx.lineTo(36*u,38*u);
+    ctx.lineTo(19*u,38*u);ctx.lineTo(13*u,22*u);ctx.lineTo(-13*u,22*u);ctx.lineTo(-19*u,38*u);ctx.closePath();
+    ctx.moveTo(-8*u,8*u);ctx.lineTo(8*u,8*u);ctx.lineTo(0,-14*u);ctx.closePath();
+    ctx.fill("evenodd");
+    ctx.beginPath();
+    if(ctx.roundRect)ctx.roundRect(44*u,-38*u,15*u,76*u,4*u);else ctx.rect(44*u,-38*u,15*u,76*u);
+    ctx.fill();
+  }else if(kind==="m"){
+    ctx.lineWidth=13*u;
+    ctx.beginPath();ctx.moveTo(-36*u,38*u);ctx.lineTo(-36*u,-38*u);ctx.lineTo(0,10*u);ctx.lineTo(36*u,-38*u);ctx.lineTo(36*u,38*u);ctx.stroke();
+  }else if(kind==="bolt"){
+    ctx.beginPath();ctx.moveTo(10*u,-46*u);ctx.lineTo(-26*u,6*u);ctx.lineTo(-2*u,6*u);
+    ctx.lineTo(-12*u,46*u);ctx.lineTo(28*u,-8*u);ctx.lineTo(2*u,-8*u);ctx.closePath();ctx.fill();
+  }else if(kind==="ring"){
+    ctx.lineWidth=12*u;
+    ctx.beginPath();ctx.arc(0,0,32*u,0,Math.PI*2);ctx.stroke();
+    ctx.beginPath();ctx.arc(0,-32*u,9*u,0,Math.PI*2);ctx.fill();
+  }else{
+    for(let r=0;r<3;r++)for(let c=0;c<3;c++){
+      const s=(r===1&&c===1)?18*u:13*u;
+      const px=(c-1)*28*u-s/2,py=(r-1)*28*u-s/2;
+      ctx.beginPath();
+      if(ctx.roundRect)ctx.roundRect(px,py,s,s,3*u);else ctx.rect(px,py,s,s);
+      ctx.fill();
+    }
+  }
+  ctx.restore();
+}
+function paintIcon(ctx,S,c,o){
+  const maskable=!!o.maskable,pulse=o.pulse||1;
+  const pal=PAL[c.palette]||PAL.mint;
+  const inset=maskable?S*.1:0,inner=S-inset*2;
+  ctx.save();
+  if(maskable){ctx.fillStyle=mix(c.accent,"#04090c",.5);ctx.fillRect(0,0,S,S)}
+  ctx.translate(inset,inset);
+  const T=inner,pad=T*.055,size=T-pad*2;
+  ctx.save();
+  shapePath(ctx,c.shape,pad,pad,size,size,size*(c.radius/100));ctx.clip();
+  ctx.fillStyle="#04090c";ctx.fillRect(0,0,T,T);
+  if(c.bg==="solid"){
+    const g=ctx.createLinearGradient(pad,pad,pad+size,pad+size);
+    g.addColorStop(0,mix(c.accent,"#04090c",.35));g.addColorStop(1,mix(c.accent,"#04090c",.62));
+    ctx.fillStyle=g;ctx.fillRect(0,0,T,T);
+  }else if(c.bg==="mesh"){
+    ctx.fillStyle=mix(c.accent,"#04090c",.72);ctx.fillRect(0,0,T,T);
+    [[.82,.16,.52,c.accent],[.16,.86,.55,c.second],[.5,.5,.42,pal[2]]].forEach(([fx,fy,fr,col])=>{
+      const g=ctx.createRadialGradient(T*fx,T*fy,0,T*fx,T*fy,T*fr);
+      g.addColorStop(0,rgba(col,.72));g.addColorStop(1,rgba(col,0));
+      ctx.fillStyle=g;ctx.fillRect(0,0,T,T);
+    });
+  }else if(c.bg==="rays"){
+    ctx.fillStyle=mix(c.accent,"#04090c",.66);ctx.fillRect(0,0,T,T);
+    ctx.save();ctx.translate(T*.5,T*.42);ctx.globalCompositeOperation="lighter";
+    for(let i=0;i<14;i++){
+      const a=i/14*Math.PI*2;
+      const g=ctx.createLinearGradient(0,0,Math.cos(a)*T,Math.sin(a)*T);
+      g.addColorStop(0,rgba(i%2?c.second:c.accent,.5));g.addColorStop(1,rgba(i%2?c.second:c.accent,0));
+      ctx.fillStyle=g;ctx.beginPath();ctx.moveTo(0,0);ctx.arc(0,0,T,a-.075,a+.075);ctx.closePath();ctx.fill();
+    }
+    ctx.restore();
+  }else{
+    const g=ctx.createLinearGradient(pad,pad,pad+size,pad+size);
+    g.addColorStop(0,c.accent);g.addColorStop(.5,c.second);g.addColorStop(1,pal[3]);
+    ctx.fillStyle=g;ctx.fillRect(0,0,T,T);
+  }
+  const gl=ctx.createRadialGradient(T*.3,T*.24,0,T*.3,T*.24,T*.8);
+  gl.addColorStop(0,rgba("#ffd9a0",.34*clamp(c.glow,0,2)));gl.addColorStop(1,rgba("#ffd9a0",0));
+  ctx.fillStyle=gl;ctx.fillRect(0,0,T,T);
+  if(c.grid&&!maskable){
+    ctx.save();ctx.strokeStyle="rgba(4,9,12,.2)";ctx.lineWidth=Math.max(1,T/220);
+    for(let i=1;i<4;i++){
+      ctx.beginPath();ctx.moveTo(pad+size*i/4,pad);ctx.lineTo(pad+size*i/4,pad+size);ctx.stroke();
+      ctx.beginPath();ctx.moveTo(pad,pad+size*i/4);ctx.lineTo(pad+size,pad+size*i/4);ctx.stroke();
+    }
+    ctx.restore();
+  }
+  ctx.save();ctx.shadowBlur=18*c.glow*(T/132);ctx.shadowColor=rgba("#04090c",.5);
+  drawGlyph(ctx,c.glyph,T/2,T/2,size*.6*pulse,"#f4fffb",c.rotate,c.scale*(maskable?.84:1));
+  ctx.restore();
+  ctx.save();ctx.shadowBlur=12*c.glow*(T/132);ctx.shadowColor=rgba(pal[2],.9);
+  ctx.fillStyle=pal[2];ctx.beginPath();ctx.arc(T*.76,T*.24,size*.045,0,Math.PI*2);ctx.fill();ctx.restore();
+  if(c.grain>0){
+    ctx.save();ctx.globalAlpha=c.grain;
+    const n=Math.round(T*T/240),px=Math.max(1,T/400);
+    for(let i=0;i<n;i++){ctx.fillStyle=Math.random()>.5?"#fff":"#000";ctx.fillRect(Math.random()*T,Math.random()*T,px,px)}
+    ctx.restore();
+  }
+  ctx.restore();
+  if(c.stroke>0){
+    ctx.save();ctx.lineWidth=c.stroke*.6*(T/132);ctx.strokeStyle=rgba(pal[3],.55);
+    shapePath(ctx,c.shape,pad,pad,size,size,size*(c.radius/100));ctx.stroke();ctx.restore();
+  }
+  if(c.safe&&!maskable){
+    ctx.save();ctx.strokeStyle=rgba("#b6ff3d",.75);ctx.lineWidth=Math.max(1,T/180);ctx.setLineDash([T/40,T/40]);
+    ctx.beginPath();ctx.arc(T/2,T/2,size*.4,0,Math.PI*2);ctx.stroke();
+    ctx.setLineDash([]);ctx.fillStyle=rgba("#b6ff3d",.9);
+    ctx.font=`600 ${Math.max(8,T*.062)}px Manrope,sans-serif`;ctx.textAlign="center";
+    ctx.fillText("maskable",T/2,T*.94);ctx.restore();
+  }
+  ctx.restore();
+}
+const cvI=$("iconCv"),cxi=cvI.getContext("2d");
+let iconRaf=null,iconT0=performance.now();
+function renderPreview(now){
+  const c=state.icon,dpr=Math.min(window.devicePixelRatio||1,2),CSS=cvI.clientWidth||132;
+  const W=Math.round(CSS*dpr);
+  if(cvI.width!==W){cvI.width=W;cvI.height=W}
+  cxi.setTransform(dpr,0,0,dpr,0,0);
+  cxi.clearRect(0,0,CSS,CSS);
+  const pulse=c.live&&!RM?1+Math.sin((now-iconT0)/900)*.022:1;
+  paintIcon(cxi,CSS,c,{pulse});
+}
+function iconLoop(now){renderPreview(now);iconRaf=requestAnimationFrame(iconLoop)}
+function startIcon(){if(iconRaf===null&&state.icon.live&&!RM&&!document.hidden){iconT0=performance.now();iconRaf=requestAnimationFrame(iconLoop)}}
+function stopIcon(){if(iconRaf!==null){cancelAnimationFrame(iconRaf);iconRaf=null}}
+function iconKick(){if(state.icon.live&&!RM)startIcon();else{stopIcon();renderPreview(performance.now())}}
+document.addEventListener("visibilitychange",()=>{document.hidden?stopIcon():iconKick()});
+window.addEventListener("resize",()=>renderPreview(performance.now()));
+window.addEventListener("beforeunload",stopIcon);
+function iconCanvas(size,maskable){
+  const cv=document.createElement("canvas");cv.width=size;cv.height=size;
+  paintIcon(cv.getContext("2d"),size,state.icon,{maskable});
+  return cv;
+}
+let manifestTimer=null;
+function syncIcon(rebuild){
+  const c=state.icon;
+  $("icShape").value=c.shape;$("icPalette").value=c.palette;$("icGlyph").value=c.glyph;$("icBg").value=c.bg;
+  $("icAccent").value=c.accent;$("icSecond").value=c.second;
+  $("icRadius").value=c.radius;$("icRadiusVal").textContent=c.radius;
+  $("icGlow").value=c.glow;$("icGlowVal").textContent=c.glow.toFixed(1)+"×";
+  $("icGrain").value=c.grain;$("icGrainVal").textContent=c.grain.toFixed(2);
+  $("icRotate").value=c.rotate;$("icRotateVal").textContent=c.rotate+"°";
+  $("icScale").value=c.scale;$("icScaleVal").textContent=c.scale.toFixed(2)+"×";
+  $("icStroke").value=c.stroke;$("icStrokeVal").textContent=c.stroke;
+  $("icGrid").setAttribute("aria-checked",String(c.grid));
+  $("icSafe").setAttribute("aria-checked",String(c.safe));
+  $("icLive").setAttribute("aria-checked",String(c.live));
+  $("icNote").textContent=`${c.shape} · ${c.glyph} · ${c.bg} · знак ${c.scale.toFixed(2)}× ${c.rotate}°`;
+  store.set("install_icon",JSON.stringify(c));
+  iconKick();
+  if(rebuild){
+    if(manifestTimer)clearTimeout(manifestTimer);
+    manifestTimer=setTimeout(()=>{manifestTimer=null;buildManifest()},420);
+  }
+}
+$("icShape").onchange=e=>{state.icon.shape=e.target.value;syncIcon(true)};
+$("icPalette").onchange=e=>{state.icon.palette=e.target.value;const p=PAL[e.target.value];state.icon.accent=p[0];state.icon.second=p[1];syncIcon(true)};
+$("icGlyph").onchange=e=>{state.icon.glyph=e.target.value;syncIcon(true)};
+$("icBg").onchange=e=>{state.icon.bg=e.target.value;syncIcon(true)};
+$("icAccent").oninput=e=>{state.icon.accent=e.target.value;syncIcon(true)};
+$("icSecond").oninput=e=>{state.icon.second=e.target.value;syncIcon(true)};
+[["icRadius","radius"],["icGlow","glow"],["icGrain","grain"],["icRotate","rotate"],["icScale","scale"],["icStroke","stroke"]].forEach(([id,k])=>{
+  $(id).oninput=e=>{state.icon[k]=+e.target.value;syncIcon(true)};
+});
+[["icGrid","grid"],["icSafe","safe"]].forEach(([id,k])=>{$(id).onclick=()=>{state.icon[k]=!state.icon[k];syncIcon(false)}});
+$("icLive").onclick=()=>{state.icon.live=!state.icon.live;syncIcon(false)};
+$("icReset").onclick=()=>{
+  state.icon={shape:"squircle",palette:"mint",glyph:"ai",bg:"linear",accent:"#00d3a7",second:"#5b6cff",
+    radius:24,glow:1,grain:.05,rotate:0,scale:1,stroke:2,grid:false,safe:false,live:true};
+  syncIcon(true);toast("Иконка сброшена");
+};
+$("icRandom").onclick=()=>{
+  const pick=a=>a[Math.floor(Math.random()*a.length)];
+  const pk=pick(Object.keys(PAL)),p=PAL[pk];
+  Object.assign(state.icon,{shape:pick(["squircle","circle","hex","shield"]),palette:pk,glyph:pick(["ai","m","bolt","grid","ring"]),
+    bg:pick(["linear","mesh","rays","solid"]),accent:p[0],second:p[1],
+    radius:Math.floor(Math.random()*46),glow:+(Math.random()*2.2).toFixed(1),grain:+(Math.random()*.2).toFixed(2),
+    rotate:Math.floor(Math.random()*41)-20,scale:+(.75+Math.random()*.55).toFixed(2),stroke:Math.floor(Math.random()*8)});
+  syncIcon(true);beep("tick");toast("Случайная иконка применена");
+};
+function exportPng(size,maskable,name){
+  const cv=iconCanvas(size,maskable);
+  $("iconFlash").classList.remove("go");void $("iconFlash").offsetWidth;$("iconFlash").classList.add("go");
+  beep("shutter");
+  cv.toBlob(b=>{if(!b)return toast("Не удалось создать PNG","err");download(b,name);toast("Сохранено: "+name)},"image/png");
+}
+$("icPng512").onclick=()=>exportPng(512,false,"icon-512.png");
+$("icPng192").onclick=()=>exportPng(192,false,"icon-192.png");
+$("icPngMask").onclick=()=>exportPng(512,true,"icon-maskable-512.png");
+$("icApply").onclick=()=>{buildManifest();beep("ok");toast("Иконки и манифест пересобраны")};
+
+/* ---------- manifest ---------- */
+function manifestObject(){
+  const pinned=SECTIONS.filter(s=>state.pins.has(s.id)).slice(0,4);
+  return{
+    name:"AI Marketing Studio",short_name:"AI Studio",
+    description:"Конвейер товарного контента: генерация, библиотека, ассеты, публикация.",
+    lang:"ru",dir:"ltr",
+    id:abs("install.html"),
+    start_url:abs("install.html"),
+    scope:abs("./"),
+    display:"standalone",
+    display_override:["standalone","minimal-ui","browser"],
+    orientation:"any",
+    background_color:"#04090c",theme_color:"#00d3a7",
+    categories:["productivity","business","utilities"],
+    icons:[
+      {src:state.icons.i192,sizes:"192x192",type:"image/png",purpose:"any"},
+      {src:state.icons.i512,sizes:"512x512",type:"image/png",purpose:"any"},
+      {src:state.icons.mask,sizes:"512x512",type:"image/png",purpose:"maskable"}
+    ],
+    shortcuts:(pinned.length?pinned:SECTIONS.slice(0,4)).map(s=>({name:s.n,short_name:s.n.slice(0,12),url:abs(s.p)}))
+  };
+}
+function buildManifest(){
+  try{
+    state.icons.i192=iconCanvas(192,false).toDataURL("image/png");
+    state.icons.i512=iconCanvas(512,false).toDataURL("image/png");
+    state.icons.mask=iconCanvas(512,true).toDataURL("image/png");
+    $("appleLink").setAttribute("href",state.icons.i192);
+    $("favLink").setAttribute("type","image/png");
+    $("favLink").setAttribute("href",state.icons.i192);
+    const json=JSON.stringify(manifestObject());
+    let href,kind;
+    try{
+      const blob=new Blob([json],{type:"application/manifest+json"});
+      href=URL.createObjectURL(blob);kind="blob";
+      if(state.manifestHref&&state.manifestHref.startsWith("blob:"))URL.revokeObjectURL(state.manifestHref);
+    }catch{
+      href="data:application/manifest+json;charset=utf-8,"+encodeURIComponent(json);kind="data";
+    }
+    state.manifestHref=href;state.manifestKind=kind;
+    $("mfLink").setAttribute("href",href);
+    $("mfChip").textContent="манифест: "+(kind==="blob"?"blob-ссылка":"data-ссылка");
+    $("mfChip").className="chip t";
+    $("icChip").textContent="иконки: PNG 192 · 512 · maskable";$("icChip").className="chip t";
+    paintChecks();paintReady();
+    return true;
+  }catch(e){
+    $("mfChip").textContent="манифест: базовый файл";$("mfChip").className="chip a";
+    $("icChip").textContent="иконки: не собраны";$("icChip").className="chip r";
+    paintChecks();paintReady();
+    return false;
+  }
+}
+
+/* ---------- service worker ---------- */
+async function initSW(){
+  if(!("serviceWorker" in navigator)){
+    $("swChip").textContent="офлайн: не поддерживается";$("swChip").className="chip r";
+    state.swReady=false;paintChecks();paintReady();return false;
+  }
+  try{
+    const reg=await navigator.serviceWorker.register("sw.js",{scope:"./"});
+    state.swReg=reg;
+    await navigator.serviceWorker.ready;
+    state.swReady=!!(navigator.serviceWorker.controller||reg.active);
+    $("swChip").textContent=state.swReady?"офлайн: активен":"офлайн: регистрируется";
+    $("swChip").className="chip "+(state.swReady?"t":"a");
+  }catch(e){
+    state.swReady=false;
+    $("swChip").textContent="офлайн: файл sw.js недоступен";$("swChip").className="chip r";
+  }
+  paintChecks();paintReady();
+  return state.swReady;
+}
+$("swRetry").onclick=async()=>{
+  const b=$("swRetry");b.disabled=true;const old=b.textContent;b.innerHTML='<span class="spin"></span>';
+  try{
+    if(state.swReg)await state.swReg.update();
+    await initSW();buildManifest();
+    toast(state.swReady?"Сервис-воркер активен":"sw.js не отвечает — проверьте файл в docs","info");
+  }finally{b.disabled=false;b.textContent=old}
+};
+$("warmBtn").onclick=async()=>{
+  const b=$("warmBtn");b.disabled=true;const old=b.textContent;
+  let ok=0,fail=0;
+  for(let i=0;i<SECTIONS.length;i++){
+    const s=SECTIONS[i];
+    b.innerHTML=`<span class="spin"></span> ${i+1}/${SECTIONS.length}`;
+    try{const r=await fetch(s.p,{cache:"reload"});if(r.ok)ok++;else fail++}catch{fail++}
+    $("warmNote").textContent=`Загружено ${ok} из ${SECTIONS.length}${fail?`, недоступно ${fail}`:""}`;
+  }
+  b.disabled=false;b.textContent=old;beep(fail?"err":"ok");
+  toast(fail?`В кэше ${ok}, недоступно ${fail}`:`Все ${ok} разделов доступны офлайн`,fail?"info":"ok");
+};
+
+/* ---------- start_url reachability ---------- */
+async function checkStart(){
+  try{
+    const r=await fetch(abs("install.html"),{cache:"no-store"});
+    state.startOk=r.ok;
+  }catch{state.startOk=null}
+  paintChecks();paintReady();
+}
+
+/* ---------- install ---------- */
+const isIOS=/iPad|iPhone|iPod/.test(navigator.userAgent)&&!window.MSStream;
+const isYandex=/YaBrowser/i.test(navigator.userAgent);
+const isSamsung=/SamsungBrowser/i.test(navigator.userAgent);
+const standalone=window.matchMedia("(display-mode: standalone)").matches||navigator.standalone===true;
+state.installed=standalone;
+function paintInstallBtn(){
+  const label=state.installed?"✓ Установлено":state.promptEvent?"📲 Установить приложение":isIOS?"📲 Как установить на iPhone":"📲 Способ установки";
+  $("installMain").textContent=label;
+  $("installTop").textContent=state.installed?"✓":"📲";
+  $("installMain").disabled=state.installed;$("installTop").disabled=state.installed;
+  $("cs5").classList.toggle("done",state.installed);
+}
+window.addEventListener("beforeinstallprompt",e=>{
+  e.preventDefault();state.promptEvent=e;paintInstallBtn();paintChecks();paintReady();
+  toast("Браузер разрешил установку — нажмите большую кнопку","ok");
+});
+window.addEventListener("appinstalled",()=>{
+  state.installed=true;state.promptEvent=null;
+  paintInstallBtn();paintChecks();paintReady();paintStats();
+  beep("installed");toast("Приложение установлено — иконка на рабочем столе","ok");
+  $("heroTitle").innerHTML='Готово: <em>иконка на рабочем столе</em>';
+  $("heroLead").textContent="Открывайте студию через иконку. Долгое нажатие на неё покажет ярлыки закреплённых разделов.";
+});
+async function doInstall(){
+  if(state.installed)return toast("Уже открыто как приложение","info");
+  if(!state.icons.i512)buildManifest();
+  if(state.promptEvent){
+    try{
+      state.promptEvent.prompt();
+      const r=await state.promptEvent.userChoice;
+      if(r&&r.outcome==="accepted"){beep("ok");toast("Установка началась")}
+      else toast("Установка отменена — можно вернуться позже","info");
+    }catch{
+      $("coach").classList.remove("hidden");
+      $("coach").scrollIntoView({behavior:"smooth",block:"center"});
+      toast("Браузер не показал окно — используйте шаги ниже","info");
+    }
+    state.promptEvent=null;paintInstallBtn();paintChecks();paintReady();return;
+  }
+  $("coach").classList.remove("hidden");
+  $("coach").scrollIntoView({behavior:"smooth",block:"center"});
+  beep("tick");
+  toast(isIOS?"Safari: Поделиться → На экран «Домой»":isYandex?"Меню «⋮» → Добавить ярлык":isSamsung?"Меню «☰» → Добавить страницу в → Главный экран":"Меню «⋮» → Установить приложение / Создать ярлык","info");
+}
+$("installMain").onclick=doInstall;
+$("installTop").onclick=doInstall;
+$("coachBtn").onclick=()=>{
+  const b=$("coach");b.classList.toggle("hidden");
+  if(!b.classList.contains("hidden"))b.scrollIntoView({behavior:"smooth",block:"center"});
+  beep("tick");
+};
+$("fixAll").onclick=async()=>{
+  const b=$("fixAll");b.disabled=true;const old=b.textContent;b.innerHTML='<span class="spin"></span> Чиню…';
+  buildManifest();
+  await initSW();
+  await checkStart();
+  buildManifest();
+  b.disabled=false;b.textContent=old;
+  paintChecks();paintReady();paintInstallBtn();beep("ok");
+  toast(state.promptEvent?"Всё готово — нажмите «Установить»":"Проверки обновлены. Если Chrome предлагает только ярлык — это равноценный путь.","info");
+};
+
+/* ---------- checks ---------- */
+function checkRows(){
+  const https=location.protocol==="https:"||location.hostname==="localhost"||location.hostname==="127.0.0.1";
+  const rows=[];
+  rows.push(https?{s:"ok",t:"Защищённое соединение",d:location.protocol+"//"+location.host}
+    :{s:"err",t:"Нужен HTTPS",d:location.protocol,fix:"Откройте страницу по адресу https://…github.io/… — по http или file:// установка невозможна.",act:"none"});
+  rows.push(state.icons.i512?{s:"ok",t:"Иконки PNG 192 и 512 собраны",d:"canvas → toDataURL"}
+    :{s:"err",t:"Иконки не собраны",d:"canvas недоступен",fix:"Нажмите «Применить к установке». В приватном режиме canvas может быть заблокирован — откройте обычное окно.",act:"icons"});
+  rows.push(state.manifestHref?{s:"ok",t:"Манифест подставлен в страницу",d:(state.manifestKind==="blob"?"blob":"data")+" · display: standalone · start_url абсолютный"}
+    :{s:"warn",t:"Используется базовый manifest.webmanifest",d:"в нём только SVG",fix:"Chrome требует PNG 192 и 512. Нажмите «Применить к установке» — манифест будет пересобран с PNG.",act:"icons"});
+  rows.push(state.swReady?{s:"ok",t:"Сервис-воркер активен",d:"sw.js · scope ./"}
+    :{s:"err",t:"Сервис-воркер не активен",d:"sw.js",fix:"Chrome требует сервис-воркер для окна установки. Нажмите «Перезапустить сервис-воркер». Если не помогает — файл docs/sw.js отсутствует или сборка Pages не зелёная.",act:"sw"});
+  rows.push(state.startOk===true?{s:"ok",t:"Адрес запуска отвечает",d:abs("install.html")}
+    :state.startOk===false?{s:"err",t:"Адрес запуска не отвечает",d:abs("install.html"),fix:"Файл install.html должен лежать в docs и быть опубликован. Дождитесь зелёной сборки в Actions.",act:"none"}
+    :{s:"warn",t:"Адрес запуска ещё не проверен",d:"нажмите «Починить всё»",act:"none"});
+  rows.push(state.installed?{s:"ok",t:"Приложение установлено",d:"display-mode: standalone"}
+    :state.promptEvent?{s:"ok",t:"Браузер разрешил установку",d:"beforeinstallprompt получен"}
+    :{s:"warn",t:"Браузер пока не предложил установку",d:"beforeinstallprompt не пришёл",
+      fix:"Chrome показывает предложение не сразу: нужно около 30 секунд взаимодействия и повторный визит. Нажмите «Починить всё», подождите полминуты. Либо используйте «Создать ярлык» — иконка и адрес будут те же.",act:"coach"});
+  if(isIOS)rows.push({s:"warn",t:"Safari не устанавливает из манифеста",d:"iOS",fix:"Поделиться → На экран «Домой» → Добавить. Это единственный поддерживаемый путь на iPhone.",act:"coach"});
+  if(isYandex)rows.push({s:"warn",t:"Яндекс.Браузер ставит ярлык, а не PWA",d:"YaBrowser",fix:"Меню «⋮» → Добавить ярлык / На главный экран. Результат тот же: иконка открывает студию.",act:"coach"});
+  if(isSamsung)rows.push({s:"warn",t:"Samsung Internet: путь через меню",d:"SamsungBrowser",fix:"Меню «☰» → Добавить страницу в → Главный экран.",act:"coach"});
+  return rows;
+}
+function paintChecks(){
+  const rows=checkRows();
+  $("checks").innerHTML=rows.map((r,i)=>`<div class="chk ${r.s}">
+    <span class="ic">${r.s==="ok"?"✓":r.s==="warn"?"!":"✕"}</span>
+    <div style="min-width:0"><b style="font:700 12.5px var(--font)">${esc(r.t)}</b>
+      ${r.d?`<div class="note" style="word-break:break-all;margin-top:3px">${esc(r.d)}</div>`:""}
+      ${r.fix?`<div class="fix">${esc(r.fix)}</div>`:""}</div>
+    ${r.act&&r.act!=="none"?`<button class="btn btn-g btn-s" data-act="${r.act}" data-i="${i}">${r.act==="icons"?"Собрать":r.act==="sw"?"Запустить":"Шаги"}</button>`:"<span></span>"}
+  </div>`).join("");
+  $("checks").querySelectorAll("[data-act]").forEach(b=>b.onclick=()=>{
+    const a=b.dataset.act;
+    if(a==="icons"){buildManifest();beep("ok");toast("Иконки и манифест пересобраны")}
+    else if(a==="sw")$("swRetry").click();
+    else{$("coach").classList.remove("hidden");$("coach").scrollIntoView({behavior:"smooth",block:"center"})}
+  });
+  const env=[];
+  env.push(navigator.onLine?{s:"ok",t:"Сеть есть",d:"онлайн"}:{s:"warn",t:"Сети нет",d:"офлайн",fix:"Установка требует сети. Разделы, открытые ранее, продолжают работать из кэша."});
+  env.push(window.MediaRecorder?{s:"ok",t:"Запись ролика поддерживается",d:"MediaRecorder"}:{s:"warn",t:"Запись ролика недоступна",d:"MediaRecorder",fix:"Карточки PNG работают везде. Ролик можно записать в Chrome на Android."});
+  env.push(navigator.clipboard&&window.isSecureContext?{s:"ok",t:"Буфер обмена доступен",d:"clipboard API"}:{s:"warn",t:"Буфер обмена через резервный способ",d:"execCommand",fix:"Копирование всё равно работает."});
+  $("envChecks").innerHTML=env.map(r=>`<div class="chk ${r.s}">
+    <span class="ic">${r.s==="ok"?"✓":"!"}</span>
+    <div style="min-width:0"><b style="font:700 12.5px var(--font)">${esc(r.t)}</b>
+      ${r.d?`<div class="note" style="margin-top:3px">${esc(r.d)}</div>`:""}
+      ${r.fix?`<div class="fix">${esc(r.fix)}</div>`:""}</div><span></span></div>`).join("");
+}
+function paintReady(){
+  const rows=checkRows().filter(r=>!/Safari|Яндекс|Samsung/.test(r.t));
+  const ok=rows.filter(r=>r.s==="ok").length;
+  const pct=Math.round(ok/Math.max(1,rows.length)*100);
+  $("readyBar").style.width=pct+"%";
+  $("readyChip").textContent=`готовность: ${ok}/${rows.length} · ${pct}%`;
+  $("readyChip").className="chip "+(pct===100?"g":pct>=60?"a":"r");
+  const pill=$("statePill");
+  if(state.installed){pill.className="pill ok";$("stateText").textContent="установлено"}
+  else if(state.promptEvent){pill.className="pill ok";$("stateText").textContent="можно ставить"}
+  else if(pct>=80){pill.className="pill warn";$("stateText").textContent="почти готово"}
+  else{pill.className="pill err";$("stateText").textContent="нужна починка"}
+  if(state.installed){
+    $("heroTitle").innerHTML='Готово: <em>иконка на рабочем столе</em>';
+    $("heroLead").textContent="Открывайте студию через иконку. Долгое нажатие на неё покажет ярлыки закреплённых разделов.";
+  }else if(state.promptEvent){
+    $("heroTitle").innerHTML='Всё готово — <em>можно устанавливать</em>';
+    $("heroLead").textContent="Браузер подтвердил готовность. Нажмите большую кнопку и подтвердите установку во всплывающем окне.";
+  }else if(pct>=80){
+    $("heroTitle").innerHTML='Почти готово: <em>остался ярлык</em>';
+    $("heroLead").textContent="Технические проверки пройдены. Если Chrome не показывает окно установки — «Создать ярлык» в меню даёт ту же иконку и тот же адрес.";
+  }
+}
+function paintStats(){
+  const gens=arrOf("lv_hist"),real=gens.filter(g=>!g.seeded);
+  const cards=real.reduce((n,g)=>n+((g?.result?.cards||[]).length),0);
+  let published=0;
+  Object.values(objOf("pub_state")).forEach(p=>{if(p?.platforms)Object.values(p.platforms).forEach(x=>{if(x?.status==="done")published++})});
+  $("stats").innerHTML=[
+    ["",state.pins.size,"закреплено"],["s2",real.length,"генераций"],["s3",cards,"карточек"],
+    ["s4",published,"вышло"],["s5",state.installed?1:0,"установлено"]
+  ].map(([c,v,l])=>`<div class="stat ${c}"><b>${esc(v)}</b><span>${esc(l)}</span></div>`).join("");
+}
+
+/* ---------- grid ---------- */
+function view(){
+  let l=SECTIONS.slice();
+  if(state.filter==="pinned")l=l.filter(s=>state.pins.has(s.id));
+  else if(state.filter!=="all")l=l.filter(s=>s.g===state.filter);
+  const q=state.q.trim().toLowerCase();
+  if(q)l=l.filter(s=>(s.n+" "+s.d+" "+s.p).toLowerCase().includes(q));
+  const cmp={
+    pinned:(a,b)=>(state.pins.has(b.id)?1:0)-(state.pins.has(a.id)?1:0)||a.n.localeCompare(b.n,"ru"),
+    manual:(a,b)=>state.order.indexOf(a.id)-state.order.indexOf(b.id),
+    az:(a,b)=>a.n.localeCompare(b.n,"ru"),
+    group:(a,b)=>a.g.localeCompare(b.g)||a.n.localeCompare(b.n,"ru"),
+    used:(a,b)=>(Number(state.uses[b.id])||0)-(Number(state.uses[a.id])||0)||a.n.localeCompare(b.n,"ru")
+  }[state.sort];
+  return l.sort(cmp);
+}
+function paintFilters(){
+  const base=[["all","Все"],["pinned","Закреплённые"]];
+  $("filters").innerHTML=base.map(([k,n])=>`<button class="fchip${state.filter===k?" on":""}" data-f="${k}">${n}</button>`).join("")
+    +Object.entries(GROUPS).map(([k,n])=>`<button class="fchip${state.filter===k?" on":""}" data-f="${k}">${n}</button>`).join("");
+  $("filters").querySelectorAll("[data-f]").forEach(b=>b.onclick=()=>{state.filter=b.dataset.f;paintFilters();paintGrid();beep("tick")});
+}
+function paintGrid(){
+  const l=view();
+  $("secCount").textContent=`${l.length} / ${SECTIONS.length}`;
+  $("grid").innerHTML=l.length?l.map(s=>{
+    const pinned=state.pins.has(s.id),uses=Number(state.uses[s.id])||0;
+    return `<div class="tile${state.sel.has(s.id)?" sel":""}" style="--tc:${s.c}" data-id="${s.id}" draggable="${state.sort==="manual"}">
+      <div class="top">
+        <input type="checkbox" data-sel="${s.id}" ${state.sel.has(s.id)?"checked":""} aria-label="Выбрать ${esc(s.n)}">
+        <span class="ic">${s.ic}</span>
+        <button class="pin${pinned?" on":""}" data-pin="${s.id}" aria-pressed="${pinned}">${pinned?"📌 закреплено":"📌 закрепить"}</button>
+        ${state.sort==="manual"?'<span class="grip" aria-hidden="true">⠿</span>':""}
+      </div>
+      <b>${esc(s.n)}</b>
+      <div class="path">${esc(s.p)}</div>
+      <p class="note">${esc(s.d)}</p>
+      <div class="row" style="gap:5px"><span class="chip">${esc(GROUPS[s.g])}</span>${uses?`<span class="chip c">открыто ${uses}</span>`:""}</div>
+      <div class="acts">
+        <a class="btn btn-p btn-s" href="${esc(s.p)}" data-open="${s.id}">Открыть</a>
+        <button class="btn btn-g btn-s" data-detail="${s.id}">Детали</button>
+      </div></div>`;
+  }).join(""):`<div class="empty"><div class="ic">🔍</div><p class="note">Ничего не найдено. Измените фильтр или очистите поиск.</p></div>`;
+  $("grid").querySelectorAll("[data-sel]").forEach(c=>c.onchange=e=>{
+    e.stopPropagation();c.checked?state.sel.add(c.dataset.sel):state.sel.delete(c.dataset.sel);
+    c.closest(".tile").classList.toggle("sel",c.checked);paintBulk();beep("tick");
+  });
+  $("grid").querySelectorAll("[data-pin]").forEach(b=>b.onclick=e=>{e.stopPropagation();togglePin(b.dataset.pin)});
+  $("grid").querySelectorAll("[data-detail]").forEach(b=>b.onclick=e=>{e.stopPropagation();openDetail(b.dataset.detail)});
+  $("grid").querySelectorAll("[data-open]").forEach(a=>a.addEventListener("click",()=>{bumpUse(a.dataset.open);beep("open")}));
+  if(state.sort==="manual"){
+    let dragId=null;
+    $("grid").querySelectorAll(".tile").forEach(el=>{
+      el.ondragstart=()=>{dragId=el.dataset.id;el.classList.add("drag")};
+      el.ondragend=()=>{dragId=null;el.classList.remove("drag")};
+      el.ondragover=e=>e.preventDefault();
+      el.ondrop=e=>{
+        e.preventDefault();const to=el.dataset.id;if(!dragId||dragId===to)return;
+        const from=state.order.indexOf(dragId),ti=state.order.indexOf(to);
+        if(from<0||ti<0)return;
+        state.order.splice(ti,0,state.order.splice(from,1)[0]);
+        saveOrder();paintGrid();toast("Порядок обновлён");
+      };
+    });
+  }
+  paintBulk();paintFilters();
+}
+function paintBulk(){
+  const n=state.sel.size;
+  $("selN").textContent=n+" выбрано";
+  ["copySel","pinSel","unpinSel"].forEach(id=>$(id).disabled=!n);
+  const v=view();$("selAll").checked=v.length>0&&v.every(s=>state.sel.has(s.id));
+}
+function togglePin(id){
+  const was=state.pins.has(id);
+  was?state.pins.delete(id):state.pins.add(id);
+  savePins();paintGrid();paintStats();buildManifest();beep("pin");
+  const s=SECTIONS.find(x=>x.id===id);
+  toast(`${s?s.n:id}: ${was?"снято с закрепа":"закреплено"}`,"info",()=>{
+    was?state.pins.add(id):state.pins.delete(id);savePins();paintGrid();paintStats();buildManifest();
+  });
+}
+$("selAll").onchange=()=>{
+  const v=view();
+  $("selAll").checked?v.forEach(s=>state.sel.add(s.id)):v.forEach(s=>state.sel.delete(s.id));
+  paintGrid();
+};
+$("copySel").onclick=()=>copy(SECTIONS.filter(s=>state.sel.has(s.id)).map(s=>`${s.n}: ${abs(s.p)}`).join("\n"));
+$("pinSel").onclick=()=>{
+  const before=new Set(state.pins);
+  state.sel.forEach(id=>state.pins.add(id));
+  savePins();state.sel.clear();paintGrid();paintStats();buildManifest();beep("pin");
+  toast("Закреплено","ok",()=>{state.pins=before;savePins();paintGrid();paintStats();buildManifest()});
+};
+$("unpinSel").onclick=()=>{
+  const before=new Set(state.pins);
+  state.sel.forEach(id=>state.pins.delete(id));
+  savePins();state.sel.clear();paintGrid();paintStats();buildManifest();beep("tick");
+  toast("Снято с закрепа","info",()=>{state.pins=before;savePins();paintGrid();paintStats();buildManifest()});
+};
+$("pinAll").onclick=()=>{
+  const before=new Set(state.pins);
+  const all=state.pins.size===SECTIONS.length;
+  state.pins=all?new Set():new Set(SECTIONS.map(s=>s.id));
+  savePins();paintGrid();paintStats();buildManifest();beep("pin");
+  toast(all?"Все сняты с закрепа":"Все разделы закреплены","info",()=>{state.pins=before;savePins();paintGrid();paintStats();buildManifest()});
+};
+$("q").oninput=e=>{state.q=e.target.value;paintGrid()};
+$("sort").onchange=e=>{state.sort=e.target.value;paintGrid()};
+$("saveView").onclick=()=>{
+  const v={id:uid("v"),name:`${state.filter}${state.q?` · «${state.q}»`:""} · ${state.sort}`,filter:state.filter,q:state.q,sort:state.sort};
+  state.views.unshift(v);state.views=state.views.slice(0,8);
+  store.set("install_views",JSON.stringify(state.views));paintViews();
+  toast("Вид сохранён","ok",()=>{state.views=state.views.filter(x=>x.id!==v.id);store.set("install_views",JSON.stringify(state.views));paintViews()});
+};
+function paintViews(){
+  $("views").innerHTML=state.views.length?state.views.map(v=>`<div class="view"><span class="chip t">вид</span><b>${esc(v.name)}</b>
+    <button class="btn btn-g btn-s" data-apply="${esc(v.id)}">Применить</button>
+    <button class="btn btn-g btn-s" style="color:var(--red)" data-vdel="${esc(v.id)}" aria-label="Удалить вид">✕</button></div>`).join(""):"";
+  $("views").querySelectorAll("[data-apply]").forEach(b=>b.onclick=()=>{
+    const v=state.views.find(x=>x.id===b.dataset.apply);if(!v)return;
+    state.filter=v.filter;state.q=v.q;state.sort=v.sort;
+    $("q").value=v.q;$("sort").value=v.sort;paintGrid();toast("Вид применён");
+  });
+  $("views").querySelectorAll("[data-vdel]").forEach(b=>b.onclick=()=>{
+    const i=state.views.findIndex(x=>x.id===b.dataset.vdel);if(i<0)return;
+    const[rm]=state.views.splice(i,1);store.set("install_views",JSON.stringify(state.views));paintViews();
+    toast("Вид удалён","info",()=>{state.views.splice(i,0,rm);store.set("install_views",JSON.stringify(state.views));paintViews()});
+  });
+}
+let detailId=null;
+function openDetail(id){
+  const s=SECTIONS.find(x=>x.id===id);if(!s)return;
+  detailId=id;
+  const pinned=state.pins.has(id),uses=Number(state.uses[id])||0;
+  $("drawerHost").innerHTML=`<div class="scrim" id="scrim"></div><aside class="drawer" role="dialog" aria-modal="true" aria-label="${esc(s.n)}">
+    <div class="row" style="justify-content:space-between;margin-bottom:11px">
+      <span class="kicker">Раздел</span><button class="btn btn-g btn-s" id="dClose">✕ Закрыть</button></div>
+    <div class="row" style="margin-bottom:10px"><span class="ic" style="width:42px;height:42px;font-size:20px">${s.ic}</span>
+      <h2 style="margin:0;font:800 16px var(--font)">${esc(s.n)}</h2></div>
+    <div class="row" style="margin-bottom:11px">
+      <span class="chip t">${esc(GROUPS[s.g])}</span>
+      ${pinned?'<span class="chip a">закреплено</span>':""}
+      ${uses?`<span class="chip c">открыто ${uses} раз</span>`:""}</div>
+    <p class="note" style="color:var(--muted);font-size:12.5px">${esc(s.d)}</p>
+    <h3 style="margin-top:14px">Адрес</h3>
+    <div class="code">${esc(abs(s.p))}</div>
+    <div class="row" style="margin-top:12px">
+      <a class="btn btn-p grow" href="${esc(s.p)}" id="dOpen">Открыть раздел</a>
+      <button class="btn btn-g" id="dCopy">📋 Ссылка</button>
+      <button class="btn btn-a" id="dPin">${pinned?"Снять закреп":"Закрепить"}</button>
+    </div>
+    <h3 style="margin-top:15px">Что нужно для работы</h3>
+    <div class="note" style="display:flex;flex-direction:column;gap:6px">
+      <span>• Откройте раздел хотя бы один раз онлайн — он сохранится для офлайна.</span>
+      <span>• Данные живут в памяти браузера: сделайте резервную копию в «Настройках».</span>
+      ${s.id==="live"?'<span>• Нужен API-ключ провайдера. Без ключа работает демо-режим.</span>':""}
+      ${s.id==="assets"?'<span>• Запись ролика требует MediaRecorder. Если недоступен — сохраняйте PNG.</span>':""}
+      ${s.id==="status"?'<span>• Проверка идёт через открытый API GitHub: 60 запросов в час без входа.</span>':""}
+    </div>
+  </aside>`;
+  const close=()=>{$("drawerHost").innerHTML="";detailId=null};
+  $("scrim").onclick=close;$("dClose").onclick=close;
+  $("dCopy").onclick=()=>copy(abs(s.p));
+  $("dPin").onclick=()=>{togglePin(id);close()};
+  $("dOpen").addEventListener("click",()=>{bumpUse(id);beep("open")});
+  $("dClose").focus();
+}
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&detailId){$("drawerHost").innerHTML="";detailId=null}});
+window.addEventListener("online",()=>{paintChecks();toast("Сеть вернулась","ok")});
+window.addEventListener("offline",()=>{paintChecks();toast("Сети нет — работают сохранённые разделы","info")});
+window.addEventListener("focus",()=>{paintStats();paintGrid();paintChecks();paintReady()});
+
+/* ---------- init ---------- */
+syncIcon(false);paintStats();paintGrid();paintViews();paintInstallBtn();paintChecks();paintReady();
+buildManifest();
+initSW().then(()=>checkStart()).then(()=>{buildManifest();paintChecks();paintReady();paintInstallBtn()});
+renderPreview(performance.now());iconKick();
+setTimeout(()=>{paintChecks();paintReady();paintInstallBtn()},15000);
+setTimeout(()=>{
+  toast(state.installed?"Открыто как приложение — разделы под рукой."
+    :state.promptEvent?"Браузер готов: нажмите «Установить приложение»."
+    :"Иконки собраны. Нажмите «Починить всё», затем «Установить». Если Chrome предлагает только ярлык — он даёт тот же результат.","info");
+},900);
+</script>
+</body>
+</html>
